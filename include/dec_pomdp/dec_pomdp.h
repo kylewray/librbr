@@ -1,25 +1,29 @@
 /**
- * 	The MIT License (MIT)
+ *  The MIT License (MIT)
  *
- * 	Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013 Kyle Wray and Luis Pineda
  *
- * 	Permission is hereby granted, free of charge, to any person obtaining a copy of
- * 	this software and associated documentation files (the "Software"), to deal in
- * 	the Software without restriction, including without limitation the rights to
- * 	use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * 	the Software, and to permit persons to whom the Software is furnished to do so,
- * 	subject to the following conditions:
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy of
+ *  this software and associated documentation files (the "Software"), to deal in
+ *  the Software without restriction, including without limitation the rights to
+ *  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ *  the Software, and to permit persons to whom the Software is furnished to do so,
+ *  subject to the following conditions:
  *
- * 	The above copyright notice and this permission notice shall be included in all
- * 	copies or substantial portions of the Software.
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
  *
- * 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * 	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * 	FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * 	COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * 	IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * 	CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ *  FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ *  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ *  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
+
+#ifndef DEC_POMDP_H
+#define DEC_POMDP_H
 
 
 #include <iostream>
@@ -28,48 +32,22 @@
 #include "../scp/scp.h"
 #include "../scp/scp_types.h"
 
-#include "fh_dec_pomdp_solution.h"
+#include "dec_pomdp_policy.h"
 
 
 /**
- *  A Finite Horizon Decentralized Partially Observable Markov Decision Process (Dec-POMDP).
+ *  A Decentralized Partially Observable Markov Decision Process (Dec-POMDP).
  */
-class FHDecPOMDP : public SCP {
+class DecPOMDP : public SCP {
 
 public:
 
 	/**
-	 * The constructor for the FHDecPOMDP class.
+	 * The constructor for the DecPOMDP class.
 	 */
-	FHDecPOMDP() {
+	DecPOMDP() {
 		reset();
 	}
-
-	/**
-	 * 	The constructor for the FHDecPOMDP class, which enables loading.
-	 *
-	 *	@param filename The JSON file to load.
-	 */
-	FHDecPOMDP(std::string filename) {
-		reset();
-		load(filename);
-	}
-
-	/**
-	 * A function which loads the Dec-POMDP as a stochastic control process file.
-	 *
-	 * @param filename The name of the file to load.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
-	 */
-	bool load(std::string filename);
-
-	/**
-	 * A function which saves the Dec-POMDP as a stochastic control process file.
-	 *
-	 * @param filename The name of the file to save.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
-	 */
-	bool save(std::string filename);
 
 private:
 
@@ -243,3 +221,6 @@ private:
 	std::string** observations;
 
 };
+
+
+#endif // DEC_POMDP_H

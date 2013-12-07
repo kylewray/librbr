@@ -22,37 +22,42 @@
  */
 
 
-#ifndef SCP_SOLVER_H
-#define SCP_SOLVER_H
+#ifndef DEC_POMDP_POLICY_H
+#define DEC_POMDP_POLICY_H
 
 
-#include "scp_policy.h"
+#include <string>
+
+#include "../scp/scp_policy.h"
 
 
 /**
- * An abstract class for solving stochastic control problem (SCP).
+ * A solution for a Decentralized Partially Observable Markov Decision Process (Dec-POMDP).
  */
-class SCPSolver {
+class DecPOMDPPolicy : public Policy {
 
 public:
 
 	/**
-	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
+	 * A function which loads an SCP solution file.
+	 *
+	 * @param filename The name of the file to load.
+	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	virtual ~SCPSolver() {}
+	bool load(std::string filename);
 
 	/**
-	 * A virtual function which must solve the SCP and return the result in the
-	 * provided solution variable.
+	 * A function which saves an SCP solution file.
 	 *
-	 * @param scp		The stochastic control process to solve.
-	 * @param solution	The return variable which will contain the solution.
-	 * @return			Return @code{true} if an error occurred or no solution could be found;
-	 * 					@code{false} otherwise.
+	 * @param filename The name of the file to save.
+	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	virtual bool solve(const SCP *scp, Policy *solution) const = 0;
+	bool save(std::string filename);
+
+private:
+
 
 };
 
 
-#endif // SCP_SOLVER_H
+#endif // DEC_POMDP_POLICY_H

@@ -22,37 +22,69 @@
  */
 
 
-#ifndef SCP_SOLVER_H
-#define SCP_SOLVER_H
+#ifndef DEC_MDP_H
+#define DEC_MDP_H
 
 
-#include "scp_policy.h"
+#include "../scp/scp.h"
+#include "../scp/scp_types.h"
 
 
 /**
- * An abstract class for solving stochastic control problem (SCP).
+ * An abstract class for a Decentralized Markov Decision Process (MDP) within librbr.
  */
-class SCPSolver {
+class DecMDP : public SCP {
 
 public:
 
 	/**
-	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
+	 * A constructor for the DecMDP class.
 	 */
-	virtual ~SCPSolver() {}
+	DecMDP();
 
 	/**
-	 * A virtual function which must solve the SCP and return the result in the
-	 * provided solution variable.
-	 *
-	 * @param scp		The stochastic control process to solve.
-	 * @param solution	The return variable which will contain the solution.
-	 * @return			Return @code{true} if an error occurred or no solution could be found;
-	 * 					@code{false} otherwise.
+	 * A deconstructor for the DecMDP class.
 	 */
-	virtual bool solve(const SCP *scp, Policy *solution) const = 0;
+	~DecMDP();
+
+private:
+
+	/**
+	 * The agents in the Dec-MDP; e.g., a vector of strings.
+	 */
+	Agents agents;
+
+	/**
+	 * The states in the Dec-MDP; e.g., an array of strings.
+	 */
+	States states;
+
+	/**
+	 * The actions in the Dec-MDP; e.g., an array of strings.
+	 */
+	Actions actions;
+
+	/**
+	 * The state transition function in the Dec-MDP; e.g., a three-dimensional array mapping to a double.
+	 */
+	StateTransitions stateTransitions;
+
+	/**
+	 * The reward function in the Dec-MDP; e.g., a two-dimensional array mapping to a double.
+	 */
+	Rewards rewards;
+
+	/**
+	 * The initial state or initial belief state; e.g., factored initial state.
+	 */
+	InitialState initialState;
+
+	/**
+	 * The horizon, either a finite time or a discount factor.
+	 */
+	Horizon horizon;
 
 };
 
 
-#endif // SCP_SOLVER_H
+#endif // DEC_MDP_H

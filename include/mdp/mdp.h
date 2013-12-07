@@ -22,37 +22,64 @@
  */
 
 
-#ifndef SCP_SOLVER_H
-#define SCP_SOLVER_H
+#ifndef MDP_H
+#define MDP_H
 
 
-#include "scp_policy.h"
+#include "../scp/scp.h"
+#include "../scp/scp_types.h"
 
 
 /**
- * An abstract class for solving stochastic control problem (SCP).
+ * An abstract class for a Markov Decision Process (MDP) within librbr.
  */
-class SCPSolver {
+class MDP : public SCP {
 
 public:
 
 	/**
-	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
+	 * A constructor for the MDP class.
 	 */
-	virtual ~SCPSolver() {}
+	MDP();
 
 	/**
-	 * A virtual function which must solve the SCP and return the result in the
-	 * provided solution variable.
-	 *
-	 * @param scp		The stochastic control process to solve.
-	 * @param solution	The return variable which will contain the solution.
-	 * @return			Return @code{true} if an error occurred or no solution could be found;
-	 * 					@code{false} otherwise.
+	 * A deconstructor for the MDP class.
 	 */
-	virtual bool solve(const SCP *scp, Policy *solution) const = 0;
+	~MDP();
+
+private:
+
+	/**
+	 * The states in the MDP; e.g., an array of strings.
+	 */
+	States states;
+
+	/**
+	 * The actions in the MDP; e.g., an array of strings.
+	 */
+	Actions actions;
+
+	/**
+	 * The state transition function in the MDP; e.g., a three-dimensional array mapping to a double.
+	 */
+	StateTransitions stateTransitions;
+
+	/**
+	 * The reward function in the MDP; e.g., a two-dimensional array mapping to a double.
+	 */
+	Rewards rewards;
+
+	/**
+	 * The initial state or initial belief state; e.g., factored initial state.
+	 */
+	InitialState initialState;
+
+	/**
+	 * The horizon, either a finite time or a discount factor.
+	 */
+	Horizon horizon;
 
 };
 
 
-#endif // SCP_SOLVER_H
+#endif // MDP_H
