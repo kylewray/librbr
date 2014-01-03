@@ -22,65 +22,26 @@
  */
 
 
-#ifndef MDP_H
-#define MDP_H
+#ifndef ACTION_H
+#define ACTION_H
 
 
-#include "../states/states.h"
-#include "../actions/actions.h"
-#include "../state_transitions/state_transitions.h"
-#include "../rewards/rewards.h"
-#include "../initial_state.h"
-#include "../horizon.h"
+#include <string>
 
 
 /**
- * A Markov Decision Process (MDP).
+ * An abstract action object. Typically, this will just be a string; however, by abstracting
+ * the actions, we are able to have actions that are classes in-and-of-themselves.
  */
-class MDP {
-public:
+struct Action {
 	/**
-	 * A constructor for the MDP class.
+	 * All actions must have the ability to convert the internal representation to a string.
+	 * For most policy solvers, this must be unique; however, this need not always be the case,
+	 * e.g., continuous actions.
 	 */
-	MDP();
-
-	/**
-	 * A deconstructor for the MDP class.
-	 */
-	~MDP();
-
-private:
-	/**
-	 * The states in the MDP; e.g., an array of strings.
-	 */
-	States states;
-
-	/**
-	 * The actions in the MDP; e.g., an array of strings.
-	 */
-	Actions actions;
-
-	/**
-	 * The state transition function in the MDP; e.g., a three-dimensional array mapping to a double.
-	 */
-	StateTransitions stateTransitions;
-
-	/**
-	 * The reward function in the MDP; e.g., a two-dimensional array mapping to a double.
-	 */
-	Rewards rewards;
-
-	/**
-	 * The initial state or initial belief state; e.g., factored initial state.
-	 */
-	InitialState initialState;
-
-	/**
-	 * The horizon, either a finite time or a discount factor.
-	 */
-	Horizon horizon;
+	std::string name;
 
 };
 
 
-#endif // MDP_H
+#endif // ACTION_H

@@ -22,65 +22,16 @@
  */
 
 
-#ifndef MDP_H
-#define MDP_H
-
-
-#include "../states/states.h"
-#include "../actions/actions.h"
-#include "../state_transitions/state_transitions.h"
-#include "../rewards/rewards.h"
-#include "../initial_state.h"
-#include "../horizon.h"
+#include "../../include/utilities/log.h"
 
 
 /**
- * A Markov Decision Process (MDP).
+ * Log a normal message or error to a stream, e.g., std::cout.
+ * @param os	The output stream, e.g., std::cout.
+ * @param msg	The message to output along with the error.
+ * @param error	The detailed error message.
  */
-class MDP {
-public:
-	/**
-	 * A constructor for the MDP class.
-	 */
-	MDP();
-
-	/**
-	 * A deconstructor for the MDP class.
-	 */
-	~MDP();
-
-private:
-	/**
-	 * The states in the MDP; e.g., an array of strings.
-	 */
-	States states;
-
-	/**
-	 * The actions in the MDP; e.g., an array of strings.
-	 */
-	Actions actions;
-
-	/**
-	 * The state transition function in the MDP; e.g., a three-dimensional array mapping to a double.
-	 */
-	StateTransitions stateTransitions;
-
-	/**
-	 * The reward function in the MDP; e.g., a two-dimensional array mapping to a double.
-	 */
-	Rewards rewards;
-
-	/**
-	 * The initial state or initial belief state; e.g., factored initial state.
-	 */
-	InitialState initialState;
-
-	/**
-	 * The horizon, either a finite time or a discount factor.
-	 */
-	Horizon horizon;
-
-};
-
-
-#endif // MDP_H
+void log_message(std::ostream &os, const std::string &classFunctionName, const std::string &message)
+{
+	os << "Error[" << classFunctionName << "]: " << message << std::endl;
+}

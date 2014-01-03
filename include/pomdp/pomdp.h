@@ -26,17 +26,21 @@
 #define POMDP_H
 
 
-#include "../scp/scp.h"
-#include "../scp/scp_types.h"
+#include "../states/states.h"
+#include "../actions/actions.h"
+#include "../observations/observations.h"
+#include "../state_transitions/state_transitions.h"
+#include "../observation_transitions/observation_transitions.h"
+#include "../rewards/rewards.h"
+#include "../initial_state.h"
+#include "../horizon.h"
 
 
 /**
- * An abstract class for a Partially Observable Markov Decision Process (MDP) within librbr.
+ * A Partially Observable Markov Decision Process (POMDP).
  */
-class POMDP : public SCP {
-
+class POMDP {
 public:
-
 	/**
 	 * A constructor for the POMDP class.
 	 */
@@ -48,7 +52,6 @@ public:
 	~POMDP();
 
 private:
-
 	/**
 	 * The states in the POMDP; e.g., an array of strings.
 	 */

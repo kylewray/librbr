@@ -54,27 +54,25 @@ struct PolicyCurrent {
  * An abstract class for all policies to stochastic control problems (SCPs).
  */
 class Policy {
-
 public:
-
 	/**
 	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
 	 */
-	virtual ~Policy() {}
+	virtual ~Policy();
 
 	/**
 	 * A virtual function which must load a SCP policy file.
 	 *
-	 * @param filename	The name of the file to load.
-	 * @return			Return @code{true} if an error occurred, @code{false} otherwise.
+	 * @param filename The name of the file to load.
+	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	virtual bool load(std::string filename) const = 0;
 
 	/**
 	 * A virtual function which must save a SCP policy file.
 	 *
-	 * @param filename	The name of the file to save.
-	 * @return			Return @code{true} if an error occurred, @code{false} otherwise.
+	 * @param filename The name of the file to save.
+	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	virtual bool save(std::string filename) const = 0;
 
@@ -83,7 +81,7 @@ public:
 	 *
 	 * @param state		The current state (mdp/dec-mdp) or observation history (pomdp/dec-pomdp).
 	 * @param action	The return variable for the next action to take.
-	 * @return			Return @code{true} if an error occurred, and @code{false} otherwise.
+	 * @return Return @code{true} if an error occurred, and @code{false} otherwise.
 	 */
 	virtual bool next(const PolicyCurrent* state, PolicyAction* action);
 

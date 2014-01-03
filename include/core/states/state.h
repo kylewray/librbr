@@ -22,23 +22,26 @@
  */
 
 
-#ifndef SCP_H
-#define SCP_H
+#ifndef STATE_H
+#define STATE_H
+
+
+#include <string>
 
 
 /**
- * An abstract class for all Stochastic Control Processes (SCP) within librbr.
+ * An abstract state object. Typically, this will just be a string; however, by abstracting
+ * the states, we are able to have states that are classes in-and-of-themselves.
  */
-class SCP {
-
-public:
-
+struct State {
 	/**
-	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
+	 * All states must have the ability to convert the internal representation to a string.
+	 * For most policy solvers, this must be unique; however, this need not always be the case,
+	 * e.g., continuous states.
 	 */
-	virtual ~SCP() {}
+	std::string name;
 
 };
 
 
-#endif // SCP_H
+#endif // STATE_H

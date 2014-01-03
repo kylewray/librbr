@@ -22,71 +22,43 @@
  */
 
 
-#ifndef DEC_MDP_H
-#define DEC_MDP_H
+#ifndef STATES_H
+#define STATES_H
 
 
-#include "../agents/agents.h"
-#include "../states/states.h"
-#include "../actions/actions.h"
-#include "../state_transitions/state_transitions.h"
-#include "../rewards/rewards.h"
-#include "../initial_state.h"
-#include "../horizon.h"
+#include <exception>
 
 
 /**
- * A Decentralized Markov Decision Process (MDP).
+ * An exception class unique to state failures.
  */
-class DecMDP {
+class StateException : public std::exception {
 public:
 	/**
-	 * A constructor for the DecMDP class.
+	 * Return the specific error that occurred.
+	 * @return The specific error that occurred.
 	 */
-	DecMDP();
+	virtual const char *what() const throw();
 
-	/**
-	 * A deconstructor for the DecMDP class.
-	 */
-	~DecMDP();
+};
 
-private:
+/**
+ * An abstract class which defines how to interact with a states object. This general
+ * structure should work for any implementation of states, such as finite states,
+ * infinite states, joint states, etc. The states available to an agent might be
+ * in the form of a list of strings, or even a function pointer.
+ *
+ * This high level class allows for a single definition of each MDP-like object, instead
+ * of one for every kind of combination of actions, states, etc.
+ */
+class States {
+public:
 	/**
-	 * The agents in the Dec-MDP; e.g., a vector of strings.
+	 * The deconstructor for the States class, which ensures that children classes deconstruct.
 	 */
-	Agents agents;
-
-	/**
-	 * The states in the Dec-MDP; e.g., an array of strings.
-	 */
-	States states;
-
-	/**
-	 * The actions in the Dec-MDP; e.g., an array of strings.
-	 */
-	Actions actions;
-
-	/**
-	 * The state transition function in the Dec-MDP; e.g., a three-dimensional array mapping to a double.
-	 */
-	StateTransitions stateTransitions;
-
-	/**
-	 * The reward function in the Dec-MDP; e.g., a two-dimensional array mapping to a double.
-	 */
-	Rewards rewards;
-
-	/**
-	 * The initial state or initial belief state; e.g., factored initial state.
-	 */
-	InitialState initialState;
-
-	/**
-	 * The horizon, either a finite time or a discount factor.
-	 */
-	Horizon horizon;
+	virtual ~States();
 
 };
 
 
-#endif // DEC_MDP_H
+#endif // STATES_H

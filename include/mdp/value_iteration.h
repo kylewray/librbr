@@ -22,37 +22,37 @@
  */
 
 
-#ifndef SCP_SOLVER_H
-#define SCP_SOLVER_H
+#ifndef VALUE_ITERATION_H
+#define VALUE_ITERATION_H
 
 
-#include "scp_policy.h"
+#include "../core/policy.h"
 
 
 /**
- * An abstract class for solving stochastic control problem (SCP).
+ * Solve an MDP via value iteration.
  */
-class SCPSolver {
-
+class ValueIteration {
 public:
+	/**
+	 * The constructor for the ValueIteration class.
+	 */
+	ValueIteration();
 
 	/**
-	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
+	 * The deconstructor for the ValueIteration class.
 	 */
-	virtual ~SCPSolver() {}
+	~ValueIteration();
 
 	/**
-	 * A virtual function which must solve the SCP and return the result in the
-	 * provided solution variable.
-	 *
-	 * @param scp		The stochastic control process to solve.
-	 * @param solution	The return variable which will contain the solution.
-	 * @return			Return @code{true} if an error occurred or no solution could be found;
-	 * 					@code{false} otherwise.
+	 * Solve the MDP provided using value iteration.
+	 * @param mdp The Markov decision process to solve.
+	 * @return Return the optimal policy; NULL is returned if an error occurred,
+	 * or the MDP provided was invalid.
 	 */
-	virtual bool solve(const SCP *scp, Policy *solution) const = 0;
+	Policy *solve(const MDP *mdp);
 
 };
 
 
-#endif // SCP_SOLVER_H
+#endif // VALUE_ITERATION_H

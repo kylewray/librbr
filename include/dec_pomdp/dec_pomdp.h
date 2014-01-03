@@ -26,199 +26,77 @@
 #define DEC_POMDP_H
 
 
-#include <iostream>
-#include <string>
-
-#include "../scp/scp.h"
-#include "../scp/scp_types.h"
-
-#include "dec_pomdp_policy.h"
+#include "../agents/agents.h"
+#include "../states/states.h"
+#include "../actions/actions.h"
+#include "../observations/observations.h"
+#include "../state_transitions/state_transitions.h"
+#include "../observation_transitions/observation_transitions.h"
+#include "../rewards/rewards.h"
+#include "../initial_state.h"
+#include "../horizon.h"
 
 
 /**
  *  A Decentralized Partially Observable Markov Decision Process (Dec-POMDP).
  */
-class DecPOMDP : public SCP {
-
+class DecPOMDP {
 public:
-
 	/**
 	 * The constructor for the DecPOMDP class.
 	 */
-	DecPOMDP() {
-		reset();
-	}
+	DecPOMDP();
+
+	/**
+	 * The deconstructor for the DecPOMDP class.
+	 */
+	~DecPOMDP();
 
 private:
+	/**
+	 * The agents in the SCP; e.g., a vector of strings.
+	 */
+	Agents agents;
 
 	/**
-	 * Reset the internal variables to default values. This does not free memory.
+	 * The states in the SCP; e.g., factored vectors of strings.
 	 */
-	void reset() {
-		numAgents = 0;
-		numStates = 0;
-
-		numActions = NULL;
-		numJointActions = 0;
-
-		stateTransitions = NULL;
-
-		numObservations = NULL;
-		numJointObservations = 0;
-
-		observationTransitions = NULL;
-
-		rewards = NULL;
-
-		horizon = 0;
-		gamma = 0.9;
-
-		agents = NULL;
-		states = NULL;
-		actions = NULL;
-		observations = NULL;
-	}
+	States states;
 
 	/**
-	 * Free the memory of the internal variables. This calls reset automatically.
+	 * The actions in the SCP; e.g., factored vectors of strings.
 	 */
-	void free() {
-		if (rewards != NULL) {
-			for (int i = 0; i < numStates; i++) {
-				for (int j = 0; j < numJointActions; j++) {
-					delete [] rewards[i][j];
-				}
-				delete [] rewards[i];
-			}
-			delete [] rewards;
-		}
-
-		if (observationTransitions != NULL) {
-			for (int i = 0; i < numStates; i++) {
-				for (int j = 0; j < numObservations[i]; i++) {
-					delete [] observationTransitions[i][j];
-				}
-				delete [] observationTransitions[i];
-			}
-			delete [] observationTransitions;
-		}
-
-		if (stateTransitions != NULL) {
-			for (int i = 0; i < numStates; i++) {
-				for (int j = 0; j < numJointActions; j++) {
-					delete [] stateTransitions[i][j];
-				}
-				delete [] stateTransitions[i];
-			}
-			delete [] stateTransitions;
-		}
-
-		if (numObservations != NULL) {
-			delete [] numObservations;
-		}
-
-		if (numActions != NULL) {
-			delete [] numActions;
-		}
-
-		reset();
-	}
+	Actions actions;
 
 	/**
-	 * The number of agents in the system.
+	 * The observations in the SCP; e.g., factored vectors of strings.
 	 */
-	int numAgents;
+	Observations observations;
 
 	/**
-	 * The number of states in the system.
+	 * The state transition function in the SCP; e.g., a three-dimensional array mapping to a double.
 	 */
-	int numStates;
+	StateTransitions stateTransitions;
 
 	/**
-	 * An array of the number of actions available for each agent, indexed by [i]:
-	 * - i is the agent index
+	 * The observation transition function in the SCP; e.g., a three-dimensional array mapping to a double.
 	 */
-	int* numActions;
+	ObservationTransitions observationTransitions;
 
 	/**
-	 * The total number of possible joint actions.
+	 * The reward function in the SCP; e.g., a two-dimensional array mapping to a double.
 	 */
-	int numJointActions;
+	Rewards rewards;
 
 	/**
-	 * A three-dimensional array of state transition probabilities, indexed by [i][j][k]:
-	 * - i is the current state index
-	 * - j is the joint action index, after performing them in state i
-	 * - k is the next state index, after taking joint actions j
-	 * Equivalently, we may write T(i,j,k) = Pr(k|i,j).
+	 * The initial state or initial belief state; e.g., factored initial state.
 	 */
-	double*** stateTransitions;
+	InitialState initialState;
 
 	/**
-	 * An array of the number of observations available for each agent, indexed by [i]:
-	 * - i is the agent index
+	 * The horizon, either a finite time or a discount factor.
 	 */
-	int* numObservations;
-
-	/**
-	 * The total number of possible joint observations.
-	 */
-	int numJointObservations;
-
-	/**
-	 * A three-dimensional array of observation transition probabilities, indexed by [i][j][k]:
-	 * - i is the joint action index, after performing them in the previous state
-	 * - j is the next state index, after taking joint actions i
-	 * - k is the next joint observation index
-	 * Equivalently, we may write O(i,j,k) = Pr(k|i,j).
-	 */
-	double*** observationTransitions;
-
-	/**
-	 * A three-dimensional array of rewards, indexed by [i][j][k]:
-	 * - i is the current state index
-	 * - j is the joint action index, after performing them in state i
-	 * - k is the next state index, after taking joint actions j
-	 * Equivalently, we may write R(i,j,k).
-	 */
-	double*** rewards;
-
-	/**
-	 * The horizon. A non-positive horizon (often 0) denotes an infinite horizon.
-	 */
-	int horizon;
-
-	/**
-	 * The discount factor. For finite horizon, define gamma = 1. For infinite horizon,
-	 * define gamma in [0,1).
-	 */
-	double gamma;
-
-	/**
-	 * An optional array of the agent's names or identifiers, indexed by [i]:
-	 * - i is the agent index
-	 */
-	std::string* agents;
-
-	/**
-	 * An optional array of the state's names or identifiers, indexed by [i]:
-	 * - i is the state index
-	 */
-	std::string* states;
-
-	/**
-	 * A optional array of agent actions, indexed by [i][j]:
-	 * - i is the agent index
-	 * - j is the action index
-	 */
-	std::string** actions;
-
-	/**
-	 * An optional array of the observation's names or identifiers, indexed by [i][j]:
-	 * - i is the agent index
-	 * - j is the observation index for agent i
-	 */
-	std::string** observations;
+	Horizon horizon;
 
 };
 

@@ -22,8 +22,8 @@
  */
 
 
-#ifndef SCP_FILE_H
-#define SCP_FILE_H
+#ifndef UNIFIED_FILE_H
+#define UNIFIED_FILE_H
 
 
 #include <string>
@@ -33,46 +33,50 @@
 
 
 /**
- * A small class which acts as an intermediate representation for any SCP-like object.
- * It can load an SCP file and internally store all variables found within the file.
- * Other class objects such as MDP or Dec-POMDP may then use an SCPFile object to copy
- * all variables, or even just a subset of the variables into the class. Overall,
- * this object.
+ * A file loading and saving class called UnifiedFile which acts as an intermediate
+ * representation for any MDP-like object. It can load any *.mdp, *.pomdp, *.decmdp,
+ * or *.decpomdp file and store all variables found within the file. Other class
+ * objects such as MDP or Dec-POMDP may then use a UnifiedFile object to copy all
+ * their required internal variables, or even just a subset of the variables.
  */
-class SCPFile {
-
+class UnifiedFile {
 public:
-
 	/**
-	 * The default constructor for an SCP file.
+	 * The default constructor for a unified file.
 	 */
-	SCPFile();
+	UnifiedFile();
 
 	/**
 	 * The constructor which enables automatic loading of the specified SCP file.
-	 *
 	 * @param filename The filename of the SCP file to load.
 	 */
-	SCPFile(std::string filename);
+	UnifiedFile(std::string filename);
 
 	/**
-	 * A function which loads the information as a SCP file.
-	 *
-	 * @param filename The filename of the SCP file to load.
+	 * The deconstructor for a unified file which cleans up the memory.
+	 */
+	~UnifiedFile();
+
+	/**
+	 * A function which loads any mdp-like file.
+	 * @param filename The filename and relative path of the mdp-like file to load.
 	 * @return Returns @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	bool load(std::string filename);
 
 	/**
 	 * A function which saves the information as a SCP file.
-	 *
-	 * @param filename The filename of the SCP file to save.
+	 * @param filename The filename and relative path of the mdp-like file to save.
 	 * @return Returns @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	bool save(std::string filename);
 
-private:
+	/**
+	 * Reset the internal objects in the unified file.
+	 */
+	void reset();
 
+private:
 	/**
 	 * The agents in the SCP; e.g., a vector of strings.
 	 */
@@ -121,4 +125,4 @@ private:
 };
 
 
-#endif // SCP_FILE_H
+#endif // UNIFIED_FILE_H

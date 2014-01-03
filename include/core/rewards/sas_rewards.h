@@ -1,0 +1,87 @@
+/**
+ *  The MIT License (MIT)
+ *
+ *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy of
+ *  this software and associated documentation files (the "Software"), to deal in
+ *  the Software without restriction, including without limitation the rights to
+ *  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ *  the Software, and to permit persons to whom the Software is furnished to do so,
+ *  subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ *  FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ *  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ *  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+
+#ifndef SAS_REWARDS_H
+#define SAS_REWARDS_H
+
+
+#include <map>
+#include <tuple>
+
+#include "rewards.h"
+
+#include "../states/state.h"
+#include "../actions/action.h"
+
+
+/**
+ * A class for state-action-state rewards in an MDP-like object. Informally, there are two basic
+ * ways to store state-action rewards: a table lookup mapping state-action-state triples to real
+ * values, or a generator function based on a given state-action-state triple. In both cases, we
+ * require that any class with provide certain get functions so that any generic solver can handle
+ * both cases.
+ *
+ * If you want to create a generator function-based SASRewards class, please create a child class
+ * which implements the function in the virtual functions described below. You will likely ignore
+ * the internal state-action-state rewards mapping variable here.
+ */
+class SASRewards : public Rewards {
+public:
+	/**
+	 * The default constructor for the SASRewards class.
+	 */
+	SASRewards();
+
+	/**
+	 * The default deconstructor for the SASRewards class.
+	 */
+	virtual ~SASRewards();
+
+	/**
+	 * Set a state transition from a particular state-action-state triple to a probability.
+	 * @param state		The current state of the system.
+	 * @param action	The action taken in the current state.
+	 * @param nextState	The next state with which we assign the reward.
+	 * @param reward	The reward from the provided state-action-state triple.
+	 */
+	void set_reward(State state, Action action, State nextState, double reward);
+
+	/**
+	 * The probability of a transition following the state-action-state triple provided.
+	 * @param state		The current state of the system.
+	 * @param action	The action taken at the current state.
+	 * @param nextState	The next state with which we assign the reward.
+	 * @return The reward from taking the given action in the given state.
+	 */
+	virtual double set_reward(State state, Action action, State nextState) const;
+
+private:
+	/**
+	 * The list of all state-action-state rewards.
+	 */
+	std::map<std::tuple<State, Action, State>, double> rewards;
+
+};
+
+#endif // SAS_REWARDS_H
