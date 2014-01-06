@@ -22,51 +22,89 @@
  */
 
 
-#ifndef POLICY_H
-#define POLICY_H
+#ifndef FSC_POLICY_H
+#define FSC_POLICY_H
 
 
 #include <string>
+#include <vector>
+#include <map>
 
-#include "../actions/action.h"
+#include "policy.h"
 
 
 /**
- * An abstract class for all policies of MDP-like objects.
+ * A small structure for Finite State Controller (FSC) policy states. In reality, all
+ * that matters for larger problems is having a unique object to represent an abstract
+ * policy state. This structure allows us to expand this state in the future, if desired.
  */
-class Policy {
+struct FSCPolicyState { };
+
+/**
+ * A Finite State Controller (FSC) policy. This FSC captures the policy tree
+ * representation, too. Internally, this object is a stochastic FSC, in which
+ * every FSC state maps to a distribution over actions, and a subsequent observation
+ * maps to a distribution over the next FSC state (not usually world state).
+ */
+class FSCPolicy : public Policy {
 public:
+	/**
+	 * The default constructor for a FSCPolicy object.
+	 */
+	FSCPolicy();
+
+	/**
+	 * The constructor for a FSCPolicy object which allows the user to specify.
+	 */
+	FSCPolicy();
+
 	/**
 	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
 	 */
-	virtual ~Policy();
+	virtual ~FSCPolicy();
 
 	/**
 	 * A virtual function which must load a policy file.
 	 * @param filename The name and path of the file to load.
 	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	virtual bool load(std::string filename) = 0;
+	virtual bool load(std::string filename);
 
 	/**
 	 * A virtual function which must save a policy file.
 	 * @param filename The name and path of the file to save.
 	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	virtual bool save(std::string filename) const = 0;
+	virtual bool save(std::string filename) const;
 
 	/**
 	 * A function which follows the defined policy, having the current state stored internally,
 	 * and returns the action to select next.
 	 */
-	virtual Action next() = 0;
+	virtual Action next();
 
 	/**
 	 * Reset the policy to the initial state.
 	 */
-	virtual void reset() = 0;
+	virtual void reset();
+
+private:
+	/**
+	 * The FSC states (nodes).
+	 */
+	std::vector<FSCPolicyState> states;
+
+	/**
+	 * The mapping of FSC states to a distribution over actions.
+	 */
+	std::map<FSCPolicyState, std::map<Action, double>> policy;
+
+	/**
+	 * The mapping of FSC state-observation pair to a distribution over subsequent FSC states.
+	 */
+	std::map<FSCPolicyState, std::map<Observation, std::map<FSCPolicyState, double>>> transition;
 
 };
 
 
-#endif // POLICY_H
+#endif // FSC_POLICY_H

@@ -72,7 +72,7 @@ public:
 	State get_initial_state() const;
 
 	/**
-	 * Set the probability of a particular state.
+	 *Get the probability of a particular state.
 	 * @param state The state to which the probability will be assigned.
 	 * @return The probability of that the initial state is the state given.
 	 */
@@ -87,12 +87,13 @@ private:
 	/**
 	 * The true initial state.
 	 */
-	State initial;
+	State initialState;
 
 	/**
-	 * The initial belief over the states.
+	 * The initial belief over the states. If a state is not mapped, then it
+	 * is assumed that the probability for that state is 0.
 	 */
-	std::map<State, double> belief;
+	std::map<State, double> initialBelief;
 
 };
 

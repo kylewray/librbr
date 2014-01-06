@@ -65,7 +65,7 @@ public:
 	 * @param probability	The probability of going from the state, taking the action, then
 	 * 						moving to the nextState.
 	 */
-	void set_state_transition(State state, Action action, State nextState, double probability);
+	void set(State state, Action action, State nextState, double probability);
 
 	/**
 	 * The probability of a transition following the state-action-state triple provided.
@@ -74,7 +74,7 @@ public:
 	 * @param nextState	The next state with which we assign the probability.
 	 * @return The probability of going from the state, taking the action, then moving to the nextState.
 	 */
-	virtual double get_state_transition(State state, Action action, State nextState) const;
+	virtual double get(State state, Action action, State nextState) const;
 
 private:
 	/**
@@ -83,5 +83,6 @@ private:
 	std::map<std::tuple<State, Action, State>, double> stateTransitions;
 
 };
+
 
 #endif // FINITE_STATE_TRANSITIONS_H

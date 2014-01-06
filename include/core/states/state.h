@@ -35,6 +35,29 @@
  */
 struct State {
 	/**
+	 * The default constructor of the State object.
+	 */
+	State();
+
+	/**
+	 * The constructor of the State object which allows initial specification of the unique name.
+	 * @param initialName The unique name of the state.
+	 */
+	State(std::string initialName);
+
+	/**
+	 * The default deconstructor of the State object.
+	 */
+	virtual ~State();
+
+	/**
+	 * Overload the equals operator to set this state equal to the state provided.
+	 * @param state The state to copy.
+	 * @return The new version of this state.
+	 */
+	virtual State &operator=(const State state);
+
+	/**
 	 * All states must have the ability to convert the internal representation to a string.
 	 * For most policy solvers, this must be unique; however, this need not always be the case,
 	 * e.g., continuous states.

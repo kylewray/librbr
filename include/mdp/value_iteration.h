@@ -26,7 +26,7 @@
 #define VALUE_ITERATION_H
 
 
-#include "../core/policy.h"
+#include "../core/policy/policy.h"
 
 
 /**

@@ -26,15 +26,29 @@
 #define AGENTS_H
 
 
+#include <exception>
+
+#include "agent.h"
+
+
 /**
- * An abstract class to contain agents. Internally, agents can simply be represented
- * as a number or even with a identifier. The main objective of the class is to abstract
- * the representation of agents and provide simple function which restructure the
- * internal representation into any representation needed by a solver. The template type
- * T defines how the user will interact with the class, not necessarily the internal
- * representation.
+ * An exception class unique to agent failures.
  */
-template <class T>
+class AgentException : public std::exception {
+public:
+	/**
+	 * Return the specific error that occurred.
+	 * @return The specific error that occurred.
+	 */
+	virtual const char *what() const throw();
+
+};
+
+/**
+ * A class for finite sets of agents in an MDP-like object. The base assumption is that the set of
+ * agents is always finite. Also, if this class is used, then it will be for the decentralized
+ * MDP and POMDP classes.
+ */
 class Agents {
 public:
 	/**
@@ -43,42 +57,39 @@ public:
 	Agents();
 
 	/**
-	 * The deconstructor for the Agents class.
+	 * The default deconstructor for the Agents class.
 	 */
 	virtual ~Agents();
 
 	/**
-	 * Define the internal representation of agents given a vector of identifiers.
-	 * @param identifiers A vector of agent unique identifiers (e.g., names).
+	 * Add an agent to the set of available agents.
+	 * @param newAgent The new agent to include in the set of available agents.
 	 */
-	virtual void define(std::vector<T> identifiers);
+	void add(Agent newAgent);
 
 	/**
-	 * Convert the internal representation to a vector of agents.
-	 * @return A vector of agent unique identifiers (e.g., names).
+	 * Remove an agent to the set of available agents.
+	 * @param removeAgent The agent to remove from the set of available agents.
 	 */
-	virtual std::vector<T> all();
+	void remove(Agent removeAgent);
 
 	/**
-	 * Clear and reset the internal variables (freeing memory, if necessary).
+	 * Set the internal actions list given another list, performing a deep copy.
+	 * @param newActions The vector of new actions to use.
 	 */
-	virtual void clear();
+	void set(std::vector<Agent> newAgents);
 
 	/**
-	 * Get a particular agent's identifier.
-	 * @param index The integer index of the agent to retrieve.
-	 * @return A string identifier corresponding to the index.
+	 * Return a list of all the available agents.
+	 * @return Return a list of available agents.
 	 */
-	virtual T operator[](int index) const;
-
-	/**
-	 * Get a reference to a particular agent's identifier (often for setting).
-	 * @param index The integer index of the agent to retrieve.
-	 * @return A string identifier corresponding to the index.
-	 */
-	virtual T &operator[](int index);
+	std::vector<Agent> all() const;
 
 private:
+	/**
+	 * The list of all agents.
+	 */
+	std::vector<Agent> agents;
 
 };
 

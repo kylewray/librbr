@@ -65,7 +65,7 @@ public:
 	 * @param nextState	The next state with which we assign the reward.
 	 * @param reward	The reward from the provided state-action-state triple.
 	 */
-	void set_reward(State state, Action action, State nextState, double reward);
+	void set(State state, Action action, State nextState, double reward);
 
 	/**
 	 * The probability of a transition following the state-action-state triple provided.
@@ -74,7 +74,7 @@ public:
 	 * @param nextState	The next state with which we assign the reward.
 	 * @return The reward from taking the given action in the given state.
 	 */
-	virtual double set_reward(State state, Action action, State nextState) const;
+	virtual double get(State state, Action action, State nextState) const;
 
 private:
 	/**

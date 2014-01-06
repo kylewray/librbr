@@ -22,51 +22,70 @@
  */
 
 
-#ifndef POLICY_H
-#define POLICY_H
+#ifndef MAP_POLICY_H
+#define MAP_POLICY_H
 
 
 #include <string>
+#include <map>
 
-#include "../actions/action.h"
+#include "policy.h"
 
 
 /**
- * An abstract class for all policies of MDP-like objects.
+ * A simple map policy which works for MDPs and Dec-MDPs; each actual state
+ * deterministically maps to a single action. This will likely be used
+ * exclusively for infinite horizon MDPs and Dec-MDPs.
  */
-class Policy {
+class MapPolicy : public Policy {
 public:
+	/**
+	 * The default constructor for a MapPolicy object.
+	 */
+	MapPolicy();
+
+	/**
+	 * The constructor for a MapPolicy object which allows the user to set the number of states.
+	 */
+	MapPolicy();
+
 	/**
 	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
 	 */
-	virtual ~Policy();
+	virtual ~MapPolicy();
 
 	/**
 	 * A virtual function which must load a policy file.
 	 * @param filename The name and path of the file to load.
 	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	virtual bool load(std::string filename) = 0;
+	virtual bool load(std::string filename);
 
 	/**
 	 * A virtual function which must save a policy file.
 	 * @param filename The name and path of the file to save.
 	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	virtual bool save(std::string filename) const = 0;
+	virtual bool save(std::string filename) const;
 
 	/**
 	 * A function which follows the defined policy, having the current state stored internally,
 	 * and returns the action to select next.
 	 */
-	virtual Action next() = 0;
+	virtual Action next();
 
 	/**
 	 * Reset the policy to the initial state.
 	 */
-	virtual void reset() = 0;
+	virtual void reset();
+
+private:
+	/**
+	 * The internal mapping from states to actions.
+	 */
+	std::map<State, Action> policy;
 
 };
 
 
-#endif // POLICY_H
+#endif // MAP_POLICY_H

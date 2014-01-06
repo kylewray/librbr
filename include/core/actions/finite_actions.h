@@ -62,32 +62,32 @@ public:
 	 * Add an action to the set of available actions.
 	 * @param newAction The new action to include in the set of available actions.
 	 */
-	void add_action(Action newAction);
+	void add(Action newAction);
 
 	/**
 	 * Remove an action to the set of available actions.
 	 * @param removeAction The action to remove from the set of available actions.
 	 */
-	void remove_action(Action removeAction);
+	void remove(Action removeAction);
 
 	/**
 	 * Set the internal actions list given another list, performing a deep copy.
 	 * @param newActions The vector of new actions to use.
 	 */
-	void set_actions(std::vector<Action> newActions);
+	void set(std::vector<Action> newActions);
 
 	/**
 	 * Return a list of all the available actions.
 	 * @return Return a list of available actions.
 	 */
-	virtual std::vector<Action> get_actions() const;
+	virtual std::vector<Action> all() const;
 
 	/**
 	 * Return a list of the actions available given a state.
 	 * @param state The current state.
 	 * @return Return a list of available actions.
 	 */
-	virtual std::vector<Action> get_actions(State state) const;
+	virtual std::vector<Action> available(State state) const;
 
 private:
 	/**
@@ -96,5 +96,6 @@ private:
 	std::vector<Action> actions;
 
 };
+
 
 #endif // FINITE_ACTIONS_H

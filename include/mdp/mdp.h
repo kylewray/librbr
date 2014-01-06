@@ -49,7 +49,7 @@ public:
 	 */
 	~MDP();
 
-private:
+//private:
 	/**
 	 * The states in the MDP; e.g., an array of strings.
 	 */

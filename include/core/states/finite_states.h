@@ -62,25 +62,25 @@ public:
 	 * Add a state to the set of available states.
 	 * @param newState The new state to include in the set of available states.
 	 */
-	void add_state(State newAction);
+	void add(State newState);
 
 	/**
 	 * Remove a state to the set of available states.
 	 * @param removeState The state to remove from the set of available states.
 	 */
-	void remove_state(State removeState);
+	void remove(State removeState);
 
 	/**
 	 * Set the internal states list given another list, performing a deep copy.
-	 * @param newState The vector of new states to use.
+	 * @param newStates The vector of new states to use.
 	 */
-	void set_states(std::vector<State> newStates);
+	void set(std::vector<State> newStates);
 
 	/**
 	 * Return a list of all the available states.
 	 * @return Return a list of available states.
 	 */
-	virtual std::vector<State> get_states() const;
+	virtual std::vector<State> all() const;
 
 	/**
 	 * Return a list of the states available given a previous state and the action taken there.
@@ -89,7 +89,7 @@ public:
 	 * @return Return a list of available states.
 	 *
 	 */
-	virtual std::vector<State> get_states(State state, Action action) const;
+	virtual std::vector<State> available(State state, Action action) const;
 
 private:
 	/**
@@ -98,5 +98,6 @@ private:
 	std::vector<State> states;
 
 };
+
 
 #endif // FINITE_STATES_H

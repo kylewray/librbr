@@ -22,46 +22,48 @@
  */
 
 
-#ifndef REWARDS_H
-#define REWARDS_H
+#ifndef AGENT_H
+#define AGENT_H
 
 
-#include <exception>
+#include <string>
 
 
 /**
- * An exception class unique to reward failures.
+ * An abstract agent object. Typically, this will just be a string; however, by abstracting
+ * the agents, we are able to have agents that are classes in-and-of-themselves.
  */
-class RewardException : public std::exception {
-public:
+struct Agent {
 	/**
-	 * Return the specific error that occurred.
-	 * @return The specific error that occurred.
+	 * The default constructor of the Agent object.
 	 */
-	virtual const char *what() const throw();
+	Agent();
+
+	/**
+	 * The constructor of the Agent object which allows initial specification of the unique name.
+	 * @param initialName The unique name of the state.
+	 */
+	Agent(std::string initialName);
+
+	/**
+	 * The default deconstructor of the Agent object.
+	 */
+	virtual ~Agent();
+
+	/**
+	 * Overload the equals operator to set this agent equal to the agent provided.
+	 * @param agent The agent to copy.
+	 * @return The new version of this agent.
+	 */
+	virtual Agent &operator=(const Agent agent);
+
+	/**
+	 * All agents must have the ability to convert the internal representation to a string.
+	 * For most policy solvers, this must be unique.
+	 */
+	std::string name;
 
 };
 
-/**
- * An abstract class which defines how to interact with a rewards object.
- * This general structure should work for any implementation of rewards,
- * such as a full table lookup, a partial table lookup with 'wildcard' capability,
- * a function, etc. This should be able to map any state, state-action pair, or
- * state-action-state triple to a real value, or a distribution over possible next
- * states for continuous states and/or actions.
- *
- * This high level class allows for a single definition of each MDP-like object, instead
- * of one for every kind of combination of actions, states, etc.
- */
-class Rewards {
-public:
-	/**
-	 * The deconstructor for the Rewards class, which ensures that children
-	 * classes properly deconstruct themselves.
-	 */
-	virtual ~Rewards();
 
-};
-
-
-#endif // REWARDS_H
+#endif // AGENT_H

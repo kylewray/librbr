@@ -22,42 +22,49 @@
  */
 
 
-#ifndef DEC_POMDP_POLICY_H
-#define DEC_POMDP_POLICY_H
+#ifndef OBSERVATION_H
+#define OBSERVATION_H
 
 
 #include <string>
 
-#include "../scp/scp_policy.h"
-
 
 /**
- * A solution for a Decentralized Partially Observable Markov Decision Process (Dec-POMDP).
+ * An abstract observation object. Typically, this will just be a string; however, by abstracting
+ * the observations, we are able to have observations that are classes in-and-of-themselves.
  */
-class DecPOMDPPolicy : public Policy {
-
-public:
+struct Observation {
+	/**
+	 * The default constructor of the Observation object.
+	 */
+	Observation();
 
 	/**
-	 * A function which loads an SCP solution file.
-	 *
-	 * @param filename The name of the file to load.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
+	 * The constructor of the Observation object which allows initial specification of the unique name.
+	 * @param initialName The unique name of the state.
 	 */
-	bool load(std::string filename);
+	Observation(std::string initialName);
 
 	/**
-	 * A function which saves an SCP solution file.
-	 *
-	 * @param filename The name of the file to save.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
+	 * The default deconstructor of the Observation object.
 	 */
-	bool save(std::string filename);
+	virtual ~Observation();
 
-private:
+	/**
+	 * Overload the equals operator to set this observation equal to the observation provided.
+	 * @param observation The observation to copy.
+	 * @return The new version of this observation.
+	 */
+	virtual Observation &operator=(const Observation observation);
 
+	/**
+	 * All observations must have the ability to convert the internal representation to a string.
+	 * For most policy solvers, this must be unique; however, this need not always be the case,
+	 * e.g., continuous observations.
+	 */
+	std::string name;
 
 };
 
 
-#endif // DEC_POMDP_POLICY_H
+#endif // OBSERVATION_H
