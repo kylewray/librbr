@@ -26,12 +26,12 @@
 #define MDP_H
 
 
-#include "../states/states.h"
-#include "../actions/actions.h"
-#include "../state_transitions/state_transitions.h"
-#include "../rewards/rewards.h"
-#include "../initial_state.h"
-#include "../horizon.h"
+#include "../core/states/states.h"
+#include "../core/actions/actions.h"
+#include "../core/state_transitions/state_transitions.h"
+#include "../core/rewards/rewards.h"
+#include "../core/initial_state.h"
+#include "../core/horizon.h"
 
 
 /**
@@ -49,7 +49,7 @@ public:
 	 */
 	~MDP();
 
-//private:
+private:
 	/**
 	 * The states in the MDP; e.g., an array of strings.
 	 */

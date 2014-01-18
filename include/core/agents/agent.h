@@ -33,7 +33,8 @@
  * An abstract agent object. Typically, this will just be a string; however, by abstracting
  * the agents, we are able to have agents that are classes in-and-of-themselves.
  */
-struct Agent {
+class Agent {
+public:
 	/**
 	 * The default constructor of the Agent object.
 	 */
@@ -46,16 +47,36 @@ struct Agent {
 	Agent(std::string initialName);
 
 	/**
+	 * The copy constructor of the Agent object.
+	 * @param other The agent to copy.
+	 */
+	Agent(const Agent &other);
+
+	/**
 	 * The default deconstructor of the Agent object.
 	 */
 	virtual ~Agent();
 
 	/**
 	 * Overload the equals operator to set this agent equal to the agent provided.
-	 * @param agent The agent to copy.
+	 * @param other The agent to copy.
 	 * @return The new version of this agent.
 	 */
-	virtual Agent &operator=(const Agent agent);
+	virtual Agent &operator=(const Agent &other);
+
+	/**
+	 * Overload the equality comparison operator.
+	 * @param other The agent to compare.
+	 * @return Returns @code{true} if this agent is equal to the other; @code{false} otherwise.
+	 */
+	virtual bool operator==(const Agent &other);
+
+	/**
+	 * Overload the less than operator for comparison.
+	 * @param other The agent to compare.
+	 * @return Returns @code{true} if this agent is less than the other; @code{false} otherwise.
+	 */
+	virtual bool operator<(const Agent &other) const;
 
 	/**
 	 * All agents must have the ability to convert the internal representation to a string.

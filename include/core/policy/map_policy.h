@@ -31,11 +31,18 @@
 
 #include "policy.h"
 
+#include "../states/state.h"
+#include "../actions/action.h"
+
 
 /**
  * A simple map policy which works for MDPs and Dec-MDPs; each actual state
  * deterministically maps to a single action. This will likely be used
  * exclusively for infinite horizon MDPs and Dec-MDPs.
+ *
+ * This class facilitates the iterative action selection process by first
+ * setting the initial state, and then continually following the policy
+ * mappings.
  */
 class MapPolicy : public Policy {
 public:
@@ -45,24 +52,19 @@ public:
 	MapPolicy();
 
 	/**
-	 * The constructor for a MapPolicy object which allows the user to set the number of states.
-	 */
-	MapPolicy();
-
-	/**
 	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
 	 */
 	virtual ~MapPolicy();
 
 	/**
-	 * A virtual function which must load a policy file.
+	 * A function which must load a policy file.
 	 * @param filename The name and path of the file to load.
 	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	virtual bool load(std::string filename);
 
 	/**
-	 * A virtual function which must save a policy file.
+	 * A function which must save a policy file.
 	 * @param filename The name and path of the file to save.
 	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
@@ -79,11 +81,27 @@ public:
 	 */
 	virtual void reset();
 
+	/**
+	 * Initialize the MapPolicy object with the initial state.
+	 * @param initialState The initial state to start.
+	 */
+	void initialize(State initialState);
+
 private:
 	/**
-	 * The internal mapping from states to actions.
+	 * Defines the policy itself; it's the internal mapping from states to actions.
 	 */
 	std::map<State, Action> policy;
+
+	/**
+	 * Used in execution; it is the current state of the system.
+	 */
+	State current;
+
+	/**
+	 * The initial state.
+	 */
+	State initial;
 
 };
 

@@ -26,7 +26,9 @@
 #define VALUE_ITERATION_H
 
 
-#include "../core/policy/policy.h"
+#include "mdp.h"
+
+#include "../core/policy/map_policy.h"
 
 
 /**
@@ -50,7 +52,7 @@ public:
 	 * @return Return the optimal policy; NULL is returned if an error occurred,
 	 * or the MDP provided was invalid.
 	 */
-	Policy *solve(const MDP *mdp);
+	MapPolicy *solve(const MDP *mdp);
 
 };
 

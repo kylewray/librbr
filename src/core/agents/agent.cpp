@@ -1,0 +1,87 @@
+/**
+ *  The MIT License (MIT)
+ *
+ *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy of
+ *  this software and associated documentation files (the "Software"), to deal in
+ *  the Software without restriction, including without limitation the rights to
+ *  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ *  the Software, and to permit persons to whom the Software is furnished to do so,
+ *  subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ *  FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ *  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ *  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+
+#include "../../../include/core/agents/agent.h"
+
+
+/**
+ * The default constructor of the Agent object.
+ */
+Agent::Agent()
+{ }
+
+/**
+ * The constructor of the Agent object which allows initial specification of the unique name.
+ * @param initialName The unique name of the state.
+ */
+Agent::Agent(std::string initialName)
+{
+	name = initialName;
+}
+
+/**
+ * The copy constructor of the Agent object.
+ * @param other The agent to copy.
+ */
+Agent::Agent(const Agent &other)
+{
+	name = other.name;
+}
+
+/**
+ * The default deconstructor of the Agent object.
+ */
+Agent::~Agent()
+{ }
+
+/**
+ * Overload the equals operator to set this agent equal to the agent provided.
+ * @param other The agent to copy.
+ * @return The new version of this agent.
+ */
+Agent &Agent::operator=(const Agent &other)
+{
+	name = other.name;
+	return *this;
+}
+
+/**
+ * Overload the equality comparison operator.
+ * @param other The agent to compare.
+ * @return Returns @code{true} if this agent is equal to the other; @code{false} otherwise.
+ */
+bool Agent::operator==(const Agent &other)
+{
+	return name == other.name;
+}
+
+/**
+ * Overload the less than operator for comparison.
+ * @param other The agent to compare.
+ * @return Returns @code{true} if this agent is less than the other; @code{false} otherwise.
+ */
+bool Agent::operator<(const Agent &other) const
+{
+	return name < other.name;
+}

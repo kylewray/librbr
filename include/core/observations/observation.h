@@ -46,16 +46,36 @@ struct Observation {
 	Observation(std::string initialName);
 
 	/**
+	 * The copy constructor of the Observation object.
+	 * @param other The observation to copy.
+	 */
+	Observation(const Observation &other);
+
+	/**
 	 * The default deconstructor of the Observation object.
 	 */
 	virtual ~Observation();
 
 	/**
 	 * Overload the equals operator to set this observation equal to the observation provided.
-	 * @param observation The observation to copy.
+	 * @param other The observation to copy.
 	 * @return The new version of this observation.
 	 */
-	virtual Observation &operator=(const Observation observation);
+	virtual Observation &operator=(const Observation &other);
+
+	/**
+	 * Overload the equality comparison operator.
+	 * @param other The observation to compare.
+	 * @return Returns @code{true} if this observation is equal to the other; @code{false} otherwise.
+	 */
+	virtual bool operator==(const Observation &other);
+
+	/**
+	 * Overload the less than operator for comparison.
+	 * @param other The observation to compare.
+	 * @return Returns @code{true} if this observation is less than the other; @code{false} otherwise.
+	 */
+	virtual bool operator<(const Observation &other) const;
 
 	/**
 	 * All observations must have the ability to convert the internal representation to a string.

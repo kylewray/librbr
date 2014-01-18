@@ -26,6 +26,8 @@
 #define INITIAL_STATE_H
 
 
+#include <map>
+
 #include "states/state.h"
 
 

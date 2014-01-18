@@ -22,51 +22,46 @@
  */
 
 
-#ifndef POLICY_H
-#define POLICY_H
-
-
-#include <string>
-
-#include "../actions/action.h"
+#include "../../../include/core/policy/policy.h"
 
 
 /**
- * An abstract class for all policies of MDP-like objects.
+ * A virtual deconstructor to prevent errors upon the deletion of a child object.
  */
-class Policy {
-public:
-	/**
-	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
-	 */
-	virtual ~Policy();
+Policy::~Policy()
+{ }
 
-	/**
-	 * A virtual function which must load a policy file.
-	 * @param filename The name and path of the file to load.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
-	 */
-	virtual bool load(std::string filename);
+/**
+ * A virtual function which must load a policy file.
+ * @param filename The name and path of the file to load.
+ * @return Return @code{true} if an error occurred, @code{false} otherwise.
+ */
+bool Policy::load(std::string filename)
+{
+	return false;
+}
 
-	/**
-	 * A virtual function which must save a policy file.
-	 * @param filename The name and path of the file to save.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
-	 */
-	virtual bool save(std::string filename) const;
+/**
+ * A virtual function which must save a policy file.
+ * @param filename The name and path of the file to save.
+ * @return Return @code{true} if an error occurred, @code{false} otherwise.
+ */
+bool Policy::save(std::string filename) const
+{
+	return false;
+}
 
-	/**
-	 * A function which follows the defined policy, having the current state stored internally,
-	 * and returns the action to select next.
-	 */
-	virtual Action next();
+/**
+ * A function which follows the defined policy, having the current state stored internally,
+ * and returns the action to select next.
+ */
+Action Policy::next()
+{
+	return Action();
+}
 
-	/**
-	 * Reset the policy to the initial state.
-	 */
-	virtual void reset();
-
-};
-
-
-#endif // POLICY_H
+/**
+ * Reset the policy to the initial state.
+ */
+void Policy::reset()
+{ }

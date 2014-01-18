@@ -22,51 +22,38 @@
  */
 
 
-#ifndef POLICY_H
-#define POLICY_H
-
-
-#include <string>
-
-#include "../actions/action.h"
+#include "../../include/mdp/value_iteration.h"
 
 
 /**
- * An abstract class for all policies of MDP-like objects.
+ * The constructor for the ValueIteration class.
  */
-class Policy {
-public:
-	/**
-	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
-	 */
-	virtual ~Policy();
+ValueIteration::ValueIteration()
+{
 
-	/**
-	 * A virtual function which must load a policy file.
-	 * @param filename The name and path of the file to load.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
-	 */
-	virtual bool load(std::string filename);
+}
 
-	/**
-	 * A virtual function which must save a policy file.
-	 * @param filename The name and path of the file to save.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
-	 */
-	virtual bool save(std::string filename) const;
+/**
+ * The deconstructor for the ValueIteration class.
+ */
+ValueIteration::~ValueIteration()
+{
 
-	/**
-	 * A function which follows the defined policy, having the current state stored internally,
-	 * and returns the action to select next.
-	 */
-	virtual Action next();
+}
 
-	/**
-	 * Reset the policy to the initial state.
-	 */
-	virtual void reset();
+/**
+ * Solve the MDP provided using value iteration.
+ * @param mdp The Markov decision process to solve.
+ * @return Return the optimal policy; NULL is returned if an error occurred,
+ * or the MDP provided was invalid.
+ */
+MapPolicy *ValueIteration::solve(const MDP *mdp)
+{
+	if (mdp == nullptr) {
+		return nullptr;
+	}
 
-};
+	MapPolicy *policy = new MapPolicy();
 
-
-#endif // POLICY_H
+	return policy;
+}

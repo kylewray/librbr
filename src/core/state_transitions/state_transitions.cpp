@@ -22,51 +22,21 @@
  */
 
 
-#ifndef POLICY_H
-#define POLICY_H
-
-
-#include <string>
-
-#include "../actions/action.h"
+#include "../../../include/core/state_transitions/state_transitions.h"
 
 
 /**
- * An abstract class for all policies of MDP-like objects.
+ * Return the specific error that occurred.
+ * @return The specific error that occurred.
  */
-class Policy {
-public:
-	/**
-	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
-	 */
-	virtual ~Policy();
+const char *StateTransitionException::what() const throw()
+{
+	return "Error[StateTransitionException]: Generic exception occurred.";
+}
 
-	/**
-	 * A virtual function which must load a policy file.
-	 * @param filename The name and path of the file to load.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
-	 */
-	virtual bool load(std::string filename);
-
-	/**
-	 * A virtual function which must save a policy file.
-	 * @param filename The name and path of the file to save.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
-	 */
-	virtual bool save(std::string filename) const;
-
-	/**
-	 * A function which follows the defined policy, having the current state stored internally,
-	 * and returns the action to select next.
-	 */
-	virtual Action next();
-
-	/**
-	 * Reset the policy to the initial state.
-	 */
-	virtual void reset();
-
-};
-
-
-#endif // POLICY_H
+/**
+ * The deconstructor for the StateTransitions class, which ensures that children
+ * classes properly deconstruct themselves.
+ */
+StateTransitions::~StateTransitions()
+{ }

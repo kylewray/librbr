@@ -32,6 +32,8 @@
 
 #include "policy.h"
 
+#include "../observations/observation.h"
+
 
 /**
  * A small structure for Finite State Controller (FSC) policy states. In reality, all
@@ -45,18 +47,18 @@ struct FSCPolicyState { };
  * representation, too. Internally, this object is a stochastic FSC, in which
  * every FSC state maps to a distribution over actions, and a subsequent observation
  * maps to a distribution over the next FSC state (not usually world state).
+ *
+ * This class facilitates the iterative action selection process by first
+ * selecting an internal FSC state following the given distribution, and then
+ * continually following the stochastic policy mappings via the 'next' function.
  */
 class FSCPolicy : public Policy {
 public:
 	/**
-	 * The default constructor for a FSCPolicy object.
+	 * The constructor for a FSCPolicy object which specifies the number of internal policy states.
+	 * @param numPolicyStates The number of policy states internal to the FSC policy.
 	 */
-	FSCPolicy();
-
-	/**
-	 * The constructor for a FSCPolicy object which allows the user to specify.
-	 */
-	FSCPolicy();
+	FSCPolicy(int numPolicyStates);
 
 	/**
 	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
@@ -64,14 +66,14 @@ public:
 	virtual ~FSCPolicy();
 
 	/**
-	 * A virtual function which must load a policy file.
+	 * A function which must load a policy file.
 	 * @param filename The name and path of the file to load.
 	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	virtual bool load(std::string filename);
 
 	/**
-	 * A virtual function which must save a policy file.
+	 * A function which must save a policy file.
 	 * @param filename The name and path of the file to save.
 	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
@@ -88,6 +90,13 @@ public:
 	 */
 	virtual void reset();
 
+	/**
+	 * Initialize the FSCPolicy object, which resets only the execution variables
+	 * such as the random initial selection of the internal FSC state following the
+	 * distribution over initial states.
+	 */
+	void initialize();
+
 private:
 	/**
 	 * The FSC states (nodes).
@@ -97,12 +106,22 @@ private:
 	/**
 	 * The mapping of FSC states to a distribution over actions.
 	 */
-	std::map<FSCPolicyState, std::map<Action, double>> policy;
+	std::map<FSCPolicyState, std::map<Action, double> > policy;
 
 	/**
 	 * The mapping of FSC state-observation pair to a distribution over subsequent FSC states.
 	 */
-	std::map<FSCPolicyState, std::map<Observation, std::map<FSCPolicyState, double>>> transition;
+	std::map<FSCPolicyState, std::map<Observation, std::map<FSCPolicyState, double> > > transitions;
+
+	/**
+	 * The mapping of an initial distribution over FSC states.
+	 */
+	std::map<FSCPolicyState, double> initial;
+
+	/**
+	 * Used in execution, this variable denotes the current internal FSC state.
+	 */
+	FSCPolicyState current;
 
 };
 

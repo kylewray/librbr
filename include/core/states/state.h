@@ -46,16 +46,36 @@ struct State {
 	State(std::string initialName);
 
 	/**
+	 * The copy constructor of the State object.
+	 * @param other The state to copy.
+	 */
+	State(const State &other);
+
+	/**
 	 * The default deconstructor of the State object.
 	 */
 	virtual ~State();
 
 	/**
 	 * Overload the equals operator to set this state equal to the state provided.
-	 * @param state The state to copy.
+	 * @param other The state to copy.
 	 * @return The new version of this state.
 	 */
-	virtual State &operator=(const State state);
+	virtual State &operator=(const State &other);
+
+	/**
+	 * Overload the equality comparison operator.
+	 * @param other The state to compare.
+	 * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
+	 */
+	virtual bool operator==(const State &other);
+
+	/**
+	 * Overload the less than operator for comparison.
+	 * @param other The state to compare.
+	 * @return Returns @code{true} if this state is less than the other; @code{false} otherwise.
+	 */
+	virtual bool operator<(const State &other) const;
 
 	/**
 	 * All states must have the ability to convert the internal representation to a string.

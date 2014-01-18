@@ -26,6 +26,7 @@
 #define AGENTS_H
 
 
+#include <vector>
 #include <exception>
 
 #include "agent.h"

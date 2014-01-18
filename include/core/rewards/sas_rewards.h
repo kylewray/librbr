@@ -27,7 +27,6 @@
 
 
 #include <map>
-#include <tuple>
 
 #include "rewards.h"
 
@@ -80,7 +79,7 @@ private:
 	/**
 	 * The list of all state-action-state rewards.
 	 */
-	std::map<std::tuple<State, Action, State>, double> rewards;
+	std::map<State, std::map<Action, std::map<State, double> > > rewards;
 
 };
 

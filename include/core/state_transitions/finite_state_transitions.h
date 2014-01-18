@@ -27,7 +27,6 @@
 
 
 #include <map>
-#include <tuple>
 
 #include "state_transitions.h"
 
@@ -80,7 +79,7 @@ private:
 	/**
 	 * The list of all state-action-state transitions.
 	 */
-	std::map<std::tuple<State, Action, State>, double> stateTransitions;
+	std::map<State, std::map<Action, std::map<State, double> > > stateTransitions;
 
 };
 

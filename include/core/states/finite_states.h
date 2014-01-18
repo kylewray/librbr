@@ -30,10 +30,7 @@
 
 #include "state.h"
 #include "states.h"
-
-
-//#include "../actions/action.h"
-class Action;
+#include "../actions/action.h"
 
 
 /**

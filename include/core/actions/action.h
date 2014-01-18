@@ -33,7 +33,8 @@
  * An abstract action object. Typically, this will just be a string; however, by abstracting
  * the actions, we are able to have actions that are classes in-and-of-themselves.
  */
-struct Action {
+class Action {
+public:
 	/**
 	 * The default constructor of the Action object.
 	 */
@@ -46,16 +47,36 @@ struct Action {
 	Action(std::string initialName);
 
 	/**
+	 * The copy constructor of the Action object. Required by use as a map key.
+	 * @param other The action to copy.
+	 */
+	Action(const Action &other);
+
+	/**
 	 * The default deconstructor of the Action object.
 	 */
 	virtual ~Action();
 
 	/**
 	 * Overload the equals operator to set this action equal to the action provided.
-	 * @param action The action to copy.
+	 * @param other The action to copy.
 	 * @return The new version of this action.
 	 */
-	virtual Action &operator=(const Action action);
+	virtual Action &operator=(const Action &other);
+
+	/**
+	 * Overload the equality comparison operator.
+	 * @param other The action to compare.
+	 * @return Returns @code{true} if this action is equal to the other; @code{false} otherwise.
+	 */
+	virtual bool operator==(const Action &other);
+
+	/**
+	 * Overload the less than operator for comparison.
+	 * @param other The action to compare.
+	 * @return Returns @code{true} if this action is less than the other; @code{false} otherwise.
+	 */
+	virtual bool operator<(const Action &other) const;
 
 	/**
 	 * All actions must have the ability to convert the internal representation to a string.
