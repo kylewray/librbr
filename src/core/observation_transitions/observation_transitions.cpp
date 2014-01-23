@@ -26,15 +26,6 @@
 
 
 /**
- * Return the specific error that occurred.
- * @return The specific error that occurred.
- */
-const char *ObservationTransitionException::what() const throw()
-{
-	return "Error[ObservationTransitionException]: Generic exception occurred.";
-}
-
-/**
  * The deconstructor for the ObservationTransitions class, which ensures that children
  * classes properly deconstruct themselves.
  */

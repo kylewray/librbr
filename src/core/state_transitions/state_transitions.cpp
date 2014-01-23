@@ -26,15 +26,6 @@
 
 
 /**
- * Return the specific error that occurred.
- * @return The specific error that occurred.
- */
-const char *StateTransitionException::what() const throw()
-{
-	return "Error[StateTransitionException]: Generic exception occurred.";
-}
-
-/**
  * The deconstructor for the StateTransitions class, which ensures that children
  * classes properly deconstruct themselves.
  */

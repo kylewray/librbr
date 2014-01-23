@@ -74,7 +74,7 @@ public:
 	 * A function which follows the defined policy, having the current state stored internally,
 	 * and returns the action to select next.
 	 */
-	virtual Action next();
+	virtual Action *next();
 
 	/**
 	 * Reset the policy to the initial state.
@@ -85,23 +85,23 @@ public:
 	 * Initialize the MapPolicy object with the initial state.
 	 * @param initialState The initial state to start.
 	 */
-	void initialize(State initialState);
+	void initialize(State *initialState);
 
 private:
 	/**
 	 * Defines the policy itself; it's the internal mapping from states to actions.
 	 */
-	std::map<State, Action> policy;
+	std::map<State *, Action *> policy;
 
 	/**
 	 * Used in execution; it is the current state of the system.
 	 */
-	State current;
+	State *current;
 
 	/**
 	 * The initial state.
 	 */
-	State initial;
+	State *initial;
 
 };
 

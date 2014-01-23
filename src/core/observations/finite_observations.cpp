@@ -36,33 +36,36 @@ FiniteObservations::FiniteObservations()
  */
 FiniteObservations::~FiniteObservations()
 {
-	observations.clear();
+	reset();
 }
 
 /**
  * Add a observation to the set of available observations.
  * @param newObservation The new observation to include in the set of available states.
  */
-void FiniteObservations::add(Observation newObservation)
+void FiniteObservations::add(Observation *newObservation)
 {
 	observations.push_back(newObservation);
 }
 
 /**
- * Remove a observation to the set of available observations.
+ * Remove a observation to the set of available observations. This frees the memory.
  * @param removeObservation The state to remove from the set of available observations.
  */
-void FiniteObservations::remove(Observation removeObservation)
+void FiniteObservations::remove(Observation *removeObservation)
 {
 	observations.erase(std::remove(observations.begin(), observations.end(), removeObservation), observations.end());
+	delete removeObservation;
 }
 
 /**
- * Set the internal observations list given another list, performing a deep copy.
+ * Set the internal observations list given another list, performing a deep copy. This resets
+ * the current list of states and frees the memory.
  * @param newObservations The vector of new observations to use.
  */
-void FiniteObservations::set(std::vector<Observation> newObservations)
+void FiniteObservations::set(std::vector<Observation *> newObservations)
 {
+	reset();
 	observations = newObservations;
 }
 
@@ -70,7 +73,7 @@ void FiniteObservations::set(std::vector<Observation> newObservations)
  * Return a list of all the available observations.
  * @return Return a list of available observations.
  */
-std::vector<Observation> FiniteObservations::all() const
+std::vector<Observation *> FiniteObservations::all() const
 {
 	return observations;
 }
@@ -82,7 +85,43 @@ std::vector<Observation> FiniteObservations::all() const
  * @return Return a list of available observations.
  *
  */
-std::vector<Observation> FiniteObservations::available(State state, Action action) const
+std::vector<Observation *> FiniteObservations::available(State *state, Action *action) const
 {
 	return observations;
+}
+
+/**
+ * Return the number of observations.
+ * @return The number of observations.
+ */
+int FiniteObservations::get_num_observations() const
+{
+	return observations.size();
+}
+
+/**
+ * Get a particular observation given the name.
+ * @param observationName The name of the observation.
+ * @return The observation with the corresponding name provided and @code{nullptr}
+ * 		if the observation was not found.
+ */
+Observation *FiniteObservations::find(std::string observationName)
+{
+	for (Observation *observation : observations) {
+		if (observation->get_name().compare(observationName) == 0) {
+			return observation;
+		}
+	}
+	return nullptr;
+}
+
+/**
+ * Reset the observations, clearing the internal list and freeing the memory.
+ */
+void FiniteObservations::reset()
+{
+	for (Observation *observation : observations) {
+		delete observation;
+	}
+	observations.clear();
 }

@@ -56,13 +56,31 @@ State::~State()
 { }
 
 /**
+ * Set the name.
+ * @param newName The new name.
+ */
+void State::set_name(std::string newName)
+{
+	name = newName;
+}
+
+/**
+ * Get the name.
+ * @return The current name.
+ */
+std::string State::get_name() const
+{
+	return name;
+}
+
+/**
  * Overload the equals operator to set this state equal to the state provided.
  * @param other The state to copy.
  * @return The new version of this state.
  */
 State &State::operator=(const State &other)
 {
-	name = other.name;
+	name = other.get_name();
 	return *this;
 }
 
@@ -73,7 +91,7 @@ State &State::operator=(const State &other)
  */
 bool State::operator==(const State &other)
 {
-	return name == other.name;
+	return name == other.get_name();
 }
 
 /**
@@ -83,5 +101,5 @@ bool State::operator==(const State &other)
  */
 bool State::operator<(const State &other) const
 {
-	return name < other.name;
+	return name < other.get_name();
 }

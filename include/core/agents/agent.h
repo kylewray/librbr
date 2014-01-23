@@ -58,6 +58,18 @@ public:
 	virtual ~Agent();
 
 	/**
+	 * Set the name.
+	 * @param newName The new name.
+	 */
+	virtual void set_name(std::string newName);
+
+	/**
+	 * Get the name.
+	 * @return The current name.
+	 */
+	virtual std::string get_name() const;
+
+	/**
 	 * Overload the equals operator to set this agent equal to the agent provided.
 	 * @param other The agent to copy.
 	 * @return The new version of this agent.
@@ -78,6 +90,7 @@ public:
 	 */
 	virtual bool operator<(const Agent &other) const;
 
+protected:
 	/**
 	 * All agents must have the ability to convert the internal representation to a string.
 	 * For most policy solvers, this must be unique.

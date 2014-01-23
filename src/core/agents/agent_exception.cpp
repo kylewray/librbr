@@ -22,11 +22,14 @@
  */
 
 
-#include "../../../include/core/observations/observations.h"
+#include "../../../include/core/agents/agent_exception.h"
 
 
 /**
- * The deconstructor for the Observations class, which ensures that children classes deconstruct.
+ * Return the specific error that occurred.
+ * @return The specific error that occurred.
  */
-Observations::~Observations()
-{ }
+const char *AgentException::what() const throw()
+{
+	return "Error[AgentException]: Generic exception occurred.";
+}

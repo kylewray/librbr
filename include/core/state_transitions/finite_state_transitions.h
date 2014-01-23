@@ -64,7 +64,7 @@ public:
 	 * @param probability	The probability of going from the state, taking the action, then
 	 * 						moving to the nextState.
 	 */
-	void set(State state, Action action, State nextState, double probability);
+	void set(State *state, Action *action, State *nextState, double probability);
 
 	/**
 	 * The probability of a transition following the state-action-state triple provided.
@@ -73,13 +73,18 @@ public:
 	 * @param nextState	The next state with which we assign the probability.
 	 * @return The probability of going from the state, taking the action, then moving to the nextState.
 	 */
-	virtual double get(State state, Action action, State nextState) const;
+	virtual double get(State *state, Action *action, State *nextState) const;
+
+	/**
+	 * Reset the state transitions, clearing the internal mapping.
+	 */
+	virtual void reset();
 
 private:
 	/**
 	 * The list of all state-action-state transitions.
 	 */
-	std::map<State, std::map<Action, std::map<State, double> > > stateTransitions;
+	std::map<State *, std::map<Action *, std::map<State *, double> > > stateTransitions;
 
 };
 

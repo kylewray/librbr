@@ -26,22 +26,6 @@
 #define STATE_TRANSITIONS_H
 
 
-#include <exception>
-
-
-/**
- * An exception class unique to state transition failures.
- */
-class StateTransitionException : public std::exception {
-public:
-	/**
-	 * Return the specific error that occurred.
-	 * @return The specific error that occurred.
-	 */
-	virtual const char *what() const throw();
-
-};
-
 /**
  * An abstract class which defines how to interact with a state transitions object.
  * This general structure should work for any implementation of state transitions,

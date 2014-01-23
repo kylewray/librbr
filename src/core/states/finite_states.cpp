@@ -23,6 +23,7 @@
 
 
 #include "../../../include/core/states/finite_states.h"
+#include "../../../include/core/states/state_exception.h"
 
 
 /**
@@ -36,33 +37,36 @@ FiniteStates::FiniteStates()
  */
 FiniteStates::~FiniteStates()
 {
-	states.clear();
+	reset();
 }
 
 /**
  * Add a state to the set of available states.
  * @param newState The new state to include in the set of available states.
  */
-void FiniteStates::add(State newState)
+void FiniteStates::add(State *newState)
 {
 	states.push_back(newState);
 }
 
 /**
- * Remove a state to the set of available states.
+ * Remove a state to the set of available states. This frees the memory.
  * @param removeState The state to remove from the set of available states.
  */
-void FiniteStates::remove(State removeState)
+void FiniteStates::remove(State *removeState)
 {
 	states.erase(std::remove(states.begin(), states.end(), removeState), states.end());
+	delete removeState;
 }
 
 /**
- * Set the internal states list given another list, performing a deep copy.
+ * Set the internal states list given another list, performing a deep copy. This resets
+ * the current list of states and frees the memory.
  * @param newStates The vector of new states to use.
  */
-void FiniteStates::set(std::vector<State> newStates)
+void FiniteStates::set(std::vector<State *> newStates)
 {
+	reset();
 	states = newStates;
 }
 
@@ -70,19 +74,69 @@ void FiniteStates::set(std::vector<State> newStates)
  * Return a list of all the available states.
  * @return Return a list of available states.
  */
-std::vector<State> FiniteStates::all() const
+std::vector<State *> FiniteStates::all() const
 {
 	return states;
 }
 
 /**
  * Return a list of the states available given a previous state and the action taken there.
- * @param state The previous state.
- * @param action The action taken at the previous state.
+ * @param state		The previous state.
+ * @param action	The action taken at the previous state.
  * @return Return a list of available states.
  *
  */
-std::vector<State> FiniteStates::available(State state, Action action) const
+std::vector<State *> FiniteStates::available(State *state, Action *action) const
 {
 	return states;
+}
+
+/**
+ * Return the number of states.
+ * @return The number of states.
+ */
+int FiniteStates::get_num_states() const
+{
+	return states.size();
+}
+
+/**
+ * Get the state at the particular index specified.
+ * @param index The index of the state to retrieve.
+ * @return The state at the specified index.
+ * @throws StateException The index was invalid.
+ */
+State *FiniteStates::get_state(int index) const
+{
+	if (index < 0 || index >= states.size()) {
+		throw StateException();
+	}
+	return states[index];
+}
+
+/**
+ * Get a particular state given the name.
+ * @param stateName The name of the state.
+ * @return The state with the corresponding name provided and @code{nullptr}
+ * 		if the state was not found.
+ */
+State *FiniteStates::find(std::string stateName)
+{
+	for (State *state : states) {
+		if (state->get_name().compare(stateName) == 0) {
+			return state;
+		}
+	}
+	return nullptr;
+}
+
+/**
+ * Reset the states, clearing the internal list and freeing the memory.
+ */
+void FiniteStates::reset()
+{
+	for (State *state : states) {
+		delete state;
+	}
+	states.clear();
 }

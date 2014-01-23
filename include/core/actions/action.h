@@ -58,6 +58,18 @@ public:
 	virtual ~Action();
 
 	/**
+	 * Set the name.
+	 * @param newName The new name.
+	 */
+	virtual void set_name(std::string newName);
+
+	/**
+	 * Get the name.
+	 * @return The current name.
+	 */
+	virtual std::string get_name() const;
+
+	/**
 	 * Overload the equals operator to set this action equal to the action provided.
 	 * @param other The action to copy.
 	 * @return The new version of this action.
@@ -78,6 +90,7 @@ public:
 	 */
 	virtual bool operator<(const Action &other) const;
 
+protected:
 	/**
 	 * All actions must have the ability to convert the internal representation to a string.
 	 * For most policy solvers, this must be unique; however, this need not always be the case,

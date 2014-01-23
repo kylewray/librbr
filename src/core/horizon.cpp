@@ -106,3 +106,12 @@ void Horizon::set_discount_factor(double d)
 {
 	discountFactor = std::max(0.0, std::min(1.0, d));
 }
+
+/**
+ * Reset the horizon to a default horizon of 1 (finite) with 1.0 discount factor.
+ */
+void Horizon::reset()
+{
+	horizon = 1;
+	discountFactor = 1.0;
+}

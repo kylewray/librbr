@@ -47,7 +47,7 @@ public:
 	 * The constructor for the InitialState class, specifying the true initial state.
 	 * @param state The true initial state.
 	 */
-	InitialState(State state);
+	InitialState(State *state);
 
 	/**
 	 * The deconstructor for the InitialState class.
@@ -58,27 +58,27 @@ public:
 	 * Set the true initial state.
 	 * @param state The true initial state.
 	 */
-	void set_initial_state(State state);
+	void set_initial_state(State *state);
 
 	/**
 	 * Set the probability of a particular state.
 	 * @param state 		The state to which the probability will be assigned.
 	 * @param probability	The probability of that the initial state is the state given.
 	 */
-	void set_initial_belief(State state, double probability);
+	void set_initial_belief(State *state, double probability);
 
 	/**
 	 * Get the true initial state.
 	 * @return The true initial state.
 	 */
-	State get_initial_state() const;
+	State *get_initial_state();
 
 	/**
-	 *Get the probability of a particular state.
+	 * Get the probability of a particular state.
 	 * @param state The state to which the probability will be assigned.
 	 * @return The probability of that the initial state is the state given.
 	 */
-	double get_initial_belief(State state) const;
+	double get_initial_belief(State *state) const;
 
 	/**
 	 * Reset the initial state and the initial belief.
@@ -89,13 +89,13 @@ private:
 	/**
 	 * The true initial state.
 	 */
-	State initialState;
+	State *initialState;
 
 	/**
 	 * The initial belief over the states. If a state is not mapped, then it
 	 * is assumed that the probability for that state is 0.
 	 */
-	std::map<State, double> initialBelief;
+	std::map<State *, double> initialBelief;
 
 };
 

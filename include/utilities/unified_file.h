@@ -29,8 +29,29 @@
 #include <string>
 #include <vector>
 
-#include "scp_types.h"
 
+#include "../core/agents/agents.h"
+#include "../core/states/finite_states.h"
+#include "../core/actions/finite_actions.h"
+#include "../core/observations/finite_observations.h"
+#include "../core/state_transitions/finite_state_transitions.h"
+#include "../core/observation_transitions/finite_observation_transitions.h"
+#include "../core/rewards/sas_rewards.h"
+#include "../core/initial_state.h"
+#include "../core/horizon.h"
+
+
+/**
+ * Enumerate the possible categories of objects which can be
+ * defined in an unified file.
+ */
+enum FileObjectCategory {
+	OBJECT_NONE,
+	OBJECT_STATE_TRANSITIONS,
+	OBJECT_OBSERVATION_TRANSITIONS,
+	OBJECT_REWARDS,
+	NUM_OBJECT_CATEGORY
+};
 
 /**
  * A file loading and saving class called UnifiedFile which acts as an intermediate
@@ -78,49 +99,49 @@ public:
 
 private:
 	/**
-	 * The agents in the SCP; e.g., a vector of strings.
+	 * The agents in the MDP-like object; e.g., a vector of strings.
 	 */
-	Agents agents;
+	Agents *agents;
 
 	/**
-	 * The states in the SCP; e.g., factored vectors of strings.
+	 * The states in the MDP-like object; e.g., factored vectors of strings.
 	 */
-	States states;
+	FiniteStates *states;
 
 	/**
-	 * The actions in the SCP; e.g., factored vectors of strings.
+	 * The actions in the MDP-like object; e.g., factored vectors of strings.
 	 */
-	Actions actions;
+	FiniteActions *actions;
 
 	/**
-	 * The observations in the SCP; e.g., factored vectors of strings.
+	 * The observations in the MDP-like object; e.g., factored vectors of strings.
 	 */
-	Observations observations;
+	FiniteObservations *observations;
 
 	/**
-	 * The state transition function in the SCP; e.g., a three-dimensional array mapping to a double.
+	 * The state transition function in the MDP-like object; e.g., a three-dimensional array mapping to a double.
 	 */
-	StateTransitions stateTransitions;
+	FiniteStateTransitions *stateTransitions;
 
 	/**
-	 * The observation transition function in the SCP; e.g., a three-dimensional array mapping to a double.
+	 * The observation transition function in the MDP-like object; e.g., a three-dimensional array mapping to a double.
 	 */
-	ObservationTransitions observationTransitions;
+	FiniteObservationTransitions *observationTransitions;
 
 	/**
 	 * The reward function in the SCP; e.g., a two-dimensional array mapping to a double.
 	 */
-	Rewards rewards;
+	SASRewards *rewards;
 
 	/**
 	 * The initial state or initial belief state; e.g., factored initial state.
 	 */
-	InitialState initialState;
+	InitialState *initialState;
 
 	/**
 	 * The horizon, either a finite time or a discount factor.
 	 */
-	Horizon horizon;
+	Horizon *horizon;
 
 };
 

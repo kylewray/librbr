@@ -26,16 +26,6 @@
 
 
 /**
- * Return the specific error that occurred.
- * @return The specific error that occurred.
- */
-const char *ActionException::what() const throw()
-{
-	return "Error[ActionException]: Generic exception occurred.";
-}
-
-
-/**
  * The deconstructor for the Actions class, which ensures that children classes deconstruct.
  */
 Actions::~Actions()

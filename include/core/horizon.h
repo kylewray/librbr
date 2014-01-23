@@ -86,6 +86,11 @@ public:
 	 */
 	void set_discount_factor(double d);
 
+	/**
+	 * Reset the horizon to a default horizon of 1 (finite) with 1.0 discount factor.
+	 */
+	void reset();
+
 private:
 	/**
 	 * The horizon. A horizon of 0 means infinite horizon.

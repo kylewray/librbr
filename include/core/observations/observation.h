@@ -33,7 +33,8 @@
  * An abstract observation object. Typically, this will just be a string; however, by abstracting
  * the observations, we are able to have observations that are classes in-and-of-themselves.
  */
-struct Observation {
+class Observation {
+public:
 	/**
 	 * The default constructor of the Observation object.
 	 */
@@ -57,6 +58,18 @@ struct Observation {
 	virtual ~Observation();
 
 	/**
+	 * Set the name.
+	 * @param newName The new name.
+	 */
+	virtual void set_name(std::string newName);
+
+	/**
+	 * Get the name.
+	 * @return The current name.
+	 */
+	virtual std::string get_name() const;
+
+	/**
 	 * Overload the equals operator to set this observation equal to the observation provided.
 	 * @param other The observation to copy.
 	 * @return The new version of this observation.
@@ -77,6 +90,7 @@ struct Observation {
 	 */
 	virtual bool operator<(const Observation &other) const;
 
+protected:
 	/**
 	 * All observations must have the ability to convert the internal representation to a string.
 	 * For most policy solvers, this must be unique; however, this need not always be the case,

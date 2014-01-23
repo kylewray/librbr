@@ -26,15 +26,6 @@
 
 
 /**
- * Return the specific error that occurred.
- * @return The specific error that occurred.
- */
-const char *RewardException::what() const throw()
-{
-	return "Error[RewardException]: Generic exception occurred.";
-}
-
-/**
  * The deconstructor for the Rewards class, which ensures that children
  * classes properly deconstruct themselves.
  */

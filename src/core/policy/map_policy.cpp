@@ -29,7 +29,10 @@
  * The default constructor for a MapPolicy object.
  */
 MapPolicy::MapPolicy()
-{ }
+{
+	current = nullptr;
+	initial = nullptr;
+}
 
 /**
  * A virtual deconstructor to prevent errors upon the deletion of a child object.
@@ -61,7 +64,7 @@ bool MapPolicy::save(std::string filename) const
  * A function which follows the defined policy, having the current state stored internally,
  * and returns the action to select next.
  */
-Action MapPolicy::next()
+Action *MapPolicy::next()
 {
 	return policy[current];
 }
@@ -78,7 +81,7 @@ void MapPolicy::reset()
  * Initialize the MapPolicy object with the initial state.
  * @param initial The initial state to start.
  */
-void MapPolicy::initialize(State initialState)
+void MapPolicy::initialize(State *initialState)
 {
 	current = initialState;
 	initial = initialState;

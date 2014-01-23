@@ -22,11 +22,25 @@
  */
 
 
-#include "../../../include/core/observations/observations.h"
+#ifndef OBSERVATION_EXCEPTION_H
+#define OBSERVATION_EXCEPTION_H
+
+
+#include <exception>
 
 
 /**
- * The deconstructor for the Observations class, which ensures that children classes deconstruct.
+ * An exception class unique to observations failures.
  */
-Observations::~Observations()
-{ }
+class ObservationException : public std::exception {
+public:
+	/**
+	 * Return the specific error that occurred.
+	 * @return The specific error that occurred.
+	 */
+	virtual const char *what() const throw();
+
+};
+
+
+#endif // OBSERVATION_EXCEPTION_H

@@ -36,33 +36,36 @@ FiniteActions::FiniteActions()
  */
 FiniteActions::~FiniteActions()
 {
-	actions.clear();
+	reset();
 }
 
 /**
  * Add an action to the set of available actions.
  * @param newAction The new action to include in the set of available actions.
  */
-void FiniteActions::add(Action newAction)
+void FiniteActions::add(Action *newAction)
 {
 	actions.push_back(newAction);
 }
 
 /**
- * Remove an action to the set of available actions.
+ * Remove an action to the set of available actions. This frees the memory.
  * @param removeAction The action to remove from the set of available actions.
  */
-void FiniteActions::remove(Action removeAction)
+void FiniteActions::remove(Action *removeAction)
 {
 	actions.erase(std::remove(actions.begin(), actions.end(), removeAction), actions.end());
+	delete removeAction;
 }
 
 /**
- * Set the internal actions list given another list, performing a deep copy.
+ * Set the internal actions list given another list, performing a deep copy. This resets
+	 * the current list of states and frees the memory.
  * @param newActions The vector of new actions to use.
  */
-void FiniteActions::set(std::vector<Action> newActions)
+void FiniteActions::set(std::vector<Action *> newActions)
 {
+	reset();
 	actions = newActions;
 }
 
@@ -70,7 +73,7 @@ void FiniteActions::set(std::vector<Action> newActions)
  * Return a list of all the available actions.
  * @return Return a list of available actions.
  */
-std::vector<Action> FiniteActions::all() const
+std::vector<Action *> FiniteActions::all() const
 {
 	return actions;
 }
@@ -80,7 +83,43 @@ std::vector<Action> FiniteActions::all() const
  * @param state The current state.
  * @return Return a list of available actions.
  */
-std::vector<Action> FiniteActions::available(State state) const
+std::vector<Action *> FiniteActions::available(State *state) const
 {
 	return actions;
+}
+
+/**
+ * Return the number of actions.
+ * @return The number of actions.
+ */
+int FiniteActions::get_num_actions() const
+{
+	return actions.size();
+}
+
+/**
+ * Get a particular action given the name.
+ * @param actionName The name of the action.
+ * @return The action with the corresponding name provided and @code{nullptr}
+ * 		if the action was not found.
+ */
+Action *FiniteActions::find(std::string actionName)
+{
+	for (Action *action : actions) {
+		if (action->get_name().compare(actionName) == 0) {
+			return action;
+		}
+	}
+	return nullptr;
+}
+
+/**
+ * Reset the actions, clearing the internal list and freeing the memory.
+ */
+void FiniteActions::reset()
+{
+	for (Action *action : actions) {
+		delete action;
+	}
+	actions.clear();
 }

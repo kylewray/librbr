@@ -46,7 +46,7 @@ Observation::Observation(std::string initialName)
  */
 Observation::Observation(const Observation &other)
 {
-	name = other.name;
+	*this = other;
 }
 
 /**
@@ -56,13 +56,31 @@ Observation::~Observation()
 { }
 
 /**
+ * Set the name.
+ * @param newName The new name.
+ */
+void Observation::set_name(std::string newName)
+{
+	name = newName;
+}
+
+/**
+ * Get the name.
+ * @return The current name.
+ */
+std::string Observation::get_name() const
+{
+	return name;
+}
+
+/**
  * Overload the equals operator to set this observation equal to the observation provided.
  * @param other The observation to copy.
  * @return The new version of this observation.
  */
 Observation &Observation::operator=(const Observation &other)
 {
-	name = other.name;
+	name = other.get_name();
 	return *this;
 }
 
@@ -73,7 +91,7 @@ Observation &Observation::operator=(const Observation &other)
  */
 bool Observation::operator==(const Observation &other)
 {
-	return name == other.name;
+	return name == other.get_name();
 }
 
 /**
@@ -83,5 +101,5 @@ bool Observation::operator==(const Observation &other)
  */
 bool Observation::operator<(const Observation &other) const
 {
-	return name < other.name;
+	return name < other.get_name();
 }

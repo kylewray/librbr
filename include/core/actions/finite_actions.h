@@ -61,38 +61,58 @@ public:
 	 * Add an action to the set of available actions.
 	 * @param newAction The new action to include in the set of available actions.
 	 */
-	void add(Action newAction);
+	void add(Action *newAction);
 
 	/**
-	 * Remove an action to the set of available actions.
+	 * Remove an action to the set of available actions. This frees the memory.
 	 * @param removeAction The action to remove from the set of available actions.
 	 */
-	void remove(Action removeAction);
+	void remove(Action *removeAction);
 
 	/**
-	 * Set the internal actions list given another list, performing a deep copy.
+	 * Set the internal actions list given another list, performing a deep copy. This resets
+	 * the current list of states and frees the memory.
 	 * @param newActions The vector of new actions to use.
 	 */
-	void set(std::vector<Action> newActions);
+	void set(std::vector<Action *> newActions);
 
 	/**
 	 * Return a list of all the available actions.
 	 * @return Return a list of available actions.
 	 */
-	virtual std::vector<Action> all() const;
+	virtual std::vector<Action *> all() const;
 
 	/**
 	 * Return a list of the actions available given a state.
 	 * @param state The current state.
 	 * @return Return a list of available actions.
 	 */
-	virtual std::vector<Action> available(State state) const;
+	virtual std::vector<Action *> available(State *state) const;
+
+	/**
+	 * Return the number of actions.
+	 * @return The number of actions.
+	 */
+	virtual int get_num_actions() const;
+
+	/**
+	 * Get a particular action given the name.
+	 * @param actionName The name of the action.
+	 * @return The action with the corresponding name provided and @code{nullptr}
+	 * 		if the action was not found.
+	 */
+	virtual Action *find(std::string actionName);
+
+	/**
+	 * Reset the actions, clearing the internal list.
+	 */
+	virtual void reset();
 
 private:
 	/**
 	 * The list of all available actions.
 	 */
-	std::vector<Action> actions;
+	std::vector<Action *> actions;
 
 };
 

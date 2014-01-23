@@ -29,13 +29,15 @@
  * The constructor for the InitialState class.
  */
 InitialState::InitialState()
-{ }
+{
+	initialState = nullptr;
+}
 
 /**
  * The constructor for the InitialState class, specifying the true initial state.
  * @param state The true initial state.
  */
-InitialState::InitialState(State state)
+InitialState::InitialState(State *state)
 {
 	set_initial_state(state);
 	set_initial_belief(state, 1.0);
@@ -53,7 +55,7 @@ InitialState::~InitialState()
  * Set the true initial state.
  * @param state The true initial state.
  */
-void InitialState::set_initial_state(State state)
+void InitialState::set_initial_state(State *state)
 {
 	initialState = state;
 }
@@ -63,7 +65,7 @@ void InitialState::set_initial_state(State state)
  * @param state 		The state to which the probability will be assigned.
  * @param probability	The probability of that the initial state is the state given.
  */
-void InitialState::set_initial_belief(State state, double probability)
+void InitialState::set_initial_belief(State *state, double probability)
 {
 	initialBelief[state] = 1.0;
 }
@@ -72,7 +74,7 @@ void InitialState::set_initial_belief(State state, double probability)
  * Get the true initial state.
  * @return The true initial state.
  */
-State InitialState::get_initial_state() const
+State *InitialState::get_initial_state()
 {
 	return initialState;
 }
@@ -82,9 +84,9 @@ State InitialState::get_initial_state() const
  * @param state The state to which the probability will be assigned.
  * @return The probability of that the initial state is the state given.
  */
-double InitialState::get_initial_belief(State state) const
+double InitialState::get_initial_belief(State *state) const
 {
-	std::map<State, double>::const_iterator belief = initialBelief.find(state);
+	std::map<State *, double>::const_iterator belief = initialBelief.find(state);
 	if (belief == initialBelief.end()) {
 		return 0.0;
 	} else {
@@ -97,7 +99,7 @@ double InitialState::get_initial_belief(State state) const
  */
 void InitialState::reset()
 {
-	initialState = State();
+	initialState = nullptr;
 	initialBelief.clear();
 }
 

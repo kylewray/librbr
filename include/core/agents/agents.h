@@ -27,23 +27,9 @@
 
 
 #include <vector>
-#include <exception>
 
 #include "agent.h"
 
-
-/**
- * An exception class unique to agent failures.
- */
-class AgentException : public std::exception {
-public:
-	/**
-	 * Return the specific error that occurred.
-	 * @return The specific error that occurred.
-	 */
-	virtual const char *what() const throw();
-
-};
 
 /**
  * A class for finite sets of agents in an MDP-like object. The base assumption is that the set of
@@ -66,31 +52,51 @@ public:
 	 * Add an agent to the set of available agents.
 	 * @param newAgent The new agent to include in the set of available agents.
 	 */
-	void add(Agent newAgent);
+	void add(Agent *newAgent);
 
 	/**
-	 * Remove an agent to the set of available agents.
+	 * Remove an agent to the set of available agents. This frees the memory.
 	 * @param removeAgent The agent to remove from the set of available agents.
 	 */
-	void remove(Agent removeAgent);
+	void remove(Agent *removeAgent);
 
 	/**
-	 * Set the internal actions list given another list, performing a deep copy.
+	 * Set the internal actions list given another list, performing a deep copy. This resets
+	 * the current list of states and frees the memory.
 	 * @param newActions The vector of new actions to use.
 	 */
-	void set(std::vector<Agent> newAgents);
+	void set(std::vector<Agent *> newAgents);
 
 	/**
 	 * Return a list of all the available agents.
 	 * @return Return a list of available agents.
 	 */
-	std::vector<Agent> all() const;
+	std::vector<Agent *> all() const;
+
+	/**
+	 * Return the number of agents.
+	 * @return The number of agents.
+	 */
+	virtual int get_num_agents() const;
+
+	/**
+	 * Get a particular agent given the name.
+	 * @param agentName The name of the agent.
+	 * @return The agent with the corresponding name provided and @code{nullptr}
+	 * 		if the agent was not found.
+	 */
+	virtual Agent *find(std::string agentName);
+
+	/**
+	 * Reset the agents, clearing the internal list and freeing the memory.
+	 */
+	void reset();
 
 private:
 	/**
 	 * The list of all agents.
 	 */
-	std::vector<Agent> agents;
+	std::vector<Agent *> agents;
 
 };
 

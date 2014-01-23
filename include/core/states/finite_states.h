@@ -59,40 +59,68 @@ public:
 	 * Add a state to the set of available states.
 	 * @param newState The new state to include in the set of available states.
 	 */
-	void add(State newState);
+	void add(State *newState);
 
 	/**
-	 * Remove a state to the set of available states.
+	 * Remove a state to the set of available states. This frees the memory.
 	 * @param removeState The state to remove from the set of available states.
 	 */
-	void remove(State removeState);
+	void remove(State *removeState);
 
 	/**
-	 * Set the internal states list given another list, performing a deep copy.
+	 * Set the internal states list given another list, performing a deep copy. This resets
+	 * the current list of states and frees the memory.
 	 * @param newStates The vector of new states to use.
 	 */
-	void set(std::vector<State> newStates);
+	void set(std::vector<State *> newStates);
 
 	/**
 	 * Return a list of all the available states.
 	 * @return Return a list of available states.
 	 */
-	virtual std::vector<State> all() const;
+	virtual std::vector<State *> all() const;
 
 	/**
 	 * Return a list of the states available given a previous state and the action taken there.
-	 * @param state The previous state.
-	 * @param action The action taken at the previous state.
+	 * @param state		The previous state.
+	 * @param action	The action taken at the previous state.
 	 * @return Return a list of available states.
 	 *
 	 */
-	virtual std::vector<State> available(State state, Action action) const;
+	virtual std::vector<State *> available(State *state, Action *action) const;
+
+	/**
+	 * Return the number of states.
+	 * @return The number of states.
+	 */
+	virtual int get_num_states() const;
+
+	/**
+	 * Get the state at the particular index specified.
+	 * @param index The index of the state to retrieve.
+	 * @return The state at the specified index.
+	 * @throws StateException The index was invalid.
+	 */
+	virtual State *get_state(int index) const;
+
+	/**
+	 * Get a particular state given the name.
+	 * @param stateName The name of the state.
+	 * @return The state with the corresponding name provided and @code{nullptr}
+	 * 		if the state was not found.
+	 */
+	virtual State *find(std::string stateName);
+
+	/**
+	 * Reset the states, clearing the internal list and freeing the memory.
+	 */
+	virtual void reset();
 
 private:
 	/**
 	 * The list of all available states.
 	 */
-	std::vector<State> states;
+	std::vector<State *> states;
 
 };
 

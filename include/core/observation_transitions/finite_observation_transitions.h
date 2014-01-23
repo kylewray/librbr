@@ -64,7 +64,7 @@ public:
 	 * @param state			The current state.
 	 * @param probability	The probability of the observation given we were in the state and took the action.
 	 */
-	void set(Observation observation, Action action, State nextState, double probability);
+	void set(Observation *observation, Action *action, State *nextState, double probability);
 
 	/**
 	 * The probability of a transition following the observation-action-state triple provided.
@@ -73,13 +73,18 @@ public:
 	 * @param state			The current state.
 	 * @return The probability of the observation given we were in the state and took the action.
 	 */
-	virtual double get(Observation observation, Action action, State state) const;
+	virtual double get(Observation *observation, Action *action, State *state) const;
+
+	/**
+	 * Reset the observation transitions, clearing the internal mapping.
+	 */
+	virtual void reset();
 
 private:
 	/**
 	 * The list of all state-action-state transitions.
 	 */
-	std::map<Observation, std::map<Action, std::map<State, double> > > observationTransitions;
+	std::map<Observation *, std::map<Action *, std::map<State *, double> > > observationTransitions;
 
 };
 

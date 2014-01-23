@@ -47,7 +47,7 @@ FiniteStateTransitions::~FiniteStateTransitions()
  * @param probability	The probability of going from the state, taking the action, then
  * 						moving to the nextState.
  */
-void FiniteStateTransitions::set(State state, Action action, State nextState, double probability)
+void FiniteStateTransitions::set(State *state, Action *action, State *nextState, double probability)
 {
 	stateTransitions[state][action][nextState] = std::max(0.0, std::min(1.0, probability));
 }
@@ -59,22 +59,31 @@ void FiniteStateTransitions::set(State state, Action action, State nextState, do
  * @param nextState	The next state with which we assign the probability.
  * @return The probability of going from the state, taking the action, then moving to the nextState.
  */
-double FiniteStateTransitions::get(State state, Action action, State nextState) const
+double FiniteStateTransitions::get(State *state, Action *action, State *nextState) const
 {
-	std::map<State, std::map<Action, std::map<State, double> > >::const_iterator alpha = stateTransitions.find(state);
+	std::map<State *, std::map<Action *, std::map<State *, double> > >::const_iterator alpha =
+			stateTransitions.find(state);
 	if (alpha == stateTransitions.end()) {
 		return 0.0;
 	}
 
-	std::map<Action, std::map<State, double> >::const_iterator beta = alpha->second.find(action);
+	std::map<Action *, std::map<State *, double> >::const_iterator beta = alpha->second.find(action);
 	if (beta == alpha->second.end()) {
 		return 0.0;
 	}
 
-	std::map<State, double>::const_iterator gamma = beta->second.find(nextState);
+	std::map<State *, double>::const_iterator gamma = beta->second.find(nextState);
 	if (gamma == beta->second.end()) {
 		return 0.0;
 	}
 
 	return gamma->second;
+}
+
+/**
+ * Reset the state transitions, clearing the internal mapping.
+ */
+void FiniteStateTransitions::reset()
+{
+	stateTransitions.clear();
 }

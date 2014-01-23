@@ -46,7 +46,7 @@ Agent::Agent(std::string initialName)
  */
 Agent::Agent(const Agent &other)
 {
-	name = other.name;
+	*this = other;
 }
 
 /**
@@ -56,13 +56,31 @@ Agent::~Agent()
 { }
 
 /**
+ * Set the name.
+ * @param newName The new name.
+ */
+void Agent::set_name(std::string newName)
+{
+	name = newName;
+}
+
+/**
+ * Get the name.
+ * @return The current name.
+ */
+std::string Agent::get_name() const
+{
+	return name;
+}
+
+/**
  * Overload the equals operator to set this agent equal to the agent provided.
  * @param other The agent to copy.
  * @return The new version of this agent.
  */
 Agent &Agent::operator=(const Agent &other)
 {
-	name = other.name;
+	name = other.get_name();
 	return *this;
 }
 
@@ -73,7 +91,7 @@ Agent &Agent::operator=(const Agent &other)
  */
 bool Agent::operator==(const Agent &other)
 {
-	return name == other.name;
+	return name == other.get_name();
 }
 
 /**
@@ -83,5 +101,5 @@ bool Agent::operator==(const Agent &other)
  */
 bool Agent::operator<(const Agent &other) const
 {
-	return name < other.name;
+	return name < other.get_name();
 }

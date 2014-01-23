@@ -26,15 +26,6 @@
 
 
 /**
- * Return the specific error that occurred.
- * @return The specific error that occurred.
- */
-const char *StateException::what() const throw()
-{
-	return "Error[StateException]: Generic exception occurred.";
-}
-
-/**
  * The deconstructor for the States class, which ensures that children classes deconstruct.
  */
 States::~States()

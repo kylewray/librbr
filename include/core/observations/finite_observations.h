@@ -61,25 +61,26 @@ public:
 	 * Add a observation to the set of available observations.
 	 * @param newObservation The new observation to include in the set of available states.
 	 */
-	void add(Observation newObservation);
+	void add(Observation *newObservation);
 
 	/**
-	 * Remove a observation to the set of available observations.
+	 * Remove a observation to the set of available observations. This frees the memory.
 	 * @param removeObservation The state to remove from the set of available observations.
 	 */
-	void remove(Observation removeObservation);
+	void remove(Observation *removeObservation);
 
 	/**
-	 * Set the internal observations list given another list, performing a deep copy.
+	 * Set the internal observations list given another list, performing a deep copy. This resets
+	 * the current list of states and frees the memory.
 	 * @param newObservations The vector of new observations to use.
 	 */
-	void set(std::vector<Observation> newObservations);
+	void set(std::vector<Observation *> newObservations);
 
 	/**
 	 * Return a list of all the available observations.
 	 * @return Return a list of available observations.
 	 */
-	virtual std::vector<Observation> all() const;
+	virtual std::vector<Observation *> all() const;
 
 	/**
 	 * Return a list of the observations available given a previous state and the action taken there.
@@ -88,13 +89,32 @@ public:
 	 * @return Return a list of available observations.
 	 *
 	 */
-	virtual std::vector<Observation> available(State state, Action action) const;
+	virtual std::vector<Observation *> available(State *state, Action *action) const;
+
+	/**
+	 * Return the number of observations.
+	 * @return The number of observations.
+	 */
+	virtual int get_num_observations() const;
+
+	/**
+	 * Get a particular observation given the name.
+	 * @param observationName The name of the observation.
+	 * @return The observation with the corresponding name provided and @code{nullptr}
+	 * 		if the observation was not found.
+	 */
+	virtual Observation *find(std::string observationName);
+
+	/**
+	 * Reset the observations, clearing the internal list and freeing the memory.
+	 */
+	virtual void reset();
 
 private:
 	/**
 	 * The list of all available observations.
 	 */
-	std::vector<Observation> observations;
+	std::vector<Observation *> observations;
 
 };
 

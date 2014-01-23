@@ -46,7 +46,7 @@ SASRewards::~SASRewards()
  * @param nextState	The next state with which we assign the reward.
  * @param reward	The reward from the provided state-action-state triple.
  */
-void SASRewards::set(State state, Action action, State nextState, double reward)
+void SASRewards::set(State *state, Action *action, State *nextState, double reward)
 {
 	rewards[state][action][nextState] = std::max(0.0, std::min(1.0, reward));
 }
@@ -58,22 +58,30 @@ void SASRewards::set(State state, Action action, State nextState, double reward)
  * @param nextState	The next state with which we assign the reward.
  * @return The reward from taking the given action in the given state.
  */
-double SASRewards::get(State state, Action action, State nextState) const
+double SASRewards::get(State *state, Action *action, State *nextState) const
 {
-	std::map<State, std::map<Action, std::map<State, double> > >::const_iterator alpha = rewards.find(state);
+	std::map<State *, std::map<Action *, std::map<State *, double> > >::const_iterator alpha = rewards.find(state);
 	if (alpha == rewards.end()) {
 		return 0.0;
 	}
 
-	std::map<Action, std::map<State, double> >::const_iterator beta = alpha->second.find(action);
+	std::map<Action *, std::map<State *, double> >::const_iterator beta = alpha->second.find(action);
 	if (beta == alpha->second.end()) {
 		return 0.0;
 	}
 
-	std::map<State, double>::const_iterator gamma = beta->second.find(nextState);
+	std::map<State *, double>::const_iterator gamma = beta->second.find(nextState);
 	if (gamma == beta->second.end()) {
 		return 0.0;
 	}
 
 	return gamma->second;
+}
+
+/**
+ * Reset the rewards, clearing the internal mapping.
+ */
+void SASRewards::reset()
+{
+	rewards.clear();
 }

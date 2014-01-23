@@ -83,7 +83,7 @@ public:
 	 * A function which follows the defined policy, having the current state stored internally,
 	 * and returns the action to select next.
 	 */
-	virtual Action next();
+	virtual Action *next();
 
 	/**
 	 * Reset the policy to the initial state.
@@ -106,12 +106,12 @@ private:
 	/**
 	 * The mapping of FSC states to a distribution over actions.
 	 */
-	std::map<FSCPolicyState, std::map<Action, double> > policy;
+	std::map<FSCPolicyState, std::map<Action *, double> > policy;
 
 	/**
 	 * The mapping of FSC state-observation pair to a distribution over subsequent FSC states.
 	 */
-	std::map<FSCPolicyState, std::map<Observation, std::map<FSCPolicyState, double> > > transitions;
+	std::map<FSCPolicyState, std::map<Observation *, std::map<FSCPolicyState, double> > > transitions;
 
 	/**
 	 * The mapping of an initial distribution over FSC states.

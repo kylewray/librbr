@@ -33,7 +33,8 @@
  * An abstract state object. Typically, this will just be a string; however, by abstracting
  * the states, we are able to have states that are classes in-and-of-themselves.
  */
-struct State {
+class State {
+public:
 	/**
 	 * The default constructor of the State object.
 	 */
@@ -57,6 +58,18 @@ struct State {
 	virtual ~State();
 
 	/**
+	 * Set the name.
+	 * @param newName The new name.
+	 */
+	virtual void set_name(std::string newName);
+
+	/**
+	 * Get the name.
+	 * @return The current name.
+	 */
+	virtual std::string get_name() const;
+
+	/**
 	 * Overload the equals operator to set this state equal to the state provided.
 	 * @param other The state to copy.
 	 * @return The new version of this state.
@@ -77,6 +90,7 @@ struct State {
 	 */
 	virtual bool operator<(const State &other) const;
 
+protected:
 	/**
 	 * All states must have the ability to convert the internal representation to a string.
 	 * For most policy solvers, this must be unique; however, this need not always be the case,

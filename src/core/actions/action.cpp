@@ -46,7 +46,7 @@ Action::Action(std::string initialName)
  */
 Action::Action(const Action &other)
 {
-	name = other.name;
+	*this = other;
 }
 
 /**
@@ -56,13 +56,31 @@ Action::~Action()
 { }
 
 /**
+ * Set the name.
+ * @param newName The new name.
+ */
+void Action::set_name(std::string newName)
+{
+	name = newName;
+}
+
+/**
+ * Get the name.
+ * @return The current name.
+ */
+std::string Action::get_name() const
+{
+	return name;
+}
+
+/**
  * Overload the equals operator to set this action equal to the action provided.
  * @param other The action to copy.
  * @return The new version of this action.
  */
 Action &Action::operator=(const Action &other)
 {
-	name = other.name;
+	name = other.get_name();
 	return *this;
 }
 
@@ -73,7 +91,7 @@ Action &Action::operator=(const Action &other)
  */
 bool Action::operator==(const Action &other)
 {
-	return name == other.name;
+	return name == other.get_name();
 }
 
 /**
@@ -83,5 +101,5 @@ bool Action::operator==(const Action &other)
  */
 bool Action::operator<(const Action &other) const
 {
-	return name < other.name;
+	return name < other.get_name();
 }

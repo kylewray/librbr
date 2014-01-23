@@ -64,9 +64,9 @@ bool FSCPolicy::save(std::string filename) const
  * A function which follows the defined policy, having the current state stored internally,
  * and returns the action to select next.
  */
-Action FSCPolicy::next()
+Action *FSCPolicy::next()
 {
-	return Action();
+	return nullptr;
 }
 
 /**

@@ -46,7 +46,7 @@ FiniteObservationTransitions::~FiniteObservationTransitions()
  * @param state			The current state.
  * @param probability	The probability of the observation given we were in the state and took the action.
  */
-void FiniteObservationTransitions::set(Observation observation, Action action, State nextState, double probability)
+void FiniteObservationTransitions::set(Observation *observation, Action *action, State *nextState, double probability)
 {
 	observationTransitions[observation][action][nextState] = std::max(0.0, std::min(1.0, probability));
 }
@@ -58,22 +58,31 @@ void FiniteObservationTransitions::set(Observation observation, Action action, S
  * @param state			The current state.
  * @return The probability of the observation given we were in the state and took the action.
  */
-double FiniteObservationTransitions::get(Observation observation, Action action, State state) const
+double FiniteObservationTransitions::get(Observation *observation, Action *action, State *state) const
 {
-	std::map<Observation, std::map<Action, std::map<State, double> > >::const_iterator alpha = observationTransitions.find(observation);
+	std::map<Observation *, std::map<Action *, std::map<State *, double> > >::const_iterator alpha =
+			observationTransitions.find(observation);
 	if (alpha == observationTransitions.end()) {
 		return 0.0;
 	}
 
-	std::map<Action, std::map<State, double> >::const_iterator beta = alpha->second.find(action);
+	std::map<Action *, std::map<State *, double> >::const_iterator beta = alpha->second.find(action);
 	if (beta == alpha->second.end()) {
 		return 0.0;
 	}
 
-	std::map<State, double>::const_iterator gamma = beta->second.find(state);
+	std::map<State *, double>::const_iterator gamma = beta->second.find(state);
 	if (gamma == beta->second.end()) {
 		return 0.0;
 	}
 
 	return gamma->second;
+}
+
+/**
+ * Reset the observation transitions, clearing the internal mapping.
+ */
+void FiniteObservationTransitions::reset()
+{
+	observationTransitions.clear();
 }

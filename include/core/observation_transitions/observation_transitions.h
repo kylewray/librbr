@@ -26,22 +26,6 @@
 #define OBSERVATION_TRANSITIONS_H
 
 
-#include <exception>
-
-
-/**
- * An exception class unique to observation transition failures.
- */
-class ObservationTransitionException : public std::exception {
-public:
-	/**
-	 * Return the specific error that occurred.
-	 * @return The specific error that occurred.
-	 */
-	virtual const char *what() const throw();
-
-};
-
 /**
  * An abstract class which defines how to interact with a observation transitions object.
  * This general structure should work for any implementation of observation transitions,

@@ -22,11 +22,14 @@
  */
 
 
-#include "../../../include/core/observations/observations.h"
+#include "../../../include/core/actions/action_exception.h"
 
 
 /**
- * The deconstructor for the Observations class, which ensures that children classes deconstruct.
+ * Return the specific error that occurred.
+ * @return The specific error that occurred.
  */
-Observations::~Observations()
-{ }
+const char *ActionException::what() const throw()
+{
+	return "Error[ActionException]: Generic exception occurred.";
+}

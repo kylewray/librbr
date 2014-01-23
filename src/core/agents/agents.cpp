@@ -26,15 +26,6 @@
 
 
 /**
- * Return the specific error that occurred.
- * @return The specific error that occurred.
- */
-const char *AgentException::what() const throw()
-{
-	return "Error[AgentException]: Generic exception occurred.";
-}
-
-/**
  * The default constructor for the Agents class.
  */
 Agents::Agents()
@@ -45,33 +36,36 @@ Agents::Agents()
  */
 Agents::~Agents()
 {
-	agents.clear();
+	reset();
 }
 
 /**
  * Add an agent to the set of available agents.
  * @param newAgent The new agent to include in the set of available agents.
  */
-void Agents::add(Agent newAgent)
+void Agents::add(Agent *newAgent)
 {
 	agents.push_back(newAgent);
 }
 
 /**
- * Remove an agent to the set of available agents.
+ * Remove an agent to the set of available agents. This frees the memory.
  * @param removeAgent The agent to remove from the set of available agents.
  */
-void Agents::remove(Agent removeAgent)
+void Agents::remove(Agent *removeAgent)
 {
 	agents.erase(std::remove(agents.begin(), agents.end(), removeAgent), agents.end());
+	delete removeAgent;
 }
 
 /**
- * Set the internal actions list given another list, performing a deep copy.
+ * Set the internal actions list given another list, performing a deep copy. This resets
+ * the current list of states and frees the memory.
  * @param newActions The vector of new actions to use.
  */
-void Agents::set(std::vector<Agent> newAgents)
+void Agents::set(std::vector<Agent *> newAgents)
 {
+	reset();
 	agents = newAgents;
 }
 
@@ -79,7 +73,43 @@ void Agents::set(std::vector<Agent> newAgents)
  * Return a list of all the available agents.
  * @return Return a list of available agents.
  */
-std::vector<Agent> Agents::all() const
+std::vector<Agent *> Agents::all() const
 {
 	return agents;
+}
+
+/**
+ * Return the number of agents.
+ * @return The number of agents.
+ */
+int Agents::get_num_agents() const
+{
+	return agents.size();
+}
+
+/**
+ * Get a particular agent given the name.
+ * @param agentName The name of the agent.
+ * @return The agent with the corresponding name provided and @code{nullptr}
+ * 		if the agent was not found.
+ */
+Agent *Agents::find(std::string agentName)
+{
+	for (Agent *agent : agents) {
+		if (agent->get_name().compare(agentName) == 0) {
+			return agent;
+		}
+	}
+	return nullptr;
+}
+
+/**
+ * Reset the agents, clearing the internal list and freeing the memory.
+ */
+void Agents::reset()
+{
+	for (Agent *agent : agents) {
+		delete agent;
+	}
+	agents.clear();
 }

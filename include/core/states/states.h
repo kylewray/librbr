@@ -26,22 +26,6 @@
 #define STATES_H
 
 
-#include <exception>
-
-
-/**
- * An exception class unique to state failures.
- */
-class StateException : public std::exception {
-public:
-	/**
-	 * Return the specific error that occurred.
-	 * @return The specific error that occurred.
-	 */
-	virtual const char *what() const throw();
-
-};
-
 /**
  * An abstract class which defines how to interact with a states object. This general
  * structure should work for any implementation of states, such as finite states,
