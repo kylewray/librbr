@@ -23,6 +23,7 @@
 
 
 #include "../../../include/core/actions/finite_actions.h"
+#include "../../../include/core/actions/action_exception.h"
 
 
 /**
@@ -100,8 +101,8 @@ int FiniteActions::get_num_actions() const
 /**
  * Get a particular action given the name.
  * @param actionName The name of the action.
- * @return The action with the corresponding name provided and @code{nullptr}
- * 		if the action was not found.
+ * @return The action with the corresponding name provided.
+ * @throws ActionException The name was invalid.
  */
 Action *FiniteActions::find(std::string actionName)
 {
@@ -110,7 +111,7 @@ Action *FiniteActions::find(std::string actionName)
 			return action;
 		}
 	}
-	return nullptr;
+	throw ActionException();
 }
 
 /**

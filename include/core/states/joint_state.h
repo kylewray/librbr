@@ -34,20 +34,24 @@
 
 /**
  * A joint state object. This is essentially a list of states, each state being a state object itself.
+ * Note: This class does *not* manage the memory of the states provided. Memory should be managed in
+ * a class such as FiniteJointStates.
  */
 class JointState : public State {
 public:
-	/**
-	 * The default constructor of the JointState object.
-	 */
-	JointState();
-
 	/**
 	 * The constructor of the JointState object which allows initial specification of the
 	 * number of joint states.
 	 * @param numJointStates The number of joint states in the tuple.
 	 */
 	JointState(int numJointStates);
+
+	/**
+	 * The constructor of the JointState object which allows initial specification of the
+	 * actual joint state tuple (vector).
+	 * @param jointState The list of states which define this joint state.
+	 */
+	JointState(std::vector<State *> jointState);
 
 	/**
 	 * The copy constructor of the JointState object.
@@ -71,13 +75,13 @@ public:
 	 * Set the joint state given a list of states.
 	 * @param jointState The list of states which define this joint state.
 	 */
-	virtual void set_joint_state(std::vector<State *> jointState);
+	virtual void set(std::vector<State *> jointState);
 
 	/**
 	 * Get the joint state.
 	 * @return The list of states.
 	 */
-	virtual std::vector<State *> get_joint_state() const;
+	virtual std::vector<State *> get() const;
 
 	/**
 	 * Get a particular state at a index.
@@ -87,7 +91,7 @@ public:
 	virtual State *get_state(int index) const;
 
 	/**
-	 * Overload the equals operator to set this state equal to the state provided.
+	 * Overload the equals operator to set this joint state equal to the state provided.
 	 * @param other The joint state to copy.
 	 * @return The new version of this state.
 	 */
@@ -110,7 +114,7 @@ public:
 protected:
 	/**
 	 * The joint state is defined as a tuple of states. To remain general, this is a vector, but
-	 * should remain a fixed size.
+	 * should remain a fixed size. This class does *not* manage the memory of these state objects.
 	 */
 	std::vector<State *> states;
 

@@ -100,8 +100,8 @@ public:
 	/**
 	 * Get a particular observation given the name.
 	 * @param observationName The name of the observation.
-	 * @return The observation with the corresponding name provided and @code{nullptr}
-	 * 		if the observation was not found.
+	 * @return The observation with the corresponding name provided.
+	 * @throws ObservationException The name was invalid.
 	 */
 	virtual Observation *find(std::string observationName);
 
@@ -110,7 +110,7 @@ public:
 	 */
 	virtual void reset();
 
-private:
+protected:
 	/**
 	 * The list of all available observations.
 	 */

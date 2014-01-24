@@ -98,8 +98,8 @@ public:
 	/**
 	 * Get a particular action given the name.
 	 * @param actionName The name of the action.
-	 * @return The action with the corresponding name provided and @code{nullptr}
-	 * 		if the action was not found.
+	 * @return The action with the corresponding name provided.
+	 * @throws ActionException The name was invalid.
 	 */
 	virtual Action *find(std::string actionName);
 
@@ -108,7 +108,7 @@ public:
 	 */
 	virtual void reset();
 
-private:
+protected:
 	/**
 	 * The list of all available actions.
 	 */

@@ -101,24 +101,10 @@ int FiniteStates::get_num_states() const
 }
 
 /**
- * Get the state at the particular index specified.
- * @param index The index of the state to retrieve.
- * @return The state at the specified index.
- * @throws StateException The index was invalid.
- */
-State *FiniteStates::get_state(int index) const
-{
-	if (index < 0 || index >= states.size()) {
-		throw StateException();
-	}
-	return states[index];
-}
-
-/**
  * Get a particular state given the name.
  * @param stateName The name of the state.
- * @return The state with the corresponding name provided and @code{nullptr}
- * 		if the state was not found.
+ * @return The state with the corresponding name provided.
+ * @throws StateException The name was invalid.
  */
 State *FiniteStates::find(std::string stateName)
 {
@@ -127,7 +113,7 @@ State *FiniteStates::find(std::string stateName)
 			return state;
 		}
 	}
-	return nullptr;
+	throw StateException();
 }
 
 /**

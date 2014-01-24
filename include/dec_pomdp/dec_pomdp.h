@@ -26,15 +26,15 @@
 #define DEC_POMDP_H
 
 
-#include "../agents/agents.h"
-#include "../states/states.h"
-#include "../actions/actions.h"
-#include "../observations/observations.h"
-#include "../state_transitions/state_transitions.h"
-#include "../observation_transitions/observation_transitions.h"
-#include "../rewards/rewards.h"
-#include "../initial_state.h"
-#include "../horizon.h"
+#include "../core/agents/agents.h"
+#include "../core/states/states.h"
+#include "../core/actions/actions.h"
+#include "../core/observations/observations.h"
+#include "../core/state_transitions/state_transitions.h"
+#include "../core/observation_transitions/observation_transitions.h"
+#include "../core/rewards/rewards.h"
+#include "../core/initial_state.h"
+#include "../core/horizon.h"
 
 
 /**

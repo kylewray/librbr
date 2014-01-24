@@ -23,6 +23,7 @@
 
 
 #include "../../../include/core/observations/finite_observations.h"
+#include "../../../include/core/observations/observation_exception.h"
 
 
 /**
@@ -102,8 +103,8 @@ int FiniteObservations::get_num_observations() const
 /**
  * Get a particular observation given the name.
  * @param observationName The name of the observation.
- * @return The observation with the corresponding name provided and @code{nullptr}
- * 		if the observation was not found.
+ * @return The observation with the corresponding name provided.
+ * @throws ObservationException The name was invalid.
  */
 Observation *FiniteObservations::find(std::string observationName)
 {
@@ -112,7 +113,7 @@ Observation *FiniteObservations::find(std::string observationName)
 			return observation;
 		}
 	}
-	return nullptr;
+	throw ObservationException();
 }
 
 /**

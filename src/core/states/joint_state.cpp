@@ -27,12 +27,6 @@
 
 
 /**
- * The default constructor of the JointState object.
- */
-JointState::JointState()
-{ }
-
-/**
  * The constructor of the JointState object which allows initial specification of the
  * number of joint states.
  * @param numJointStates The number of joint states in the tuple.
@@ -40,6 +34,17 @@ JointState::JointState()
 JointState::JointState(int numJointStates)
 {
 	states.reserve(numJointStates);
+}
+
+/**
+ * The constructor of the JointState object which allows initial specification of the
+ * actual joint state tuple (vector).
+ * @param jointState The list of states which define this joint state.
+ */
+JointState::JointState(std::vector<State *> jointState)
+{
+	states.reserve(jointState.size());
+	states = jointState;
 }
 
 /**
@@ -71,7 +76,7 @@ void JointState::set_name(std::string newName)
  * Set the joint state given a list of states.
  * @param jointState The list of states which define this joint state.
  */
-void JointState::set_joint_state(std::vector<State *> jointState)
+void JointState::set(std::vector<State *> jointState)
 {
 	states = jointState;
 }
@@ -80,7 +85,7 @@ void JointState::set_joint_state(std::vector<State *> jointState)
  * Get the joint state.
  * @return The list of states.
  */
-std::vector<State *> JointState::get_joint_state() const
+std::vector<State *> JointState::get() const
 {
 	return states;
 }
@@ -106,7 +111,7 @@ State *JointState::get_state(int index) const
  */
 JointState &JointState::operator=(const JointState &other)
 {
-	states = other.get_joint_state();
+	states = other.get();
 	name = other.get_name();
 	return *this;
 }
@@ -120,7 +125,7 @@ bool JointState::operator==(const JointState &other)
 {
 	int counter = 0;
 	for (State *state : states) {
-		if (other.get_state(counter)->get_name().compare(state->get_name()) != 0) {
+		if (*state == *(other.get_state(counter))) {
 			return false;
 		}
 		counter++;

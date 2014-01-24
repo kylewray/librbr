@@ -212,7 +212,7 @@ bool UnifiedFile::load(std::string filename)
 								return true;
 							}
 
-							initialState->set_initial_belief(((FiniteStates *)states)->get_state(counter), p);
+							initialState->set_initial_belief(((FiniteStates *)states)->all()[counter], p);
 							counter++;
 						}
 					}

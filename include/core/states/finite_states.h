@@ -96,18 +96,10 @@ public:
 	virtual int get_num_states() const;
 
 	/**
-	 * Get the state at the particular index specified.
-	 * @param index The index of the state to retrieve.
-	 * @return The state at the specified index.
-	 * @throws StateException The index was invalid.
-	 */
-	virtual State *get_state(int index) const;
-
-	/**
 	 * Get a particular state given the name.
 	 * @param stateName The name of the state.
-	 * @return The state with the corresponding name provided and @code{nullptr}
-	 * 		if the state was not found.
+	 * @return The state with the corresponding name provided.
+	 * @throws StateException The name was invalid.
 	 */
 	virtual State *find(std::string stateName);
 
@@ -116,7 +108,7 @@ public:
 	 */
 	virtual void reset();
 
-private:
+protected:
 	/**
 	 * The list of all available states.
 	 */

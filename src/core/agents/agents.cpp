@@ -23,6 +23,7 @@
 
 
 #include "../../../include/core/agents/agents.h"
+#include "../../../include/core/agents/agent_exception.h"
 
 
 /**
@@ -90,8 +91,8 @@ int Agents::get_num_agents() const
 /**
  * Get a particular agent given the name.
  * @param agentName The name of the agent.
- * @return The agent with the corresponding name provided and @code{nullptr}
- * 		if the agent was not found.
+ * @return The agent with the corresponding name provided
+ * @throws AgentException The name was invalid.
  */
 Agent *Agents::find(std::string agentName)
 {
@@ -100,7 +101,7 @@ Agent *Agents::find(std::string agentName)
 			return agent;
 		}
 	}
-	return nullptr;
+	throw AgentException();
 }
 
 /**

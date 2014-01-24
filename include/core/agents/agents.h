@@ -82,8 +82,8 @@ public:
 	/**
 	 * Get a particular agent given the name.
 	 * @param agentName The name of the agent.
-	 * @return The agent with the corresponding name provided and @code{nullptr}
-	 * 		if the agent was not found.
+	 * @return The agent with the corresponding name provided.
+	 * @throws AgentException The name was invalid.
 	 */
 	virtual Agent *find(std::string agentName);
 
@@ -92,7 +92,7 @@ public:
 	 */
 	void reset();
 
-private:
+protected:
 	/**
 	 * The list of all agents.
 	 */
