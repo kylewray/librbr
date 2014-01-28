@@ -22,8 +22,8 @@
  */
 
 
-#ifndef JOINT_STATE_H
-#define JOINT_STATE_H
+#ifndef FACTORED_STATE_H
+#define FACTORED_STATE_H
 
 
 #include <string>
@@ -33,36 +33,36 @@
 
 
 /**
- * A joint state object. This is essentially a list of states, each state being a state object itself.
+ * A factored state object. This is essentially a list of states, each state being a state object itself.
  * Note: This class does *not* manage the memory of the states provided. Memory should be managed in
- * a class such as FiniteJointStates.
+ * a class such as FiniteFactoredStates.
  */
-class JointState : public State {
+class FactoredState : public State {
 public:
 	/**
-	 * The constructor of the JointState object which allows initial specification of the
-	 * number of joint states.
-	 * @param numJointStates The number of joint states in the tuple.
+	 * The constructor of the FactoredState object which allows initial specification of the
+	 * number of factored states.
+	 * @param numFactoredStates The number of factored states in the tuple.
 	 */
-	JointState(int numJointStates);
+	FactoredState(int numFactoredStates);
 
 	/**
-	 * The constructor of the JointState object which allows initial specification of the
-	 * actual joint state tuple (vector).
-	 * @param jointState The list of states which define this joint state.
+	 * The constructor of the FactoredState object which allows initial specification of the
+	 * actual factored state tuple (vector).
+	 * @param factoredState The list of states which define this factored state.
 	 */
-	JointState(std::vector<State *> jointState);
+	FactoredState(std::vector<State *> factoredState);
 
 	/**
-	 * The copy constructor of the JointState object.
-	 * @param other The joint state to copy.
+	 * The copy constructor of the FactoredState object.
+	 * @param other The factored state to copy.
 	 */
-	JointState(const JointState &other);
+	FactoredState(const FactoredState &other);
 
 	/**
-	 * The default deconstructor of the JointState object.
+	 * The default deconstructor of the FactoredState object.
 	 */
-	virtual ~JointState();
+	virtual ~FactoredState();
 
 	/**
 	 * Override set name (leave get_name() alone) to raise an error when it is called.
@@ -72,13 +72,13 @@ public:
 	virtual void set_name(std::string newName);
 
 	/**
-	 * Set the joint state given a list of states.
-	 * @param jointState The list of states which define this joint state.
+	 * Set the factored state given a list of states.
+	 * @param factoredState The list of states which define this factored state.
 	 */
-	virtual void set(std::vector<State *> jointState);
+	virtual void set(std::vector<State *> factoredState);
 
 	/**
-	 * Get the joint state.
+	 * Get the factored state.
 	 * @return The list of states.
 	 */
 	virtual std::vector<State *> get() const;
@@ -91,29 +91,29 @@ public:
 	virtual State *get_state(int index) const;
 
 	/**
-	 * Overload the equals operator to set this joint state equal to the state provided.
-	 * @param other The joint state to copy.
+	 * Overload the equals operator to set this factored state equal to the state provided.
+	 * @param other The factored state to copy.
 	 * @return The new version of this state.
 	 */
-	virtual JointState &operator=(const JointState &other);
+	virtual FactoredState &operator=(const FactoredState &other);
 
 	/**
 	 * Overload the equality comparison operator.
-	 * @param other The joint state to compare.
+	 * @param other The factored state to compare.
 	 * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
 	 */
-	virtual bool operator==(const JointState &other);
+	virtual bool operator==(const FactoredState &other);
 
 	/**
 	 * Overload the less than operator for comparison.
-	 * @param other The joint state to compare.
+	 * @param other The factored state to compare.
 	 * @return Returns @code{true} if this state is less than the other; @code{false} otherwise.
 	 */
-	virtual bool operator<(const JointState &other) const;
+	virtual bool operator<(const FactoredState &other) const;
 
 protected:
 	/**
-	 * The joint state is defined as a tuple of states. To remain general, this is a vector, but
+	 * The factored state is defined as a tuple of states. To remain general, this is a vector, but
 	 * should remain a fixed size. This class does *not* manage the memory of these state objects.
 	 */
 	std::vector<State *> states;
@@ -121,4 +121,4 @@ protected:
 };
 
 
-#endif // JOINT_STATE_H
+#endif // FACTORED_STATE_H

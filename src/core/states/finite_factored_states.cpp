@@ -22,24 +22,30 @@
  */
 
 
-#include "../../../include/core/states/finite_joint_states.h"
-#include "../../../include/core/states/joint_state.h"
+#include "../../../include/core/states/finite_factored_states.h"
+#include "../../../include/core/states/factored_state.h"
 #include "../../../include/core/states/state_exception.h"
 
 
 /**
- * The constructor for the FiniteJointStates class which lets you specify the number of factors.
+ * The default constructor for the FiniteFactoredStates class.
+ */
+FiniteFactoredStates::FiniteFactoredStates()
+{ }
+
+/**
+ * The constructor for the FiniteFactoredStates class which lets you specify the number of factors.
  * @param numFactors The number of state factors.
  */
-FiniteJointStates::FiniteJointStates(int numFactors)
+FiniteFactoredStates::FiniteFactoredStates(int numFactors)
 {
 	factoredStates.resize(numFactors);
 }
 
 /**
- * The default deconstructor for the FiniteJointStates class.
+ * The default deconstructor for the FiniteFactoredStates class.
  */
-FiniteJointStates::~FiniteJointStates()
+FiniteFactoredStates::~FiniteFactoredStates()
 {
 	reset();
 }
@@ -50,7 +56,7 @@ FiniteJointStates::~FiniteJointStates()
  * @param newState 			The new state to include in the set of available states.
  * @throws StateException	The index was invalid.
  */
-void FiniteJointStates::add(int factorIndex, State *newState)
+void FiniteFactoredStates::add(int factorIndex, State *newState)
 {
 	if (factorIndex < 0 || factorIndex >= factoredStates.size()) {
 		throw StateException();
@@ -65,7 +71,7 @@ void FiniteJointStates::add(int factorIndex, State *newState)
  * @param removeState 		The state to remove from the set of available states.
  * @throws StateException	The index was invalid.
  */
-void FiniteJointStates::remove(int factorIndex, State *removeState)
+void FiniteFactoredStates::remove(int factorIndex, State *removeState)
 {
 	if (factorIndex < 0 || factorIndex >= factoredStates.size()) {
 		throw StateException();
@@ -85,7 +91,7 @@ void FiniteJointStates::remove(int factorIndex, State *removeState)
  * @param newStates 		The vector of new states to use.
  * @throws StateException	The index was invalid, or newStates was empty.
  */
-void FiniteJointStates::set(int factorIndex, std::vector<State *> newStates)
+void FiniteFactoredStates::set(int factorIndex, std::vector<State *> newStates)
 {
 	if (factorIndex < 0 || factorIndex >= factoredStates.size() || newStates.size() == 0) {
 		throw StateException();
@@ -101,11 +107,11 @@ void FiniteJointStates::set(int factorIndex, std::vector<State *> newStates)
 }
 
 /**
- * Update the internal states list which holds all permutations of joint states in an efficient structure.
+ * Update the internal states list which holds all permutations of factored states in an efficient structure.
  * Note: This *must* be called after sequences of add(), remove(), and/or set() calls.
  * @throws StateException If a state factor has not been defined.
  */
-void FiniteJointStates::update()
+void FiniteFactoredStates::update()
 {
 	// Throw an error if one factor is not defined.
 	for (std::vector<State *> &factor : factoredStates) {
@@ -119,9 +125,17 @@ void FiniteJointStates::update()
 }
 
 /**
- * Reset the joint states, clearing the internal list and freeing the memory.
+ * Get the number of factored states.
  */
-void FiniteJointStates::reset()
+int FiniteFactoredStates::get_num_factors()
+{
+	return factoredStates.size();
+}
+
+/**
+ * Reset the factored states, clearing the internal list and freeing the memory.
+ */
+void FiniteFactoredStates::reset()
 {
 	for (std::vector<State *> &factor : factoredStates) {
 		for (State *state : factor) {
@@ -135,25 +149,25 @@ void FiniteJointStates::reset()
 
 /**
  * A helper function for updating the internal "states" variable as part of the update() function.
- * @param currentJointState		The current (incomplete) joint state as a vector of states.
+ * @param currentFactoredState	The current (incomplete) factored state as a vector of states.
  * @param currentFactorIndex	The current factor index.
  */
-void FiniteJointStates::update_step(std::vector<State *> currentJointState, int currentFactorIndex)
+void FiniteFactoredStates::update_step(std::vector<State *> currentFactoredState, int currentFactorIndex)
 {
-	// At the final factor index, we need to create a bunch of joint states.
+	// At the final factor index, we need to create a bunch of factored states.
 	for (State *state : factoredStates[currentFactorIndex]) {
 		// Begin by pushing a current factor's state on the vector (tuple).
-		currentJointState.push_back(state);
+		currentFactoredState.push_back(state);
 
-		// If this is the final index, then create a joint state object and append it to the list of states.
-		// Otherwise, recurse to the next index, using the new currentJointState object.
+		// If this is the final index, then create a factored state object and append it to the list of states.
+		// Otherwise, recurse to the next index, using the new currentFactoredState object.
 		if (currentFactorIndex == factoredStates.size() - 1) {
-			states.push_back(new JointState(currentJointState));
+			states.push_back(new FactoredState(currentFactoredState));
 		} else {
-			update_step(currentJointState, currentFactorIndex + 1);
+			update_step(currentFactoredState, currentFactorIndex + 1);
 		}
 
 		// Pop off the state that was just appended, to prepare for the next loop.
-		currentJointState.pop_back();
+		currentFactoredState.pop_back();
 	}
 }

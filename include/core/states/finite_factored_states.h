@@ -22,8 +22,8 @@
  */
 
 
-#ifndef FINITE_JOINT_STATES_H
-#define FINITE_JOINT_STATES_H
+#ifndef FINITE_FACTORED_STATES_H
+#define FINITE_FACTORED_STATES_H
 
 
 #include <vector>
@@ -34,30 +34,35 @@
 
 
 /**
- * A class for finite sets of joint states in an MDP-like object. Informally, there are two basic ways to
+ * A class for finite sets of factored states in an MDP-like object. Informally, there are two basic ways to
  * store finite states: a vector of states or a generator function based on a state and action. In both
  * cases, we require that any class with finite states provide certain get functions so that any generic
  * solver can handle both cases.
  *
- * If you want to create a generator function-based FiniteJointStates class, please create a child class which
+ * If you want to create a generator function-based FiniteFactoredStates class, please create a child class which
  * implements the function in the virtual functions described below. You will likely ignore the internal
  * states vector variable here.
  *
- * Note: The protected "states" variable implicitly must only store JointState objects, not State objects.
+ * Note: The protected "states" variable implicitly must only store FactoredState objects, not State objects.
  */
-class FiniteJointStates : public FiniteStates {
+class FiniteFactoredStates : public FiniteStates {
 public:
 	/**
-	 * The default constructor for the FiniteJointStates class which requires that you
+	 * The default constructor for the FiniteFactoredStates class.
+	 */
+	FiniteFactoredStates();
+
+	/**
+	 * The constructor for the FiniteFactoredStates class which requires that you
 	 * specify the number of factors.
 	 * @param numFactors The number of state factors.
 	 */
-	FiniteJointStates(int numFactors);
+	FiniteFactoredStates(int numFactors);
 
 	/**
-	 * The default deconstructor for the FiniteJointStates class.
+	 * The default deconstructor for the FiniteFactoredStates class.
 	 */
-	virtual ~FiniteJointStates();
+	virtual ~FiniteFactoredStates();
 
 	/**
 	 * Add a state to the set of available states in a factor. This does *not* update the states list; please
@@ -88,14 +93,19 @@ public:
 	void set(int factorIndex, std::vector<State *> newStates);
 
 	/**
-	 * Update the internal states list which holds all permutations of joint states in an efficient structure.
+	 * Update the internal states list which holds all permutations of factored states in an efficient structure.
 	 * Note: This *must* be called after sequences of add(), remove(), and/or set() calls.
 	 * @throws StateException If a state factor has not been defined.
 	 */
 	void update();
 
 	/**
-	 * Reset the joint states, clearing the internal list and freeing the memory.
+	 * Get the number of factored states.
+	 */
+	int get_num_factors();
+
+	/**
+	 * Reset the factored states, clearing the internal list and freeing the memory.
 	 */
 	virtual void reset();
 
@@ -108,12 +118,12 @@ protected:
 private:
 	/**
 	 * A helper function for updating the internal "states" variable as part of the update() function.
-	 * @param currentJointState		The current (incomplete) joint state as a vector of states.
+	 * @param currentFactoredState	The current (incomplete) factored state as a vector of states.
 	 * @param currentFactorIndex	The current factor index.
 	 */
-	void update_step(std::vector<State *> currentJointState, int currentFactorIndex);
+	void update_step(std::vector<State *> currentFactoredState, int currentFactorIndex);
 
 };
 
 
-#endif // FINITE_JOINT_STATES_H
+#endif // FINITE_FACTORED_STATES_H

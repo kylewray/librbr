@@ -22,44 +22,44 @@
  */
 
 
-#include "../../../include/core/states/joint_state.h"
+#include "../../../include/core/states/factored_state.h"
 #include "../../../include/core/states/state_exception.h"
 
 
 /**
- * The constructor of the JointState object which allows initial specification of the
- * number of joint states.
- * @param numJointStates The number of joint states in the tuple.
+ * The constructor of the FactoredState object which allows initial specification of the
+ * number of factored states.
+ * @param numFactoredStates The number of factored states in the tuple.
  */
-JointState::JointState(int numJointStates)
+FactoredState::FactoredState(int numFactoredStates)
 {
-	states.reserve(numJointStates);
+	states.reserve(numFactoredStates);
 }
 
 /**
- * The constructor of the JointState object which allows initial specification of the
- * actual joint state tuple (vector).
- * @param jointState The list of states which define this joint state.
+ * The constructor of the FactoredState object which allows initial specification of the
+ * actual factored state tuple (vector).
+ * @param factoredState The list of states which define this factored state.
  */
-JointState::JointState(std::vector<State *> jointState)
+FactoredState::FactoredState(std::vector<State *> factoredState)
 {
-	states.reserve(jointState.size());
-	states = jointState;
+	states.reserve(factoredState.size());
+	states = factoredState;
 }
 
 /**
- * The copy constructor of the JointState object.
+ * The copy constructor of the FactoredState object.
  * @param other The state to copy.
  */
-JointState::JointState(const JointState &other)
+FactoredState::FactoredState(const FactoredState &other)
 {
 	*this = other;
 }
 
 /**
- * The default deconstructor of the JointState object.
+ * The default deconstructor of the FactoredState object.
  */
-JointState::~JointState()
+FactoredState::~FactoredState()
 { }
 
 /**
@@ -67,25 +67,25 @@ JointState::~JointState()
  * @param newName The new name.
  * @throws StateException This is no longer a valid function.
  */
-void JointState::set_name(std::string newName)
+void FactoredState::set_name(std::string newName)
 {
 	throw StateException();
 }
 
 /**
- * Set the joint state given a list of states.
- * @param jointState The list of states which define this joint state.
+ * Set the factored state given a list of states.
+ * @param factoredState The list of states which define this factored state.
  */
-void JointState::set(std::vector<State *> jointState)
+void FactoredState::set(std::vector<State *> factoredState)
 {
-	states = jointState;
+	states = factoredState;
 }
 
 /**
- * Get the joint state.
+ * Get the factored state.
  * @return The list of states.
  */
-std::vector<State *> JointState::get() const
+std::vector<State *> FactoredState::get() const
 {
 	return states;
 }
@@ -96,7 +96,7 @@ std::vector<State *> JointState::get() const
  * @return The state at the index provided.
  * @throws StateException The index is not valid.
  */
-State *JointState::get_state(int index) const
+State *FactoredState::get_state(int index) const
 {
 	if (index < 0 || index >= states.size()) {
 		throw StateException();
@@ -106,10 +106,10 @@ State *JointState::get_state(int index) const
 
 /**
  * Overload the equals operator to set this state equal to the state provided.
- * @param other The joint state to copy.
+ * @param other The factored state to copy.
  * @return The new version of this state.
  */
-JointState &JointState::operator=(const JointState &other)
+FactoredState &FactoredState::operator=(const FactoredState &other)
 {
 	states = other.get();
 	name = other.get_name();
@@ -118,10 +118,10 @@ JointState &JointState::operator=(const JointState &other)
 
 /**
  * Overload the equality comparison operator.
- * @param other The joint state to compare.
+ * @param other The factored state to compare.
  * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
  */
-bool JointState::operator==(const JointState &other)
+bool FactoredState::operator==(const FactoredState &other)
 {
 	int counter = 0;
 	for (State *state : states) {
@@ -135,10 +135,10 @@ bool JointState::operator==(const JointState &other)
 
 /**
  * Overload the less than operator for comparison.
- * @param other The joint state to compare.
+ * @param other The factored state to compare.
  * @return Returns @code{true} if this state is less than the other; @code{false} otherwise.
  */
-bool JointState::operator<(const JointState &other) const
+bool FactoredState::operator<(const FactoredState &other) const
 {
 	return name < other.get_name();
 }
