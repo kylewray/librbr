@@ -95,6 +95,11 @@ public:
 	void update();
 
 	/**
+	 * Get the number of factored actions.
+	 */
+	int get_num_factors();
+
+	/**
 	 * Reset the joint actions, clearing the internal list and freeing the memory.
 	 */
 	virtual void reset();

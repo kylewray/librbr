@@ -65,6 +65,13 @@ public:
 	virtual ~FiniteFactoredStates();
 
 	/**
+	 * Add a new factor states to the set of available states in a factor. This does *not* update the
+	 * states list; please call update() once all factors have been set.
+	 * @param newState The new state to include in the set of available states.
+	 */
+	void add_factor(std::vector<State *> newStates);
+
+	/**
 	 * Add a state to the set of available states in a factor. This does *not* update the states list; please
 	 * call update() once all factors have been set.
 	 * @param factorIndex 		The index of the factor to add the states to.

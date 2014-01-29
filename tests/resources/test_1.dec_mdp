@@ -1,0 +1,14 @@
+discount: 1.0
+horizon: 100
+values: cost
+
+agents: a1 a2 a3
+
+states: s1 s2 s3 s4
+
+actions:
+box1_left box1_right
+box2_top box2_middle box3_bottom
+5
+
+#start: s1

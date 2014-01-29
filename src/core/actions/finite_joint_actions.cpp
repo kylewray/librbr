@@ -122,6 +122,14 @@ void FiniteJointActions::update()
 }
 
 /**
+ * Get the number of factored actions.
+ */
+int FiniteJointActions::get_num_factors()
+{
+	return factoredActions.size();
+}
+
+/**
  * Reset the joint actions, clearing the internal list and freeing the memory.
  */
 void FiniteJointActions::reset()

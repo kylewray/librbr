@@ -123,6 +123,14 @@ void FiniteJointObservations::update()
 }
 
 /**
+ * Get the number of factored observations.
+ */
+int FiniteJointObservations::get_num_factors()
+{
+	return factoredObservations.size();
+}
+
+/**
  * Reset the joint observations, clearing the internal list and freeing the memory.
  */
 void FiniteJointObservations::reset()

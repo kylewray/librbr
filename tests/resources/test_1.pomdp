@@ -1,0 +1,9 @@
+discount: 0.9
+horizon: 0
+values: reward
+
+states: s1 s2 s3
+actions: left right
+observations: high low
+
+start: uniform

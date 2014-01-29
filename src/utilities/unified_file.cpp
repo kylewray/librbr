@@ -94,169 +94,175 @@ bool UnifiedFile::load(std::string path)
 
 	// This is not necessarily the best way to do it, but these are used in loading
 	// matrices or vectors for T, O, and R.
-	void *loadingAlpha = nullptr;
-	void *loadingBeta = nullptr;
-	void *loadingGamma = nullptr;
+//	void *loadingAlpha = nullptr;
+//	void *loadingBeta = nullptr;
+//	void *loadingGamma = nullptr;
 
 	// If the file failed to open, then do not do anything.
-	if (file.is_open()) {
-		// Iterate over all lines in the file, and then each character in a line.
-		FileObjectCategory category = FileObjectCategory::OBJECT_NONE;
+	if (!file.is_open()) {
+		sprintf(error, "Failed to find file '%s'.", filename.c_str());
+		log_message(std::cout, "UnifiedFile::load", error);
+		return true;
+	}
 
-		while (std::getline(file, line)) {
-			// Handle comments by removing all characters down to and including a '#'.
-			line = line.substr(0, line.find('#'));
+	// Iterate over all lines in the file, and then each character in a line.
+	FileObjectCategory category = FileObjectCategory::OBJECT_NONE;
 
-			//line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
+	while (std::getline(file, line)) {
+		// Handle comments by removing all characters down to and including a '#'.
+		line = line.substr(0, line.find('#'));
 
-			// Skip over blank lines.
-			if (line.length() == 0) {
-				rows++;
-				continue;
+		//line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
+
+		// Skip over blank lines.
+		if (line.length() == 0) {
+			rows++;
+			continue;
+		}
+
+		// Two cases, either this is a keyword line, or it is an information line.
+		if (line.find(':') != std::string::npos) {
+			// Reset these variables since we have started a new ":" statement.
+			loading = 0;
+			loadingCounter = 0;
+
+			// If this contains a colon, then it is a keyword line. For keyword lines,
+			// split the line based on the colon(s) and handle the keyword.
+			std::istringstream ssLine(line);
+			std::vector<std::string> items;
+			std::string temp;
+
+			while (std::getline(ssLine, temp, ':')) {
+				items.push_back(temp);
 			}
 
-			// Two cases, either this is a keyword line, or it is an information line.
-			if (line.find(':') != std::string::npos) {
-				// Reset these variables since we have started a new ":" statement.
-				loading = 0;
-				loadingCounter = 0;
-
-				// If this contains a colon, then it is a keyword line. For keyword lines,
-				// split the line based on the colon(s) and handle the keyword.
-				std::istringstream ssLine(line);
-				std::vector<std::string> items;
-				std::string temp;
-
-				while (std::getline(ssLine, temp, ':')) {
-					items.push_back(temp);
-				}
-
-				// Handle the specific case.
-				if (items[0].compare("horizon") == 0) {
-					if (load_horizon(items)) {
-						return true;
-					}
-				} else if (items[0].compare("discount") == 0) {
-					if (load_discount_factor(items)) {
-						return true;
-					}
-				} else if (items[0].compare("start") == 0) {
-					if (load_initial_state(items)) {
-						return true;
-					}
-				} else if (items[0].compare("start include") == 0) {
-					if (load_initial_state_inclusive(items)) {
-						return true;
-					}
-				} else if (items[0].compare("start exclude") == 0) {
-					if (load_initial_state_exclusive(items)) {
-						return true;
-					}
-				} else if (items[0].compare("values") == 0) {
-					if (load_value(items)) {
-						return true;
-					}
-				} else if (items[0].compare("agents") == 0) {
-					if (load_agents(items)) {
-						return true;
-					}
-				} else if (items[0].compare("states") == 0) {
-					int result = load_states(items);
-					if (result == -1) {
-						return true;
-					} else if (result == 1) {
-						loading = 1;
-						loadingCounter = 0;
-					}
-				} else if (items[0].compare("actions") == 0) {
-					int result = load_actions(items);
-					if (result == -1) {
-						return true;
-					} else if (result == 1) {
-						loading = 2;
-						loadingCounter = 0;
-					}
-				} else if (items[0].compare("observations") == 0) {
-					int result = load_observations(items);
-					if (result == -1) {
-						return true;
-					} else if (result == 1) {
-						loading = 3;
-						loadingCounter = 0;
-					}
-				} else if (items[0].compare("T") == 0) {
-
-				} else if (items[0].compare("O") == 0) {
-
-				} else if (items[0].compare("R") == 0) {
-
-				}
-			} else {
-				// If this does not contain a colon (and is not blank), then it
-				// is an information line. For information lines, split the line based on
-				// spaces and read each float, creating the appropriate map.
-				switch (loading) {
-				case 1:
-					// Loading factored states.
-					if (load_factored_states(loadingCounter, line)) {
-						return true;
-					}
-					break;
-				case 2:
-					// Loading an agent's actions.
-					if (load_agent_actions(loadingCounter, line)) {
-						return true;
-					}
-					break;
-				case 3:
-					// Loading an agent's observations.
-					if (load_agent_observations(loadingCounter, line)) {
-						return true;
-					}
-					break;
-				case 4:
-					// Loading a vector for T.
-					break;
-				case 5:
-					// Loading a matrix for T.
-					break;
-				case 6:
-					// Loading a vector for O.
-					break;
-				case 7:
-					// Loading a matrix for O.
-					break;
-				case 8:
-					// Loading a vector for R.
-					break;
-				case 9:
-					// Loading a matrix for R.
-					break;
-				default:
-					sprintf(error, "Failed loading a factor, vector, or matrix on line %i in file '%s'.",
-							rows, filename.c_str());
-					log_message(std::cout, "UnifiedFile::load", error);
+			// Handle the specific case.
+			if (items[0].compare("horizon") == 0) {
+				if (load_horizon(items)) {
 					return true;
-					break;
 				}
-			}
+			} else if (items[0].compare("discount") == 0) {
+				if (load_discount_factor(items)) {
+					return true;
+				}
+			} else if (items[0].compare("start") == 0) {
+				if (load_initial_state(items)) {
+					return true;
+				}
+			} else if (items[0].compare("start include") == 0) {
+				if (load_initial_state_inclusive(items)) {
+					return true;
+				}
+			} else if (items[0].compare("start exclude") == 0) {
+				if (load_initial_state_exclusive(items)) {
+					return true;
+				}
+			} else if (items[0].compare("values") == 0) {
+				if (load_value(items)) {
+					return true;
+				}
+			} else if (items[0].compare("agents") == 0) {
+				if (load_agents(items)) {
+					return true;
+				}
+			} else if (items[0].compare("states") == 0) {
+				int result = load_states(items);
+				if (result == -1) {
+					return true;
+				} else if (result == 1) {
+					loading = 1;
+					loadingCounter = 0;
+				}
+			} else if (items[0].compare("actions") == 0) {
+				int result = load_actions(items);
+				if (result == -1) {
+					return true;
+				} else if (result == 1) {
+					loading = 2;
+					loadingCounter = 0;
+				}
+			} else if (items[0].compare("observations") == 0) {
+				int result = load_observations(items);
+				if (result == -1) {
+					return true;
+				} else if (result == 1) {
+					loading = 3;
+					loadingCounter = 0;
+				}
+			} else if (items[0].compare("T") == 0) {
 
-			// Check if this new line contains a ":" and the category exists. This means
-			// that the category will switch, so we need to save the 'current' before it
-			// does.
-			if (category != FileObjectCategory::OBJECT_NONE && line.find(':') != std::string::npos) {
-				switch (category) {
-				case FileObjectCategory::OBJECT_STATE_TRANSITIONS:
-					break;
-				case FileObjectCategory::OBJECT_OBSERVATION_TRANSITIONS:
-					break;
-				case FileObjectCategory::OBJECT_REWARDS:
-					break;
-				default:
-					break;
+			} else if (items[0].compare("O") == 0) {
+
+			} else if (items[0].compare("R") == 0) {
+
+			}
+		} else {
+			// If this does not contain a colon (and is not blank), then it
+			// is an information line. For information lines, split the line based on
+			// spaces and read each float, creating the appropriate map.
+			switch (loading) {
+			case 1:
+				// Loading factored states.
+				if (load_factored_states(loadingCounter, line)) {
+					return true;
 				}
+				break;
+			case 2:
+				// Loading an agent's actions.
+				if (load_agent_actions(loadingCounter, line)) {
+					return true;
+				}
+				break;
+			case 3:
+				// Loading an agent's observations.
+				if (load_agent_observations(loadingCounter, line)) {
+					return true;
+				}
+				break;
+			case 4:
+				// Loading a vector for T.
+				break;
+			case 5:
+				// Loading a matrix for T.
+				break;
+			case 6:
+				// Loading a vector for O.
+				break;
+			case 7:
+				// Loading a matrix for O.
+				break;
+			case 8:
+				// Loading a vector for R.
+				break;
+			case 9:
+				// Loading a matrix for R.
+				break;
+			default:
+				sprintf(error, "Failed loading a factor, vector, or matrix on line %i in file '%s'.",
+						rows, filename.c_str());
+				log_message(std::cout, "UnifiedFile::load", error);
+				return true;
+				break;
 			}
 		}
+
+		// Check if this new line contains a ":" and the category exists. This means
+		// that the category will switch, so we need to save the 'current' before it
+		// does.
+		if (category != FileObjectCategory::OBJECT_NONE && line.find(':') != std::string::npos) {
+			switch (category) {
+			case FileObjectCategory::OBJECT_STATE_TRANSITIONS:
+				break;
+			case FileObjectCategory::OBJECT_OBSERVATION_TRANSITIONS:
+				break;
+			case FileObjectCategory::OBJECT_REWARDS:
+				break;
+			default:
+				break;
+			}
+		}
+
+		rows++;
 	}
 
 	return false;
@@ -418,7 +424,6 @@ bool UnifiedFile::load_discount_factor(std::vector<std::string> items)
 	return false;
 }
 
-
 /**
  * Load the initial state from the file's data.
  * @param items	The list of items on the same line.
@@ -442,7 +447,7 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 	}
 
 	// If the initial state is not yet defined, then create it.
-	if (initialState != nullptr) {
+	if (initialState == nullptr) {
 		initialState = new InitialState();
 	}
 
@@ -459,46 +464,26 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 	}
 
 	// Handle the various cases for setting an initial state.
-	if (list.size() == 1) {
-		// Either this is a single state, uniform, or number of states.
-		if (list[0].compare("uniform") == 0) {
-			double probability = 1.0 / (double)states->get_num_states();
-			for (State *state : states->all()) {
-				initialState->set_initial_belief(state, probability);
-			}
+	// Either this is a single state, uniform, or number of states.
+	if (list[0].compare("uniform") == 0) {
+		double probability = 1.0 / (double)states->get_num_states();
+		for (State *state : states->all()) {
+			initialState->set_initial_belief(state, probability);
 		}
+	} else if (list.size() == 1) {
+		State *state = nullptr;
 
-		// Attempt to convert this to an integer. If it fails, then it must be a state.
-		int stateIndex = -1;
 		try {
-			stateIndex = std::stoi(list[0]);
-		} catch (const std::invalid_argument &err) { }
-
-		if (stateIndex == -1) {
-			State *state = nullptr;
-
-			try {
-				state = states->find(list[0]);
-			} catch (const StateException &err) {
-				sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
-						list[0].c_str(), rows, filename.c_str());
-				log_message(std::cout, "UnifiedFile::load_initial_state", error);
-				return true;
-			}
-
-			initialState->set_initial_state(state);
-		} else {
-			// Handle the case in which the user provided an invalid state.
-			if (stateIndex < 0 || stateIndex >= states->get_num_states()) {
-				sprintf(error, "State integer '%i' out of bounds on line %i in file '%s'.",
-						stateIndex, rows, filename.c_str());
-				log_message(std::cout, "UnifiedFile::load_initial_state", error);
-				return true;
-			}
-
-			initialState->set_initial_state(states->all()[stateIndex]);
-			initialState->set_initial_belief(states->all()[stateIndex], 1.0);
+			state = states->find(list[0]);
+		} catch (const StateException &err) {
+			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
+					list[0].c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_initial_state", error);
+			return true;
 		}
+
+		initialState->set_initial_state(state);
+		initialState->set_initial_belief(state, 1.0);
 	} else {
 		// This must be a full list of probabilities.
 		int stateIndex = 0;
@@ -530,7 +515,6 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 	return false;
 }
 
-
 /**
  * Load the initial state from the file's data, following the special inclusive structure.
  * @param items	The list of items on the same line.
@@ -554,7 +538,7 @@ bool UnifiedFile::load_initial_state_inclusive(std::vector<std::string> items)
 	}
 
 	// If the initial state is not yet defined, then create it.
-	if (initialState != nullptr) {
+	if (initialState == nullptr) {
 		initialState = new InitialState();
 	}
 
@@ -576,55 +560,21 @@ bool UnifiedFile::load_initial_state_inclusive(std::vector<std::string> items)
 		return true;
 	}
 
-	// Check if the first item in the list is an integer. It must be if this is
-	// a list of state indices.
-	bool indices = true;
-	try {
-		std::stoi(list[0]);
-	} catch (const std::invalid_argument &err) {
-		indices = false;
-	}
-
 	double probability = 1.0 / (double)list.size();
 
-	// If these are indices, then load them as such. Otherwise, load them as string identifiers.
-	if (indices) {
-		for (std::string indexString : list) {
-			int stateIndex = -1;
+	for (std::string idString : list) {
+		State *state = nullptr;
 
-			try {
-				stateIndex = std::stoi(indexString);
-			} catch (const std::invalid_argument &err) {
-				sprintf(error, "Invalid state index string '%s' on line %i in file '%s'.",
-						indexString.c_str(), rows, filename.c_str());
-				log_message(std::cout, "UnifiedFile::load_initial_state_inclusive", error);
-				return true;
-			}
-
-			if (stateIndex < 0 || stateIndex >= states->get_num_states()) {
-				sprintf(error, "State index '%s' is out of bounds on line %i in file '%s'.",
-						indexString.c_str(), rows, filename.c_str());
-				log_message(std::cout, "UnifiedFile::load_initial_state_inclusive", error);
-				return true;
-			}
-
-			initialState->set_initial_belief(states->all()[stateIndex], probability);
+		try {
+			state = states->find(idString);
+		} catch (const StateException &err) {
+			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
+					idString.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_initial_state_inclusive", error);
+			return true;
 		}
-	} else {
-		for (std::string idString : list) {
-			State *state = nullptr;
 
-			try {
-				state = states->find(idString);
-			} catch (const StateException &err) {
-				sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
-						idString.c_str(), rows, filename.c_str());
-				log_message(std::cout, "UnifiedFile::load_initial_state_inclusive", error);
-				return true;
-			}
-
-			initialState->set_initial_belief(state, probability);
-		}
+		initialState->set_initial_belief(state, probability);
 	}
 
 	return false;
@@ -653,7 +603,7 @@ bool UnifiedFile::load_initial_state_exclusive(std::vector<std::string> items)
 	}
 
 	// If the initial state is not yet defined, then create it.
-	if (initialState != nullptr) {
+	if (initialState == nullptr) {
 		initialState = new InitialState();
 	}
 
@@ -675,60 +625,24 @@ bool UnifiedFile::load_initial_state_exclusive(std::vector<std::string> items)
 		return true;
 	}
 
-	// Check if the first item in the list is an integer. It must be if this is
-	// a list of state indices.
-	bool indices = true;
-	try {
-		std::stoi(list[0]);
-	} catch (const std::invalid_argument &err) {
-		indices = false;
-	}
-
 	double probability = 1.0 / (double)(states->get_num_states() - list.size());
 
 	std::vector<State *> subset = states->all();
 
-	// If these are indices, then remove them from the 'stateSubset' vector. Otherwise, remove them as
-	// string identifiers.
-	if (indices) {
-		for (std::string indexString : list) {
-			int stateIndex = -1;
+	for (std::string idString : list) {
+		State *state = nullptr;
 
-			try {
-				stateIndex = std::stoi(indexString);
-			} catch (const std::invalid_argument &err) {
-				sprintf(error, "Invalid state index string '%s' on line %i in file '%s'.",
-						indexString.c_str(), rows, filename.c_str());
-				log_message(std::cout, "UnifiedFile::load_initial_state_exclusive", error);
-				return true;
-			}
-
-			if (stateIndex < 0 || stateIndex >= states->get_num_states()) {
-				sprintf(error, "State index '%s' is out of bounds on line %i in file '%s'.",
-						indexString.c_str(), rows, filename.c_str());
-				log_message(std::cout, "UnifiedFile::load_initial_state_exclusive", error);
-				return true;
-			}
-
-			// Remove the state from the list.
-			subset.erase(std::remove(subset.begin(), subset.end(), states->all()[stateIndex]), subset.end());
+		try {
+			state = states->find(idString);
+		} catch (const StateException &err) {
+			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
+					idString.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_initial_state_exclusive", error);
+			return true;
 		}
-	} else {
-		for (std::string idString : list) {
-			State *state = nullptr;
 
-			try {
-				state = states->find(idString);
-			} catch (const StateException &err) {
-				sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
-						idString.c_str(), rows, filename.c_str());
-				log_message(std::cout, "UnifiedFile::load_initial_state_exclusive", error);
-				return true;
-			}
-
-			// Remove the state from the list.
-			subset.erase(std::remove(subset.begin(), subset.end(), state), subset.end());
-		}
+		// Remove the state from the list.
+		subset.erase(std::remove(subset.begin(), subset.end(), state), subset.end());
 	}
 
 	// The remaining states must be defined with a uniform belief.
@@ -738,7 +652,6 @@ bool UnifiedFile::load_initial_state_exclusive(std::vector<std::string> items)
 
 	return false;
 }
-
 
 /**
  * Load the value type (reward or cost) from the file's data.
@@ -753,6 +666,8 @@ bool UnifiedFile::load_value(std::vector<std::string> items)
 		log_message(std::cout, "UnifiedFile::load_value", error);
 		return true;
 	}
+
+	items[1].erase(std::remove(items[1].begin(), items[1].end(), ' '), items[1].end());
 
 	if (items[1].compare("reward") == 0) {
 		rewardValue = true;
@@ -913,7 +828,7 @@ int UnifiedFile::load_states(std::vector<std::string> items)
 bool UnifiedFile::load_factored_states(int factorIndex, std::string line)
 {
 	// Handle an invalid factor index and undefined states variable.
-	if (factorIndex < 0 || factorIndex >= ((FiniteFactoredStates *)states)->get_num_factors()) {
+	if (factorIndex < 0) { // || factorIndex >= ((FiniteFactoredStates *)states)->get_num_factors()) {
 		sprintf(error, "Missing states definition on line %i in file '%s'.", rows, filename.c_str());
 		log_message(std::cout, "UnifiedFile::load_factored_states", error);
 		return -1;
@@ -970,13 +885,16 @@ bool UnifiedFile::load_factored_states(int factorIndex, std::string line)
 		}
 	} else {
 		// This must be a full list of unique state names.
-		std::vector<State *> newStates;
 		for (std::string stateName : list) {
 			newStates.push_back(new State(stateName));
 		}
 	}
 
-	((FiniteFactoredStates *)states)->set(factorIndex, newStates);
+	if (factorIndex >= ((FiniteFactoredStates *)states)->get_num_factors()) {
+		((FiniteFactoredStates *)states)->add_factor(newStates);
+	} else {
+		((FiniteFactoredStates *)states)->set(factorIndex, newStates);
+	}
 	((FiniteFactoredStates *)states)->update();
 
 	return 0;
@@ -1125,14 +1043,17 @@ int UnifiedFile::load_agent_actions(int agentIndex, std::string line)
 		}
 	} else {
 		// This must be a full list of unique action names.
-		std::vector<Action *> newActions;
 		for (std::string actionName : list) {
 			newActions.push_back(new Action(actionName));
 		}
 	}
 
+	// Set the action index, and ignore any errors on an update. An error means that some action
+	// sets for other agents are not yet defined.
 	((FiniteJointActions *)actions)->set(agentIndex, newActions);
-	((FiniteJointActions *)actions)->update();
+	try {
+		((FiniteJointActions *)actions)->update();
+	} catch (const ActionException &err) { }
 
 	return 0;
 }
@@ -1280,14 +1201,17 @@ int UnifiedFile::load_agent_observations(int agentIndex, std::string line)
 		}
 	} else {
 		// This must be a full list of unique observation names.
-		std::vector<Observation *> newObservations;
 		for (std::string observationName : list) {
 			newObservations.push_back(new Observation(observationName));
 		}
 	}
 
+	// Set the observation, and ignore any errors on an update. An error means that some observation
+	// sets for other agents are not yet defined.
 	((FiniteJointObservations *)observations)->set(agentIndex, newObservations);
-	((FiniteJointObservations *)observations)->update();
+	try {
+		((FiniteJointObservations *)observations)->update();
+	} catch (const ObservationException &error) { }
 
 	return 0;
 }
