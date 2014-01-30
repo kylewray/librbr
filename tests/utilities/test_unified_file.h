@@ -30,34 +30,128 @@
 
 #include "../../include/utilities/unified_file.h"
 
-// Test the UnifiedFile object. Output the success or failure for each test.
-void test_unified_file()
+/**
+ * Test the UnifiedFile object. Output the success or failure for each test.
+ * @return The number of errors encountered during execution.
+ */
+int test_unified_file()
 {
+	int numErrors = 0;
 	UnifiedFile file;
 
-	std::cout << "UnifiedFile: MDP Test 1... ";
-	if (!file.load("tests/resources/test_1.mdp")) {
-		std::cout << "OK." << std::endl;
+	std::cout << "UnifiedFile: 'test_01.mdp'...";
+	if (!file.load("tests/resources/test_01.mdp")) {
+		std::cout << " Success." << std::endl;
+	} else {
+		std::cout << " Failure." << std::endl;
+		numErrors++;
 	}
-	std::cout.flush();
 
-	std::cout << "UnifiedFile: MDP Test 2... ";
-	if (!file.load("tests/resources/test_2.mdp")) {
-		std::cout << "OK." << std::endl;
+	std::cout << "UnifiedFile: 'test_02.mdp'... ";
+	if (!file.load("tests/resources/test_02.mdp")) {
+		std::cout << " Success." << std::endl;
+	} else {
+		std::cout << " Failure." << std::endl;
+		numErrors++;
 	}
-	std::cout.flush();
 
-	std::cout << "UnifiedFile: POMDP Test 1... ";
-	if (!file.load("tests/resources/test_1.pomdp")) {
-		std::cout << "OK." << std::endl;
+	std::cout << "UnifiedFile: 'test_03.mdp' (Expecting Error)...\n\t";
+	if (file.load("tests/resources/test_03.mdp")) {
+		std::cout << "\tSuccess." << std::endl;
+	} else {
+		std::cout << "\tFailure." << std::endl;
+		numErrors++;
 	}
-	std::cout.flush();
 
-	std::cout << "UnifiedFile: Dec-MDP Test 1... ";
-	if (!file.load("tests/resources/test_1.dec_mdp")) {
-		std::cout << "OK." << std::endl;
+	std::cout << "UnifiedFile: 'test_04.mdp' (Expecting Error)...\n\t";
+	if (file.load("tests/resources/test_04.mdp")) {
+		std::cout << "\tSuccess." << std::endl;
+	} else {
+		std::cout << "\tFailure." << std::endl;
+		numErrors++;
 	}
-	std::cout.flush();
+
+	std::cout << "UnifiedFile: 'test_05.mdp' (Expecting Error)...\n\t";
+	if (file.load("tests/resources/test_05.mdp")) {
+		std::cout << "\tSuccess." << std::endl;
+	} else {
+		std::cout << "\tFailure." << std::endl;
+		numErrors++;
+	}
+
+	std::cout << "UnifiedFile: 'test_06.mdp' (Expecting Error)...\n\t";
+	if (file.load("tests/resources/test_06.mdp")) {
+		std::cout << "\tSuccess." << std::endl;
+	} else {
+		std::cout << "\tFailure." << std::endl;
+		numErrors++;
+	}
+
+	std::cout << "UnifiedFile: 'test_07.mdp' (Expecting Error)...\n\t";
+	if (file.load("tests/resources/test_07.mdp")) {
+		std::cout << "\tSuccess." << std::endl;
+	} else {
+		std::cout << "\tFailure." << std::endl;
+		numErrors++;
+	}
+
+	std::cout << "UnifiedFile: 'test_08.mdp'... ";
+	if (!file.load("tests/resources/test_08.mdp")) {
+		std::cout << " Success." << std::endl;
+	} else {
+		std::cout << " Failure." << std::endl;
+		numErrors++;
+	}
+
+	std::cout << "UnifiedFile: 'test_09.mdp' (Expecting Error)...\n\t";
+	if (file.load("tests/resources/test_09.mdp")) {
+		std::cout << "\tSuccess." << std::endl;
+	} else {
+		std::cout << "\tFailure." << std::endl;
+		numErrors++;
+	}
+
+	std::cout << "UnifiedFile: 'test_10.mdp'... ";
+	if (!file.load("tests/resources/test_10.mdp")) {
+		std::cout << " Success." << std::endl;
+	} else {
+		std::cout << " Failure." << std::endl;
+		numErrors++;
+	}
+
+	std::cout << "UnifiedFile: 'test_11.mdp' (Expecting Error)...\n\t";
+	if (file.load("tests/resources/test_11.mdp")) {
+		std::cout << "\tSuccess." << std::endl;
+	} else {
+		std::cout << "\tFailure." << std::endl;
+		numErrors++;
+	}
+
+	std::cout << "UnifiedFile: 'test_12.mdp'... ";
+	if (!file.load("tests/resources/test_12.mdp")) {
+		std::cout << " Success." << std::endl;
+	} else {
+		std::cout << " Failure." << std::endl;
+		numErrors++;
+	}
+
+	std::cout << "UnifiedFile: 'test_13.mdp' (Expecting Error)...\n\t";
+	if (file.load("tests/resources/test_13.mdp")) {
+		std::cout << "\tSuccess." << std::endl;
+	} else {
+		std::cout << "\tFailure." << std::endl;
+		numErrors++;
+	}
+
+	std::cout << "UnifiedFile: 'test_14.mdp'...";
+	if (!file.load("tests/resources/test_14.mdp")) {
+		std::cout << " Success." << std::endl;
+	} else {
+		std::cout << " Failure." << std::endl;
+		numErrors++;
+	}
+
+	return numErrors;
 }
 
 

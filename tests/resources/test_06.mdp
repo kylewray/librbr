@@ -1,0 +1,10 @@
+# This is a comment.
+
+discount: 0.9
+horizon: 0
+values: reward
+states: -1
+actions: left right
+#start: s1
+start include: s3 s1
+#start exclude: s2 s3

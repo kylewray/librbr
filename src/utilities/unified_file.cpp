@@ -51,6 +51,10 @@ UnifiedFile::UnifiedFile()
 	rewardValue = true;
 	rows = 1;
 	filename = "";
+
+	loadingAction = nullptr;
+	loadingState = nullptr;
+	loadingObservation = nullptr;
 }
 
 /**
@@ -92,12 +96,6 @@ bool UnifiedFile::load(std::string path)
 	int loading = 0;
 	int loadingCounter = 0;
 
-	// This is not necessarily the best way to do it, but these are used in loading
-	// matrices or vectors for T, O, and R.
-//	void *loadingAlpha = nullptr;
-//	void *loadingBeta = nullptr;
-//	void *loadingGamma = nullptr;
-
 	// If the file failed to open, then do not do anything.
 	if (!file.is_open()) {
 		sprintf(error, "Failed to find file '%s'.", filename.c_str());
@@ -112,8 +110,6 @@ bool UnifiedFile::load(std::string path)
 		// Handle comments by removing all characters down to and including a '#'.
 		line = line.substr(0, line.find('#'));
 
-		//line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
-
 		// Skip over blank lines.
 		if (line.length() == 0) {
 			rows++;
@@ -125,6 +121,10 @@ bool UnifiedFile::load(std::string path)
 			// Reset these variables since we have started a new ":" statement.
 			loading = 0;
 			loadingCounter = 0;
+
+			loadingAction = nullptr;
+			loadingState = nullptr;
+			loadingObservation = nullptr;
 
 			// If this contains a colon, then it is a keyword line. For keyword lines,
 			// split the line based on the colon(s) and handle the keyword.
@@ -190,16 +190,43 @@ bool UnifiedFile::load(std::string path)
 					loadingCounter = 0;
 				}
 			} else if (items[0].compare("T") == 0) {
-
+				int result = load_state_transition(items);
+				if (result == -1) {
+					return true;
+				} else if (result == 1) {
+					loading = 4;
+					loadingCounter = 0;
+				} else if (result == 2) {
+					loading = 5;
+					loadingCounter = 0;
+				}
 			} else if (items[0].compare("O") == 0) {
-
+				int result = load_observation_transition(items);
+				if (result == -1) {
+					return true;
+				} else if (result == 1) {
+					loading = 6;
+					loadingCounter = 0;
+				} else if (result == 2) {
+					loading = 7;
+					loadingCounter = 0;
+				}
 			} else if (items[0].compare("R") == 0) {
-
+				int result = load_reward(items);
+				if (result == -1) {
+					return true;
+				} else if (result == 1) {
+					loading = 8;
+					loadingCounter = 0;
+				} else if (result == 2) {
+					loading = 9;
+					loadingCounter = 0;
+				}
 			}
 		} else {
 			// If this does not contain a colon (and is not blank), then it
 			// is an information line. For information lines, split the line based on
-			// spaces and read each float, creating the appropriate map.
+			// spaces and read each double, creating the appropriate map.
 			switch (loading) {
 			case 1:
 				// Loading factored states.
@@ -221,21 +248,39 @@ bool UnifiedFile::load(std::string path)
 				break;
 			case 4:
 				// Loading a vector for T.
+				if (load_state_transition_vector(line)) {
+					return true;
+				}
 				break;
 			case 5:
 				// Loading a matrix for T.
+				if (load_state_transition_matrix(loadingCounter, line)) {
+					return true;
+				}
 				break;
 			case 6:
 				// Loading a vector for O.
+				if (load_observation_transition_vector(line)) {
+					return true;
+				}
 				break;
 			case 7:
 				// Loading a matrix for O.
+				if (load_observation_transition_matrix(loadingCounter, line)) {
+					return true;
+				}
 				break;
 			case 8:
 				// Loading a vector for R.
+				if (load_reward_vector(line)) {
+					return true;
+				}
 				break;
 			case 9:
 				// Loading a matrix for R.
+				if (load_reward_matrix(loadingCounter, line)) {
+					return true;
+				}
 				break;
 			default:
 				sprintf(error, "Failed loading a factor, vector, or matrix on line %i in file '%s'.",
@@ -244,6 +289,8 @@ bool UnifiedFile::load(std::string path)
 				return true;
 				break;
 			}
+
+			loadingCounter++;
 		}
 
 		// Check if this new line contains a ":" and the category exists. This means
@@ -334,6 +381,52 @@ void UnifiedFile::reset()
 }
 
 /**
+ * Remove all white space from a string.
+ * @param item The string to remove white space from.
+ * @return The resulting item without any white spaces.
+ */
+void UnifiedFile::remove_whitespace(std::string &item)
+{
+	item.erase(std::remove(item.begin(), item.end(), ' '), item.end());
+}
+
+/**
+ * Split a string delimited by spaces ' ' into a vector of strings. If this
+ * string happens to represent joint actions, joint observations, or
+ * factored states, then it will split on spaces surrounding '<...>' instead.
+ * @param item The string to split which is delimited by spaces ' '.
+ * @return The resulting vector of items.
+ */
+std::vector<std::string> UnifiedFile::split(std::string item)
+{
+	std::istringstream ssItem(item);
+	std::vector<std::string> list;
+	std::string temp;
+	std::string element;
+	bool buildingElement = false;
+
+	while (std::getline(ssItem, temp, ' ')) {
+		if (temp.length() == 0) {
+			continue;
+		}
+
+		if (temp.find('<') != std::string::npos) {
+			element = temp.substr(temp.find('<') + 1);
+			buildingElement = true;
+		} else if (temp.find('>') != std::string::npos) {
+			list.push_back(element + " " + temp.substr(0, temp.find('>')));
+			buildingElement = false;
+		} else if (buildingElement) {
+			element += " " + temp;
+		} else {
+			list.push_back(temp);
+		}
+	}
+
+	return list;
+}
+
+/**
  * Load the horizon object from the file's data.
  * @param items	The list of items on the same line.
  * @return Return @code{true} if an error occurred, and @code{false} otherwise.
@@ -352,8 +445,7 @@ bool UnifiedFile::load_horizon(std::vector<std::string> items)
 		horizon = new Horizon();
 	}
 
-	// Remove the whitespace.
-	items[1].erase(std::remove(items[1].begin(), items[1].end(), ' '), items[1].end());
+	remove_whitespace(items[1]);
 
 	// Attempt to convert the string to a double. If successful, then set the horizon.
 	int h = 0.0;
@@ -398,15 +490,14 @@ bool UnifiedFile::load_discount_factor(std::vector<std::string> items)
 		horizon = new Horizon();
 	}
 
-	// Remove the whitespace.
-	items[1].erase(std::remove(items[1].begin(), items[1].end(), ' '), items[1].end());
+	remove_whitespace(items[1]);
 
 	// Attempt to convert the string to a double. If successful, then set the discount factor.
 	double d = 0.0;
 	try {
 		d = std::stod(items[1]);
 	} catch (const std::invalid_argument &err) {
-		sprintf(error, "Failed to convert '%s' to a float on line %i in file '%s'.",
+		sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
 				items[1].c_str(), rows, filename.c_str());
 		log_message(std::cout, "UnifiedFile::load_discount_factor", error);
 		return true;
@@ -451,17 +542,7 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 		initialState = new InitialState();
 	}
 
-	// Split the first item by spaces, skipping over the empty strings.
-	std::istringstream ssItem(items[1]);
-	std::vector<std::string> list;
-	std::string temp;
-
-	while (std::getline(ssItem, temp, ' ')) {
-		if (temp.length() == 0) {
-			continue;
-		}
-		list.push_back(temp);
-	}
+	std::vector<std::string> list = split(items[1]);
 
 	// Handle the various cases for setting an initial state.
 	// Either this is a single state, uniform, or number of states.
@@ -501,7 +582,7 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 			try {
 				p = std::stod(probability);
 			} catch (const std::invalid_argument &err) {
-				sprintf(error, "Failed to convert '%s' to a float on line %i in file '%s'.",
+				sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
 						items[1].c_str(), rows, filename.c_str());
 				log_message(std::cout, "UnifiedFile::load_initial_state", error);
 				return true;
@@ -542,17 +623,7 @@ bool UnifiedFile::load_initial_state_inclusive(std::vector<std::string> items)
 		initialState = new InitialState();
 	}
 
-	// Split the first item by spaces, skipping over the empty strings.
-	std::istringstream ssItem(items[1]);
-	std::vector<std::string> list;
-	std::string temp;
-
-	while (std::getline(ssItem, temp, ' ')) {
-		if (temp.length() == 0) {
-			continue;
-		}
-		list.push_back(temp);
-	}
+	std::vector<std::string> list = split(items[1]);
 
 	if (list.size() == 0) {
 		sprintf(error, "No states provided on line %i in file '%s'.", rows, filename.c_str());
@@ -607,17 +678,7 @@ bool UnifiedFile::load_initial_state_exclusive(std::vector<std::string> items)
 		initialState = new InitialState();
 	}
 
-	// Split the first item by spaces, skipping over the empty strings.
-	std::istringstream ssItem(items[1]);
-	std::vector<std::string> list;
-	std::string temp;
-
-	while (std::getline(ssItem, temp, ' ')) {
-		if (temp.length() == 0) {
-			continue;
-		}
-		list.push_back(temp);
-	}
+	std::vector<std::string> list = split(items[1]);
 
 	if (list.size() == 0) {
 		sprintf(error, "No states provided on line %i in file '%s'.", rows, filename.c_str());
@@ -667,7 +728,7 @@ bool UnifiedFile::load_value(std::vector<std::string> items)
 		return true;
 	}
 
-	items[1].erase(std::remove(items[1].begin(), items[1].end(), ' '), items[1].end());
+	remove_whitespace(items[1]);
 
 	if (items[1].compare("reward") == 0) {
 		rewardValue = true;
@@ -702,17 +763,7 @@ bool UnifiedFile::load_agents(std::vector<std::string> items)
 		agents = new Agents();
 	}
 
-	// Split the first item by spaces, skipping over the empty strings.
-	std::istringstream ssItem(items[1]);
-	std::vector<std::string> list;
-	std::string temp;
-
-	while (std::getline(ssItem, temp, ' ')) {
-		if (temp.length() == 0) {
-			continue;
-		}
-		list.push_back(temp);
-	}
+	std::vector<std::string> list = split(items[1]);
 
 	// If this is one item, then it must be a number, since there must be at least two agents.
 	if (list.size() == 1) {
@@ -770,17 +821,7 @@ int UnifiedFile::load_states(std::vector<std::string> items)
 		states = new FiniteStates();
 	}
 
-	// Split the first item by spaces, skipping over the empty strings.
-	std::istringstream ssItem(items[1]);
-	std::vector<std::string> list;
-	std::string temp;
-
-	while (std::getline(ssItem, temp, ' ')) {
-		if (temp.length() == 0) {
-			continue;
-		}
-		list.push_back(temp);
-	}
+	std::vector<std::string> list = split(items[1]);
 
 	// If this is one item, then it must be a number, since there must be at least two states.
 	if (list.size() == 1) {
@@ -840,17 +881,7 @@ bool UnifiedFile::load_factored_states(int factorIndex, std::string line)
 		return -1;
 	}
 
-	// Split the line by spaces, skipping over the empty strings.
-	std::istringstream ssItem(line);
-	std::vector<std::string> list;
-	std::string temp;
-
-	while (std::getline(ssItem, temp, ' ')) {
-		if (temp.length() == 0) {
-			continue;
-		}
-		list.push_back(temp);
-	}
+	std::vector<std::string> list = split(line);
 
 	// If this is one item, then it must be a number, since there must be at least two states.
 	std::vector<State *> newStates;
@@ -927,17 +958,7 @@ int UnifiedFile::load_actions(std::vector<std::string> items)
 		actions = new FiniteActions();
 	}
 
-	// Split the first item by spaces, skipping over the empty strings.
-	std::istringstream ssItem(items[1]);
-	std::vector<std::string> list;
-	std::string temp;
-
-	while (std::getline(ssItem, temp, ' ')) {
-		if (temp.length() == 0) {
-			continue;
-		}
-		list.push_back(temp);
-	}
+	std::vector<std::string> list = split(items[1]);
 
 	// If this is one item, then it must be a number, since there must be at least two agents.
 	if (list.size() == 1) {
@@ -998,17 +1019,7 @@ int UnifiedFile::load_agent_actions(int agentIndex, std::string line)
 		return -1;
 	}
 
-	// Split the line by spaces, skipping over the empty strings.
-	std::istringstream ssItem(line);
-	std::vector<std::string> list;
-	std::string temp;
-
-	while (std::getline(ssItem, temp, ' ')) {
-		if (temp.length() == 0) {
-			continue;
-		}
-		list.push_back(temp);
-	}
+	std::vector<std::string> list = split(line);
 
 	// If this is one item, then it must be a number, since there must be at least two actions.
 	std::vector<Action *> newActions;
@@ -1085,17 +1096,7 @@ int UnifiedFile::load_observations(std::vector<std::string> items)
 		observations = new FiniteObservations();
 	}
 
-	// Split the first item by spaces, skipping over the empty strings.
-	std::istringstream ssItem(items[1]);
-	std::vector<std::string> list;
-	std::string temp;
-
-	while (std::getline(ssItem, temp, ' ')) {
-		if (temp.length() == 0) {
-			continue;
-		}
-		list.push_back(temp);
-	}
+	std::vector<std::string> list = split(items[1]);
 
 	// If this is one item, then it must be a number, since there must be at least two observations.
 	if (list.size() == 1) {
@@ -1156,17 +1157,7 @@ int UnifiedFile::load_agent_observations(int agentIndex, std::string line)
 		return -1;
 	}
 
-	// Split the line by spaces, skipping over the empty strings.
-	std::istringstream ssItem(line);
-	std::vector<std::string> list;
-	std::string temp;
-
-	while (std::getline(ssItem, temp, ' ')) {
-		if (temp.length() == 0) {
-			continue;
-		}
-		list.push_back(temp);
-	}
+	std::vector<std::string> list = split(line);
 
 	// If this is one item, then it must be a number, since there must be at least two observations.
 	std::vector<Observation *> newObservations;
@@ -1214,4 +1205,558 @@ int UnifiedFile::load_agent_observations(int agentIndex, std::string line)
 	} catch (const ObservationException &error) { }
 
 	return 0;
+}
+
+/**
+ * Load the state transitions from the file's data.
+ * @param items	The list of items on the same line.
+ * @return Return -1 if an error occurred, 0 if successful, 1 if this begins
+ * 		loading a vector of state transitions, 2 if this begins loading a
+ * 		matrix of state transitions.
+ */
+int UnifiedFile::load_state_transition(std::vector<std::string> items)
+{
+	// Ensure a valid number of items.
+	if (items.size() < 2 || items.size() > 5) {
+		sprintf(error, "Incomplete statement on line %i in file '%s'.", rows, filename.c_str());
+		log_message(std::cout, "UnifiedFile::load_state_transition", error);
+		return -1;
+	}
+
+	// Create the state transitions object if it has not been made yet.
+	if (stateTransitions == nullptr) {
+		stateTransitions = new FiniteStateTransitions();
+	}
+
+	std::string actionName = split(items[1])[0];
+	Action *action = nullptr;
+
+	if (actionName.compare("*") != 0) {
+		try {
+			action = actions->find(actionName);
+		} catch (const ActionException &err) {
+			sprintf(error, "Action '%s' has not been defined on line %i in file '%s'.",
+					actionName.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_state_transition", error);
+			return -1;
+		}
+	}
+
+	// If this is of the form "T: action :" then a matrix follows.
+	if (items.size() == 2) {
+		loadingAction = action;
+		return 2;
+	}
+
+	std::string startStateName = split(items[2])[0];
+	State *startState = nullptr;
+
+	if (startStateName.compare("*") != 0) {
+		try {
+			startState = states->find(startStateName);
+		} catch (const StateException &err) {
+			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
+					startStateName.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_state_transition", error);
+			return -1;
+		}
+	}
+
+	// If this is of the form "T: action : start-state :" then a vector follows.
+	if (items.size() == 3) {
+		loadingAction = action;
+		loadingState = startState;
+		return 1;
+	}
+
+	std::string endStateName = split(items[3])[0];
+	State *endState = nullptr;
+
+	if (endStateName.compare("*") != 0) {
+		try {
+			endState = states->find(endStateName);
+		} catch (const StateException &err) {
+			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
+					endStateName.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_state_transition", error);
+			return -1;
+		}
+	}
+
+	std::string probabilityString = split(items[4])[0];
+	double probability = 0.0;
+
+	try {
+		probability = std::stod(probabilityString);
+	} catch (const std::invalid_argument &err) {
+		sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
+				probabilityString.c_str(), rows, filename.c_str());
+		log_message(std::cout, "UnifiedFile::load_state_transition", error);
+		return -1;
+	}
+
+	stateTransitions->set(startState, action, endState, probability);
+
+	return 0;
+}
+
+/**
+ * Load a state transition vector from the file's data.
+ * @param line		The line to parse containing a vector of probabilities.
+ * @return Return @code{true} if an error occurred, @code{false} otherwise.
+ */
+bool UnifiedFile::load_state_transition_vector(std::string line)
+{
+	// Split the line into a list of (hopefully) probabilities equal to the number of states.
+	std::vector<std::string> list = split(line);
+
+	if ((int)list.size() != states->get_num_states()) {
+		sprintf(error, "Invalid number of probabilities given: %i != %i on line %i in file '%s'.",
+				(int)list.size(), states->get_num_states(), rows, filename.c_str());
+		log_message(std::cout, "UnifiedFile::load_state_transition_vector", error);
+		return true;
+	}
+
+	// Attempt to convert each string to a probability and set the corresponding transition probability.
+	int counter = 0;
+
+	for (std::string probabilityString : list) {
+		double probability = 0.0;
+
+		try {
+			probability = std::stod(probabilityString);
+		} catch (const std::invalid_argument &err) {
+			sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
+					probabilityString.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_state_transition_vector", error);
+			return true;
+		}
+
+		stateTransitions->set(loadingState, loadingAction, states->all()[counter], probability);
+
+		counter++;
+	}
+
+	return false;
+}
+
+/**
+ * Load a state transition matrix from the file's data.
+ * @param stateIndex	The current state index for the start state.
+ * @param line			The line to parse containing a vector of probabilities.
+ * @return Return @code{true} if an error occurred, @code{false} otherwise.
+ */
+bool UnifiedFile::load_state_transition_matrix(int stateIndex, std::string line)
+{
+	// Split the line into a list of (hopefully) probabilities equal to the number of states.
+	std::vector<std::string> list = split(line);
+
+	if (stateIndex < 0 || stateIndex >= states->get_num_states()) {
+		sprintf(error, "State index '%i' out of bounds on line %i in file '%s'.",
+				stateIndex, rows, filename.c_str());
+		log_message(std::cout, "UnifiedFile::load_state_transition_matrix", error);
+		return true;
+	}
+
+	if ((int)list.size() != states->get_num_states()) {
+		sprintf(error, "Invalid number of probabilities given: '%i != %i' on line %i in file '%s'.",
+				(int)list.size(), states->get_num_states(), rows, filename.c_str());
+		log_message(std::cout, "UnifiedFile::load_state_transition_matrix", error);
+		return true;
+	}
+
+	// Attempt to convert each string to a probability and set the corresponding transition probability.
+	int counter = 0;
+
+	for (std::string probabilityString : list) {
+		double probability = 0.0;
+
+		try {
+			probability = std::stod(probabilityString);
+		} catch (const std::invalid_argument &err) {
+			sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
+					probabilityString.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_state_transition_matrix", error);
+			return true;
+		}
+
+		stateTransitions->set(states->all()[stateIndex], loadingAction, states->all()[counter], probability);
+
+		counter++;
+	}
+
+	return false;
+}
+
+/**
+ * Load the observation transitions from the file's data.
+ * @param items	The list of items on the same line.
+ * @return Return -1 if an error occurred, 0 if successful, and 1 if this begins
+ * 		loading a matrix of observation transitions.
+ */
+int UnifiedFile::load_observation_transition(std::vector<std::string> items)
+{
+	// Ensure a valid number of items.
+	if (items.size() < 2 || items.size() > 5) {
+		sprintf(error, "Incomplete statement on line %i in file '%s'.", rows, filename.c_str());
+		log_message(std::cout, "UnifiedFile::load_observation_transition", error);
+		return -1;
+	}
+
+	// Create the observation transitions object if it has not been made yet.
+	if (observationTransitions == nullptr) {
+		observationTransitions = new FiniteObservationTransitions();
+	}
+
+	std::string actionName = split(items[1])[0];
+	Action *action = nullptr;
+
+	if (actionName.compare("*") != 0) {
+		try {
+			action = actions->find(actionName);
+		} catch (const ActionException &err) {
+			sprintf(error, "Action '%s' has not been defined on line %i in file '%s'.",
+					actionName.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_observation_transition", error);
+			return -1;
+		}
+	}
+
+	// If this is of the form "O: action :" then a matrix follows.
+	if (items.size() == 2) {
+		loadingAction = action;
+		return 2;
+	}
+
+	std::string endStateName = split(items[2])[0];
+	State *endState = nullptr;
+
+	if (endStateName.compare("*") != 0) {
+		try {
+			endState = states->find(endStateName);
+		} catch (const StateException &err) {
+			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
+					endStateName.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_observation_transition", error);
+			return -1;
+		}
+	}
+
+	// If this is of the form "O: action : end-state :" then a vector follows.
+	if (items.size() == 3) {
+		loadingAction = action;
+		loadingState = endState;
+		return 1;
+	}
+
+	std::string observationName = split(items[3])[0];
+	Observation *observation = nullptr;
+
+	if (observationName.compare("*") != 0) {
+		try {
+			observation = observations->find(observationName);
+		} catch (const ObservationException &err) {
+			sprintf(error, "Observation '%s' has not been defined on line %i in file '%s'.",
+					observationName.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_observation_transition", error);
+			return -1;
+		}
+	}
+
+	std::string probabilityString = split(items[4])[0];
+	double probability = 0.0;
+
+	try {
+		probability = std::stod(probabilityString);
+	} catch (const std::invalid_argument &err) {
+		sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
+				probabilityString.c_str(), rows, filename.c_str());
+		log_message(std::cout, "UnifiedFile::load_observation_transition", error);
+		return -1;
+	}
+
+	observationTransitions->set(observation, action, endState, probability);
+
+	return 0;
+}
+
+/**
+ * Load a observation transition vector from the file's data.
+ * @param line		The line to parse containing a vector of probabilities.
+ * @return Return @code{true} if an error occurred, @code{false} otherwise.
+ */
+bool UnifiedFile::load_observation_transition_vector(std::string line)
+{
+	// Split the line into a list of (hopefully) probabilities equal to the number of observations.
+	std::vector<std::string> list = split(line);
+
+	if ((int)list.size() != observations->get_num_observations()) {
+		sprintf(error, "Invalid number of probabilities given: %i != %i on line %i in file '%s'.",
+				(int)list.size(), observations->get_num_observations(), rows, filename.c_str());
+		log_message(std::cout, "UnifiedFile::load_observation_transition_vector", error);
+		return true;
+	}
+
+	// Attempt to convert each string to a probability and set the corresponding transition probability.
+	int counter = 0;
+
+	for (std::string probabilityString : list) {
+		double probability = 0.0;
+
+		try {
+			probability = std::stod(probabilityString);
+		} catch (const std::invalid_argument &err) {
+			sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
+					probabilityString.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_observation_transition_vector", error);
+			return true;
+		}
+
+		observationTransitions->set(observations->all()[counter], loadingAction, loadingState, probability);
+
+		counter++;
+	}
+
+	return false;
+}
+
+/**
+ * Load a state transition matrix from the file's data.
+ * @param stateIndex	The current state index for the end state.
+ * @param line			The line to parse containing a vector of probabilities.
+ * @return Return @code{true} if an error occurred, @code{false} otherwise.
+ */
+bool UnifiedFile::load_observation_transition_matrix(int stateIndex, std::string line)
+{
+	// Split the line into a list of (hopefully) probabilities equal to the number of observations.
+	std::vector<std::string> list = split(line);
+
+	if (stateIndex < 0 || stateIndex >= states->get_num_states()) {
+		sprintf(error, "State index '%i' out of bounds on line %i in file '%s'.",
+				stateIndex, rows, filename.c_str());
+		log_message(std::cout, "UnifiedFile::load_observation_transition_matrix", error);
+		return true;
+	}
+
+	if ((int)list.size() != observations->get_num_observations()) {
+		sprintf(error, "Invalid number of probabilities given: '%i != %i' on line %i in file '%s'.",
+				(int)list.size(), observations->get_num_observations(), rows, filename.c_str());
+		log_message(std::cout, "UnifiedFile::load_observation_transition_matrix", error);
+		return true;
+	}
+
+	// Attempt to convert each string to a probability and set the corresponding transition probability.
+	int counter = 0;
+
+	for (std::string probabilityString : list) {
+		double probability = 0.0;
+
+		try {
+			probability = std::stod(probabilityString);
+		} catch (const std::invalid_argument &err) {
+			sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
+					probabilityString.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_observation_transition_matrix", error);
+			return true;
+		}
+
+		observationTransitions->set(observations->all()[counter], loadingAction, states->all()[stateIndex], probability);
+
+		counter++;
+	}
+
+	return false;
+}
+
+/**
+ * Load the rewards from the file's data.
+ * @param items	The list of items on the same line.
+ * @return Return -1 if an error occurred, 0 if successful, and 1 if this begins
+ * 		loading a matrix of rewards.
+ */
+int UnifiedFile::load_reward(std::vector<std::string> items)
+{
+	// Ensure a valid number of items.
+	if (items.size() < 2 || items.size() > 5) {
+		sprintf(error, "Incomplete statement on line %i in file '%s'.", rows, filename.c_str());
+		log_message(std::cout, "UnifiedFile::load_reward", error);
+		return -1;
+	}
+
+	// Create the rewards object if it has not been made yet.
+	if (rewards == nullptr) {
+		rewards = new SASRewards();
+	}
+
+	std::string actionName = split(items[1])[0];
+	Action *action = nullptr;
+
+	if (actionName.compare("*") != 0) {
+		try {
+			action = actions->find(actionName);
+		} catch (const ActionException &err) {
+			sprintf(error, "Action '%s' has not been defined on line %i in file '%s'.",
+					actionName.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_reward", error);
+			return -1;
+		}
+	}
+
+	// If this is of the form "R: action :" then a matrix follows.
+	if (items.size() == 2) {
+		loadingAction = action;
+		return 2;
+	}
+
+	std::string startStateName = split(items[2])[0];
+	State *startState = nullptr;
+
+	if (startStateName.compare("*") != 0) {
+		try {
+			startState = states->find(startStateName);
+		} catch (const StateException &err) {
+			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
+					startStateName.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_reward", error);
+			return -1;
+		}
+	}
+
+	// If this is of the form "R: action : start-state :" then a vector follows.
+	if (items.size() == 3) {
+		loadingAction = action;
+		loadingState = startState;
+		return 1;
+	}
+
+	std::string endStateName = split(items[3])[0];
+	State *endState = nullptr;
+
+	if (endStateName.compare("*") != 0) {
+		try {
+			endState = states->find(endStateName);
+		} catch (const StateException &err) {
+			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
+					endStateName.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_reward", error);
+			return -1;
+		}
+	}
+
+	std::string rewardString = split(items[4])[0];
+	double reward = 0.0;
+
+	try {
+		reward = std::stod(rewardString);
+	} catch (const std::invalid_argument &err) {
+		sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
+				rewardString.c_str(), rows, filename.c_str());
+		log_message(std::cout, "UnifiedFile::load_reward", error);
+		return -1;
+	}
+
+	// Set the reward based on the previously loaded 'reward' or 'cost' specification.
+	if (rewardValue) {
+		rewards->set(startState, action, endState, reward);
+	} else {
+		rewards->set(startState, action, endState, -reward);
+	}
+
+	return 0;
+}
+
+/**
+ * Load a reward vector from the file's data.
+ * @param line		The line to parse containing a vector of rewards or costs.
+ * @return Return @code{true} if an error occurred, @code{false} otherwise.
+ */
+bool UnifiedFile::load_reward_vector(std::string line)
+{
+	// Split the line into a list of (hopefully) rewards equal to the number of states.
+	std::vector<std::string> list = split(line);
+
+	if ((int)list.size() != states->get_num_states()) {
+		sprintf(error, "Invalid number of rewards given: %i != %i on line %i in file '%s'.",
+				(int)list.size(), states->get_num_states(), rows, filename.c_str());
+		log_message(std::cout, "UnifiedFile::load_reward_vector", error);
+		return true;
+	}
+
+	// Attempt to convert each string to a reward and set the corresponding value accordingly.
+	int counter = 0;
+
+	for (std::string rewardString : list) {
+		double reward = 0.0;
+
+		try {
+			reward = std::stod(rewardString);
+		} catch (const std::invalid_argument &err) {
+			sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
+					rewardString.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_reward_vector", error);
+			return true;
+		}
+
+		if (rewardValue) {
+			rewards->set(states->all()[counter], loadingAction, loadingState, reward);
+		} else {
+			rewards->set(states->all()[counter], loadingAction, loadingState, -reward);
+		}
+
+		counter++;
+	}
+
+	return false;
+}
+
+/**
+ * Load a reward matrix from the file's data.
+ * @param stateIndex	The current state index for the end state.
+ * @param line			The line to parse containing a vector of rewards or costs.
+ * @return Return @code{true} if an error occurred, @code{false} otherwise.
+ */
+bool UnifiedFile::load_reward_matrix(int stateIndex, std::string line)
+{
+	// Split the line into a list of (hopefully) rewards equal to the number of states.
+	std::vector<std::string> list = split(line);
+
+	if (stateIndex < 0 || stateIndex >= states->get_num_states()) {
+		sprintf(error, "State index '%i' out of bounds on line %i in file '%s'.",
+				stateIndex, rows, filename.c_str());
+		log_message(std::cout, "UnifiedFile::load_reward_matrix", error);
+		return true;
+	}
+
+	if ((int)list.size() != states->get_num_states()) {
+		sprintf(error, "Invalid number of rewards given: '%i != %i' on line %i in file '%s'.",
+				(int)list.size(), states->get_num_states(), rows, filename.c_str());
+		log_message(std::cout, "UnifiedFile::load_reward_matrix", error);
+		return true;
+	}
+
+	// Attempt to convert each string to a reward and set the corresponding value accordingly.
+	int counter = 0;
+
+	for (std::string rewardString : list) {
+		double reward = 0.0;
+
+		try {
+			reward = std::stod(rewardString);
+		} catch (const std::invalid_argument &err) {
+			sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
+					rewardString.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_reward_matrix", error);
+			return true;
+		}
+
+		if (rewardValue) {
+			rewards->set(states->all()[stateIndex], loadingAction, states->all()[counter], reward);
+		} else {
+			rewards->set(states->all()[stateIndex], loadingAction, states->all()[counter], -reward);
+		}
+
+		counter++;
+	}
+
+	return false;
 }

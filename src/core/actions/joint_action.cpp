@@ -45,6 +45,7 @@ JointAction::JointAction(std::vector<Action *> jointAction)
 {
 	actions.reserve(jointAction.size());
 	actions = jointAction;
+	update_name();
 }
 
 /**
@@ -79,6 +80,7 @@ void JointAction::set_name(std::string newName)
 void JointAction::set(std::vector<Action *> jointAction)
 {
 	actions = jointAction;
+	update_name();
 }
 
 /**
@@ -140,4 +142,22 @@ bool JointAction::operator==(const JointAction &other)
 bool JointAction::operator<(const JointAction &other) const
 {
 	return name < other.get_name();
+}
+
+/**
+ * A helper function to compute the name of the joint action, once the actions are set.
+ */
+void JointAction::update_name()
+{
+	name = "";
+
+	int counter = 0;
+	for (Action *action : actions) {
+		name += action->get_name();
+
+		counter++;
+		if (counter < actions.size()) {
+			name += " ";
+		}
+	}
 }

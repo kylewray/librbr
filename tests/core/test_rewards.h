@@ -30,10 +30,15 @@
 
 #include "../../include/core/rewards/sas_rewards.h"
 
-// Test all reward-related objects. Output the success or failure for each test.
-void test_rewards()
+/**
+ * Test the reward objects. Output the success or failure for each test.
+ * @return The number of errors encountered during execution.
+ */
+int test_rewards()
 {
+	int numErrors = 0;
 
+	return numErrors;
 }
 
 

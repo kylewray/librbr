@@ -30,10 +30,15 @@
 
 #include "../../include/core/state_transitions/finite_state_transitions.h"
 
-// Test all state transition-related objects. Output the success or failure for each test.
-void test_state_transitions()
+/**
+ * Test the state transition objects. Output the success or failure for each test.
+ * @return The number of errors encountered during execution.
+ */
+int test_state_transitions()
 {
+	int numErrors = 0;
 
+	return numErrors;
 }
 
 

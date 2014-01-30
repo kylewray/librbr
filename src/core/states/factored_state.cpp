@@ -45,6 +45,7 @@ FactoredState::FactoredState(std::vector<State *> factoredState)
 {
 	states.reserve(factoredState.size());
 	states = factoredState;
+	update_name();
 }
 
 /**
@@ -79,6 +80,7 @@ void FactoredState::set_name(std::string newName)
 void FactoredState::set(std::vector<State *> factoredState)
 {
 	states = factoredState;
+	update_name();
 }
 
 /**
@@ -141,4 +143,22 @@ bool FactoredState::operator==(const FactoredState &other)
 bool FactoredState::operator<(const FactoredState &other) const
 {
 	return name < other.get_name();
+}
+
+/**
+ * A helper function to compute the name of the factored state, once the states are set.
+ */
+void FactoredState::update_name()
+{
+	name = "";
+
+	int counter = 0;
+	for (State *state : states) {
+		name += state->get_name();
+
+		counter++;
+		if (counter < states.size()) {
+			name += " ";
+		}
+	}
 }

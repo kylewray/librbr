@@ -101,6 +101,21 @@ public:
 
 private:
 	/**
+	 * Remove all white space from a string.
+	 * @param item The string to remove white space from.
+	 */
+	void remove_whitespace(std::string &item);
+
+	/**
+	 * Split a string delimited by spaces ' ' into a vector of strings. If this
+	 * string happens to represent joint actions, joint observations, or
+	 * factored states, then it will split on spaces surrounding '<...>' instead.
+	 * @param item The string to split which is delimited by spaces ' '.
+	 * @return The resulting vector of items.
+	 */
+	std::vector<std::string> split(std::string item);
+
+	/**
 	 * Load the horizon from the file's data.
 	 * @param items	The list of items on the same line.
 	 * @return Return @code{true} if an error occurred, and @code{false} otherwise.
@@ -202,10 +217,26 @@ private:
 	/**
 	 * Load the state transitions from the file's data.
 	 * @param items	The list of items on the same line.
-	 * @return Return -1 if an error occurred, 0 if successful, and 1 if this begins
-	 * 		loading a matrix of state transitions.
+	 * @return Return -1 if an error occurred, 0 if successful, 1 if this begins
+	 * 		loading a vector of state transitions, 2 if this begins loading a
+	 * 		matrix of state transitions.
 	 */
 	int load_state_transition(std::vector<std::string> items);
+
+	/**
+	 * Load a state transition vector from the file's data.
+	 * @param line		The line to parse containing a vector of probabilities.
+	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
+	 */
+	bool load_state_transition_vector(std::string line);
+
+	/**
+	 * Load a state transition matrix from the file's data.
+	 * @param stateIndex	The current state index for the start state.
+	 * @param line			The line to parse containing a vector of probabilities.
+	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
+	 */
+	bool load_state_transition_matrix(int stateIndex, std::string line);
 
 	/**
 	 * Load the observation transitions from the file's data.
@@ -216,12 +247,42 @@ private:
 	int load_observation_transition(std::vector<std::string> items);
 
 	/**
+	 * Load a observation transition vector from the file's data.
+	 * @param line		The line to parse containing a vector of probabilities.
+	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
+	 */
+	bool load_observation_transition_vector(std::string line);
+
+	/**
+	 * Load a state transition matrix from the file's data.
+	 * @param stateIndex	The current state index for the end state.
+	 * @param line			The line to parse containing a vector of probabilities.
+	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
+	 */
+	bool load_observation_transition_matrix(int stateIndex, std::string line);
+
+	/**
 	 * Load the rewards from the file's data.
 	 * @param items	The list of items on the same line.
 	 * @return Return -1 if an error occurred, 0 if successful, and 1 if this begins
 	 * 		loading a matrix of rewards.
 	 */
 	int load_reward(std::vector<std::string> items);
+
+	/**
+	 * Load a reward vector from the file's data.
+	 * @param line		The line to parse containing a vector of rewards or costs.
+	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
+	 */
+	bool load_reward_vector(std::string line);
+
+	/**
+	 * Load a reward matrix from the file's data.
+	 * @param stateIndex	The current state index for the end state.
+	 * @param line			The line to parse containing a vector of rewards or costs.
+	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
+	 */
+	bool load_reward_matrix(int stateIndex, std::string line);
 
 	/**
 	 * The agents in the MDP-like object; e.g., a vector of strings.
@@ -287,6 +348,21 @@ private:
 	 * A variable which holds the error message.
 	 */
 	char error[1024];
+
+	/**
+	 * A helper action variable for loading vectors or matrices.
+	 */
+	Action *loadingAction;
+
+	/**
+	 * A helper state variable for loading vectors or matrices.
+	 */
+	State *loadingState;
+
+	/**
+	 * A helper observation variable for loading vectors or matrices.
+	 */
+	Observation *loadingObservation;
 
 };
 

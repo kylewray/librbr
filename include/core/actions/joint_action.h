@@ -118,6 +118,12 @@ protected:
 	 */
 	std::vector<Action *> actions;
 
+private:
+	/**
+	 * A helper function to compute the name of the joint action, once the actions are set.
+	 */
+	void update_name();
+
 };
 
 

@@ -118,6 +118,12 @@ protected:
 	 */
 	std::vector<State *> states;
 
+private:
+	/**
+	 * A helper function to compute the name of the factored state, once the states are set.
+	 */
+	void update_name();
+
 };
 
 

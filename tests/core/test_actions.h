@@ -31,10 +31,45 @@
 #include "../../include/core/actions/finite_actions.h"
 #include "../../include/core/actions/finite_joint_actions.h"
 
-// Test all action-related objects. Output the success or failure for each test.
-void test_actions()
-{
 
+/**
+ * Test the actions objects. Output the success or failure for each test.
+ * @return The number of errors encountered during execution.
+ */
+int test_actions()
+{
+	int numErrors = 0;
+/*
+	std::cout << "Actions: Test 'FiniteActions' object... ";
+	FiniteActions finiteActions;
+
+	if (???) {
+		std::cout << " Success." << std::endl;
+	} else {
+		std::cout << " Failure." << std::endl;
+		numErrors++;
+	}
+
+	std::cout << "Actions: Test 'FiniteActions' object... ";
+	FiniteJointActions finiteJointActions(3);
+
+	if (???) {
+		std::cout << " Success." << std::endl;
+	} else {
+		std::cout << " Failure." << std::endl;
+		numErrors++;
+	}
+*/
+
+//	std::cout << "Actions: ??? (Expecting Error)...\n\t";
+//	if (???)) {
+//		std::cout << "\tSuccess." << std::endl;
+//	} else {
+//		std::cout << "\tFailure." << std::endl;
+//		numErrors++;
+//	}
+
+	return numErrors;
 }
 
 

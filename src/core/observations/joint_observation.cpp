@@ -45,6 +45,7 @@ JointObservation::JointObservation(std::vector<Observation *> jointObservation)
 {
 	observations.reserve(jointObservation.size());
 	observations = jointObservation;
+	update_name();
 }
 
 /**
@@ -79,6 +80,7 @@ void JointObservation::set_name(std::string newName)
 void JointObservation::set(std::vector<Observation *> jointObservation)
 {
 	observations = jointObservation;
+	update_name();
 }
 
 /**
@@ -141,4 +143,22 @@ bool JointObservation::operator==(const JointObservation &other)
 bool JointObservation::operator<(const JointObservation &other) const
 {
 	return name < other.get_name();
+}
+
+/**
+ * A helper function to compute the name of the joint observation, once the observations are set.
+ */
+void JointObservation::update_name()
+{
+	name = "";
+
+	int counter = 0;
+	for (Observation *observation : observations) {
+		name += observation->get_name();
+
+		counter++;
+		if (counter < observations.size()) {
+			name += " ";
+		}
+	}
 }

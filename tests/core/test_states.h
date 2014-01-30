@@ -31,10 +31,15 @@
 #include "../../include/core/states/finite_states.h"
 #include "../../include/core/states/finite_factored_states.h"
 
-// Test all state-related objects. Output the success or failure for each test.
-void test_states()
+/**
+ * Test the states objects. Output the success or failure for each test.
+ * @return The number of errors encountered during execution.
+ */
+int test_states()
 {
+	int numErrors = 0;
 
+	return numErrors;
 }
 
 

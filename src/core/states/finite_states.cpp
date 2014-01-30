@@ -100,6 +100,8 @@ int FiniteStates::get_num_states() const
 	return states.size();
 }
 
+#include <iostream>
+
 /**
  * Get a particular state given the name.
  * @param stateName The name of the state.
@@ -113,6 +115,7 @@ State *FiniteStates::find(std::string stateName)
 			return state;
 		}
 	}
+
 	throw StateException();
 }
 

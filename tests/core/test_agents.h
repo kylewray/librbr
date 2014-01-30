@@ -31,10 +31,15 @@
 #include "../../include/core/agents/agent.h"
 #include "../../include/core/agents/agents.h"
 
-// Test all agent-related objects. Output the success or failure for each test.
-void test_agents()
+/**
+ * Test the agents objects. Output the success or failure for each test.
+ * @return The number of errors encountered during execution.
+ */
+int test_agents()
 {
+	int numErrors = 0;
 
+	return numErrors;
 }
 
 

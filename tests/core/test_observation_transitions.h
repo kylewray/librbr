@@ -30,10 +30,15 @@
 
 #include "../../include/core/observation_transitions/finite_observation_transitions.h"
 
-// Test all observation transition-related objects. Output the success or failure for each test.
-void test_observation_transitions()
+/**
+ * Test the observation transition objects. Output the success or failure for each test.
+ * @return The number of errors encountered during execution.
+ */
+int test_observation_transitions()
 {
+	int numErrors = 0;
 
+	return numErrors;
 }
 
 

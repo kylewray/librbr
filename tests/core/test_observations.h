@@ -31,10 +31,15 @@
 #include "../../include/core/observations/finite_observations.h"
 #include "../../include/core/observations/finite_joint_observations.h"
 
-// Test all observation-related objects. Output the success or failure for each test.
-void test_observations()
+/**
+ * Test the observation objects. Output the success or failure for each test.
+ * @return The number of errors encountered during execution.
+ */
+int test_observations()
 {
+	int numErrors = 0;
 
+	return numErrors;
 }
 
 

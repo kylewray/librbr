@@ -31,10 +31,15 @@
 #include "../../include/core/policy/map_policy.h"
 #include "../../include/core/policy/fsc_policy.h"
 
-// Test all policy-related objects. Output the success or failure for each test.
-void test_policy()
+/**
+ * Test the policy objects. Output the success or failure for each test.
+ * @return The number of errors encountered during execution.
+ */
+int test_policy()
 {
+	int numErrors = 0;
 
+	return numErrors;
 }
 
 

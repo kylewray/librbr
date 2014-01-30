@@ -118,6 +118,12 @@ protected:
 	 */
 	std::vector<Observation *> observations;
 
+private:
+	/**
+	 * A helper function to compute the name of the joint observation, once the observations are set.
+	 */
+	void update_name();
+
 };
 
 
