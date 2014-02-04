@@ -63,7 +63,8 @@ public:
 
 	/**
 	 * Remove a state to the set of available states. This frees the memory.
-	 * @param removeState The state to remove from the set of available states.
+	 * @param removeState 		The state to remove from the set of available states.
+	 * @throws StateException	The state was not found in the states list.
 	 */
 	void remove(State *removeState);
 
@@ -73,6 +74,15 @@ public:
 	 * @param newStates The vector of new states to use.
 	 */
 	void set(std::vector<State *> newStates);
+
+	/**
+	 * Get the state at the corresponding index. A state's index is defined by the order
+	 * in which they are added and removed.
+	 * @param stateIndex The index of the state.
+	 * @return The state at the corresponding index.
+	 * @throws StateException The index was invalid.
+	 */
+	State *get(int stateIndex) const;
 
 	/**
 	 * Return a list of all the available states.

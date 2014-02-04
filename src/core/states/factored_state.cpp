@@ -98,7 +98,7 @@ std::vector<State *> FactoredState::get() const
  * @return The state at the index provided.
  * @throws StateException The index is not valid.
  */
-State *FactoredState::get_state(int index) const
+State *FactoredState::get(int index) const
 {
 	if (index < 0 || index >= states.size()) {
 		throw StateException();
@@ -127,7 +127,7 @@ bool FactoredState::operator==(const FactoredState &other)
 {
 	int counter = 0;
 	for (State *state : states) {
-		if (*state == *(other.get_state(counter))) {
+		if (*state == *(other.get(counter))) {
 			return false;
 		}
 		counter++;

@@ -66,11 +66,14 @@ void FiniteJointObservations::add(int factorIndex, Observation *newObservation)
  * does *not* update the observations list; please call update() once all factors have been set.
  * @param factorIndex 			The index of the factor to add the observations to.
  * @param removeObservation 	The observation to remove from the set of available observations.
- * @throws ObservationException	The index was invalid.
+ * @throws ObservationException	The index was invalid, or the observation was not found in the observations list.
  */
 void FiniteJointObservations::remove(int factorIndex, Observation *removeObservation)
 {
 	if (factorIndex < 0 || factorIndex >= factoredObservations.size()) {
+		throw ObservationException();
+	} else if (std::find(factoredObservations[factorIndex].begin(), factoredObservations[factorIndex].end(),
+			removeObservation) == observations.end()) {
 		throw ObservationException();
 	}
 
@@ -105,6 +108,25 @@ void FiniteJointObservations::set(int factorIndex, std::vector<Observation *> ne
 }
 
 /**
+ * Get the observation at the corresponding index, given the particular factor. The factor index
+ * is defined by the agent, and an observation's index is defined by the order in which they are
+ * added and removed.
+ * @param factorIndex THe index of the factor.
+ * @param observationIndex The index of the observation.
+ * @return The observation at the corresponding index.
+ * @throws ObservationException The index was invalid.
+ */
+Observation *FiniteJointObservations::get(int factorIndex, int observationIndex) const
+{
+	if (factorIndex < 0 || factorIndex >= factoredObservations.size() ||
+			observationIndex < 0 || observationIndex >= factoredObservations[factorIndex].size()) {
+		throw ObservationException();
+	}
+
+	return factoredObservations[factorIndex][observationIndex];
+}
+
+/**
  * Update the internal observations list which holds all permutations of joint observations in an efficient structure.
  * Note: This *must* be called after sequences of add(), remove(), and/or set() calls.
  * @throws ObservationException If a state factor has not been defined.
@@ -117,6 +139,8 @@ void FiniteJointObservations::update()
 			throw ObservationException();
 		}
 	}
+
+	observations.clear();
 
 	std::vector<Observation *> create;
 	update_step(create, 0);

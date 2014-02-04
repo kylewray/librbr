@@ -63,17 +63,26 @@ double FiniteObservationTransitions::get(Observation *observation, Action *actio
 	std::map<Observation *, std::map<Action *, std::map<State *, double> > >::const_iterator alpha =
 			observationTransitions.find(observation);
 	if (alpha == observationTransitions.end()) {
-		return 0.0;
+		alpha = observationTransitions.find(nullptr);
+		if (alpha == observationTransitions.end()) {
+			return 0.0;
+		}
 	}
 
 	std::map<Action *, std::map<State *, double> >::const_iterator beta = alpha->second.find(action);
 	if (beta == alpha->second.end()) {
-		return 0.0;
+		beta = alpha->second.find(nullptr);
+		if (beta == alpha->second.end()) {
+			return 0.0;
+		}
 	}
 
 	std::map<State *, double>::const_iterator gamma = beta->second.find(state);
 	if (gamma == beta->second.end()) {
-		return 0.0;
+		gamma = beta->second.find(nullptr);
+		if (gamma == beta->second.end()) {
+			return 0.0;
+		}
 	}
 
 	return gamma->second;

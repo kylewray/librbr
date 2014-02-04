@@ -88,7 +88,7 @@ public:
 	 * @param index The index to retrieve the action.
 	 * @return The action at the index provided.
 	 */
-	virtual Action *get_action(int index) const;
+	virtual Action *get(int index) const;
 
 	/**
 	 * Overload the equals operator to set this joint action equal to the state provided.

@@ -22,32 +22,14 @@
  */
 
 
+#include "perform_tests.h"
+
+
 // Only perform the tests if the flag is set during compilation.
-#ifdef PERFORM_TESTS
+#ifdef PERFORM_TESTS_H
 
 
 #include <iostream>
-
-#include "core/test_agents.h"
-#include "core/test_states.h"
-#include "core/test_actions.h"
-#include "core/test_observations.h"
-#include "core/test_rewards.h"
-
-#include "core/test_state_transitions.h"
-#include "core/test_observation_transitions.h"
-
-#include "core/test_policy.h"
-
-#include "utilities/test_unified_file.h"
-
-//#include "mdp/value_iteration.h"
-//#include "mdp/policy_iteration.h"
-
-//#include "pomdp/value_iteration.h"
-//#include "pomdp/policy_iteration.h"
-
-// ...
 
 /**
  * The main function which executes the test suite.
@@ -100,4 +82,4 @@ int main(int argc, char *argv[])
 }
 
 
-#endif // PERFORM_TESTS
+#endif // PERFORM_TESTS_H

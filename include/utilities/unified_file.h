@@ -44,18 +44,6 @@
 
 
 /**
- * Enumerate the possible categories of objects which can be
- * defined in an unified file.
- */
-enum FileObjectCategory {
-	OBJECT_NONE,
-	OBJECT_STATE_TRANSITIONS,
-	OBJECT_OBSERVATION_TRANSITIONS,
-	OBJECT_REWARDS,
-	NUM_OBJECT_CATEGORY
-};
-
-/**
  * A file loading and saving class called UnifiedFile which acts as an intermediate
  * representation for any MDP-like object. It can load any *.mdp, *.pomdp, *.decmdp,
  * or *.decpomdp file and store all variables found within the file. Other class
@@ -100,6 +88,12 @@ public:
 	void reset();
 
 private:
+	/**
+	 * Trim the left and right sides of a string, removing the whitespace.
+	 * @param item The string to trim.
+	 */
+	void trim_whitespace(std::string &item);
+
 	/**
 	 * Remove all white space from a string.
 	 * @param item The string to remove white space from.

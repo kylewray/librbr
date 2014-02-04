@@ -65,7 +65,8 @@ public:
 
 	/**
 	 * Remove an action to the set of available actions. This frees the memory.
-	 * @param removeAction The action to remove from the set of available actions.
+	 * @param removeAction 		The action to remove from the set of available actions.
+	 * @throws ActionException	The action was not found in the actions list.
 	 */
 	void remove(Action *removeAction);
 
@@ -75,6 +76,15 @@ public:
 	 * @param newActions The vector of new actions to use.
 	 */
 	void set(std::vector<Action *> newActions);
+
+	/**
+	 * Get the action at the corresponding index. An action's index is defined by the order
+	 * in which they are added and removed.
+	 * @param actionIndex The index of the action.
+	 * @return The action at the corresponding index.
+	 * @throws ActionException The index was invalid.
+	 */
+	Action *get(int actionIndex) const;
 
 	/**
 	 * Return a list of all the available actions.

@@ -51,23 +51,44 @@ void FiniteObservations::add(Observation *newObservation)
 
 /**
  * Remove a observation to the set of available observations. This frees the memory.
- * @param removeObservation The state to remove from the set of available observations.
+ * @param removeObservation 	The state to remove from the set of available observations.
+ * @throws ObservationException	The observation was not found in the observations list.
  */
 void FiniteObservations::remove(Observation *removeObservation)
 {
+	if (std::find(observations.begin(), observations.end(), removeObservation) == observations.end()) {
+		throw ObservationException();
+	}
+
 	observations.erase(std::remove(observations.begin(), observations.end(), removeObservation), observations.end());
 	delete removeObservation;
 }
 
 /**
  * Set the internal observations list given another list, performing a deep copy. This resets
- * the current list of states and frees the memory.
+ * the current list of observations and frees the memory.
  * @param newObservations The vector of new observations to use.
  */
 void FiniteObservations::set(std::vector<Observation *> newObservations)
 {
 	reset();
 	observations = newObservations;
+}
+
+/**
+ * Get the observation at the corresponding index. An observation's index is defined by the order
+ * in which they are added and removed.
+ * @param observationIndex The index of the observation.
+ * @return The observation at the corresponding index.
+ * @throws ObservationException The index was invalid.
+ */
+Observation *FiniteObservations::get(int observationIndex) const
+{
+	if (observationIndex < 0 || observationIndex >= observations.size()) {
+		throw ObservationException();
+	}
+
+	return observations[observationIndex];
 }
 
 /**

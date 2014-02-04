@@ -73,19 +73,30 @@ public:
 	 * update the actions list; please call update() once all factors have been set.
 	 * @param factorIndex 		The index of the factor to add the actions to.
 	 * @param removeAction 		The action to remove from the set of available actions.
-	 * @throws ActionException	The index was invalid.
+	 * @throws ActionException	The index was invalid, or the action was not found in the actions list.
 	 */
 	void remove(int factorIndex, Action *removeAction);
 
 	/**
-	 * Set the internal states list for a factor given another list, performing a deep copy. This resets
-	 * the current list of states and frees the memory. This does *not* update the states list; please
+	 * Set the internal actions list for a factor given another list, performing a deep copy. This resets
+	 * the current list of actions and frees the memory. This does *not* update the states list; please
 	 * call update() once all factors have been set.
 	 * @param factorIndex 		The index of the factor to add the actions to.
 	 * @param newActions 		The vector of new actions to use.
 	 * @throws ActionException	The index was invalid, or newActions was empty.
 	 */
 	void set(int factorIndex, std::vector<Action *> newActions);
+
+	/**
+	 * Get the action at the corresponding index, given the particular factor. The factor index
+	 * is defined by the agent, and an action's index is defined by the order in which they are
+	 * added and removed.
+	 * @param factorIndex THe index of the factor.
+	 * @param actionIndex The index of the action.
+	 * @return The action at the corresponding index.
+	 * @throws ActionException The index was invalid.
+	 */
+	Action *get(int factorIndex, int actionIndex) const;
 
 	/**
 	 * Update the internal actions list which holds all permutations of joint actions in an efficient structure.
@@ -103,6 +114,14 @@ public:
 	 * Reset the joint actions, clearing the internal list and freeing the memory.
 	 */
 	virtual void reset();
+
+	/**
+	 * Get the joint action at the corresponding index.
+	 * @param actionIndex The index of the action.
+	 * @return The action at the corresponding index.
+	 * @throws ActionException The index was invalid.
+	 */
+	using FiniteActions::get;
 
 protected:
 	/**

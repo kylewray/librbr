@@ -22,8 +22,11 @@
  */
 
 
+#include "../perform_tests.h"
+
+
 // Only perform the tests if the flag is set during compilation.
-#ifdef PERFORM_TESTS
+#ifdef PERFORM_TESTS_H
 
 
 #include <iostream>
@@ -43,4 +46,4 @@ int test_observations()
 }
 
 
-#endif // PERFORM_TESTS
+#endif // PERFORM_TESTS_H

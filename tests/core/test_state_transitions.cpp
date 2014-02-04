@@ -22,20 +22,22 @@
  */
 
 
+#include "../perform_tests.h"
+
+
 // Only perform the tests if the flag is set during compilation.
-#ifdef PERFORM_TESTS
+#ifdef PERFORM_TESTS_H
 
 
 #include <iostream>
 
-#include "../../include/core/policy/map_policy.h"
-#include "../../include/core/policy/fsc_policy.h"
+#include "../../include/core/state_transitions/finite_state_transitions.h"
 
 /**
- * Test the policy objects. Output the success or failure for each test.
+ * Test the state transition objects. Output the success or failure for each test.
  * @return The number of errors encountered during execution.
  */
-int test_policy()
+int test_state_transitions()
 {
 	int numErrors = 0;
 
@@ -43,4 +45,4 @@ int test_policy()
 }
 
 
-#endif // PERFORM_TESTS
+#endif // PERFORM_TESTS_H

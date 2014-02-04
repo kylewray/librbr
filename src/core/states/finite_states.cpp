@@ -51,10 +51,15 @@ void FiniteStates::add(State *newState)
 
 /**
  * Remove a state to the set of available states. This frees the memory.
- * @param removeState The state to remove from the set of available states.
+ * @param removeState 		The state to remove from the set of available states.
+ * @throws StateException	The state was not found in the states list.
  */
 void FiniteStates::remove(State *removeState)
 {
+	if (std::find(states.begin(), states.end(), removeState) == states.end()) {
+		throw StateException();
+	}
+
 	states.erase(std::remove(states.begin(), states.end(), removeState), states.end());
 	delete removeState;
 }
@@ -68,6 +73,22 @@ void FiniteStates::set(std::vector<State *> newStates)
 {
 	reset();
 	states = newStates;
+}
+
+/**
+ * Get the state at the corresponding index. A state's index is defined by the order
+ * in which they are added and removed.
+ * @param stateIndex The index of the state.
+ * @return The state at the corresponding index.
+ * @throws StateException The index was invalid.
+ */
+State *FiniteStates::get(int stateIndex) const
+{
+	if (stateIndex < 0 || stateIndex >= states.size()) {
+		throw StateException();
+	}
+
+	return states[stateIndex];
 }
 
 /**
@@ -99,8 +120,6 @@ int FiniteStates::get_num_states() const
 {
 	return states.size();
 }
-
-#include <iostream>
 
 /**
  * Get a particular state given the name.

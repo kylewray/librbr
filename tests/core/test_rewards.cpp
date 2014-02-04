@@ -22,19 +22,22 @@
  */
 
 
+#include "../perform_tests.h"
+
+
 // Only perform the tests if the flag is set during compilation.
-#ifdef PERFORM_TESTS
+#ifdef PERFORM_TESTS_H
 
 
 #include <iostream>
 
-#include "../../include/core/observation_transitions/finite_observation_transitions.h"
+#include "../../include/core/rewards/sas_rewards.h"
 
 /**
- * Test the observation transition objects. Output the success or failure for each test.
+ * Test the reward objects. Output the success or failure for each test.
  * @return The number of errors encountered during execution.
  */
-int test_observation_transitions()
+int test_rewards()
 {
 	int numErrors = 0;
 
@@ -42,4 +45,4 @@ int test_observation_transitions()
 }
 
 
-#endif // PERFORM_TESTS
+#endif // PERFORM_TESTS_H

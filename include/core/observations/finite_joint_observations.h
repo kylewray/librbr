@@ -75,7 +75,7 @@ public:
 	 * does *not* update the observations list; please call update() once all factors have been set.
 	 * @param factorIndex 			The index of the factor to add the observations to.
 	 * @param removeObservation 	The observation to remove from the set of available observations.
-	 * @throws ObservationException	The index was invalid.
+	 * @throws ObservationException	The index was invalid, or the observation was not found in the observations list.
 	 */
 	void remove(int factorIndex, Observation *removeObservation);
 
@@ -88,6 +88,17 @@ public:
 	 * @throws ObservationException	The index was invalid, or newObservations was empty.
 	 */
 	void set(int factorIndex, std::vector<Observation *> newObservations);
+
+	/**
+	 * Get the observation at the corresponding index, given the particular factor. The factor index
+	 * is defined by the agent, and an observation's index is defined by the order in which they are
+	 * added and removed.
+	 * @param factorIndex THe index of the factor.
+	 * @param observationIndex The index of the observation.
+	 * @return The observation at the corresponding index.
+	 * @throws ObservationException The index was invalid.
+	 */
+	Observation *get(int factorIndex, int observationIndex) const;
 
 	/**
 	 * Update the internal observations list which holds all permutations of joint observations in an efficient structure.
@@ -105,6 +116,14 @@ public:
 	 * Reset the joint observations, clearing the internal list and freeing the memory.
 	 */
 	virtual void reset();
+
+	/**
+	 * Get the joint observation at the corresponding index.
+	 * @param observationIndex The index of the observation.
+	 * @return The observation at the corresponding index.
+	 * @throws ObservationException The index was invalid.
+	 */
+	using FiniteObservations::get;
 
 protected:
 	/**

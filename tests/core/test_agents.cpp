@@ -22,20 +22,23 @@
  */
 
 
+#include "../perform_tests.h"
+
+
 // Only perform the tests if the flag is set during compilation.
-#ifdef PERFORM_TESTS
+#ifdef PERFORM_TESTS_H
 
 
 #include <iostream>
 
-#include "../../include/core/states/finite_states.h"
-#include "../../include/core/states/finite_factored_states.h"
+#include "../../include/core/agents/agent.h"
+#include "../../include/core/agents/agents.h"
 
 /**
- * Test the states objects. Output the success or failure for each test.
+ * Test the agents objects. Output the success or failure for each test.
  * @return The number of errors encountered during execution.
  */
-int test_states()
+int test_agents()
 {
 	int numErrors = 0;
 
@@ -43,4 +46,4 @@ int test_states()
 }
 
 
-#endif // PERFORM_TESTS
+#endif // PERFORM_TESTS_H

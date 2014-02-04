@@ -51,23 +51,44 @@ void FiniteActions::add(Action *newAction)
 
 /**
  * Remove an action to the set of available actions. This frees the memory.
- * @param removeAction The action to remove from the set of available actions.
+ * @param removeAction		The action to remove from the set of available actions.
+ * @throws ActionException	The action was not found in the actions list.
  */
 void FiniteActions::remove(Action *removeAction)
 {
+	if (std::find(actions.begin(), actions.end(), removeAction) == actions.end()) {
+		throw ActionException();
+	}
+
 	actions.erase(std::remove(actions.begin(), actions.end(), removeAction), actions.end());
 	delete removeAction;
 }
 
 /**
  * Set the internal actions list given another list, performing a deep copy. This resets
-	 * the current list of states and frees the memory.
+ * the current list of states and frees the memory.
  * @param newActions The vector of new actions to use.
  */
 void FiniteActions::set(std::vector<Action *> newActions)
 {
 	reset();
 	actions = newActions;
+}
+
+/**
+ * Get the action at the corresponding index. An action's index is defined by the order
+ * in which they are added and removed.
+ * @param actionIndex The index of the action.
+ * @return The action at the corresponding index.
+ * @throws ActionException The index was invalid.
+ */
+Action *FiniteActions::get(int actionIndex) const
+{
+	if (actionIndex < 0 || actionIndex >= actions.size()) {
+		throw ActionException();
+	}
+
+	return actions[actionIndex];
 }
 
 /**
@@ -97,6 +118,8 @@ int FiniteActions::get_num_actions() const
 {
 	return actions.size();
 }
+
+#include <iostream>
 
 /**
  * Get a particular action given the name.

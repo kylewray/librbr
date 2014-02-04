@@ -1,0 +1,65 @@
+discount: 0.9
+horizon: 0
+values: reward
+
+agents: 2
+states:
+s1 s2
+s1 s2
+actions:
+left right
+left right
+observations:
+high low
+high low
+
+start: uniform
+
+T: <left left> : <s1 s1> : <s1 s2> : 0.2
+T: <left left> : <s1 s2> : <s2 s1> : 0.5
+
+T: <right left> : <s2 s1> :
+0.0 0.4 0.6 0.0
+
+T: <left right> : <s1 s1> :
+0.1 0.2 0.3 0.4
+
+T: <right right> :
+0.4 0.3 0.2 0.1
+0.1 0.4 0.3 0.2
+0.2 0.1 0.4 0.3
+0.3 0.2 0.1 0.4
+
+O: <left left> :
+0.1 0.2 0.3 0.4
+0.45 0.55 0.0 0.0
+0.0 1.0 0.0 0.0
+1.0 0.0 0.0 0.0
+
+O: <right right> :
+0.5 0.5 0.0 0.0
+0.6 0.4 0.0 0.0
+0.15 0.85 0.0 0.0
+0.4 0.6 0.0 0.0
+
+O: <left right> : <s1 s2> : <high low> : 0.8
+O: <left right> : <s2 s1> : <low low> : 0.7
+O: <left right> : <s1 s2> :
+0.4 0.6 0.0 0.0
+O: <left right> : <s2 s2> :
+0.1 0.9 0.0 0.0
+
+R: <left left> :
+0 0 5 0
+-0.1 -0.1 1000 -0.1
+0 1 0 1
+1 0 1 0
+
+R: <right left> : <s1 s2> :
+0 0 1.5 -4
+
+R: <left right> : <s2 s1> : <s1 s2> : 5.0
+R: <right left> : <s1 s2> : <s1 s1> : 2
+
+R: <right right> : * :
+-1 -1 -1 10

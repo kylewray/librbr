@@ -85,7 +85,7 @@ public:
 	 * update the states list; please call update() once all factors have been set.
 	 * @param factorIndex 		The index of the factor to add the states to.
 	 * @param removeState 		The state to remove from the set of available states.
-	 * @throws StateException	The index was invalid.
+	 * @throws StateException	The index was invalid, or the state was not found in the states list.
 	 */
 	void remove(int factorIndex, State *removeState);
 
@@ -98,6 +98,17 @@ public:
 	 * @throws StateException	The index was invalid, or newStates was empty.
 	 */
 	void set(int factorIndex, std::vector<State *> newStates);
+
+	/**
+	 * Get the state at the corresponding index, given the particular factor. The factor index
+	 * is defined by the number of factored states, and an state's index is defined by the
+	 * order in which they are added and removed.
+	 * @param factorIndex THe index of the factor.
+	 * @param stateIndex The index of the state.
+	 * @return The state at the corresponding index.
+	 * @throws StateException The index was invalid.
+	 */
+	State *get(int factorIndex, int stateIndex) const;
 
 	/**
 	 * Update the internal states list which holds all permutations of factored states in an efficient structure.
@@ -115,6 +126,14 @@ public:
 	 * Reset the factored states, clearing the internal list and freeing the memory.
 	 */
 	virtual void reset();
+
+	/**
+	 * Get the factored state at the corresponding index.
+	 * @param stateIndex The index of the state.
+	 * @return The state at the corresponding index.
+	 * @throws StateException The index was invalid.
+	 */
+	using FiniteStates::get;
 
 protected:
 	/**

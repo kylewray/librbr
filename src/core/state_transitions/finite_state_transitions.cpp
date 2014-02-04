@@ -64,17 +64,26 @@ double FiniteStateTransitions::get(State *state, Action *action, State *nextStat
 	std::map<State *, std::map<Action *, std::map<State *, double> > >::const_iterator alpha =
 			stateTransitions.find(state);
 	if (alpha == stateTransitions.end()) {
-		return 0.0;
+		alpha = stateTransitions.find(nullptr);
+		if (alpha == stateTransitions.end()) {
+			return 0.0;
+		}
 	}
 
 	std::map<Action *, std::map<State *, double> >::const_iterator beta = alpha->second.find(action);
 	if (beta == alpha->second.end()) {
-		return 0.0;
+		beta = alpha->second.find(nullptr);
+		if (beta == alpha->second.end()) {
+			return 0.0;
+		}
 	}
 
 	std::map<State *, double>::const_iterator gamma = beta->second.find(nextState);
 	if (gamma == beta->second.end()) {
-		return 0.0;
+		gamma = beta->second.find(nullptr);
+		if (gamma == beta->second.end()) {
+			return 0.0;
+		}
 	}
 
 	return gamma->second;

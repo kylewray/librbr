@@ -1,0 +1,57 @@
+discount: 0.9
+horizon: 0
+values: reward
+
+states: s1 s2 s3 s4
+actions: left right
+observations: high low
+
+start: uniform
+
+T: left : s1 : s2 : 0.5
+T: left : s1 : s3 : 0.5
+T: right : s1 : s4 : 0.75
+T: right : s1 : s1 : 0.25
+T: right : s2 :
+0.1 0.1 0.0 0.8
+T: left :
+0.4 0.3 0.2 0.1
+0.1 0.4 0.3 0.2
+0.2 0.1 0.4 0.3
+0.3 0.2 0.1 0.4
+
+O: left : # Test with colon.
+0.1 0.2
+0.45 0.55 0.1
+0.0 1.0
+1.0 0.0
+
+O: right  # Test without colon.
+0.5 0.5
+0.6 0.4
+0.15 0.85
+0.4 0.6
+
+O: left : s1 : high : 0.8
+O: left : s1 : low : 0.2
+O: right : s2 : high : 0.3
+O: right : s2 : low : 0.7
+O: left : s3
+0.4 0.6
+O: right : s4
+0.1 0.9
+
+R: left :
+0 0 5 0
+-0.1 -0.1 1000 -0.1
+0 1 0 1
+1 0 1 0
+
+R: left : s1 :
+0 0 1.5 -4
+
+R: left : s1 : s1 : 5.0
+R: right : s1 : s1 : 2
+
+R: right : * :
+-1 -1 -1 10

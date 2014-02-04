@@ -88,7 +88,7 @@ public:
 	 * @return The observation at the index provided.
 	 * @throws ObservationException The index is not valid.
 	 */
-	virtual Observation *get_observation(int index) const;
+	virtual Observation *get(int index) const;
 
 	/**
 	 * Overload the equals operator to set this joint observation equal to the observation provided.

@@ -103,9 +103,6 @@ bool UnifiedFile::load(std::string path)
 		return true;
 	}
 
-	// Iterate over all lines in the file, and then each character in a line.
-	FileObjectCategory category = FileObjectCategory::OBJECT_NONE;
-
 	while (std::getline(file, line)) {
 		// Handle comments by removing all characters down to and including a '#'.
 		line = line.substr(0, line.find('#'));
@@ -133,6 +130,10 @@ bool UnifiedFile::load(std::string path)
 			std::string temp;
 
 			while (std::getline(ssLine, temp, ':')) {
+				trim_whitespace(temp);
+				if (temp.length() == 0) {
+					continue;
+				}
 				items.push_back(temp);
 			}
 
@@ -293,22 +294,6 @@ bool UnifiedFile::load(std::string path)
 			loadingCounter++;
 		}
 
-		// Check if this new line contains a ":" and the category exists. This means
-		// that the category will switch, so we need to save the 'current' before it
-		// does.
-		if (category != FileObjectCategory::OBJECT_NONE && line.find(':') != std::string::npos) {
-			switch (category) {
-			case FileObjectCategory::OBJECT_STATE_TRANSITIONS:
-				break;
-			case FileObjectCategory::OBJECT_OBSERVATION_TRANSITIONS:
-				break;
-			case FileObjectCategory::OBJECT_REWARDS:
-				break;
-			default:
-				break;
-			}
-		}
-
 		rows++;
 	}
 
@@ -379,6 +364,30 @@ void UnifiedFile::reset()
 	rows = 1;
 	filename = "";
 }
+/**
+ * Trim the left and right sides of a string, removing the whitespace.
+ * @param item The string to trim.
+ */
+void UnifiedFile::trim_whitespace(std::string &item)
+{
+	// Trim from the left side.
+	int left = 0;
+	for (left = 0; left < item.length(); left++) {
+		if (item[left] != ' ') {
+			break;
+		}
+	}
+
+	int right = item.length();
+	for (right = item.length(); right >= 0; right--) {
+		if (item[right] != ' ') {
+			break;
+		}
+	}
+
+	item = item.substr(left, right - left);
+}
+
 
 /**
  * Remove all white space from a string.
@@ -1295,6 +1304,13 @@ int UnifiedFile::load_state_transition(std::vector<std::string> items)
 		return -1;
 	}
 
+	if (probability < 0.0 || probability > 1.0) {
+		sprintf(error, "Invalid probability '%s' on line %i in file '%s'.",
+				probabilityString.c_str(), rows, filename.c_str());
+		log_message(std::cout, "UnifiedFile::load_state_transition", error);
+		return true;
+	}
+
 	stateTransitions->set(startState, action, endState, probability);
 
 	return 0;
@@ -1327,6 +1343,13 @@ bool UnifiedFile::load_state_transition_vector(std::string line)
 			probability = std::stod(probabilityString);
 		} catch (const std::invalid_argument &err) {
 			sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
+					probabilityString.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_state_transition_vector", error);
+			return true;
+		}
+
+		if (probability < 0.0 || probability > 1.0) {
+			sprintf(error, "Invalid probability '%s' on line %i in file '%s'.",
 					probabilityString.c_str(), rows, filename.c_str());
 			log_message(std::cout, "UnifiedFile::load_state_transition_vector", error);
 			return true;
@@ -1375,6 +1398,13 @@ bool UnifiedFile::load_state_transition_matrix(int stateIndex, std::string line)
 			probability = std::stod(probabilityString);
 		} catch (const std::invalid_argument &err) {
 			sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
+					probabilityString.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_state_transition_matrix", error);
+			return true;
+		}
+
+		if (probability < 0.0 || probability > 1.0) {
+			sprintf(error, "Invalid probability '%s' on line %i in file '%s'.",
 					probabilityString.c_str(), rows, filename.c_str());
 			log_message(std::cout, "UnifiedFile::load_state_transition_matrix", error);
 			return true;
@@ -1475,6 +1505,13 @@ int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 		return -1;
 	}
 
+	if (probability < 0.0 || probability > 1.0) {
+		sprintf(error, "Invalid probability '%s' on line %i in file '%s'.",
+				probabilityString.c_str(), rows, filename.c_str());
+		log_message(std::cout, "UnifiedFile::load_observation_transition", error);
+		return true;
+	}
+
 	observationTransitions->set(observation, action, endState, probability);
 
 	return 0;
@@ -1507,6 +1544,13 @@ bool UnifiedFile::load_observation_transition_vector(std::string line)
 			probability = std::stod(probabilityString);
 		} catch (const std::invalid_argument &err) {
 			sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
+					probabilityString.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_observation_transition_vector", error);
+			return true;
+		}
+
+		if (probability < 0.0 || probability > 1.0) {
+			sprintf(error, "Invalid probability '%s' on line %i in file '%s'.",
 					probabilityString.c_str(), rows, filename.c_str());
 			log_message(std::cout, "UnifiedFile::load_observation_transition_vector", error);
 			return true;
@@ -1555,6 +1599,13 @@ bool UnifiedFile::load_observation_transition_matrix(int stateIndex, std::string
 			probability = std::stod(probabilityString);
 		} catch (const std::invalid_argument &err) {
 			sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
+					probabilityString.c_str(), rows, filename.c_str());
+			log_message(std::cout, "UnifiedFile::load_observation_transition_matrix", error);
+			return true;
+		}
+
+		if (probability < 0.0 || probability > 1.0) {
+			sprintf(error, "Invalid probability '%s' on line %i in file '%s'.",
 					probabilityString.c_str(), rows, filename.c_str());
 			log_message(std::cout, "UnifiedFile::load_observation_transition_matrix", error);
 			return true;

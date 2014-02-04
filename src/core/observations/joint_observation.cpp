@@ -98,7 +98,7 @@ std::vector<Observation *> JointObservation::get() const
  * @return The observation at the index provided.
  * @throws ObservationException The index is not valid.
  */
-Observation *JointObservation::get_observation(int index) const
+Observation *JointObservation::get(int index) const
 {
 	if (index < 0 || index >= observations.size()) {
 		throw ObservationException();
@@ -127,7 +127,7 @@ bool JointObservation::operator==(const JointObservation &other)
 {
 	int counter = 0;
 	for (Observation *observation : observations) {
-		if (*observation == *(other.get_observation(counter))) {
+		if (*observation == *(other.get(counter))) {
 			return false;
 		}
 		counter++;

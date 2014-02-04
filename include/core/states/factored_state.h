@@ -88,7 +88,7 @@ public:
 	 * @param index The index to retrieve the state.
 	 * @return The state at the index provided.
 	 */
-	virtual State *get_state(int index) const;
+	virtual State *get(int index) const;
 
 	/**
 	 * Overload the equals operator to set this factored state equal to the state provided.

@@ -66,11 +66,14 @@ void FiniteJointActions::add(int factorIndex, Action *newAction)
  * update the actions list; please call update() once all factors have been set.
  * @param factorIndex 		The index of the factor to add the actions to.
  * @param removeAction 		The action to remove from the set of available actions.
- * @throws ActionException	The index was invalid.
+ * @throws ActionException	The index was invalid, or the action was not found in the actions list.
  */
 void FiniteJointActions::remove(int factorIndex, Action *removeAction)
 {
 	if (factorIndex < 0 || factorIndex >= factoredActions.size()) {
+		throw ActionException();
+	} else if (std::find(factoredActions[factorIndex].begin(), factoredActions[factorIndex].end(),
+			removeAction) == actions.end()) {
 		throw ActionException();
 	}
 
@@ -81,8 +84,8 @@ void FiniteJointActions::remove(int factorIndex, Action *removeAction)
 }
 
 /**
- * Set the internal states list for a factor given another list, performing a deep copy. This resets
- * the current list of states and frees the memory. This does *not* update the states list; please
+ * Set the internal actions list for a factor given another list, performing a deep copy. This resets
+ * the current list of actions and frees the memory. This does *not* update the actions list; please
  * call update() once all factors have been set.
  * @param factorIndex 		The index of the factor to add the actions to.
  * @param newActions 		The vector of new actions to use.
@@ -104,6 +107,25 @@ void FiniteJointActions::set(int factorIndex, std::vector<Action *> newActions)
 }
 
 /**
+ * Get the action at the corresponding index, given the particular factor. The factor index
+ * is defined by the agent, and an action's index is defined by the order in which they are
+ * added and removed.
+ * @param factorIndex The index of the factor.
+ * @param actionIndex The index of the action.
+ * @return The action at the corresponding index.
+ * @throws ActionException The index was invalid.
+ */
+Action *FiniteJointActions::get(int factorIndex, int actionIndex) const
+{
+	if (factorIndex < 0 || factorIndex >= factoredActions.size() ||
+			actionIndex < 0 || actionIndex >= factoredActions[factorIndex].size()) {
+		throw ActionException();
+	}
+
+	return factoredActions[factorIndex][actionIndex];
+}
+
+/**
  * Update the internal actions list which holds all permutations of joint actions in an efficient structure.
  * Note: This *must* be called after sequences of add(), remove(), and/or set() calls.
  * @throws ActionException If a action factor has not been defined.
@@ -116,6 +138,8 @@ void FiniteJointActions::update()
 			throw ActionException();
 		}
 	}
+
+	actions.clear();
 
 	std::vector<Action *> create;
 	update_step(create, 0);

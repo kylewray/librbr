@@ -97,7 +97,7 @@ std::vector<Action *> JointAction::get() const
  * @param index The index to retrieve the action.
  * @return The action at the index provided.
  */
-Action *JointAction::get_action(int index) const
+Action *JointAction::get(int index) const
 {
 	if (index < 0 || index >= actions.size()) {
 		throw ActionException();
@@ -126,7 +126,7 @@ bool JointAction::operator==(const JointAction &other)
 {
 	int counter = 0;
 	for (Action *action : actions) {
-		if (*action == *(other.get_action(counter))) {
+		if (*action == *(other.get(counter))) {
 			return false;
 		}
 		counter++;

@@ -22,19 +22,22 @@
  */
 
 
+#include "../perform_tests.h"
+
+
 // Only perform the tests if the flag is set during compilation.
-#ifdef PERFORM_TESTS
+#ifdef PERFORM_TESTS_H
 
 
 #include <iostream>
 
-#include "../../include/core/state_transitions/finite_state_transitions.h"
+#include "../../include/core/observation_transitions/finite_observation_transitions.h"
 
 /**
- * Test the state transition objects. Output the success or failure for each test.
+ * Test the observation transition objects. Output the success or failure for each test.
  * @return The number of errors encountered during execution.
  */
-int test_state_transitions()
+int test_observation_transitions()
 {
 	int numErrors = 0;
 
@@ -42,4 +45,4 @@ int test_state_transitions()
 }
 
 
-#endif // PERFORM_TESTS
+#endif // PERFORM_TESTS_H

@@ -79,11 +79,14 @@ void FiniteFactoredStates::add(int factorIndex, State *newState)
  * Remove a state to the set of available states in a factor. This frees the memory.
  * @param factorIndex 		The index of the factor to add the states to.
  * @param removeState 		The state to remove from the set of available states.
- * @throws StateException	The index was invalid.
+ * @throws StateException	The index was invalid, or the state was not found in the states list.
  */
 void FiniteFactoredStates::remove(int factorIndex, State *removeState)
 {
 	if (factorIndex < 0 || factorIndex >= factoredStates.size()) {
+		throw StateException();
+	} else if (std::find(factoredStates[factorIndex].begin(), factoredStates[factorIndex].end(),
+			removeState) == states.end()) {
 		throw StateException();
 	}
 
@@ -117,6 +120,25 @@ void FiniteFactoredStates::set(int factorIndex, std::vector<State *> newStates)
 }
 
 /**
+ * Get the state at the corresponding index, given the particular factor. The factor index
+ * is defined by the number of factored states, and an state's index is defined by the
+ * order in which they are added and removed.
+ * @param factorIndex THe index of the factor.
+ * @param stateIndex The index of the state.
+ * @return The state at the corresponding index.
+ * @throws StateException The index was invalid.
+ */
+State *FiniteFactoredStates::get(int factorIndex, int stateIndex) const
+{
+	if (factorIndex < 0 || factorIndex >= factoredStates.size() ||
+			stateIndex < 0 || stateIndex >= factoredStates[factorIndex].size()) {
+		throw StateException();
+	}
+
+	return factoredStates[factorIndex][stateIndex];
+}
+
+/**
  * Update the internal states list which holds all permutations of factored states in an efficient structure.
  * Note: This *must* be called after sequences of add(), remove(), and/or set() calls.
  * @throws StateException If a state factor has not been defined.
@@ -129,6 +151,8 @@ void FiniteFactoredStates::update()
 			throw StateException();
 		}
 	}
+
+	states.clear();
 
 	std::vector<State *> create;
 	update_step(create, 0);

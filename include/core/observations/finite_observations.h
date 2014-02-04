@@ -65,16 +65,26 @@ public:
 
 	/**
 	 * Remove a observation to the set of available observations. This frees the memory.
-	 * @param removeObservation The state to remove from the set of available observations.
+	 * @param removeObservation 	The state to remove from the set of available observations.
+	 * @throws ObservationException	The observation was not found in the observations list.
 	 */
 	void remove(Observation *removeObservation);
 
 	/**
 	 * Set the internal observations list given another list, performing a deep copy. This resets
-	 * the current list of states and frees the memory.
+	 * the current list of observations and frees the memory.
 	 * @param newObservations The vector of new observations to use.
 	 */
 	void set(std::vector<Observation *> newObservations);
+
+	/**
+	 * Get the observation at the corresponding index. An observation's index is defined by the order
+	 * in which they are added and removed.
+	 * @param observationIndex The index of the observation.
+	 * @return The observation at the corresponding index.
+	 * @throws ObservationException The index was invalid.
+	 */
+	Observation *get(int observationIndex) const;
 
 	/**
 	 * Return a list of all the available observations.

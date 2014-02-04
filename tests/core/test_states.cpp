@@ -22,55 +22,28 @@
  */
 
 
+#include "../perform_tests.h"
+
+
 // Only perform the tests if the flag is set during compilation.
-#ifdef PERFORM_TESTS
+#ifdef PERFORM_TESTS_H
 
 
 #include <iostream>
 
-#include "../../include/core/actions/finite_actions.h"
-#include "../../include/core/actions/finite_joint_actions.h"
-
+#include "../../include/core/states/finite_states.h"
+#include "../../include/core/states/finite_factored_states.h"
 
 /**
- * Test the actions objects. Output the success or failure for each test.
+ * Test the states objects. Output the success or failure for each test.
  * @return The number of errors encountered during execution.
  */
-int test_actions()
+int test_states()
 {
 	int numErrors = 0;
-/*
-	std::cout << "Actions: Test 'FiniteActions' object... ";
-	FiniteActions finiteActions;
-
-	if (???) {
-		std::cout << " Success." << std::endl;
-	} else {
-		std::cout << " Failure." << std::endl;
-		numErrors++;
-	}
-
-	std::cout << "Actions: Test 'FiniteActions' object... ";
-	FiniteJointActions finiteJointActions(3);
-
-	if (???) {
-		std::cout << " Success." << std::endl;
-	} else {
-		std::cout << " Failure." << std::endl;
-		numErrors++;
-	}
-*/
-
-//	std::cout << "Actions: ??? (Expecting Error)...\n\t";
-//	if (???)) {
-//		std::cout << "\tSuccess." << std::endl;
-//	} else {
-//		std::cout << "\tFailure." << std::endl;
-//		numErrors++;
-//	}
 
 	return numErrors;
 }
 
 
-#endif // PERFORM_TESTS
+#endif // PERFORM_TESTS_H

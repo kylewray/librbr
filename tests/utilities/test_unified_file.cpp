@@ -22,8 +22,11 @@
  */
 
 
+#include "../perform_tests.h"
+
+
 // Only perform the tests if the flag is set during compilation.
-#ifdef PERFORM_TESTS
+#ifdef PERFORM_TESTS_H
 
 
 #include <iostream>
@@ -151,8 +154,56 @@ int test_unified_file()
 		numErrors++;
 	}
 
+	std::cout << "UnifiedFile: 'test_15.pomdp'...";
+	if (!file.load("tests/resources/test_15.pomdp")) {
+		std::cout << " Success." << std::endl;
+	} else {
+		std::cout << " Failure." << std::endl;
+		numErrors++;
+	}
+
+	std::cout << "UnifiedFile: 'test_16.pomdp' (Expecting Error)...\n\t";
+	if (file.load("tests/resources/test_16.pomdp")) {
+		std::cout << "\tSuccess." << std::endl;
+	} else {
+		std::cout << "\tFailure." << std::endl;
+		numErrors++;
+	}
+
+	std::cout << "UnifiedFile: 'test_17.pomdp' (Expecting Error)...\n\t";
+	if (file.load("tests/resources/test_17.pomdp")) {
+		std::cout << "\tSuccess." << std::endl;
+	} else {
+		std::cout << "\tFailure." << std::endl;
+		numErrors++;
+	}
+
+	std::cout << "UnifiedFile: 'test_18.pomdp' (Expecting Error)...\n\t";
+	if (file.load("tests/resources/test_18.pomdp")) {
+		std::cout << "\tSuccess." << std::endl;
+	} else {
+		std::cout << "\tFailure." << std::endl;
+		numErrors++;
+	}
+
+	std::cout << "UnifiedFile: 'test_19.pomdp' (Expecting Error)...\n\t";
+	if (file.load("tests/resources/test_19.pomdp")) {
+		std::cout << "\tSuccess." << std::endl;
+	} else {
+		std::cout << "\tFailure." << std::endl;
+		numErrors++;
+	}
+
+	std::cout << "UnifiedFile: 'test_20.dpomdp'...";
+	if (!file.load("tests/resources/test_20.dpomdp")) {
+		std::cout << " Success." << std::endl;
+	} else {
+		std::cout << " Failure." << std::endl;
+		numErrors++;
+	}
+
 	return numErrors;
 }
 
 
-#endif // PERFORM_TESTS
+#endif // PERFORM_TESTS_H
