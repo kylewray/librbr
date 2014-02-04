@@ -51,10 +51,15 @@ void Agents::add(Agent *newAgent)
 
 /**
  * Remove an agent to the set of available agents. This frees the memory.
- * @param removeAgent The agent to remove from the set of available agents.
+ * @param removeAgent 		The agent to remove from the set of available agents.
+ * @throws AgentException	The agent was not found in the agents list.
  */
 void Agents::remove(Agent *removeAgent)
 {
+	if (std::find(agents.begin(), agents.end(), removeAgent) == agents.end()) {
+		throw AgentException();
+	}
+
 	agents.erase(std::remove(agents.begin(), agents.end(), removeAgent), agents.end());
 	delete removeAgent;
 }
@@ -68,6 +73,22 @@ void Agents::set(std::vector<Agent *> newAgents)
 {
 	reset();
 	agents = newAgents;
+}
+
+/**
+ * Get an agent at a particular index. The index is determined by the order in which
+ * agents were added.
+ * @param agentIndex The index of the agent.
+ * @return The agent at the corresponding index.
+ * @throws AgentException The index was invalid.
+ */
+Agent *Agents::get(int agentIndex) const
+{
+	if (agentIndex < 0 || agentIndex >= agents.size()) {
+		throw AgentException();
+	}
+
+	return agents[agentIndex];
 }
 
 /**

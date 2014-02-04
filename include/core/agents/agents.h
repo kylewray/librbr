@@ -56,7 +56,8 @@ public:
 
 	/**
 	 * Remove an agent to the set of available agents. This frees the memory.
-	 * @param removeAgent The agent to remove from the set of available agents.
+	 * @param removeAgent 		The agent to remove from the set of available agents.
+	 * @throws AgentException	The agent was not found in the agents list.
 	 */
 	void remove(Agent *removeAgent);
 
@@ -66,6 +67,15 @@ public:
 	 * @param newActions The vector of new actions to use.
 	 */
 	void set(std::vector<Agent *> newAgents);
+
+	/**
+	 * Get an agent at a particular index. The index is determined by the order in which
+	 * agents were added.
+	 * @param agentIndex The index of the agent.
+	 * @return The agent at the corresponding index.
+	 * @throws AgentException The index was invalid.
+	 */
+	Agent *get(int agentIndex) const;
 
 	/**
 	 * Return a list of all the available agents.

@@ -73,7 +73,7 @@ void FiniteJointObservations::remove(int factorIndex, Observation *removeObserva
 	if (factorIndex < 0 || factorIndex >= factoredObservations.size()) {
 		throw ObservationException();
 	} else if (std::find(factoredObservations[factorIndex].begin(), factoredObservations[factorIndex].end(),
-			removeObservation) == observations.end()) {
+			removeObservation) == factoredObservations[factorIndex].end()) {
 		throw ObservationException();
 	}
 

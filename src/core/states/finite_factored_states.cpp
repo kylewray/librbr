@@ -86,7 +86,7 @@ void FiniteFactoredStates::remove(int factorIndex, State *removeState)
 	if (factorIndex < 0 || factorIndex >= factoredStates.size()) {
 		throw StateException();
 	} else if (std::find(factoredStates[factorIndex].begin(), factoredStates[factorIndex].end(),
-			removeState) == states.end()) {
+			removeState) == factoredStates[factorIndex].end()) {
 		throw StateException();
 	}
 

@@ -73,7 +73,7 @@ void FiniteJointActions::remove(int factorIndex, Action *removeAction)
 	if (factorIndex < 0 || factorIndex >= factoredActions.size()) {
 		throw ActionException();
 	} else if (std::find(factoredActions[factorIndex].begin(), factoredActions[factorIndex].end(),
-			removeAction) == actions.end()) {
+			removeAction) == factoredActions[factorIndex].end()) {
 		throw ActionException();
 	}
 
