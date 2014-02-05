@@ -41,6 +41,27 @@ MapPolicy::~MapPolicy()
 { }
 
 /**
+ * Set the mapping from a state to an action.
+ * @param state		The state to define.
+ * @param action	The action which should be taken at the state.
+ */
+void MapPolicy::set(State *state, Action *action)
+{
+	policy[state] = action;
+}
+
+/**
+ * Get the action for a given state.
+ * @param state The state to retrieve a mapping.
+ * @return The action to take at the given state.
+ * @throws PolicyException The policy was not defined for this state.
+ */
+Action *MapPolicy::get(State *state)
+{
+	return policy[state];
+}
+
+/**
  * A function which must load a policy file.
  * @param filename The name and path of the file to load.
  * @return Return @code{true} if an error occurred, @code{false} otherwise.

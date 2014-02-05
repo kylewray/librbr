@@ -33,7 +33,6 @@
 #include "../states/state.h"
 #include "../actions/action.h"
 
-
 /**
  * A class for state-action-state rewards in an MDP-like object. Informally, there are two basic
  * ways to store state-action rewards: a table lookup mapping state-action-state triples to real
@@ -82,9 +81,30 @@ public:
 
 private:
 	/**
+	 * The actual get function which returns a value. This will throw an error if the value is undefined.
+	 * It is used as a helper function for the public get function.
+	 * @param state		The current state of the system.
+	 * @param action	The action taken at the current state.
+	 * @param nextState	The next state with which we assign the reward.
+	 * @return The reward from taking the given action in the given state.
+	 * @throws RewardException The reward was not defined.
+	 */
+	virtual double get_value(State *state, Action *action, State *nextState) const;
+
+	/**
 	 * The list of all state-action-state rewards.
 	 */
 	std::map<State *, std::map<Action *, std::map<State *, double> > > rewards;
+
+	/**
+	 * A special state (implicitly constant) referring to a state wildcard.
+	 */
+	State *stateWildcard;
+
+	/**
+	 * A special action (implicitly constant) referring to an action wildcard.
+	 */
+	Action *actionWildcard;
 
 };
 

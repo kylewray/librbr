@@ -34,7 +34,6 @@
 #include "../actions/action.h"
 #include "../states/state.h"
 
-
 /**
  * A class for finite observation transitions in an MDP-like object. Informally, there are two basic ways to
  * store finite observation transitions: a table lookup mapping observation-action-state triples to real values,
@@ -82,9 +81,35 @@ public:
 
 private:
 	/**
+	 * The actual get function which returns a value. This will throw an error if the value is undefined.
+	 * It is used as a helper function for the public get function.
+	 * @param observation	The next observation to which we assign a probability.
+	 * @param action		The action taken at the current state.
+	 * @param state			The current state.
+	 * @return The reward from taking the given action in the given state.
+	 * @throws ObservationTransitionException The observation transition was not defined.
+	 */
+	virtual double get_value(Observation *observation, Action *action, State *state) const;
+
+	/**
 	 * The list of all state-action-state transitions.
 	 */
 	std::map<Observation *, std::map<Action *, std::map<State *, double> > > observationTransitions;
+
+	/**
+	 * A special state (implicitly constant) referring to a state wildcard.
+	 */
+	State *stateWildcard;
+
+	/**
+	 * A special action (implicitly constant) referring to an action wildcard.
+	 */
+	Action *actionWildcard;
+
+	/**
+	 * A special observation (implicitly constant) referring to an observation wildcard.
+	 */
+	Observation *observationWildcard;
 
 };
 

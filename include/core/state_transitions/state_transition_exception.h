@@ -22,16 +22,16 @@
  */
 
 
-#ifndef OBSERVATION_EXCEPTION_H
-#define OBSERVATION_EXCEPTION_H
+#ifndef STATE_TRANSITION_EXCEPTION_H
+#define STATE_TRANSITION_EXCEPTION_H
 
 
 #include <exception>
 
 /**
- * An exception class unique to observations failures.
+ * An exception class unique to state transition failures.
  */
-class ObservationException : public std::exception {
+class StateTransitionException : public std::exception {
 public:
 	/**
 	 * Return the specific error that occurred.
@@ -42,4 +42,4 @@ public:
 };
 
 
-#endif // OBSERVATION_EXCEPTION_H
+#endif // STATE_TRANSITION_EXCEPTION_H

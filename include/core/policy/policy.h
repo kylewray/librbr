@@ -30,7 +30,6 @@
 
 #include "../actions/action.h"
 
-
 /**
  * An abstract class for all policies of MDP-like objects.
  */

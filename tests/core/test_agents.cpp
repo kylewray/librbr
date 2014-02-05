@@ -37,11 +37,11 @@
 
 /**
  * Test the agents objects. Output the success or failure for each test.
- * @return The number of errors encountered during execution.
+ * @return The number of successes during execution.
  */
 int test_agents()
 {
-	int numErrors = 0;
+	int numSuccesses = 0;
 
 	Agent *alice = new Agent("Alice");
 	Agent *bob = new Agent("Bob");
@@ -55,31 +55,30 @@ int test_agents()
 		if (agents->get_num_agents() == 2 && agents->get(0) == alice &&
 				agents->get(1) == bob) {
 			std::cout << " Success." << std::endl;
+			numSuccesses++;
 		} else {
 			std::cout << " Failure." << std::endl;
-			numErrors++;
 		}
 	} catch (const AgentException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Agents: Test 'Agents::remove'... ";
 	try {
 		agents->remove(alice);
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} catch (const AgentException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Agents: Test 'Agents::remove' (Check Result) and 'Agents::all'... ";
 	if (agents->get_num_agents() == 1 && agents->get(0) == bob &&
 			agents->all().size() == agents->get_num_agents()) {
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Agents: Test 'Agents::remove' (Expecting Error)... ";
@@ -87,9 +86,9 @@ int test_agents()
 	try {
 		agents->remove(charlie);
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	} catch (const AgentException &err) {
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	}
 
 	std::cout << "Agents: Test 'Agents::set'... ";
@@ -103,9 +102,9 @@ int test_agents()
 	try {
 		agents->set(testAgentsList);
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} catch (const AgentException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Agents: Test 'Agents::set' (Check Result)... ";
@@ -114,13 +113,12 @@ int test_agents()
 		if (agents->get_num_agents() == 2 && agents->get(0) == alice &&
 				agents->get(1) == charlie) {
 			std::cout << " Success." << std::endl;
+			numSuccesses++;
 		} else {
 			std::cout << " Failure." << std::endl;
-			numErrors++;
 		}
 	} catch (const AgentException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Agents: Test 'Agents::find'... ";
@@ -130,21 +128,23 @@ int test_agents()
 	try {
 		testFindAgent = agents->find("Charlie");
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} catch (const AgentException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Agents: Test 'Agents::find' (Expecting Error)... ";
 	try {
 		testFindAgent = agents->find("Dave");
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	} catch (const AgentException &err) {
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	}
 
-	return numErrors;
+	delete agents;
+
+	return numSuccesses;
 }
 
 

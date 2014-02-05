@@ -39,11 +39,11 @@
 
 /**
  * Test the observation objects. Output the success or failure for each test.
- * @return The number of errors encountered during execution.
+ * @return The number of successes during execution.
  */
 int test_observations()
 {
-	int numErrors = 0;
+	int numSuccesses = 0;
 
 	Observation *o1 = new Observation("o1");
 	Observation *o2 = new Observation("o2");
@@ -61,13 +61,12 @@ int test_observations()
 		if (finiteObservations->get_num_observations() == 3 && finiteObservations->get(0) == o1 &&
 				finiteObservations->get(1) == o2 && finiteObservations->get(2) == o3) {
 			std::cout << " Success." << std::endl;
+			numSuccesses++;
 		} else {
 			std::cout << " Failure." << std::endl;
-			numErrors++;
 		}
 	} catch (const ObservationException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Observations: Test 'FiniteObservations::remove'... ";
@@ -75,18 +74,18 @@ int test_observations()
 		finiteObservations->remove(o2);
 		o2 = new Observation("o2");
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} catch (const ObservationException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Observations: Test 'FiniteObservations::remove' (Check Result)... ";
 	if (finiteObservations->get_num_observations() == 2 && finiteObservations->get(0) == o1 &&
 			finiteObservations->get(1) == o3) {
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Observations: Test 'FiniteObservations::add' and 'FiniteObservations::remove'... ";
@@ -97,9 +96,9 @@ int test_observations()
 		finiteObservations->add(o2);
 		finiteObservations->add(o1);
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} catch (const ObservationException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Observations: Test 'FiniteObservations::add', 'FiniteObservations::remove' (Check Result), and 'FiniteObservations::all'... ";
@@ -107,9 +106,9 @@ int test_observations()
 			finiteObservations->get(1) == o2 && finiteObservations->get(2) == o1 &&
 			finiteObservations->all().size() == finiteObservations->get_num_observations()) {
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Observations: Test 'FiniteObservations::remove' (Expecting Error)... ";
@@ -117,9 +116,9 @@ int test_observations()
 	try {
 		finiteObservations->remove(doesNotExist);
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	} catch (const ObservationException &err) {
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	}
 	delete doesNotExist;
 
@@ -140,9 +139,9 @@ int test_observations()
 	if (finiteObservations->get_num_observations() == 2 && finiteObservations->get(0) == o1 &&
 			finiteObservations->get(1) == o2) {
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	Observation *testFindObservation = nullptr;
@@ -151,20 +150,25 @@ int test_observations()
 	try {
 		testFindObservation = finiteObservations->find(o1->get_name());
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} catch (const ObservationException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Observations: Test 'FiniteObservations::find' (Expecting Error)... ";
 	try {
 		testFindObservation = finiteObservations->find(o3->get_name());
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	} catch (const ObservationException &err) {
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	}
 
+	delete finiteObservations;
+
+	o1 = new Observation("o1");
+	o2 = new Observation("o2");
+	o3 = new Observation("o3");
 	Observation *o4 = new Observation("o4");
 
 	FiniteJointObservations *finiteJointObservations = new FiniteJointObservations(2);
@@ -177,9 +181,9 @@ int test_observations()
 		finiteJointObservations->add(1, o4);
 		finiteJointObservations->update();
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} catch (const ObservationException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	JointObservation *o13 = nullptr;
@@ -194,9 +198,9 @@ int test_observations()
 		o23 = (JointObservation *)finiteJointObservations->get(2);
 		o24 = (JointObservation *)finiteJointObservations->get(3);
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} catch (const ObservationException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Observations: Test 'FiniteJointObservations::add' (Check Result)... ";
@@ -215,13 +219,12 @@ int test_observations()
 				o24->get(0) == o2 &&
 				o24->get(1) == o4) {
 			std::cout << " Success." << std::endl;
+			numSuccesses++;
 		} else {
 			std::cout << " Failure." << std::endl;
-			numErrors++;
 		}
 	} catch (const ObservationException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Observations: Test 'FiniteJointObservations::remove'... ";
@@ -231,9 +234,9 @@ int test_observations()
 
 		finiteJointObservations->update();
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} catch (const ObservationException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Observations: Test 'FiniteJointObservations::remove' (Check Result)... ";
@@ -243,13 +246,12 @@ int test_observations()
 				finiteJointObservations->get(1, 0) == o3 &&
 				finiteJointObservations->get(1, 1) == o4) {
 			std::cout << " Success." << std::endl;
+			numSuccesses++;
 		} else {
 			std::cout << " Failure." << std::endl;
-			numErrors++;
 		}
 	} catch (const ObservationException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Observations: Test 'FiniteJointObservations::add' and 'FiniteJointObservations::remove'... ";
@@ -261,9 +263,9 @@ int test_observations()
 		finiteJointObservations->add(0, o2);
 		finiteJointObservations->update();
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} catch (const ObservationException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Observations: Test 'FiniteJointObservations::add' and 'FiniteJointObservations::remove' (Check Result)... ";
@@ -274,13 +276,12 @@ int test_observations()
 				finiteJointObservations->get(0, 2) == o2 &&
 				finiteJointObservations->get(1, 0) == o4) {
 			std::cout << " Success." << std::endl;
+			numSuccesses++;
 		} else {
 			std::cout << " Failure." << std::endl;
-			numErrors++;
 		}
 	} catch (const ObservationException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Observations: Test 'FiniteJointObservations::remove' (Expecting Error)... ";
@@ -291,9 +292,9 @@ int test_observations()
 		finiteJointObservations->remove(0, doesNotExist2);
 		finiteJointObservations->update();
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	} catch (const ObservationException &err) {
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	}
 	delete a7;
 	delete a8;
@@ -311,9 +312,9 @@ int test_observations()
 		finiteJointObservations->set(0, testObservationsList);
 		finiteJointObservations->update();
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} catch (const ObservationException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	o1 = o1New;
@@ -327,13 +328,12 @@ int test_observations()
 				finiteJointObservations->get(0, 1) == o1 &&
 				finiteJointObservations->get(1, 0) == o4) {
 			std::cout << " Success." << std::endl;
+			numSuccesses++;
 		} else {
 			std::cout << " Failure." << std::endl;
-			numErrors++;
 		}
 	} catch (const ObservationException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	testFindObservation = nullptr;
@@ -342,21 +342,23 @@ int test_observations()
 	try {
 		testFindObservation = finiteJointObservations->find("o1 o4");
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} catch (const ObservationException &err) {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "Observations: Test 'finiteJointObservations::find' (Expecting Error)... ";
 	try {
 		testFindObservation = finiteJointObservations->find("o3 o2");
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	} catch (const ObservationException &err) {
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	}
 
-	return numErrors;
+	delete finiteJointObservations;
+
+	return numSuccesses;
 }
 
 

@@ -23,20 +23,26 @@
 
 
 #include "../../../include/core/state_transitions/finite_state_transitions.h"
-
+#include "../../../include/core/state_transitions/state_transition_exception.h"
 
 /**
  * The default constructor for the FiniteStateTransitions class.
  */
 FiniteStateTransitions::FiniteStateTransitions()
-{ }
+{
+	stateWildcard = new State("*");
+	actionWildcard = new Action("*");
+}
 
 /**
  * The default deconstructor for the FiniteStateTransitions class.
  */
 FiniteStateTransitions::~FiniteStateTransitions()
 {
-	stateTransitions.clear();
+	reset();
+
+	delete stateWildcard;
+	delete actionWildcard;
 }
 
 /**
@@ -49,6 +55,16 @@ FiniteStateTransitions::~FiniteStateTransitions()
  */
 void FiniteStateTransitions::set(State *state, Action *action, State *nextState, double probability)
 {
+	if (state == nullptr) {
+		state = stateWildcard;
+	}
+	if (action == nullptr) {
+		action = actionWildcard;
+	}
+	if (nextState == nullptr) {
+		nextState = stateWildcard;
+	}
+
 	stateTransitions[state][action][nextState] = std::max(0.0, std::min(1.0, probability));
 }
 
@@ -61,32 +77,32 @@ void FiniteStateTransitions::set(State *state, Action *action, State *nextState,
  */
 double FiniteStateTransitions::get(State *state, Action *action, State *nextState) const
 {
-	std::map<State *, std::map<Action *, std::map<State *, double> > >::const_iterator alpha =
-			stateTransitions.find(state);
-	if (alpha == stateTransitions.end()) {
-		alpha = stateTransitions.find(nullptr);
-		if (alpha == stateTransitions.end()) {
-			return 0.0;
+	// Iterate over all possible configurations of wildcards in the get statement.
+	// For each, use the get_value() function to check if the value exists. If it
+	// does, perhaps using a wildcard, then return that, otherwise continue.
+	// Return 0 by default.
+	for (int i = 0; i < 8; i++) {
+		State *alpha = stateWildcard;
+		if (i & (1 << 0)) {
+			alpha = state;
 		}
+
+		Action *beta = actionWildcard;
+		if (i & (1 << 1)) {
+			beta = action;
+		}
+
+		State *gamma = stateWildcard;
+		if (i & (1 << 2)) {
+			gamma = nextState;
+		}
+
+		try {
+			return get_value(alpha, beta, gamma);
+		} catch (const StateTransitionException &err) { }
 	}
 
-	std::map<Action *, std::map<State *, double> >::const_iterator beta = alpha->second.find(action);
-	if (beta == alpha->second.end()) {
-		beta = alpha->second.find(nullptr);
-		if (beta == alpha->second.end()) {
-			return 0.0;
-		}
-	}
-
-	std::map<State *, double>::const_iterator gamma = beta->second.find(nextState);
-	if (gamma == beta->second.end()) {
-		gamma = beta->second.find(nullptr);
-		if (gamma == beta->second.end()) {
-			return 0.0;
-		}
-	}
-
-	return gamma->second;
+	return 0.0;
 }
 
 /**
@@ -95,4 +111,33 @@ double FiniteStateTransitions::get(State *state, Action *action, State *nextStat
 void FiniteStateTransitions::reset()
 {
 	stateTransitions.clear();
+}
+
+/**
+ * The actual get function which returns a value. This will throw an error if the value is undefined.
+ * It is used as a helper function for the public get function.
+ * @param state		The current state of the system.
+ * @param action	The action taken at the current state.
+ * @param nextState	The next state with which we assign the reward.
+ * @return The probability of going from the state, taking the action, then moving to the nextState.
+ * @throws StateTransitionException The state transition was not defined.
+ */
+double FiniteStateTransitions::get_value(State *state, Action *action, State *nextState) const
+{
+	std::map<State *, std::map<Action *, std::map<State *, double> > >::const_iterator alpha = stateTransitions.find(state);
+	if (alpha == stateTransitions.end()) {
+		throw StateTransitionException();
+	}
+
+	std::map<Action *, std::map<State *, double> >::const_iterator beta = alpha->second.find(action);
+	if (beta == alpha->second.end()) {
+		throw StateTransitionException();
+	}
+
+	std::map<State *, double>::const_iterator gamma = beta->second.find(nextState);
+	if (gamma == beta->second.end()) {
+		throw StateTransitionException();
+	}
+
+	return gamma->second;
 }

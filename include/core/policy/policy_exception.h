@@ -22,16 +22,16 @@
  */
 
 
-#ifndef OBSERVATION_EXCEPTION_H
-#define OBSERVATION_EXCEPTION_H
+#ifndef POLICY_EXCEPTION_H
+#define POLICY_EXCEPTION_H
 
 
 #include <exception>
 
 /**
- * An exception class unique to observations failures.
+ * An exception class unique to policy failures.
  */
-class ObservationException : public std::exception {
+class PolicyException : public std::exception {
 public:
 	/**
 	 * Return the specific error that occurred.
@@ -42,4 +42,4 @@ public:
 };
 
 
-#endif // OBSERVATION_EXCEPTION_H
+#endif // POLICY_EXCEPTION_H

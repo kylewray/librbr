@@ -24,7 +24,6 @@
 
 #include "../../../include/core/state_transitions/state_transitions.h"
 
-
 /**
  * The deconstructor for the StateTransitions class, which ensures that children
  * classes properly deconstruct themselves.

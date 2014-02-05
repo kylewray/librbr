@@ -36,7 +36,7 @@
 
 /**
  * Test the policy objects. Output the success or failure for each test.
- * @return The number of errors encountered during execution.
+ * @return The number of successes during execution.
  */
 int test_policy()
 {

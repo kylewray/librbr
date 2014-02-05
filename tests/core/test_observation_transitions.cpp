@@ -35,13 +35,151 @@
 
 /**
  * Test the observation transition objects. Output the success or failure for each test.
- * @return The number of errors encountered during execution.
+ * @return The number of successes during execution.
  */
 int test_observation_transitions()
 {
-	int numErrors = 0;
+	int numSuccesses = 0;
 
-	return numErrors;
+	Observation *o1 = new Observation("o1");
+	Observation *o2 = new Observation("o2");
+
+	State *s1 = new State("s1");
+	State *s2 = new State("s2");
+
+	Action *a1 = new Action("a1");
+	Action *a2 = new Action("a2");
+
+	FiniteObservationTransitions *finiteObservationTransitions = new FiniteObservationTransitions();
+
+	std::cout << "ObservationTransitions: Test 'FiniteObservationTransitions::set' and ";
+	std::cout << "'FiniteObservationTransitions::get' (All Values Mapped)... ";
+
+	finiteObservationTransitions->set(o1, a1, s1, 0.1);
+	finiteObservationTransitions->set(o1, a1, s2, 0.2);
+	finiteObservationTransitions->set(o1, a2, s1, 0.3);
+	finiteObservationTransitions->set(o1, a2, s2, 0.4);
+	finiteObservationTransitions->set(o2, a1, s1, 0.5);
+	finiteObservationTransitions->set(o2, a1, s2, 0.6);
+	finiteObservationTransitions->set(o2, a2, s1, 0.7);
+	finiteObservationTransitions->set(o2, a2, s2, 0.8);
+
+	if (finiteObservationTransitions->get(o1, a1, s1) == 0.1 && finiteObservationTransitions->get(o1, a1, s2) == 0.2 &&
+			finiteObservationTransitions->get(o1, a2, s1) == 0.3 && finiteObservationTransitions->get(o1, a2, s2) == 0.4 &&
+			finiteObservationTransitions->get(o2, a1, s1) == 0.5 && finiteObservationTransitions->get(o2, a1, s2) == 0.6 &&
+			finiteObservationTransitions->get(o2, a2, s1) == 0.7 && finiteObservationTransitions->get(o2, a2, s2) == 0.8) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	delete finiteObservationTransitions;
+	finiteObservationTransitions = new FiniteObservationTransitions();
+
+	std::cout << "ObservationTransitions: Test 'FiniteObservationTransitions::set' and ";
+	std::cout << "'FiniteObservationTransitions::get' (Default Zero Values)... ";
+
+//	finiteObservationTransitions->set(o1, a1, s1, 0.1); // Leave undefined to test the default zero value for the next state s1.
+	finiteObservationTransitions->set(o1, a1, s2, 0.2);
+//	finiteObservationTransitions->set(o1, a2, s1, 0.3);
+//	finiteObservationTransitions->set(o1, a2, s2, 0.4); // Leave undefined to test the default zero value for the action a2.
+//	finiteObservationTransitions->set(o2, a1, s1, 0.5); // Leave undefined to test the default zero value for the observation o2.
+//	finiteObservationTransitions->set(o2, a1, s2, 0.6); // Leave undefined to test the default zero value for the observation o2.
+//	finiteObservationTransitions->set(o2, a2, s1, 0.7);	// Leave undefined to test the default zero value for the observation o2.
+//	finiteObservationTransitions->set(o2, a2, s2, 0.8);	// Leave undefined to test the default zero value for the observation o2.
+
+	if (finiteObservationTransitions->get(o1, a1, s1) == 0.0 && finiteObservationTransitions->get(o1, a1, s2) == 0.2 &&
+			finiteObservationTransitions->get(o2, a1, s1) == 0.0 && finiteObservationTransitions->get(o2, a1, s2) == 0.0 &&
+			finiteObservationTransitions->get(o1, a2, s1) == 0.0 && finiteObservationTransitions->get(o1, a2, s2) == 0.0 &&
+			finiteObservationTransitions->get(o2, a2, s1) == 0.0 && finiteObservationTransitions->get(o2, a2, s2) == 0.0) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	delete finiteObservationTransitions;
+	finiteObservationTransitions = new FiniteObservationTransitions();
+
+	std::cout << "ObservationTransitions: Test 'FiniteObservationTransitions::set' and ";
+	std::cout << "'FiniteObservationTransitions::get' (Wildcard Next State)... ";
+
+	finiteObservationTransitions->set(o1, a1, s1, 0.1);
+	finiteObservationTransitions->set(o1, a1, s2, 0.2);
+	finiteObservationTransitions->set(o1, a2, s1, 0.3);
+	finiteObservationTransitions->set(o1, a2, s2, 0.4);
+	finiteObservationTransitions->set(o2, a1, s1, 0.5);
+	finiteObservationTransitions->set(o2, a1, s2, 0.6);
+//	finiteObservationTransitions->set(o2, a2, s1, 0.7); // Leave undefined to test wildcard next state.
+//	finiteObservationTransitions->set(o2, a2, s2, 0.8); // Leave undefined to test wildcard next state.
+	finiteObservationTransitions->set(o2, a2, nullptr, 0.9);
+
+	if (finiteObservationTransitions->get(o1, a1, s1) == 0.1 && finiteObservationTransitions->get(o1, a1, s2) == 0.2 &&
+			finiteObservationTransitions->get(o1, a2, s1) == 0.3 && finiteObservationTransitions->get(o1, a2, s2) == 0.4 &&
+			finiteObservationTransitions->get(o2, a1, s1) == 0.5 && finiteObservationTransitions->get(o2, a1, s2) == 0.6 &&
+			finiteObservationTransitions->get(o2, a2, s1) == 0.9 && finiteObservationTransitions->get(o2, a2, s2) == 0.9) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	delete finiteObservationTransitions;
+	finiteObservationTransitions = new FiniteObservationTransitions();
+
+	std::cout << "ObservationTransitions: Test 'FiniteObservationTransitions::set' and ";
+	std::cout << "'FiniteObservationTransitions::get' (Wildcard Action)... ";
+
+	finiteObservationTransitions->set(o1, a1, s1, 0.1);
+	finiteObservationTransitions->set(o1, a1, s2, 0.2);
+	finiteObservationTransitions->set(o1, a2, s1, 0.3);
+	finiteObservationTransitions->set(o1, a2, s2, 0.4);
+//	finiteObservationTransitions->set(o2, a1, s1, 0.5); // Leave undefined to test wildcard action.
+	finiteObservationTransitions->set(o2, a1, s2, 0.6);
+//	finiteObservationTransitions->set(o2, a2, s1, 0.7); // Leave undefined to test wildcard action.
+	finiteObservationTransitions->set(o2, a2, s2, 0.8);
+	finiteObservationTransitions->set(o2, nullptr, s1, 0.9);
+
+	if (finiteObservationTransitions->get(o1, a1, s1) == 0.1 && finiteObservationTransitions->get(o1, a1, s2) == 0.2 &&
+			finiteObservationTransitions->get(o1, a2, s1) == 0.3 && finiteObservationTransitions->get(o1, a2, s2) == 0.4 &&
+			finiteObservationTransitions->get(o2, a1, s1) == 0.9 && finiteObservationTransitions->get(o2, a1, s2) == 0.6 &&
+			finiteObservationTransitions->get(o2, a2, s1) == 0.9 && finiteObservationTransitions->get(o2, a2, s2) == 0.8) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	delete finiteObservationTransitions;
+	finiteObservationTransitions = new FiniteObservationTransitions();
+
+	std::cout << "ObservationTransitions: Test 'FiniteObservationTransitions::set' and ";
+	std::cout << "'FiniteObservationTransitions::get' (Wildcard Previous State)... ";
+
+	finiteObservationTransitions->set(o1, a1, s1, 0.1);
+	finiteObservationTransitions->set(o1, a1, s2, 0.2);
+//	finiteObservationTransitions->set(o1, a2, s1, 0.3); // Leave undefined to test wildcard previous state.
+	finiteObservationTransitions->set(o1, a2, s2, 0.4);
+	finiteObservationTransitions->set(o2, a1, s1, 0.5);
+	finiteObservationTransitions->set(o2, a1, s2, 0.6);
+//	finiteObservationTransitions->set(o2, a2, s1, 0.7); // Leave undefined to test wildcard previous state.
+	finiteObservationTransitions->set(o2, a2, s2, 0.8);
+	finiteObservationTransitions->set(nullptr, a2, s1, 0.9);
+
+	if (finiteObservationTransitions->get(o1, a1, s1) == 0.1 && finiteObservationTransitions->get(o1, a1, s2) == 0.2 &&
+			finiteObservationTransitions->get(o1, a2, s1) == 0.9 && finiteObservationTransitions->get(o1, a2, s2) == 0.4 &&
+			finiteObservationTransitions->get(o2, a1, s1) == 0.5 && finiteObservationTransitions->get(o2, a1, s2) == 0.6 &&
+			finiteObservationTransitions->get(o2, a2, s1) == 0.9 && finiteObservationTransitions->get(o2, a2, s2) == 0.8) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	delete finiteObservationTransitions;
+
+	return numSuccesses;
 }
 
 

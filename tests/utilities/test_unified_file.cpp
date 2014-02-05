@@ -35,174 +35,174 @@
 
 /**
  * Test the UnifiedFile object. Output the success or failure for each test.
- * @return The number of errors encountered during execution.
+ * @return The number of successes during execution.
  */
 int test_unified_file()
 {
-	int numErrors = 0;
+	int numSuccesses = 0;
 	UnifiedFile file;
 
 	std::cout << "UnifiedFile: 'test_01.mdp'...";
 	if (!file.load("tests/resources/test_01.mdp")) {
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_02.mdp'... ";
 	if (!file.load("tests/resources/test_02.mdp")) {
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_03.mdp' (Expecting Error)...\n\t";
 	if (file.load("tests/resources/test_03.mdp")) {
 		std::cout << "\tSuccess." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << "\tFailure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_04.mdp' (Expecting Error)...\n\t";
 	if (file.load("tests/resources/test_04.mdp")) {
 		std::cout << "\tSuccess." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << "\tFailure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_05.mdp' (Expecting Error)...\n\t";
 	if (file.load("tests/resources/test_05.mdp")) {
 		std::cout << "\tSuccess." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << "\tFailure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_06.mdp' (Expecting Error)...\n\t";
 	if (file.load("tests/resources/test_06.mdp")) {
 		std::cout << "\tSuccess." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << "\tFailure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_07.mdp' (Expecting Error)...\n\t";
 	if (file.load("tests/resources/test_07.mdp")) {
 		std::cout << "\tSuccess." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << "\tFailure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_08.mdp'... ";
 	if (!file.load("tests/resources/test_08.mdp")) {
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_09.mdp' (Expecting Error)...\n\t";
 	if (file.load("tests/resources/test_09.mdp")) {
 		std::cout << "\tSuccess." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << "\tFailure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_10.mdp'... ";
 	if (!file.load("tests/resources/test_10.mdp")) {
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_11.mdp' (Expecting Error)...\n\t";
 	if (file.load("tests/resources/test_11.mdp")) {
 		std::cout << "\tSuccess." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << "\tFailure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_12.mdp'... ";
 	if (!file.load("tests/resources/test_12.mdp")) {
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_13.mdp' (Expecting Error)...\n\t";
 	if (file.load("tests/resources/test_13.mdp")) {
 		std::cout << "\tSuccess." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << "\tFailure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_14.mdp'...";
 	if (!file.load("tests/resources/test_14.mdp")) {
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_15.pomdp'...";
 	if (!file.load("tests/resources/test_15.pomdp")) {
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_16.pomdp' (Expecting Error)...\n\t";
 	if (file.load("tests/resources/test_16.pomdp")) {
 		std::cout << "\tSuccess." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << "\tFailure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_17.pomdp' (Expecting Error)...\n\t";
 	if (file.load("tests/resources/test_17.pomdp")) {
 		std::cout << "\tSuccess." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << "\tFailure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_18.pomdp' (Expecting Error)...\n\t";
 	if (file.load("tests/resources/test_18.pomdp")) {
 		std::cout << "\tSuccess." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << "\tFailure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_19.pomdp' (Expecting Error)...\n\t";
 	if (file.load("tests/resources/test_19.pomdp")) {
 		std::cout << "\tSuccess." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << "\tFailure." << std::endl;
-		numErrors++;
 	}
 
 	std::cout << "UnifiedFile: 'test_20.dpomdp'...";
 	if (!file.load("tests/resources/test_20.dpomdp")) {
 		std::cout << " Success." << std::endl;
+		numSuccesses++;
 	} else {
 		std::cout << " Failure." << std::endl;
-		numErrors++;
 	}
 
-	return numErrors;
+	return numSuccesses;
 }
 
 

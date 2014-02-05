@@ -22,24 +22,13 @@
  */
 
 
-#ifndef OBSERVATION_EXCEPTION_H
-#define OBSERVATION_EXCEPTION_H
-
-
-#include <exception>
+#include "../../../include/core/rewards/reward_exception.h"
 
 /**
- * An exception class unique to observations failures.
+ * Return the specific error that occurred.
+ * @return The specific error that occurred.
  */
-class ObservationException : public std::exception {
-public:
-	/**
-	 * Return the specific error that occurred.
-	 * @return The specific error that occurred.
-	 */
-	virtual const char *what() const throw();
-
-};
-
-
-#endif // OBSERVATION_EXCEPTION_H
+const char *RewardException::what() const throw()
+{
+	return "Error[RewardException]: Generic exception occurred.";
+}

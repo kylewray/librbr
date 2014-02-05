@@ -34,7 +34,6 @@
 #include "../states/state.h"
 #include "../actions/action.h"
 
-
 /**
  * A simple map policy which works for MDPs and Dec-MDPs; each actual state
  * deterministically maps to a single action. This will likely be used
@@ -55,6 +54,21 @@ public:
 	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
 	 */
 	virtual ~MapPolicy();
+
+	/**
+	 * Set the mapping from a state to an action.
+	 * @param state		The state to define.
+	 * @param action	The action which should be taken at the state.
+	 */
+	void set(State *state, Action *action);
+
+	/**
+	 * Get the action for a given state.
+	 * @param state The state to retrieve a mapping.
+	 * @return The action to take at the given state.
+	 * @throws PolicyException The policy was not defined for this state.
+	 */
+	Action *get(State *state);
 
 	/**
 	 * A function which must load a policy file.

@@ -27,57 +27,67 @@
 #define PERFORM_TESTS_H
 
 
+#define NUM_AGENT_TESTS 8
+#define NUM_STATE_TESTS 21
+#define NUM_ACTION_TESTS 21
+#define NUM_OBSERVATION_TESTS 21
+#define NUM_REWARD_TESTS 5
+#define NUM_STATE_TRANSITION_TESTS 5
+#define NUM_OBSERVATION_TRANSITION_TESTS 5
+#define NUM_POLICY_TESTS 0
+#define NUM_UNIFIED_FILE_TESTS 20
+
 /**
  * Test the agents objects. Output the success or failure for each test.
- * @return The number of errors encountered during execution.
+ * @return The number of successes during execution.
  */
 int test_agents();
 
 /**
  * Test the states objects. Output the success or failure for each test.
- * @return The number of errors encountered during execution.
+ * @return The number of successes during execution.
  */
 int test_states();
 
 /**
  * Test the actions objects. Output the success or failure for each test.
- * @return The number of errors encountered during execution.
+ * @return The number of successes during execution.
  */
 int test_actions();
 
 /**
  * Test the observation objects. Output the success or failure for each test.
- * @return The number of errors encountered during execution.
+ * @return The number of successes during execution.
  */
 int test_observations();
 
 /**
  * Test the reward objects. Output the success or failure for each test.
- * @return The number of errors encountered during execution.
+ * @return The number of successes during execution.
  */
 int test_rewards();
 
 /**
  * Test the state transition objects. Output the success or failure for each test.
- * @return The number of errors encountered during execution.
+ * @return The number of successes during execution.
  */
 int test_state_transitions();
 
 /**
  * Test the observation transition objects. Output the success or failure for each test.
- * @return The number of errors encountered during execution.
+ * @return The number of successes during execution.
  */
 int test_observation_transitions();
 
 /**
  * Test the policy objects. Output the success or failure for each test.
- * @return The number of errors encountered during execution.
+ * @return The number of successes during execution.
  */
 int test_policy();
 
 /**
  * Test the UnifiedFile object. Output the success or failure for each test.
- * @return The number of errors encountered during execution.
+ * @return The number of successes during execution.
  */
 int test_unified_file();
 

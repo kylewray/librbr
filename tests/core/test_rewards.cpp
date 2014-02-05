@@ -35,13 +35,144 @@
 
 /**
  * Test the reward objects. Output the success or failure for each test.
- * @return The number of errors encountered during execution.
+ * @return The number of successes during execution.
  */
 int test_rewards()
 {
-	int numErrors = 0;
+	int numSuccesses = 0;
 
-	return numErrors;
+	State *s1 = new State("s1");
+	State *s2 = new State("s2");
+
+	Action *a1 = new Action("a1");
+	Action *a2 = new Action("a2");
+
+	SASRewards *rewards = new SASRewards();
+
+	std::cout << "Rewards: Test 'SASRewards::set' and 'SASRewards::get' (All Values Mapped)... ";
+
+	rewards->set(s1, a1, s1, 3.0);
+	rewards->set(s1, a1, s2, -2.9);
+	rewards->set(s1, a2, s1, 2.5);
+	rewards->set(s1, a2, s2, 1.9);
+	rewards->set(s2, a1, s1, 2.2);
+	rewards->set(s2, a1, s2, -6.0);
+	rewards->set(s2, a2, s1, 4.0);
+	rewards->set(s2, a2, s2, 9.4);
+
+	if (rewards->get(s1, a1, s1) == 3.0 && rewards->get(s1, a1, s2) == -2.9 &&
+			rewards->get(s1, a2, s1) == 2.5 && rewards->get(s1, a2, s2) == 1.9 &&
+			rewards->get(s2, a1, s1) == 2.2 && rewards->get(s2, a1, s2) == -6.0 &&
+			rewards->get(s2, a2, s1) == 4.0 && rewards->get(s2, a2, s2) == 9.4) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	delete rewards;
+	rewards = new SASRewards();
+
+	std::cout << "Rewards: Test 'SASRewards::set' and 'SASRewards::get' (Default Zero Values)... ";
+
+//	rewards->set(s1, a1, s1, 3.0); // Leave undefined to test the default zero value for the next state s1.
+	rewards->set(s1, a1, s2, -2.9);
+//	rewards->set(s1, a2, s1, 2.5);
+//	rewards->set(s1, a2, s2, 1.9); // Leave undefined to test the default zero value for the action a2.
+//	rewards->set(s2, a1, s1, 2.2);  // Leave undefined to test the default zero value for the previous state s2.
+//	rewards->set(s2, a1, s2, -6.0); // Leave undefined to test the default zero value for the previous state s2.
+//	rewards->set(s2, a2, s1, 4.0);	// Leave undefined to test the default zero value for the previous state s2.
+//	rewards->set(s2, a2, s2, 9.4);	// Leave undefined to test the default zero value for the previous state s2.
+
+	if (rewards->get(s1, a1, s1) == 0.0 && rewards->get(s1, a1, s2) == -2.9 &&
+			rewards->get(s1, a2, s1) == 0.0 && rewards->get(s1, a2, s2) == 0.0 &&
+			rewards->get(s2, a1, s1) == 0.0 && rewards->get(s2, a1, s2) == 0.0 &&
+			rewards->get(s2, a2, s1) == 0.0 && rewards->get(s2, a2, s2) == 0.0) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	delete rewards;
+	rewards = new SASRewards();
+
+	std::cout << "Rewards: Test 'SASRewards::set' and 'SASRewards::get' (Wildcard Next State)... ";
+
+	rewards->set(s1, a1, s1, 3.0);
+	rewards->set(s1, a1, s2, -2.9);
+	rewards->set(s1, a2, s1, 2.5);
+	rewards->set(s1, a2, s2, 1.9);
+	rewards->set(s2, a1, s1, 2.2);
+	rewards->set(s2, a1, s2, -6.0);
+//	rewards->set(s2, a2, s1, 4.0); // Leave undefined to test wildcard next state.
+//	rewards->set(s2, a2, s2, 9.4); // Leave undefined to test wildcard next state.
+	rewards->set(s2, a2, nullptr, -42.0);
+
+	if (rewards->get(s1, a1, s1) == 3.0 && rewards->get(s1, a1, s2) == -2.9 &&
+			rewards->get(s1, a2, s1) == 2.5 && rewards->get(s1, a2, s2) == 1.9 &&
+			rewards->get(s2, a1, s1) == 2.2 && rewards->get(s2, a1, s2) == -6.0 &&
+			rewards->get(s2, a2, s1) == -42.0 && rewards->get(s2, a2, s2) == -42.0) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	delete rewards;
+	rewards = new SASRewards();
+
+	std::cout << "Rewards: Test 'SASRewards::set' and 'SASRewards::get' (Wildcard Action)... ";
+
+	rewards->set(s1, a1, s1, 3.0);
+	rewards->set(s1, a1, s2, -2.9);
+	rewards->set(s1, a2, s1, 2.5);
+	rewards->set(s1, a2, s2, 1.9);
+//	rewards->set(s2, a1, s1, 2.2); // Leave undefined to test wildcard action.
+	rewards->set(s2, a1, s2, -6.0);
+//	rewards->set(s2, a2, s1, 4.0); // Leave undefined to test wildcard action.
+	rewards->set(s2, a2, s2, 9.4);
+	rewards->set(s2, nullptr, s1, -42.0);
+//	rewards->set(s2, nullptr, s2, -121.0);
+
+	if (rewards->get(s1, a1, s1) == 3.0 && rewards->get(s1, a1, s2) == -2.9 &&
+			rewards->get(s1, a2, s1) == 2.5 && rewards->get(s1, a2, s2) == 1.9 &&
+			rewards->get(s2, a1, s1) == -42.0 && rewards->get(s2, a1, s2) == -6.0 &&
+			rewards->get(s2, a2, s1) == -42.0 && rewards->get(s2, a2, s2) == 9.4) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	delete rewards;
+	rewards = new SASRewards();
+
+	std::cout << "Rewards: Test 'SASRewards::set' and 'SASRewards::get' (Wildcard Previous State)... ";
+
+	rewards->set(s1, a1, s1, 3.0);
+	rewards->set(s1, a1, s2, -2.9);
+//	rewards->set(s1, a2, s1, 2.5); // Leave undefined to test wildcard previous state.
+	rewards->set(s1, a2, s2, 1.9);
+	rewards->set(s2, a1, s1, 2.2);
+	rewards->set(s2, a1, s2, -6.0);
+//	rewards->set(s2, a2, s1, 4.0); // Leave undefined to test wildcard previous state.
+	rewards->set(s2, a2, s2, 9.4);
+	rewards->set(nullptr, a2, s1, -42.0);
+
+	if (rewards->get(s1, a1, s1) == 3.0 && rewards->get(s1, a1, s2) == -2.9 &&
+			rewards->get(s1, a2, s1) == -42.0 && rewards->get(s1, a2, s2) == 1.9 &&
+			rewards->get(s2, a1, s1) == 2.2 && rewards->get(s2, a1, s2) == -6.0 &&
+			rewards->get(s2, a2, s1) == -42.0 && rewards->get(s2, a2, s2) == 9.4) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	delete rewards;
+
+	return numSuccesses;
 }
 
 

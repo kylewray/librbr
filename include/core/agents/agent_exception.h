@@ -28,7 +28,6 @@
 
 #include <exception>
 
-
 /**
  * An exception class unique to agent failures.
  */

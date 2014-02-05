@@ -24,7 +24,6 @@
 
 #include "../../../include/core/observation_transitions/observation_transitions.h"
 
-
 /**
  * The deconstructor for the ObservationTransitions class, which ensures that children
  * classes properly deconstruct themselves.

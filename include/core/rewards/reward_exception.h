@@ -22,16 +22,16 @@
  */
 
 
-#ifndef OBSERVATION_EXCEPTION_H
-#define OBSERVATION_EXCEPTION_H
+#ifndef REWARD_EXCEPTION_H
+#define REWARD_EXCEPTION_H
 
 
 #include <exception>
 
 /**
- * An exception class unique to observations failures.
+ * An exception class unique to reward failures.
  */
-class ObservationException : public std::exception {
+class RewardException : public std::exception {
 public:
 	/**
 	 * Return the specific error that occurred.
@@ -42,4 +42,4 @@ public:
 };
 
 
-#endif // OBSERVATION_EXCEPTION_H
+#endif // REWARD_EXCEPTION_H

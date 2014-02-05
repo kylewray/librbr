@@ -42,40 +42,43 @@ int main(int argc, char *argv[])
 	std::cout << "Performing Tests..." << std::endl;
 
 	int numTests = 9;
-	int totalErrors = 0;
 
-	int numErrors[numTests];
+	int numSuccesses[numTests];
 	for (int i = 0; i < numTests; i++) {
-		numErrors[i] = 0;
+		numSuccesses[i] = 0;
 	}
 
-	numErrors[0] = test_agents();
-	numErrors[1] = test_states();
-	numErrors[2] = test_actions();
-	numErrors[3] = test_observations();
-	numErrors[4] = test_rewards();
+	numSuccesses[0] = test_agents();
+	numSuccesses[1] = test_states();
+	numSuccesses[2] = test_actions();
+	numSuccesses[3] = test_observations();
+	numSuccesses[4] = test_rewards();
 
-	numErrors[5] = test_state_transitions();
-	numErrors[6] = test_observation_transitions();
+	numSuccesses[5] = test_state_transitions();
+	numSuccesses[6] = test_observation_transitions();
 
-	numErrors[7] = test_policy();
+	numSuccesses[7] = test_policy();
 
-	numErrors[8] = test_unified_file();
+	numSuccesses[8] = test_unified_file();
 
-	std::cout << "Number of Errors [Agents]: " << numErrors[0] << std::endl;
-	std::cout << "Number of Errors [States]: " << numErrors[1] << std::endl;
-	std::cout << "Number of Errors [Actions]: " << numErrors[2] << std::endl;
-	std::cout << "Number of Errors [Observations]: " << numErrors[3] << std::endl;
-	std::cout << "Number of Errors [Rewards]: " << numErrors[4] << std::endl;
-	std::cout << "Number of Errors [StateTransitions]: " << numErrors[5] << std::endl;
-	std::cout << "Number of Errors [ObservationTransitions]: " << numErrors[6] << std::endl;
-	std::cout << "Number of Errors [Policy]: " << numErrors[7] << std::endl;
-	std::cout << "Number of Errors [UnifiedFile]: " << numErrors[8] << std::endl;
+	std::cout << "Agents:                 " << numSuccesses[0] << " / " << NUM_AGENT_TESTS << std::endl;
+	std::cout << "States:                 " << numSuccesses[1] << " / " << NUM_STATE_TESTS << std::endl;
+	std::cout << "Actions:                " << numSuccesses[2] << " / " << NUM_ACTION_TESTS << std::endl;
+	std::cout << "Observations:           " << numSuccesses[3] << " / " << NUM_OBSERVATION_TESTS << std::endl;
+	std::cout << "Rewards:                " << numSuccesses[4] << " / " << NUM_REWARD_TESTS << std::endl;
+	std::cout << "StateTransitions:       " << numSuccesses[5] << " / " << NUM_STATE_TRANSITION_TESTS << std::endl;
+	std::cout << "ObservationTransitions: " << numSuccesses[6] << " / " << NUM_OBSERVATION_TRANSITION_TESTS << std::endl;
+	std::cout << "Policy:                 " << numSuccesses[7] << " / " << NUM_POLICY_TESTS << std::endl;
+	std::cout << "UnifiedFile:            " << numSuccesses[8] << " / " << NUM_UNIFIED_FILE_TESTS << std::endl;
 
+	int total = 0;
+	int totalPossible = NUM_AGENT_TESTS + NUM_STATE_TESTS + NUM_ACTION_TESTS + NUM_OBSERVATION_TESTS +
+			NUM_REWARD_TESTS + NUM_STATE_TRANSITION_TESTS + NUM_OBSERVATION_TRANSITION_TESTS +
+			NUM_POLICY_TESTS + NUM_UNIFIED_FILE_TESTS;
 	for (int i = 0; i < numTests; i++) {
-		totalErrors += numErrors[i];
+		total += numSuccesses[i];
 	}
-	std::cout << "Number of Errors [Total]: " << totalErrors << std::endl;
+	std::cout << "Total:                  " << total << " / " << totalPossible << std::endl;
 	std::cout << "Done." << std::endl;
 
 	return 0;

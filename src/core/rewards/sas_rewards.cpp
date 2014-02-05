@@ -23,20 +23,26 @@
 
 
 #include "../../../include/core/rewards/sas_rewards.h"
-
+#include "../../../include/core/rewards/reward_exception.h"
 
 /**
  * The default constructor for the SASRewards class.
  */
 SASRewards::SASRewards()
-{ }
+{
+	stateWildcard = new State("*");
+	actionWildcard = new Action("*");
+}
 
 /**
  * The default deconstructor for the SASRewards class.
  */
 SASRewards::~SASRewards()
 {
-	rewards.clear();
+	reset();
+
+	delete stateWildcard;
+	delete actionWildcard;
 }
 
 /**
@@ -48,7 +54,17 @@ SASRewards::~SASRewards()
  */
 void SASRewards::set(State *state, Action *action, State *nextState, double reward)
 {
-	rewards[state][action][nextState] = std::max(0.0, std::min(1.0, reward));
+	if (state == nullptr) {
+		state = stateWildcard;
+	}
+	if (action == nullptr) {
+		action = actionWildcard;
+	}
+	if (nextState == nullptr) {
+		nextState = stateWildcard;
+	}
+
+	rewards[state][action][nextState] = reward;
 }
 
 /**
@@ -60,31 +76,32 @@ void SASRewards::set(State *state, Action *action, State *nextState, double rewa
  */
 double SASRewards::get(State *state, Action *action, State *nextState) const
 {
-	std::map<State *, std::map<Action *, std::map<State *, double> > >::const_iterator alpha = rewards.find(state);
-	if (alpha == rewards.end()) {
-		alpha = rewards.find(nullptr);
-		if (alpha == rewards.end()) {
-			return 0.0;
+	// Iterate over all possible configurations of wildcards in the get statement.
+	// For each, use the get_value() function to check if the value exists. If it
+	// does, perhaps using a wildcard, then return that, otherwise continue.
+	// Return 0 by default.
+	for (int i = 0; i < 8; i++) {
+		State *alpha = stateWildcard;
+		if (i & (1 << 0)) {
+			alpha = state;
 		}
+
+		Action *beta = actionWildcard;
+		if (i & (1 << 1)) {
+			beta = action;
+		}
+
+		State *gamma = stateWildcard;
+		if (i & (1 << 2)) {
+			gamma = nextState;
+		}
+
+		try {
+			return get_value(alpha, beta, gamma);
+		} catch (const RewardException &err) { }
 	}
 
-	std::map<Action *, std::map<State *, double> >::const_iterator beta = alpha->second.find(action);
-	if (beta == alpha->second.end()) {
-		beta = alpha->second.find(nullptr);
-		if (beta == alpha->second.end()) {
-			return 0.0;
-		}
-	}
-
-	std::map<State *, double>::const_iterator gamma = beta->second.find(nextState);
-	if (gamma == beta->second.end()) {
-		gamma = beta->second.find(nullptr);
-		if (gamma == beta->second.end()) {
-			return 0.0;
-		}
-	}
-
-	return gamma->second;
+	return 0.0;
 }
 
 /**
@@ -93,4 +110,33 @@ double SASRewards::get(State *state, Action *action, State *nextState) const
 void SASRewards::reset()
 {
 	rewards.clear();
+}
+
+/**
+ * The actual get function which returns a value. This will throw an error if the value is undefined.
+ * It is used as a helper function for the public get function.
+ * @param state		The current state of the system.
+ * @param action	The action taken at the current state.
+ * @param nextState	The next state with which we assign the reward.
+ * @return The reward from taking the given action in the given state.
+ * @throws RewardException The reward was not defined.
+ */
+double SASRewards::get_value(State *state, Action *action, State *nextState) const
+{
+	std::map<State *, std::map<Action *, std::map<State *, double> > >::const_iterator alpha = rewards.find(state);
+	if (alpha == rewards.end()) {
+		throw RewardException();
+	}
+
+	std::map<Action *, std::map<State *, double> >::const_iterator beta = alpha->second.find(action);
+	if (beta == alpha->second.end()) {
+		throw RewardException();
+	}
+
+	std::map<State *, double>::const_iterator gamma = beta->second.find(nextState);
+	if (gamma == beta->second.end()) {
+		throw RewardException();
+	}
+
+	return gamma->second;
 }

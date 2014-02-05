@@ -34,7 +34,6 @@
 
 #include "../observations/observation.h"
 
-
 /**
  * A small structure for Finite State Controller (FSC) policy states. In reality, all
  * that matters for larger problems is having a unique object to represent an abstract
