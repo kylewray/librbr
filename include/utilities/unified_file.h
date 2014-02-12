@@ -42,6 +42,12 @@
 #include "../core/initial_state.h"
 #include "../core/horizon.h"
 
+#include "../mdp/mdp.h"
+#include "../pomdp/pomdp.h"
+#include "../dec_mdp/dec_mdp.h"
+#include "../dec_pomdp/dec_pomdp.h"
+
+#include "miscellaneous.h"
 
 /**
  * A file loading and saving class called UnifiedFile which acts as an intermediate
@@ -87,28 +93,31 @@ public:
 	 */
 	void reset();
 
+	/**
+	 * Get an MDP version of a loaded file.
+	 * @return An MDP defined by the file loaded.
+	 */
+	MDP *get_mdp();
+
+	/**
+	 * Get an POMDP version of a loaded file.
+	 * @return A POMDP defined by the file loaded.
+	 */
+	POMDP *get_pomdp();
+
+	/**
+	 * Get an Dec-MDP version of a loaded file.
+	 * @return A Dec-MDP defined by the file loaded.
+	 */
+	DecMDP *get_dec_mdp();
+
+	/**
+	 * Get an Dec-POMDP version of a loaded file.
+	 * @return A Dec-POMDP defined by the file loaded.
+	 */
+	DecPOMDP *get_dec_pomdp();
+
 private:
-	/**
-	 * Trim the left and right sides of a string, removing the whitespace.
-	 * @param item The string to trim.
-	 */
-	void trim_whitespace(std::string &item);
-
-	/**
-	 * Remove all white space from a string.
-	 * @param item The string to remove white space from.
-	 */
-	void remove_whitespace(std::string &item);
-
-	/**
-	 * Split a string delimited by spaces ' ' into a vector of strings. If this
-	 * string happens to represent joint actions, joint observations, or
-	 * factored states, then it will split on spaces surrounding '<...>' instead.
-	 * @param item The string to split which is delimited by spaces ' '.
-	 * @return The resulting vector of items.
-	 */
-	std::vector<std::string> split(std::string item);
-
 	/**
 	 * Load the horizon from the file's data.
 	 * @param items	The list of items on the same line.

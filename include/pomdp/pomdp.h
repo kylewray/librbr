@@ -35,62 +35,59 @@
 #include "../core/initial_state.h"
 #include "../core/horizon.h"
 
+#include "../mdp/mdp.h"
 
 /**
  * A Partially Observable Markov Decision Process (POMDP).
  */
-class POMDP {
+class POMDP : public MDP {
 public:
 	/**
-	 * A constructor for the POMDP class.
+	 * The default constructor for the POMDP class.
 	 */
 	POMDP();
 
 	/**
+	 * A constructor for the POMDP class.
+	 * @param s		The states.
+	 * @param a		The actions.
+	 * @param o		The observations.
+	 * @param st	The state transitions, which uses the states and actions parameters.
+	 * @param ot	The observation transitions, which uses the states, actions, and observations parameters.
+	 * @param r		The rewards, which uses the states and actions parameters.
+	 * @param is	The initial state, which uses the states parameter.
+	 * @param h		The horizon.
+	 */
+	POMDP(States *s, Actions *a, Observations *o, StateTransitions *st, ObservationTransitions *ot,
+			Rewards *r, InitialState *is, Horizon *h);
+
+	/**
 	 * A deconstructor for the POMDP class.
 	 */
-	~POMDP();
-
-private:
-	/**
-	 * The states in the POMDP; e.g., an array of strings.
-	 */
-	States states;
+	virtual ~POMDP();
 
 	/**
-	 * The actions in the POMDP; e.g., an array of strings.
+	 * Get the observations object.
+	 * @return The observations object.
 	 */
-	Actions actions;
+	const Observations *get_observations() const;
 
+	/**
+	 * Get the observation transitions object.
+	 * @return The observation transitions object.
+	 */
+	const ObservationTransitions *get_observation_transitions() const;
+
+protected:
 	/**
 	 * The observations in the POMDP; e.g., factored vectors of strings.
 	 */
-	Observations observations;
-
-	/**
-	 * The state transition function in the POMDP; e.g., a three-dimensional array mapping to a double.
-	 */
-	StateTransitions stateTransitions;
+	Observations *observations;
 
 	/**
 	 * The observation transition function in the POMDP; e.g., a three-dimensional array mapping to a double.
 	 */
-	ObservationTransitions observationTransitions;
-
-	/**
-	 * The reward function in the POMDP; e.g., a two-dimensional array mapping to a double.
-	 */
-	Rewards rewards;
-
-	/**
-	 * The initial state or initial belief state; e.g., factored initial state.
-	 */
-	InitialState initialState;
-
-	/**
-	 * The horizon, either a finite time or a discount factor.
-	 */
-	Horizon horizon;
+	ObservationTransitions *observationTransitions;
 
 };
 

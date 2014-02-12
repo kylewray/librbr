@@ -40,31 +40,6 @@ public:
 	 */
 	virtual ~Policy();
 
-	/**
-	 * A virtual function which must load a policy file.
-	 * @param filename The name and path of the file to load.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
-	 */
-	virtual bool load(std::string filename);
-
-	/**
-	 * A virtual function which must save a policy file.
-	 * @param filename The name and path of the file to save.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
-	 */
-	virtual bool save(std::string filename) const;
-
-	/**
-	 * A function which follows the defined policy, having the current state stored internally,
-	 * and returns the action to select next.
-	 */
-	virtual Action *next();
-
-	/**
-	 * Reset the policy to the initial state.
-	 */
-	virtual void reset();
-
 };
 
 

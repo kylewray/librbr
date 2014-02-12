@@ -60,19 +60,19 @@ public:
 	 * Return true if the horizon is finite; false if it is infinite.
 	 * @return Return @code{true} if the horizon is infinite; @code{false} otherwise.
 	 */
-	bool is_finite();
+	bool is_finite() const;
 
 	/**
 	 * Get the horizon.
 	 * @return The horizon.
 	 */
-	unsigned int get_horizon();
+	unsigned int get_horizon() const;
 
 	/**
 	 * Return the discount factor gamma.
 	 * @return The discount factor gamma in [0, 1].
 	 */
-	double get_discount_factor();
+	double get_discount_factor() const;
 
 	/**
 	 * Set the horizon.

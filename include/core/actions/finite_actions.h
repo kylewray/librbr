@@ -53,6 +53,12 @@ public:
 	FiniteActions();
 
 	/**
+	 * The constructor for the FiniteActions class which allows the specification of an initial set of actions.
+	 * @param actions The initial vector of actions.
+	 */
+	FiniteActions(std::vector<Action *> actions);
+
+	/**
 	 * The default deconstructor for the FiniteActions class.
 	 */
 	virtual ~FiniteActions();
@@ -111,7 +117,7 @@ public:
 	 * @return The action with the corresponding name provided.
 	 * @throws ActionException The name was invalid.
 	 */
-	virtual Action *find(std::string actionName);
+	virtual Action *find(std::string actionName) const;
 
 	/**
 	 * Reset the actions, clearing the internal list.

@@ -127,7 +127,7 @@ int FiniteObservations::get_num_observations() const
  * @return The observation with the corresponding name provided.
  * @throws ObservationException The name was invalid.
  */
-Observation *FiniteObservations::find(std::string observationName)
+Observation *FiniteObservations::find(std::string observationName) const
 {
 	for (Observation *observation : observations) {
 		if (observation->get_name().compare(observationName) == 0) {

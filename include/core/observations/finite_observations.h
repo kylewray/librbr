@@ -113,7 +113,7 @@ public:
 	 * @return The observation with the corresponding name provided.
 	 * @throws ObservationException The name was invalid.
 	 */
-	virtual Observation *find(std::string observationName);
+	virtual Observation *find(std::string observationName) const;
 
 	/**
 	 * Reset the observations, clearing the internal list and freeing the memory.

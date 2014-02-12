@@ -115,7 +115,7 @@ int Agents::get_num_agents() const
  * @return The agent with the corresponding name provided
  * @throws AgentException The name was invalid.
  */
-Agent *Agents::find(std::string agentName)
+Agent *Agents::find(std::string agentName) const
 {
 	for (Agent *agent : agents) {
 		if (agent->get_name().compare(agentName) == 0) {

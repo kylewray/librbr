@@ -22,11 +22,35 @@
  */
 
 
-#include "../../../include/core/policy/policy.h"
+#ifndef MISCELLANEOUS_H
+#define MISCELLANEOUS_H
 
+
+#include <sstream>
+#include <string>
+#include <vector>
 
 /**
- * A virtual deconstructor to prevent errors upon the deletion of a child object.
+ * Trim the left and right sides of a string, removing the whitespace.
+ * @param item The string to trim.
  */
-Policy::~Policy()
-{ }
+void trim_whitespace(std::string &item);
+
+/**
+ * Remove all white space from a string.
+ * @param item The string to remove white space from.
+ * @return The resulting item without any white spaces.
+ */
+void remove_whitespace(std::string &item);
+
+/**
+ * Split a string delimited by spaces ' ' into a vector of strings. If this
+ * string happens to represent joint actions, joint observations, or
+ * factored states, then it will split on spaces surrounding '<...>' instead.
+ * @param item The string to split which is delimited by spaces ' '.
+ * @return The resulting vector of items.
+ */
+std::vector<std::string> split_string(std::string item);
+
+
+#endif // MISCELLANEOUS_H

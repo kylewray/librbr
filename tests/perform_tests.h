@@ -22,8 +22,8 @@
  */
 
 
-//#ifdef PERFORM_TESTS_H		// Build actual library.
-#ifndef PERFORM_TESTS_H	// Build tests executable.
+//#ifdef PERFORM_TESTS_H // Build actual library.
+#ifndef PERFORM_TESTS_H // Build tests executable.
 #define PERFORM_TESTS_H
 
 
@@ -34,7 +34,7 @@
 #define NUM_REWARD_TESTS 5
 #define NUM_STATE_TRANSITION_TESTS 5
 #define NUM_OBSERVATION_TRANSITION_TESTS 5
-#define NUM_POLICY_TESTS 0
+#define NUM_POLICY_TESTS 6
 #define NUM_UNIFIED_FILE_TESTS 20
 
 /**

@@ -66,7 +66,7 @@ Horizon::~Horizon()
  * Return true if the horizon is finite; false if it is infinite.
  * @return Return @code{true} if the horizon is infinite; @code{false} otherwise.
  */
-bool Horizon::is_finite()
+bool Horizon::is_finite() const
 {
 	return horizon > 0;
 }
@@ -75,7 +75,7 @@ bool Horizon::is_finite()
  * Get the horizon.
  * @return The horizon.
  */
-unsigned int Horizon::get_horizon()
+unsigned int Horizon::get_horizon() const
 {
 	return horizon;
 }
@@ -84,7 +84,7 @@ unsigned int Horizon::get_horizon()
  * Return the discount factor gamma.
  * @return The discount factor gamma in [0, 1].
  */
-double Horizon::get_discount_factor()
+double Horizon::get_discount_factor() const
 {
 	return discountFactor;
 }

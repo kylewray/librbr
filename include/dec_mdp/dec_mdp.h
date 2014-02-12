@@ -34,57 +34,46 @@
 #include "../core/initial_state.h"
 #include "../core/horizon.h"
 
+#include "../mdp/mdp.h"
 
 /**
  * A Decentralized Markov Decision Process (MDP).
  */
-class DecMDP {
+class DecMDP : public MDP {
 public:
 	/**
-	 * A constructor for the DecMDP class.
+	 * The default constructor for the DecMDP class.
 	 */
 	DecMDP();
 
 	/**
+	 * A constructor for the DecMDP class.
+	 * @param ag	The agents.
+	 * @param s		The states.
+	 * @param a		The actions, which uses the agents parameter.
+	 * @param st	The state transitions, which uses the states and actions parameters.
+	 * @param r		The rewards, which uses the states and actions parameters.
+	 * @param is	The initial state, which uses the states parameter.
+	 * @param h		The horizon.
+	 */
+	DecMDP(Agents *ag, States *s, Actions *a, StateTransitions *st, Rewards *r, InitialState *is, Horizon *h);
+
+	/**
 	 * A deconstructor for the DecMDP class.
 	 */
-	~DecMDP();
+	virtual ~DecMDP();
 
-private:
+	/**
+	 * Get the agents object.
+	 * @return The agents object.
+	 */
+	const Agents *get_agents() const;
+
+protected:
 	/**
 	 * The agents in the Dec-MDP; e.g., a vector of strings.
 	 */
-	Agents agents;
-
-	/**
-	 * The states in the Dec-MDP; e.g., an array of strings.
-	 */
-	States states;
-
-	/**
-	 * The actions in the Dec-MDP; e.g., an array of strings.
-	 */
-	Actions actions;
-
-	/**
-	 * The state transition function in the Dec-MDP; e.g., a three-dimensional array mapping to a double.
-	 */
-	StateTransitions stateTransitions;
-
-	/**
-	 * The reward function in the Dec-MDP; e.g., a two-dimensional array mapping to a double.
-	 */
-	Rewards rewards;
-
-	/**
-	 * The initial state or initial belief state; e.g., factored initial state.
-	 */
-	InitialState initialState;
-
-	/**
-	 * The horizon, either a finite time or a discount factor.
-	 */
-	Horizon horizon;
+	Agents *agents;
 
 };
 

@@ -33,6 +33,11 @@
 
 #include "../../include/core/policy/map_policy.h"
 #include "../../include/core/policy/fsc_policy.h"
+#include "../../include/core/policy/policy_exception.h"
+
+#include "../../include/core/states/finite_states.h"
+#include "../../include/core/actions/finite_actions.h"
+#include "../../include/core/horizon.h"
 
 /**
  * Test the policy objects. Output the success or failure for each test.
@@ -40,9 +45,93 @@
  */
 int test_policy()
 {
-	int numErrors = 0;
+	int numSuccesses = 0;
 
-	return numErrors;
+	State *s1 = new State("s1");
+	State *s2 = new State("s2");
+
+	Action *a1 = new Action("a1");
+	Action *a2 = new Action("a2");
+
+	FiniteStates *states = new FiniteStates({s1, s2});
+	FiniteActions *actions = new FiniteActions({a1, a2});
+	Horizon *horizon = new Horizon((unsigned int)3);
+
+	MapPolicy *policy = new MapPolicy();
+
+	std::cout << "Policy: 'MapPolicy::load' file 'test_01.map_policy'... ";
+	if (!policy->load("tests/resources/policy/test_01.map_policy", states, actions, horizon)) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	std::cout << "Policy: Test 'MapPolicy::get' (Check Result)... ";
+	try {
+		if (policy->get(s1) == a2 && policy->get(s2) == a1) {
+			std::cout << " Success." << std::endl;
+			numSuccesses++;
+		} else {
+			std::cout << " Failure." << std::endl;
+		}
+	} catch (const PolicyException &err) {
+		std::cout << " Failure." << std::endl;
+	}
+
+	std::cout << "Policy: Test 'MapPolicy::set'... ";
+
+	policy->set(s1, a1);
+	policy->set(s2, a2);
+
+	try {
+		if (policy->get(s1) == a1 && policy->get(s2) == a2) {
+			std::cout << " Success." << std::endl;
+			numSuccesses++;
+		} else {
+			std::cout << " Failure." << std::endl;
+		}
+	} catch (const PolicyException &err) {
+		std::cout << " Failure." << std::endl;
+	}
+
+	std::cout << "Policy: 'test_02.map_policy' (Expecting Error)...\n\t";
+	if (policy->load("tests/resources/policy/test_02.map_policy", states, actions, horizon)) {
+		std::cout << "\tSuccess." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << "\tFailure." << std::endl;
+	}
+
+	std::cout << "Policy: 'MapPolicy::load' file 'test_03.map_policy'... ";
+	if (!policy->load("tests/resources/policy/test_03.map_policy", states, actions, horizon)) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	std::cout << "Policy: Test 'MapPolicy::get' (Check Result)... ";
+	try {
+		if (policy->get(0, s1) == a2 && policy->get(0, s2) == a1 &&
+				policy->get(1, s1) == a1 && policy->get(1, s2) == a2 &&
+				policy->get(2, s1) == a1 && policy->get(2, s2) == a1) {
+			std::cout << " Success." << std::endl;
+			numSuccesses++;
+		} else {
+			std::cout << " Failure." << std::endl;
+		}
+	} catch (const PolicyException &err) {
+		std::cout << " Failure." << std::endl;
+	}
+
+	// Note: The state and action variables are freed inside the deconstructors of states and actions.
+	delete states;
+	delete actions;
+	delete horizon;
+	delete policy;
+
+	return numSuccesses;
 }
 
 

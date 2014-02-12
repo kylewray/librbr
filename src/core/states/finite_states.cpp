@@ -33,6 +33,15 @@ FiniteStates::FiniteStates()
 { }
 
 /**
+ * The constructor for the FiniteStates class which allows the specification of an initial set of FiniteStates.
+ * @param FiniteStates The initial vector of FiniteStates.
+ */
+FiniteStates::FiniteStates(std::vector<State *> states)
+{
+	set(states);
+}
+
+/**
  * The default deconstructor for the FiniteStates class.
  */
 FiniteStates::~FiniteStates()
@@ -127,7 +136,7 @@ int FiniteStates::get_num_states() const
  * @return The state with the corresponding name provided.
  * @throws StateException The name was invalid.
  */
-State *FiniteStates::find(std::string stateName)
+State *FiniteStates::find(std::string stateName) const
 {
 	for (State *state : states) {
 		if (state->get_name().compare(stateName) == 0) {

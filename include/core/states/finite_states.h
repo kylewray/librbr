@@ -51,6 +51,12 @@ public:
 	FiniteStates();
 
 	/**
+	 * The constructor for the FiniteStates class which allows the specification of an initial set of states.
+	 * @param states The initial vector of states.
+	 */
+	FiniteStates(std::vector<State *> states);
+
+	/**
 	 * The default deconstructor for the FiniteStates class.
 	 */
 	virtual ~FiniteStates();
@@ -111,7 +117,7 @@ public:
 	 * @return The state with the corresponding name provided.
 	 * @throws StateException The name was invalid.
 	 */
-	virtual State *find(std::string stateName);
+	virtual State *find(std::string stateName) const;
 
 	/**
 	 * Reset the states, clearing the internal list and freeing the memory.

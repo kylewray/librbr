@@ -36,67 +36,50 @@
 #include "../core/initial_state.h"
 #include "../core/horizon.h"
 
+#include "../pomdp/pomdp.h"
 
 /**
  *  A Decentralized Partially Observable Markov Decision Process (Dec-POMDP).
  */
-class DecPOMDP {
+class DecPOMDP : public POMDP {
 public:
 	/**
-	 * The constructor for the DecPOMDP class.
+	 * The default constructor for the DecPOMDP class.
 	 */
 	DecPOMDP();
 
 	/**
+	 * A constructor for the DecPOMDP class.
+	 * @param ag	The agents.
+	 * @param s		The states.
+	 * @param a		The actions.
+	 * @param o		The observations.
+	 * @param st	The state transitions, which uses the states and actions parameters.
+	 * @param ot	The observation transitions, which uses the states, actions, and observations parameters.
+	 * @param r		The rewards, which uses the states and actions parameters.
+	 * @param is	The initial state, which uses the states parameter.
+	 * @param h		The horizon.
+	 */
+	DecPOMDP(Agents *agents, States *states, Actions *actions, Observations *observations,
+			StateTransitions *stateTransitions, ObservationTransitions *observationTransitions,
+			Rewards *rewards, InitialState *initialState, Horizon *horizon);
+
+	/**
 	 * The deconstructor for the DecPOMDP class.
 	 */
-	~DecPOMDP();
+	virtual ~DecPOMDP();
 
-private:
+	/**
+	 * Get the agents object.
+	 * @return The agents object.
+	 */
+	const Agents *get_agents() const;
+
+protected:
 	/**
 	 * The agents in the SCP; e.g., a vector of strings.
 	 */
-	Agents agents;
-
-	/**
-	 * The states in the SCP; e.g., factored vectors of strings.
-	 */
-	States states;
-
-	/**
-	 * The actions in the SCP; e.g., factored vectors of strings.
-	 */
-	Actions actions;
-
-	/**
-	 * The observations in the SCP; e.g., factored vectors of strings.
-	 */
-	Observations observations;
-
-	/**
-	 * The state transition function in the SCP; e.g., a three-dimensional array mapping to a double.
-	 */
-	StateTransitions stateTransitions;
-
-	/**
-	 * The observation transition function in the SCP; e.g., a three-dimensional array mapping to a double.
-	 */
-	ObservationTransitions observationTransitions;
-
-	/**
-	 * The reward function in the SCP; e.g., a two-dimensional array mapping to a double.
-	 */
-	Rewards rewards;
-
-	/**
-	 * The initial state or initial belief state; e.g., factored initial state.
-	 */
-	InitialState initialState;
-
-	/**
-	 * The horizon, either a finite time or a discount factor.
-	 */
-	Horizon horizon;
+	Agents *agents;
 
 };
 

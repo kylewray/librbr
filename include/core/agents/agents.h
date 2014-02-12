@@ -95,7 +95,7 @@ public:
 	 * @return The agent with the corresponding name provided.
 	 * @throws AgentException The name was invalid.
 	 */
-	virtual Agent *find(std::string agentName);
+	virtual Agent *find(std::string agentName) const;
 
 	/**
 	 * Reset the agents, clearing the internal list and freeing the memory.

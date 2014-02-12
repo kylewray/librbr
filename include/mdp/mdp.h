@@ -33,52 +33,98 @@
 #include "../core/initial_state.h"
 #include "../core/horizon.h"
 
-
 /**
  * A Markov Decision Process (MDP).
  */
 class MDP {
 public:
 	/**
-	 * A constructor for the MDP class.
+	 * The default constructor for the MDP class.
 	 */
 	MDP();
 
 	/**
+	 * A constructor for the MDP class.
+	 * @param s		The states.
+	 * @param a		The actions.
+	 * @param st	The state transitions, which uses the states and actions parameters.
+	 * @param r		The rewards, which uses the states and actions parameters.
+	 * @param is	The initial state, which uses the states parameter.
+	 * @param h		The horizon.
+	 */
+	MDP(States *s, Actions *a, StateTransitions *st, Rewards *r, InitialState *is, Horizon *h);
+
+	/**
 	 * A deconstructor for the MDP class.
 	 */
-	~MDP();
+	virtual ~MDP();
 
-private:
+	/**
+	 * Get the states object.
+	 * @return The states object.
+	 */
+	const States *get_states() const;
+
+	/**
+	 * Get the actions object.
+	 * @return The actions object.
+	 */
+	const Actions *get_actions() const;
+
+	/**
+	 * Get the state transitions object.
+	 * @return The state transitions object.
+	 */
+	const StateTransitions *get_state_transitions() const;
+
+	/**
+	 * Get the rewards object.
+	 * @return The rewards object.
+	 */
+	const Rewards *get_rewards() const;
+
+	/**
+	 * Get the initial state object.
+	 * @return The initial state object.
+	 */
+	const InitialState *get_initial_state() const;
+
+	/**
+	 * Get the horizon object.
+	 * @return The horizon object.
+	 */
+	const Horizon *get_horizon() const;
+
+protected:
 	/**
 	 * The states in the MDP; e.g., an array of strings.
 	 */
-	States states;
+	States *states;
 
 	/**
 	 * The actions in the MDP; e.g., an array of strings.
 	 */
-	Actions actions;
+	Actions *actions;
 
 	/**
 	 * The state transition function in the MDP; e.g., a three-dimensional array mapping to a double.
 	 */
-	StateTransitions stateTransitions;
+	StateTransitions *stateTransitions;
 
 	/**
 	 * The reward function in the MDP; e.g., a two-dimensional array mapping to a double.
 	 */
-	Rewards rewards;
+	Rewards *rewards;
 
 	/**
 	 * The initial state or initial belief state; e.g., factored initial state.
 	 */
-	InitialState initialState;
+	InitialState *initialState;
 
 	/**
 	 * The horizon, either a finite time or a discount factor.
 	 */
-	Horizon horizon;
+	Horizon *horizon;
 
 };
 

@@ -33,6 +33,15 @@ FiniteActions::FiniteActions()
 { }
 
 /**
+ * The constructor for the FiniteActions class which allows the specification of an initial set of actions.
+ * @param actions The initial vector of actions.
+ */
+FiniteActions::FiniteActions(std::vector<Action *> actions)
+{
+	set(actions);
+}
+
+/**
  * The default deconstructor for the FiniteActions class.
  */
 FiniteActions::~FiniteActions()
@@ -127,7 +136,7 @@ int FiniteActions::get_num_actions() const
  * @return The action with the corresponding name provided.
  * @throws ActionException The name was invalid.
  */
-Action *FiniteActions::find(std::string actionName)
+Action *FiniteActions::find(std::string actionName) const
 {
 	for (Action *action : actions) {
 		if (action->get_name().compare(actionName) == 0) {
