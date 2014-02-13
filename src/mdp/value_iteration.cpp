@@ -31,6 +31,7 @@
 #include "../../include/core/rewards/reward_exception.h"
 
 #include <math.h>
+#include <limits>
 
 /**
  * The default constructor for the ValueIteration class.
@@ -120,9 +121,48 @@ MapPolicy *ValueIteration::solve(const MDP *mdp)
 MapPolicy *ValueIteration::solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
 		const SASRewards *R, const Horizon *h)
 {
-	return nullptr;
+	// Create the policy based on the horizon.
+	MapPolicy *policy = new MapPolicy(h);
+
+	// The value of a states and state's actions.
+	std::map<State *, double> V;
+	std::map<State *, std::map<Action *, double> > Q;
+
+	// Continue to iterate until the maximum difference between two V[s]'s is less than the tolerance.
+	for (int t = 0; t < h->get_horizon(); t++){
+		// For all the states, compute V[s].
+		for (State *s : S->all()) {
+			Action *aBest = nullptr;
+			double Vs = std::numeric_limits<double>::lowest();
+
+			// For all the actions, compute Q[s][a].
+			for (Action *a : A->available(s)) {
+				// Compute the Q(s, a) estimate.
+				Q[s][a] = 0.0;
+				for (State *sPrime : S->all()) {
+					Q[s][a] += T->get(s, a, sPrime) * (R->get(s, a, sPrime) + V[sPrime]);
+				}
+				Q[s][a] = Q[s][a] * h->get_discount_factor();
+
+				// While we are looping over actions, find the maximum.
+				if (Q[s][a] > Vs) {
+					Vs = Q[s][a];
+					aBest = a;
+				}
+			}
+
+			// Set the value of the state.
+			V[s] = Vs;
+
+			// Set the policy's action, which will yield the optimal policy at the end.
+			policy->set(t, s, aBest);
+		}
+	}
+
+	return policy;
 }
 
+#include <iostream>
 /**
  * Solve an infinite horizon MDP using value iteration.
  * @param S The finite states.
@@ -144,12 +184,14 @@ MapPolicy *ValueIteration::solve_infinite_horizon(const FiniteStates *S, const F
 	std::map<State *, std::map<Action *, double> > Q;
 
 	// Continue to iterate until the maximum difference between two V[s]'s is less than the tolerance.
-	double difference = 0.0f;
-	while (difference < epsilon) {
+	double difference = epsilon + 1.0;
+	while (difference > epsilon) {
+		difference = 0.0;
+
 		// For all the states, compute V[s].
 		for (State *s : S->all()) {
 			Action *aBest = nullptr;
-			double Vs = 0.0;
+			double Vs = std::numeric_limits<double>::lowest();
 
 			// For all the actions, compute Q[s][a].
 			for (Action *a : A->available(s)) {

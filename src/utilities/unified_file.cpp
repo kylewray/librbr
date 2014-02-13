@@ -27,10 +27,14 @@
 #include "../../include/utilities/unified_file.h"
 #include "../../include/utilities/log.h"
 
+#include "../../include/core/core_exception.h"
+#include "../../include/core/agents/agent_exception.h"
+#include "../../include/core/states/state_exception.h"
 #include "../../include/core/actions/action_exception.h"
 #include "../../include/core/observations/observation_exception.h"
-#include "../../include/core/states/state_exception.h"
-
+#include "../../include/core/state_transitions/state_transition_exception.h"
+#include "../../include/core/observation_transitions/observation_transition_exception.h"
+#include "../../include/core/rewards/reward_exception.h"
 
 /**
  * The default constructor for a unified file.
@@ -385,6 +389,12 @@ bool UnifiedFile::load_horizon(std::vector<std::string> items)
 	}
 
 	remove_whitespace(items[1]);
+
+	// Handle the infinite horizon case with the keyword 'infinite'.
+	if (items[1].compare("infinite") == 0) {
+		horizon->set_horizon(0);
+		return false;
+	}
 
 	// Attempt to convert the string to a double. If successful, then set the horizon.
 	int h = 0.0;
@@ -1743,38 +1753,93 @@ bool UnifiedFile::load_reward_matrix(int stateIndex, std::string line)
 }
 
 /**
- * Get an MDP version of a loaded file.
+ * Release control over the memory of the variables.
+ */
+void UnifiedFile::release()
+{
+	agents = nullptr;
+	states = nullptr;
+	actions = nullptr;
+	observations = nullptr;
+	stateTransitions = nullptr;
+	observationTransitions = nullptr;
+	rewards = nullptr;
+	initialState = nullptr;
+	horizon = nullptr;
+}
+
+/**
+ * Get an MDP version of a loaded file. This releases control of the memory to the
+ * MDP object, and therefore removes pointers to any loaded file information.
  * @return An MDP defined by the file loaded.
+ * @throws CoreException The MDP was missing a vital component to be defined.
  */
 MDP *UnifiedFile::get_mdp()
 {
-	return nullptr;
+	if (states == nullptr || actions == nullptr || stateTransitions == nullptr || rewards == nullptr ||
+			initialState == nullptr || horizon == nullptr) {
+		throw CoreException();
+	}
+
+	MDP *mdp = new MDP(states, actions, stateTransitions, rewards, initialState, horizon);
+	release();
+	return mdp;
 }
 
 /**
- * Get an POMDP version of a loaded file.
+ * Get an POMDP version of a loaded file. This releases control of the memory to the
+ * MDP object, and therefore removes pointers to any loaded file information.
  * @return An POMDP defined by the file loaded.
+ * @throws CoreException The MDP was missing a vital component to be defined.
  */
 POMDP *UnifiedFile::get_pomdp()
 {
-	return nullptr;
+	if (states == nullptr || actions == nullptr || observations == nullptr || stateTransitions == nullptr ||
+			observationTransitions == nullptr || rewards == nullptr || initialState == nullptr ||
+			horizon == nullptr) {
+		throw CoreException();
+	}
+
+	POMDP *pomdp = new POMDP(states, actions, observations, stateTransitions, observationTransitions,
+			rewards, initialState, horizon);
+	release();
+	return pomdp;
 }
 
 /**
- * Get an Dec-MDP version of a loaded file.
+ * Get an Dec-MDP version of a loaded file. This releases control of the memory to the
+ * MDP object, and therefore removes pointers to any loaded file information.
  * @return An Dec-MDP defined by the file loaded.
+ * @throws CoreException The MDP was missing a vital component to be defined.
  */
 DecMDP *UnifiedFile::get_dec_mdp()
 {
-	return nullptr;
+	if (agents == nullptr || states == nullptr || actions == nullptr || stateTransitions == nullptr ||
+			rewards == nullptr || initialState == nullptr || horizon == nullptr) {
+		throw CoreException();
+	}
+
+	DecMDP *decmdp = new DecMDP(agents, states, actions, stateTransitions, rewards, initialState, horizon);
+	release();
+	return decmdp;
 }
 
 /**
- * Get an Dec-POMDP version of a loaded file.
+ * Get an Dec-POMDP version of a loaded file. This releases control of the memory to the
+ * MDP object, and therefore removes pointers to any loaded file information.
  * @return An Dec-POMDP defined by the file loaded.
+ * @throws CoreException The MDP was missing a vital component to be defined.
  */
 DecPOMDP *UnifiedFile::get_dec_pomdp()
 {
-	return nullptr;
-}
+	if (agents == nullptr || states == nullptr || actions == nullptr || observations == nullptr ||
+			stateTransitions == nullptr || observationTransitions == nullptr || rewards == nullptr ||
+			initialState == nullptr || horizon == nullptr) {
+		throw CoreException();
+	}
 
+	DecPOMDP *decpomdp = new DecPOMDP(agents, states, actions, observations, stateTransitions, observationTransitions,
+			rewards, initialState, horizon);
+	release();
+	return decpomdp;
+}

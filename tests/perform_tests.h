@@ -36,6 +36,7 @@
 #define NUM_OBSERVATION_TRANSITION_TESTS 5
 #define NUM_POLICY_TESTS 6
 #define NUM_UNIFIED_FILE_TESTS 20
+#define NUM_MDP_TESTS 4
 
 /**
  * Test the agents objects. Output the success or failure for each test.
@@ -90,6 +91,12 @@ int test_policy();
  * @return The number of successes during execution.
  */
 int test_unified_file();
+
+/**
+ * Test the MDP solvers. Output the success or failure for each test.
+ * @return The number of successes during execution.
+ */
+int test_mdp();
 
 
 #endif // PERFORM_TESTS_H

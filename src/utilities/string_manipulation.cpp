@@ -22,7 +22,7 @@
  */
 
 
-#include "../../include/utilities/miscellaneous.h"
+#include "../../include/utilities/string_manipulation.h"
 
 /**
  * Trim the left and right sides of a string, removing the whitespace.

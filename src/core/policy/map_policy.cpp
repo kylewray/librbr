@@ -33,7 +33,7 @@
 #include "../../../include/core/states/state_exception.h"
 #include "../../../include/core/policy/policy_exception.h"
 
-#include "../../../include/utilities/miscellaneous.h"
+#include "../../../include/utilities/string_manipulation.h"
 
 /**
  * The default constructor for a MapPolicy object. It defaults to 1 level.
@@ -270,6 +270,7 @@ bool MapPolicy::save(std::string filename) const
 
 	if (policy.size() > 1) {
 		int h = 0;
+
 		for (std::map<State *, Action *> p : policy) {
 			file << "horizon: " << h << std::endl;
 

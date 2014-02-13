@@ -47,7 +47,7 @@
 #include "../dec_mdp/dec_mdp.h"
 #include "../dec_pomdp/dec_pomdp.h"
 
-#include "miscellaneous.h"
+#include "string_manipulation.h"
 
 /**
  * A file loading and saving class called UnifiedFile which acts as an intermediate
@@ -94,26 +94,34 @@ public:
 	void reset();
 
 	/**
-	 * Get an MDP version of a loaded file.
+	 * Get an MDP version of a loaded file. This releases control of the memory to the
+	 * MDP object, and therefore removes pointers to any loaded file information.
 	 * @return An MDP defined by the file loaded.
+	 * @throws CoreException The MDP was missing a vital component to be defined.
 	 */
 	MDP *get_mdp();
 
 	/**
-	 * Get an POMDP version of a loaded file.
+	 * Get an POMDP version of a loaded file. This releases control of the memory to the
+	 * MDP object, and therefore removes pointers to any loaded file information.
 	 * @return A POMDP defined by the file loaded.
+	 * @throws CoreException The MDP was missing a vital component to be defined.
 	 */
 	POMDP *get_pomdp();
 
 	/**
-	 * Get an Dec-MDP version of a loaded file.
+	 * Get an Dec-MDP version of a loaded file. This releases control of the memory to the
+	 * MDP object, and therefore removes pointers to any loaded file information.
 	 * @return A Dec-MDP defined by the file loaded.
+	 * @throws CoreException The MDP was missing a vital component to be defined.
 	 */
 	DecMDP *get_dec_mdp();
 
 	/**
-	 * Get an Dec-POMDP version of a loaded file.
+	 * Get an Dec-POMDP version of a loaded file. This releases control of the memory to the
+	 * MDP object, and therefore removes pointers to any loaded file information.
 	 * @return A Dec-POMDP defined by the file loaded.
+	 * @throws CoreException The MDP was missing a vital component to be defined.
 	 */
 	DecPOMDP *get_dec_pomdp();
 
@@ -286,6 +294,11 @@ private:
 	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	bool load_reward_matrix(int stateIndex, std::string line);
+
+	/**
+	 * Release control over the memory of the variables.
+	 */
+	void release();
 
 	/**
 	 * The agents in the MDP-like object; e.g., a vector of strings.
