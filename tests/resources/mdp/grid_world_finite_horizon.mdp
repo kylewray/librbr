@@ -4,7 +4,7 @@
 discount: 0.9
 horizon: 10
 values: reward
-states: s11 s12 s13 s21 s22 s23 s31 s32 s33 s41 s42 s43
+states: s11 s12 s13 s21 s23 s31 s32 s33 s41 s42 s43
 actions: N S E W
 start: s11
 

@@ -497,7 +497,7 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 	// Either this is a single state, uniform, or number of states.
 	if (list[0].compare("uniform") == 0) {
 		double probability = 1.0 / (double)states->get_num_states();
-		for (State *state : states->all()) {
+		for (State *state : *states) {
 			initialState->set_initial_belief(state, probability);
 		}
 	} else if (list.size() == 1) {
@@ -537,7 +537,7 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 				return true;
 			}
 
-			initialState->set_initial_belief(states->all()[stateIndex], p);
+			initialState->set_initial_belief(states->get(stateIndex), p);
 			stateIndex++;
 		}
 	}
@@ -637,7 +637,7 @@ bool UnifiedFile::load_initial_state_exclusive(std::vector<std::string> items)
 
 	double probability = 1.0 / (double)(states->get_num_states() - list.size());
 
-	std::vector<State *> subset = states->all();
+	std::vector<State *> subset;
 
 	for (std::string idString : list) {
 		State *state = nullptr;
@@ -651,13 +651,15 @@ bool UnifiedFile::load_initial_state_exclusive(std::vector<std::string> items)
 			return true;
 		}
 
-		// Remove the state from the list.
-		subset.erase(std::remove(subset.begin(), subset.end(), state), subset.end());
+		// Add the state to the subset list.
+		subset.push_back(state);
 	}
 
 	// The remaining states must be defined with a uniform belief.
-	for (State *state : subset) {
-		initialState->set_initial_belief(state, probability);
+	for (State *state : *states) {
+		if (std::find(subset.begin(), subset.end(), state) == subset.end()) {
+			initialState->set_initial_belief(state, probability);
+		}
 	}
 
 	return false;
@@ -1295,7 +1297,7 @@ bool UnifiedFile::load_state_transition_vector(std::string line)
 			return true;
 		}
 
-		stateTransitions->set(loadingState, loadingAction, states->all()[counter], probability);
+		stateTransitions->set(loadingState, loadingAction, states->get(counter), probability);
 
 		counter++;
 	}
@@ -1350,7 +1352,7 @@ bool UnifiedFile::load_state_transition_matrix(int stateIndex, std::string line)
 			return true;
 		}
 
-		stateTransitions->set(states->all()[stateIndex], loadingAction, states->all()[counter], probability);
+		stateTransitions->set(states->get(stateIndex), loadingAction, states->get(counter), probability);
 
 		counter++;
 	}
@@ -1496,7 +1498,7 @@ bool UnifiedFile::load_observation_transition_vector(std::string line)
 			return true;
 		}
 
-		observationTransitions->set(observations->all()[counter], loadingAction, loadingState, probability);
+		observationTransitions->set(observations->get(counter), loadingAction, loadingState, probability);
 
 		counter++;
 	}
@@ -1551,7 +1553,7 @@ bool UnifiedFile::load_observation_transition_matrix(int stateIndex, std::string
 			return true;
 		}
 
-		observationTransitions->set(observations->all()[counter], loadingAction, states->all()[stateIndex], probability);
+		observationTransitions->set(observations->get(counter), loadingAction, states->get(stateIndex), probability);
 
 		counter++;
 	}
@@ -1689,9 +1691,9 @@ bool UnifiedFile::load_reward_vector(std::string line)
 		}
 
 		if (rewardValue) {
-			rewards->set(states->all()[counter], loadingAction, loadingState, reward);
+			rewards->set(states->get(counter), loadingAction, loadingState, reward);
 		} else {
-			rewards->set(states->all()[counter], loadingAction, loadingState, -reward);
+			rewards->set(states->get(counter), loadingAction, loadingState, -reward);
 		}
 
 		counter++;
@@ -1741,9 +1743,9 @@ bool UnifiedFile::load_reward_matrix(int stateIndex, std::string line)
 		}
 
 		if (rewardValue) {
-			rewards->set(states->all()[stateIndex], loadingAction, states->all()[counter], reward);
+			rewards->set(states->get(stateIndex), loadingAction, states->get(counter), reward);
 		} else {
-			rewards->set(states->all()[stateIndex], loadingAction, states->all()[counter], -reward);
+			rewards->set(states->get(stateIndex), loadingAction, states->get(counter), -reward);
 		}
 
 		counter++;

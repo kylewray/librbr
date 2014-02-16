@@ -36,7 +36,7 @@
 #define NUM_OBSERVATION_TRANSITION_TESTS 5
 #define NUM_POLICY_TESTS 6
 #define NUM_UNIFIED_FILE_TESTS 20
-#define NUM_MDP_TESTS 4
+#define NUM_MDP_TESTS 6
 
 /**
  * Test the agents objects. Output the success or failure for each test.

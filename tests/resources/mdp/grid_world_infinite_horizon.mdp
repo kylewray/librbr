@@ -1,10 +1,10 @@
 # Grid World (Infinite Horizon)
 
 # Main variables.
-discount: 0.9
+discount: 1.0
 horizon: infinite
 values: reward
-states: s11 s12 s13 s21 s22 s23 s31 s32 s33 s41 s42 s43
+states: s11 s12 s13 s21 s23 s31 s32 s33 s41 s42 s43 goal
 actions: N S E W
 start: s11
 
@@ -46,12 +46,12 @@ T: N : s41 : s42 : 0.8
 T: N : s41 : s31 : 0.1
 T: N : s41 : s41 : 0.1
 
-T: N : s42 : s43 : 0.8
-T: N : s42 : s32 : 0.1
-T: N : s42 : s42 : 0.1
+# T: N : s42 : s43 : 0.8
+# T: N : s42 : s32 : 0.1
+# T: N : s42 : s42 : 0.1
 
-T: N : s43 : s43 : 0.9
-T: N : s43 : s33 : 0.1
+# T: N : s43 : s43 : 0.9
+# T: N : s43 : s33 : 0.1
 
 # Action: South, Start: x-axis 1
 T: S : s11 : s11 : 0.9
@@ -60,8 +60,9 @@ T: S : s11 : s21 : 0.1
 T: S : s12 : s11 : 0.8
 T: S : s12 : s12 : 0.2
 
-T: S : s13 : s12 : 0.9
+T: S : s13 : s12 : 0.8
 T: S : s13 : s23 : 0.1
+T: S : s13 : s13 : 0.1
 
 # Action: South, Start: x-axis 2
 T: S : s21 : s21 : 0.8
@@ -89,13 +90,13 @@ T: S : s33 : s43 : 0.1
 T: S : s41 : s41 : 0.9
 T: S : s41 : s31 : 0.1
 
-T: S : s42 : s41 : 0.8
-T: S : s42 : s32 : 0.1
-T: S : s42 : s42 : 0.1
+# T: S : s42 : s41 : 0.8
+# T: S : s42 : s32 : 0.1
+# T: S : s42 : s42 : 0.1
 
-T: S : s43 : s42 : 0.8
-T: S : s43 : s33 : 0.1
-T: S : s43 : s43 : 0.1
+# T: S : s43 : s42 : 0.8
+# T: S : s43 : s33 : 0.1
+# T: S : s43 : s43 : 0.1
 
 # Action: East, Start: x-axis 1
 T: E : s11 : s21 : 0.8
@@ -134,12 +135,12 @@ T: E : s33 : s33 : 0.1
 T: E : s41 : s41 : 0.9
 T: E : s41 : s42 : 0.1
 
-T: E : s42 : s42 : 0.8
-T: E : s42 : s41 : 0.1
-T: E : s42 : s43 : 0.1
+# T: E : s42 : s42 : 0.8
+# T: E : s42 : s41 : 0.1
+# T: E : s42 : s43 : 0.1
 
-T: E : s43 : s43 : 0.9
-T: E : s43 : s42 : 0.1
+# T: E : s43 : s43 : 0.9
+# T: E : s43 : s42 : 0.1
 
 # Action: West, Start: x-axis 1
 T: W : s11 : s11 : 0.9
@@ -177,14 +178,20 @@ T: W : s41 : s31 : 0.8
 T: W : s41 : s42 : 0.1
 T: W : s41 : s41 : 0.1
 
-T: W : s42 : s32 : 0.8
-T: W : s42 : s41 : 0.1
-T: W : s42 : s43 : 0.1
+# T: W : s42 : s32 : 0.8
+# T: W : s42 : s41 : 0.1
+# T: W : s42 : s43 : 0.1
 
-T: W : s43 : s33 : 0.8
-T: W : s43 : s42 : 0.1
-T: W : s43 : s43 : 0.1
+# T: W : s43 : s33 : 0.8
+# T: W : s43 : s42 : 0.1
+# T: W : s43 : s43 : 0.1
 
-# Rewards for goal states.
-R: * : * : s43 : 1.0
-R: * : * : s42 : -1.0
+# Handle goal state transitions.
+T: * : s43 : goal : 1.0
+T: * : s42 : goal : 1.0
+
+# Rewards for goal states and a penalty for wasting time.
+R: * : goal : * : 0.0
+R: * : * : * : -0.04
+R: * : s43 : * : 1.0
+R: * : s42 : * : -1.0

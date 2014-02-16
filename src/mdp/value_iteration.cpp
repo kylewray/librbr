@@ -23,15 +23,15 @@
 
 
 #include "../../include/mdp/value_iteration.h"
+#include "../../include/mdp/mdp_utilities.h"
 
-#include "../../include/core/policy/policy_exception.h"
 #include "../../include/core/states/state_exception.h"
 #include "../../include/core/actions/action_exception.h"
 #include "../../include/core/state_transitions/state_transition_exception.h"
 #include "../../include/core/rewards/reward_exception.h"
+#include "../../include/core/policy/policy_exception.h"
 
 #include <math.h>
-#include <limits>
 
 /**
  * The default constructor for the ValueIteration class.
@@ -109,7 +109,7 @@ MapPolicy *ValueIteration::solve(const MDP *mdp)
 }
 
 /**
- * Solve an finite horizon MDP using value iteration.
+ * Solve a finite horizon MDP using value iteration.
  * @param S The finite states.
  * @param A The finite actions.
  * @param T The finite state transition function.
@@ -126,33 +126,14 @@ MapPolicy *ValueIteration::solve_finite_horizon(const FiniteStates *S, const Fin
 
 	// The value of a states and state's actions.
 	std::map<State *, double> V;
-	std::map<State *, std::map<Action *, double> > Q;
 
 	// Continue to iterate until the maximum difference between two V[s]'s is less than the tolerance.
-	for (int t = 0; t < h->get_horizon(); t++){
-		// For all the states, compute V[s].
-		for (State *s : S->all()) {
+	for (int t = h->get_horizon() - 1; t >= 0; t--){
+		// For all the states, compute V(s).
+		for (State *s : *S) {
 			Action *aBest = nullptr;
-			double Vs = std::numeric_limits<double>::lowest();
 
-			// For all the actions, compute Q[s][a].
-			for (Action *a : A->available(s)) {
-				// Compute the Q(s, a) estimate.
-				Q[s][a] = 0.0;
-				for (State *sPrime : S->all()) {
-					Q[s][a] += T->get(s, a, sPrime) * (R->get(s, a, sPrime) + V[sPrime]);
-				}
-				Q[s][a] = Q[s][a] * h->get_discount_factor();
-
-				// While we are looping over actions, find the maximum.
-				if (Q[s][a] > Vs) {
-					Vs = Q[s][a];
-					aBest = a;
-				}
-			}
-
-			// Set the value of the state.
-			V[s] = Vs;
+			bellman_update(S, A, T, R, h, s, V, aBest);
 
 			// Set the policy's action, which will yield the optimal policy at the end.
 			policy->set(t, s, aBest);
@@ -162,7 +143,6 @@ MapPolicy *ValueIteration::solve_finite_horizon(const FiniteStates *S, const Fin
 	return policy;
 }
 
-#include <iostream>
 /**
  * Solve an infinite horizon MDP using value iteration.
  * @param S The finite states.
@@ -179,43 +159,29 @@ MapPolicy *ValueIteration::solve_infinite_horizon(const FiniteStates *S, const F
 	// Create the policy based on the horizon.
 	MapPolicy *policy = new MapPolicy(h);
 
-	// The value of a states and state's actions.
+	// The value of the states.
 	std::map<State *, double> V;
-	std::map<State *, std::map<Action *, double> > Q;
 
 	// Continue to iterate until the maximum difference between two V[s]'s is less than the tolerance.
-	double difference = epsilon + 1.0;
-	while (difference > epsilon) {
-		difference = 0.0;
+	double convergenceCriterion = epsilon * (1.0 - h->get_discount_factor()) / h->get_discount_factor();
+	double delta = convergenceCriterion + 1.0;
 
-		// For all the states, compute V[s].
-		for (State *s : S->all()) {
+	while (delta > convergenceCriterion) {
+		delta = 0.0;
+
+		// For all the states, compute V(s).
+		for (State *s : *S) {
 			Action *aBest = nullptr;
-			double Vs = std::numeric_limits<double>::lowest();
+			double Vs = V[s];
 
-			// For all the actions, compute Q[s][a].
-			for (Action *a : A->available(s)) {
-				// Compute the Q(s, a) estimate.
-				Q[s][a] = 0.0;
-				for (State *sPrime : S->all()) {
-					Q[s][a] += T->get(s, a, sPrime) * (R->get(s, a, sPrime) + V[sPrime]);
-				}
-				Q[s][a] = Q[s][a] * h->get_discount_factor();
-
-				// While we are looping over actions, find the maximum.
-				if (Q[s][a] > Vs) {
-					Vs = Q[s][a];
-					aBest = a;
-				}
-			}
+			// Perform the Bellman update, which modifies V and aBest such that V(s) = max Q(s, a)
+			// and aBest = argmax Q(s, a).
+			bellman_update(S, A, T, R, h, s, V, aBest);
 
 			// Find the maximum difference, as part of our convergence criterion check.
-			if (fabs(Vs - V[s]) > difference) {
-				difference = fabs(Vs - V[s]);
+			if (fabs(V[s] - Vs) > delta) {
+				delta = fabs(V[s] - Vs);
 			}
-
-			// Set the value of the state.
-			V[s] = Vs;
 
 			// Set the policy's action, which will yield the optimal policy at the end.
 			policy->set(s, aBest);

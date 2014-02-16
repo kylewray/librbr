@@ -1,14 +1,14 @@
-# The initial action to take.
-horizon: 0
+# The first horizon!
+horizon: 1
 s1: a2
 s2: a1
 
-# The first horizon!
-horizon: 1
+# The second horizon!
+horizon: 2
 s1: a1  # Note: This is a comment!
 s2: a2
 
-# The second horizon!
-horizon: 2
+# The third horizon!
+horizon: 3
 s1: a1
 s2: a1
