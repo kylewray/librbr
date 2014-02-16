@@ -34,6 +34,7 @@
 #include "../../include/core/actions/finite_actions.h"
 #include "../../include/core/state_Transitions/finite_state_transitions.h"
 #include "../../include/core/rewards/sas_rewards.h"
+#include "../../include/core/horizon.h"
 
 /**
  * Solve an MDP via value iteration (finite or infinite horizon). This solver has the
@@ -76,7 +77,7 @@ public:
 
 private:
 	/**
-	 * Solve an finite horizon MDP using value iteration.
+	 * Solve a finite horizon MDP using value iteration.
 	 * @param S The finite states.
 	 * @param A The finite actions.
 	 * @param T The finite state transition function.

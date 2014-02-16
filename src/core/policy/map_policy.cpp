@@ -163,7 +163,7 @@ bool MapPolicy::load(std::string filename, const FiniteStates *states, const Fin
 	int rows = 1;
 	std::string line;
 
-	int h = 0;
+	int h = 1;
 
 	State *state = nullptr;
 	Action *action = nullptr;
@@ -243,7 +243,7 @@ bool MapPolicy::load(std::string filename, const FiniteStates *states, const Fin
 				return true;
 			}
 
-			policy[h][state] = action;
+			policy[h - 1][state] = action;
 		}
 
 		rows++;
@@ -269,7 +269,7 @@ bool MapPolicy::save(std::string filename) const
 	char error[1024];
 
 	if (policy.size() > 1) {
-		int h = 0;
+		int h = 1;
 
 		for (std::map<State *, Action *> p : policy) {
 			file << "horizon: " << h << std::endl;

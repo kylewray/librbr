@@ -82,17 +82,17 @@ double SASRewards::get(State *state, Action *action, State *nextState) const
 	// Return 0 by default.
 	for (int i = 0; i < 8; i++) {
 		State *alpha = stateWildcard;
-		if (i & (1 << 0)) {
+		if (!(bool)(i & (1 << 0))) {
 			alpha = state;
 		}
 
 		Action *beta = actionWildcard;
-		if (i & (1 << 1)) {
+		if (!(bool)(i & (1 << 1))) {
 			beta = action;
 		}
 
 		State *gamma = stateWildcard;
-		if (i & (1 << 2)) {
+		if (!(bool)(i & (1 << 2))) {
 			gamma = nextState;
 		}
 

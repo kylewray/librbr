@@ -95,7 +95,7 @@ Observation *FiniteObservations::get(int observationIndex) const
  * Return a list of all the available observations.
  * @return Return a list of available observations.
  */
-std::vector<Observation *> FiniteObservations::all() const
+const std::vector<Observation *> &FiniteObservations::all() const
 {
 	return observations;
 }
@@ -107,7 +107,7 @@ std::vector<Observation *> FiniteObservations::all() const
  * @return Return a list of available observations.
  *
  */
-std::vector<Observation *> FiniteObservations::available(State *state, Action *action) const
+const std::vector<Observation *> &FiniteObservations::available(State *state, Action *action) const
 {
 	return observations;
 }
@@ -146,4 +146,40 @@ void FiniteObservations::reset()
 		delete observation;
 	}
 	observations.clear();
+}
+
+/**
+ * To facilitate easy iteration, return the beginning of the observations vector.
+ * @return The iterator which points to the beginning of the observations vector.
+ */
+std::vector<Observation *>::iterator FiniteObservations::begin()
+{
+	return observations.begin();
+}
+
+/**
+ * To facilitate easy iteration, return the end of the observations vector.
+ * @return The iterator which points to the end of the observations vector.
+ */
+std::vector<Observation *>::iterator FiniteObservations::end()
+{
+	return observations.end();
+}
+
+/**
+ * To facilitate easy iteration, return a constant beginning of the observations vector.
+ * @return The iterator which points to a constant beginning of the observations vector.
+ */
+std::vector<Observation *>::const_iterator FiniteObservations::begin() const
+{
+	return observations.begin();
+}
+
+/**
+ * To facilitate easy iteration, return a constant end of the observations vector.
+ * @return The iterator which points to a constant end of the observations vector.
+ */
+std::vector<Observation *>::const_iterator FiniteObservations::end() const
+{
+	return observations.end();
 }

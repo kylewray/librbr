@@ -104,7 +104,7 @@ State *FiniteStates::get(int stateIndex) const
  * Return a list of all the available states.
  * @return Return a list of available states.
  */
-std::vector<State *> FiniteStates::all() const
+const std::vector<State *> &FiniteStates::all() const
 {
 	return states;
 }
@@ -116,7 +116,7 @@ std::vector<State *> FiniteStates::all() const
  * @return Return a list of available states.
  *
  */
-std::vector<State *> FiniteStates::available(State *state, Action *action) const
+const std::vector<State *> &FiniteStates::successor(State *state, Action *action) const
 {
 	return states;
 }
@@ -156,4 +156,40 @@ void FiniteStates::reset()
 		delete state;
 	}
 	states.clear();
+}
+
+/**
+ * To facilitate easy iteration, return the beginning of the states vector.
+ * @return The iterator which points to the beginning of the states vector.
+ */
+std::vector<State *>::iterator FiniteStates::begin()
+{
+	return states.begin();
+}
+
+/**
+ * To facilitate easy iteration, return the end of the states vector.
+ * @return The iterator which points to the end of the states vector.
+ */
+std::vector<State *>::iterator FiniteStates::end()
+{
+	return states.end();
+}
+
+/**
+ * To facilitate easy iteration, return a constant beginning of the states vector.
+ * @return The iterator which points to a constant beginning of the states vector.
+ */
+std::vector<State *>::const_iterator FiniteStates::begin() const
+{
+	return states.begin();
+}
+
+/**
+ * To facilitate easy iteration, return a constant end of the states vector.
+ * @return The iterator which points to a constant end of the states vector.
+ */
+std::vector<State *>::const_iterator FiniteStates::end() const
+{
+	return states.end();
 }

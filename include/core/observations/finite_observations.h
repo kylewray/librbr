@@ -34,7 +34,6 @@
 #include "../states/state.h"
 #include "../actions/action.h"
 
-
 /**
  * A class for finite sets of observations in an MDP-like object. Informally, there are two basic ways to
  * store finite observations: a vector of observations or a generator function based on a state and action.
@@ -90,7 +89,7 @@ public:
 	 * Return a list of all the available observations.
 	 * @return Return a list of available observations.
 	 */
-	virtual std::vector<Observation *> all() const;
+	virtual const std::vector<Observation *> &all() const;
 
 	/**
 	 * Return a list of the observations available given a previous state and the action taken there.
@@ -99,7 +98,7 @@ public:
 	 * @return Return a list of available observations.
 	 *
 	 */
-	virtual std::vector<Observation *> available(State *state, Action *action) const;
+	virtual const std::vector<Observation *> &available(State *state, Action *action) const;
 
 	/**
 	 * Return the number of observations.
@@ -119,6 +118,30 @@ public:
 	 * Reset the observations, clearing the internal list and freeing the memory.
 	 */
 	virtual void reset();
+
+	/**
+	 * To facilitate easy iteration, return the beginning of the observations vector.
+	 * @return The iterator which points to the beginning of the observations vector.
+	 */
+	std::vector<Observation *>::iterator begin();
+
+	/**
+	 * To facilitate easy iteration, return the end of the observations vector.
+	 * @return The iterator which points to the end of the observations vector.
+	 */
+	std::vector<Observation *>::iterator end();
+
+	/**
+	 * To facilitate easy iteration, return a constant beginning of the observations vector.
+	 * @return The iterator which points to a constant beginning of the observations vector.
+	 */
+	std::vector<Observation *>::const_iterator begin() const;
+
+	/**
+	 * To facilitate easy iteration, return a constant end of the observations vector.
+	 * @return The iterator which points to a constant end of the observations vector.
+	 */
+	std::vector<Observation *>::const_iterator end() const;
 
 protected:
 	/**

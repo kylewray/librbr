@@ -94,7 +94,7 @@ public:
 	 * Return a list of all the available states.
 	 * @return Return a list of available states.
 	 */
-	virtual std::vector<State *> all() const;
+	virtual const std::vector<State *> &all() const;
 
 	/**
 	 * Return a list of the states available given a previous state and the action taken there.
@@ -103,7 +103,7 @@ public:
 	 * @return Return a list of available states.
 	 *
 	 */
-	virtual std::vector<State *> available(State *state, Action *action) const;
+	virtual const std::vector<State *> &successor(State *state, Action *action) const;
 
 	/**
 	 * Return the number of states.
@@ -123,6 +123,30 @@ public:
 	 * Reset the states, clearing the internal list and freeing the memory.
 	 */
 	virtual void reset();
+
+	/**
+	 * To facilitate easy iteration, return the beginning of the states vector.
+	 * @return The iterator which points to the beginning of the states vector.
+	 */
+	std::vector<State *>::iterator begin();
+
+	/**
+	 * To facilitate easy iteration, return the end of the states vector.
+	 * @return The iterator which points to the end of the states vector.
+	 */
+	std::vector<State *>::iterator end();
+
+	/**
+	 * To facilitate easy iteration, return a constant beginning of the states vector.
+	 * @return The iterator which points to a constant beginning of the states vector.
+	 */
+	std::vector<State *>::const_iterator begin() const;
+
+	/**
+	 * To facilitate easy iteration, return a constant end of the states vector.
+	 * @return The iterator which points to a constant end of the states vector.
+	 */
+	std::vector<State *>::const_iterator end() const;
 
 protected:
 	/**

@@ -135,3 +135,39 @@ void Agents::reset()
 	}
 	agents.clear();
 }
+
+/**
+ * To facilitate easy iteration, return the beginning of the agents vector.
+ * @return The iterator which points to the beginning of the agents vector.
+ */
+std::vector<Agent *>::iterator Agents::begin()
+{
+	return agents.begin();
+}
+
+/**
+ * To facilitate easy iteration, return the end of the agents vector.
+ * @return The iterator which points to the end of the agents vector.
+ */
+std::vector<Agent *>::iterator Agents::end()
+{
+	return agents.end();
+}
+
+/**
+ * To facilitate easy iteration, return a constant beginning of the agents vector.
+ * @return The iterator which points to a constant beginning of the agents vector.
+ */
+std::vector<Agent *>::const_iterator Agents::begin() const
+{
+	return agents.begin();
+}
+
+/**
+ * To facilitate easy iteration, return a constant end of the agents vector.
+ * @return The iterator which points to a constant end of the agents vector.
+ */
+std::vector<Agent *>::const_iterator Agents::end() const
+{
+	return agents.end();
+}

@@ -31,9 +31,7 @@
 #include "action.h"
 #include "actions.h"
 
-
 #include "../states/state.h"
-
 
 /**
  * A class for finite sets of actions in an MDP-like object. Informally, there are two basic ways to
@@ -96,14 +94,14 @@ public:
 	 * Return a list of all the available actions.
 	 * @return Return a list of available actions.
 	 */
-	virtual std::vector<Action *> all() const;
+	virtual const std::vector<Action *> &all() const;
 
 	/**
 	 * Return a list of the actions available given a state.
 	 * @param state The current state.
 	 * @return Return a list of available actions.
 	 */
-	virtual std::vector<Action *> available(State *state) const;
+	virtual const std::vector<Action *> &available(State *state) const;
 
 	/**
 	 * Return the number of actions.
@@ -123,6 +121,30 @@ public:
 	 * Reset the actions, clearing the internal list.
 	 */
 	virtual void reset();
+
+	/**
+	 * To facilitate easy iteration, return the beginning of the actions vector.
+	 * @return The iterator which points to the beginning of the actions vector.
+	 */
+	std::vector<Action *>::iterator begin();
+
+	/**
+	 * To facilitate easy iteration, return the end of the actions vector.
+	 * @return The iterator which points to the end of the actions vector.
+	 */
+	std::vector<Action *>::iterator end();
+
+	/**
+	 * To facilitate easy iteration, return a constant beginning of the actions vector.
+	 * @return The iterator which points to a constant beginning of the actions vector.
+	 */
+	std::vector<Action *>::const_iterator begin() const;
+
+	/**
+	 * To facilitate easy iteration, return a constant end of the actions vector.
+	 * @return The iterator which points to a constant end of the actions vector.
+	 */
+	std::vector<Action *>::const_iterator end() const;
 
 protected:
 	/**

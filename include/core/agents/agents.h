@@ -30,7 +30,6 @@
 
 #include "agent.h"
 
-
 /**
  * A class for finite sets of agents in an MDP-like object. The base assumption is that the set of
  * agents is always finite. Also, if this class is used, then it will be for the decentralized
@@ -101,6 +100,30 @@ public:
 	 * Reset the agents, clearing the internal list and freeing the memory.
 	 */
 	void reset();
+
+	/**
+	 * To facilitate easy iteration, return the beginning of the agents vector.
+	 * @return The iterator which points to the beginning of the agents vector.
+	 */
+	std::vector<Agent *>::iterator begin();
+
+	/**
+	 * To facilitate easy iteration, return the end of the agents vector.
+	 * @return The iterator which points to the end of the agents vector.
+	 */
+	std::vector<Agent *>::iterator end();
+
+	/**
+	 * To facilitate easy iteration, return a constant beginning of the agents vector.
+	 * @return The iterator which points to a constant beginning of the agents vector.
+	 */
+	std::vector<Agent *>::const_iterator begin() const;
+
+	/**
+	 * To facilitate easy iteration, return a constant end of the agents vector.
+	 * @return The iterator which points to a constant end of the agents vector.
+	 */
+	std::vector<Agent *>::const_iterator end() const;
 
 protected:
 	/**
