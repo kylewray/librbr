@@ -58,21 +58,21 @@ public:
 
 	/**
 	 * Set a observation transition from a particular observation-action-state triple to a probability.
-	 * @param observation	The next observation to which we assign a probability.
-	 * @param action		The action taken at the current state.
-	 * @param state			The current state.
-	 * @param probability	The probability of the observation given we were in the state and took the action.
+	 * @param previousAction	The action taken at the previous state which resulted in the current state.
+	 * @param state				The current state.
+	 * @param observation		The next observation to which we assign a probability.
+	 * @param probability		The probability of the observation given we took the action and landed in the state given.
 	 */
-	void set(Observation *observation, Action *action, State *nextState, double probability);
+	void set(Action *previousAction, State *state, Observation *observation, double probability);
 
 	/**
 	 * The probability of a transition following the observation-action-state triple provided.
-	 * @param observation	The next observation to which we assign a probability.
-	 * @param action		The action taken at the current state.
-	 * @param state			The current state.
-	 * @return The probability of the observation given we were in the state and took the action.
+	 * @param previousAction	The action taken at the previous state which resulted in the current state.
+	 * @param state				The current state.
+	 * @param observation		The next observation to which we assign a probability.
+	 * @return The probability of the observation given we took the action and landed in the state given.
 	 */
-	virtual double get(Observation *observation, Action *action, State *state) const;
+	virtual double get(Action *previousAction, State *state, Observation *observation) const;
 
 	/**
 	 * Reset the observation transitions, clearing the internal mapping.
@@ -83,28 +83,28 @@ private:
 	/**
 	 * The actual get function which returns a value. This will throw an error if the value is undefined.
 	 * It is used as a helper function for the public get function.
-	 * @param observation	The next observation to which we assign a probability.
-	 * @param action		The action taken at the current state.
-	 * @param state			The current state.
-	 * @return The reward from taking the given action in the given state.
+	 * @param previousAction	The action taken at the previous state which resulted in the current state.
+	 * @param state				The current state.
+	 * @param observation		The next observation to which we assign a probability.
+	 * @return The probability of the observation given we took the action and landed in the state given.
 	 * @throws ObservationTransitionException The observation transition was not defined.
 	 */
-	virtual double get_value(Observation *observation, Action *action, State *state) const;
+	virtual double get_value(Action *previousAction, State *state, Observation *observation) const;
 
 	/**
 	 * The list of all state-action-state transitions.
 	 */
-	std::map<Observation *, std::map<Action *, std::map<State *, double> > > observationTransitions;
-
-	/**
-	 * A special state (implicitly constant) referring to a state wildcard.
-	 */
-	State *stateWildcard;
+	std::map<Action *, std::map<State *, std::map<Observation *, double> > > observationTransitions;
 
 	/**
 	 * A special action (implicitly constant) referring to an action wildcard.
 	 */
 	Action *actionWildcard;
+
+	/**
+	 * A special state (implicitly constant) referring to a state wildcard.
+	 */
+	State *stateWildcard;
 
 	/**
 	 * A special observation (implicitly constant) referring to an observation wildcard.

@@ -1454,7 +1454,7 @@ int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 		return true;
 	}
 
-	observationTransitions->set(observation, action, endState, probability);
+	observationTransitions->set(action, endState, observation, probability);
 
 	return 0;
 }
@@ -1498,7 +1498,7 @@ bool UnifiedFile::load_observation_transition_vector(std::string line)
 			return true;
 		}
 
-		observationTransitions->set(observations->get(counter), loadingAction, loadingState, probability);
+		observationTransitions->set(loadingAction, loadingState, observations->get(counter), probability);
 
 		counter++;
 	}
@@ -1553,7 +1553,7 @@ bool UnifiedFile::load_observation_transition_matrix(int stateIndex, std::string
 			return true;
 		}
 
-		observationTransitions->set(observations->get(counter), loadingAction, states->get(stateIndex), probability);
+		observationTransitions->set(loadingAction, states->get(stateIndex), observations->get(counter), probability);
 
 		counter++;
 	}

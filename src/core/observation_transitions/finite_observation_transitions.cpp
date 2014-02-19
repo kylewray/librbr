@@ -49,53 +49,53 @@ FiniteObservationTransitions::~FiniteObservationTransitions()
 
 /**
  * Set a observation transition from a particular observation-action-state triple to a probability.
- * @param observation	The next observation to which we assign a probability.
- * @param action		The action taken at the current state.
- * @param state			The current state.
- * @param probability	The probability of the observation given we were in the state and took the action.
+ * @param previousAction	The action taken at the previous state which resulted in the current state.
+ * @param state				The current state.
+ * @param observation		The next observation to which we assign a probability.
+ * @param probability		The probability of the observation given we took the action and landed in the state given.
  */
-void FiniteObservationTransitions::set(Observation *observation, Action *action, State *nextState, double probability)
+void FiniteObservationTransitions::set(Action *previousAction, State *state, Observation *observation, double probability)
 {
+	if (previousAction == nullptr) {
+		previousAction = actionWildcard;
+	}
+	if (state == nullptr) {
+		state = stateWildcard;
+	}
 	if (observation == nullptr) {
 		observation = observationWildcard;
 	}
-	if (action == nullptr) {
-		action = actionWildcard;
-	}
-	if (nextState == nullptr) {
-		nextState = stateWildcard;
-	}
 
-	observationTransitions[observation][action][nextState] = std::max(0.0, std::min(1.0, probability));
+	observationTransitions[previousAction][state][observation] = std::max(0.0, std::min(1.0, probability));
 }
 
 /**
  * The probability of a transition following the observation-action-state triple provided.
- * @param observation	The next observation to which we assign a probability.
- * @param action		The action taken at the current state.
- * @param state			The current state.
- * @return The probability of the observation given we were in the state and took the action.
+ * @param observation		The next observation to which we assign a probability.
+ * @param previousAction	The action taken at the previous state which resulted in the current state.
+ * @param state				The current state.
+ * @return The probability of the observation given we took the action and landed in the state given.
  */
-double FiniteObservationTransitions::get(Observation *observation, Action *action, State *state) const
+double FiniteObservationTransitions::get(Action *previousAction, State *state, Observation *observation) const
 {
 	// Iterate over all possible configurations of wildcards in the get statement.
 	// For each, use the get_value() function to check if the value exists. If it
 	// does, perhaps using a wildcard, then return that, otherwise continue.
 	// Return 0 by default.
 	for (int i = 0; i < 8; i++) {
-		Observation *alpha = observationWildcard;
-		if (i & (1 << 0)) {
-			alpha = observation;
-		}
-
-		Action *beta = actionWildcard;
+		Action *alpha = actionWildcard;
 		if (i & (1 << 1)) {
-			beta = action;
+			alpha = previousAction;
 		}
 
-		State *gamma = stateWildcard;
+		State *beta = stateWildcard;
 		if (i & (1 << 2)) {
-			gamma = state;
+			beta = state;
+		}
+
+		Observation *gamma = observationWildcard;
+		if (i & (1 << 0)) {
+			gamma = observation;
 		}
 
 		try {
@@ -117,26 +117,26 @@ void FiniteObservationTransitions::reset()
 /**
  * The actual get function which returns a value. This will throw an error if the value is undefined.
  * It is used as a helper function for the public get function.
- * @param observation	The next observation to which we assign a probability.
- * @param action		The action taken at the current state.
- * @param state			The current state.
- * @return The reward from taking the given action in the given state.
+ * @param previousAction	The action taken at the previous state which resulted in the current state.
+ * @param state				The current state.
+ * @param observation		The next observation to which we assign a probability.
+ * @return The probability of the observation given we took the action and landed in the state given.
  * @throws ObservationTransitionException The observation transition was not defined.
  */
-double FiniteObservationTransitions::get_value(Observation *observation, Action *action, State *state) const
+double FiniteObservationTransitions::get_value(Action *previousAction, State *state, Observation *observation) const
 {
-	std::map<Observation *, std::map<Action *, std::map<State *, double> > >::const_iterator alpha =
-			observationTransitions.find(observation);
+	std::map<Action *, std::map<State *, std::map<Observation *, double> > >::const_iterator alpha =
+			observationTransitions.find(previousAction);
 	if (alpha == observationTransitions.end()) {
 		throw ObservationTransitionException();
 	}
 
-	std::map<Action *, std::map<State *, double> >::const_iterator beta = alpha->second.find(action);
+	std::map<State *, std::map<Observation *, double> >::const_iterator beta = alpha->second.find(state);
 	if (beta == alpha->second.end()) {
 		throw ObservationTransitionException();
 	}
 
-	std::map<State *, double>::const_iterator gamma = beta->second.find(state);
+	std::map<Observation *, double>::const_iterator gamma = beta->second.find(observation);
 	if (gamma == beta->second.end()) {
 		throw ObservationTransitionException();
 	}
