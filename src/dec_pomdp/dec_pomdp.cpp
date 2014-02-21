@@ -27,10 +27,8 @@
 /**
  * The default constructor for the DecPOMDP class.
  */
-DecPOMDP::DecPOMDP()
+DecPOMDP::DecPOMDP() : POMDP()
 {
-	POMDP::POMDP();
-
 	agents = nullptr;
 }
 
@@ -47,10 +45,8 @@ DecPOMDP::DecPOMDP()
  * @param h		The horizon.
  */
 DecPOMDP::DecPOMDP(Agents *ag, States *s, Actions *a, Observations *o, StateTransitions *st, ObservationTransitions *ot,
-		Rewards *r, InitialState *is, Horizon *h)
+		Rewards *r, InitialState *is, Horizon *h) : POMDP(s, a, o, st, ot, r, is, h)
 {
-	POMDP::POMDP(s, a, o, st, ot, r, is, h);
-
 	agents = ag;
 }
 
@@ -59,8 +55,6 @@ DecPOMDP::DecPOMDP(Agents *ag, States *s, Actions *a, Observations *o, StateTran
  */
 DecPOMDP::~DecPOMDP()
 {
-	POMDP::~POMDP();
-
 	if (agents == nullptr) {
 		delete agents;
 	}

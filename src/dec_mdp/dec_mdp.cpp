@@ -27,10 +27,8 @@
 /**
  * The default constructor for the DecMDP class.
  */
-DecMDP::DecMDP()
+DecMDP::DecMDP() : MDP()
 {
-	MDP::MDP();
-
 	agents = nullptr;
 }
 
@@ -44,10 +42,9 @@ DecMDP::DecMDP()
  * @param is	The initial state, which uses the states parameter.
  * @param h		The horizon.
  */
-DecMDP::DecMDP(Agents *ag, States *s, Actions *a, StateTransitions *st, Rewards *r, InitialState *is, Horizon *h)
+DecMDP::DecMDP(Agents *ag, States *s, Actions *a, StateTransitions *st, Rewards *r,
+		InitialState *is, Horizon *h) : MDP(s, a, st, r, is, h)
 {
-	MDP::MDP(s, a, st, r, is, h);
-
 	agents = ag;
 }
 
@@ -56,8 +53,6 @@ DecMDP::DecMDP(Agents *ag, States *s, Actions *a, StateTransitions *st, Rewards 
  */
 DecMDP::~DecMDP()
 {
-	MDP::~MDP();
-
 	if (agents != nullptr) {
 		delete agents;
 	}

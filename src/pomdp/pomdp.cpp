@@ -27,10 +27,8 @@
 /**
  * The default constructor for the POMDP class.
  */
-POMDP::POMDP()
+POMDP::POMDP() : MDP()
 {
-	MDP::MDP();
-
 	observations = nullptr;
 	observationTransitions = nullptr;
 }
@@ -47,10 +45,8 @@ POMDP::POMDP()
  * @param horizon					The horizon.
  */
 POMDP::POMDP(States *s, Actions *a, Observations *o, StateTransitions *st, ObservationTransitions *ot,
-		Rewards *r, InitialState *is, Horizon *h)
+		Rewards *r, InitialState *is, Horizon *h) : MDP(s, a, st, r, is, h)
 {
-	MDP::MDP(s, a, st, r, is, h);
-
 	observations = o;
 	observationTransitions = ot;
 }
@@ -60,8 +56,6 @@ POMDP::POMDP(States *s, Actions *a, Observations *o, StateTransitions *st, Obser
  */
 POMDP::~POMDP()
 {
-	MDP::~MDP();
-
 	if (observations != nullptr) {
 		delete observations;
 	}
