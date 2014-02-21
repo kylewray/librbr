@@ -136,14 +136,14 @@ PolicyFSC *POMDPValueIteration::solve(const POMDP *pomdp)
  * @return Return the optimal policy as a tree.
  * @throws PolicyException An error occurred computing the policy.
  */
-PolicyFSC *solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+PolicyFSC *POMDPValueIteration::solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
 		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASRewards *R,
 		const Horizon *h)
 {
+	/*
 	// Create the policy based on the horizon.
 	PolicyFSC *policy = new PolicyFSC(h);
 
-	/*
 	// The value of a states and state's actions.
 	std::map<State *, double> V;
 
@@ -159,9 +159,10 @@ PolicyFSC *solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, c
 			policy->set(t, s, aBest);
 		}
 	}
-	*/
 
 	return policy;
+	*/
+	return nullptr;
 }
 
 /**
@@ -176,14 +177,14 @@ PolicyFSC *solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, c
  * @return Return the optimal policy as a finite state controller.
  * @throws PolicyException An error occurred computing the policy.
  */
-PolicyFSC *solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+PolicyFSC *POMDPValueIteration::solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
 		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASRewards *R,
 		const Horizon *h)
 {
+	/*
 	// Create the policy based on the horizon.
 	PolicyFSC *policy = new PolicyFSC(h);
 
-	/*
 	// The value of the states.
 	std::map<State *, double> V;
 
@@ -212,7 +213,8 @@ PolicyFSC *solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A,
 			policy->set(s, aBest);
 		}
 	}
-	*/
 
 	return policy;
+	*/
+	return nullptr;
 }

@@ -26,6 +26,7 @@
 #include "../../../include/core/states/factored_state.h"
 #include "../../../include/core/states/state_exception.h"
 
+#include <algorithm>
 
 /**
  * The default constructor for the FiniteFactoredStates class.

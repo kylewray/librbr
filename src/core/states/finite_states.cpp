@@ -25,6 +25,7 @@
 #include "../../../include/core/states/finite_states.h"
 #include "../../../include/core/states/state_exception.h"
 
+#include <algorithm>
 
 /**
  * The default constructor for the FiniteStates class.

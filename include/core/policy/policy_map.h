@@ -46,29 +46,29 @@
  * Additionally, the class supports finite horizon solutions, too. By default
  * it assumes infinite horizon.
  */
-class MapPolicy : public Policy {
+class PolicyMap : public Policy {
 public:
 	/**
 	 * The default constructor for a MapPolicy object. It defaults to 1 level.
 	 */
-	MapPolicy();
+	PolicyMap();
 
 	/**
 	 * A constructor for a MapPolicy object which specifies the horizon.
 	 * @param horizon The horizon of the problem; 0 represents infinite horizon.
 	 */
-	MapPolicy(unsigned int horizon);
+	PolicyMap(unsigned int horizon);
 
 	/**
 	 * A constructor for a MapPolicy object which specifies the horizon.
 	 * @param horizon The horizon object from the MDP-like object.
 	 */
-	MapPolicy(const Horizon *horizon);
+	PolicyMap(const Horizon *horizon);
 
 	/**
 	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
 	 */
-	virtual ~MapPolicy();
+	virtual ~PolicyMap();
 
 	/**
 	 * Set the mapping from a state to an action. For finite horizon, it assumes 0 by default.

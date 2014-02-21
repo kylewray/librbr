@@ -22,22 +22,21 @@
  */
 
 
-#include "../../../include/core/policy/fsc_policy.h"
-
+#include "../../../include/core/policy/policy_fsc.h"
 
 /**
  * The constructor for a FSCPolicy object which specifies the number of internal policy states.
  * @param numPolicyStates The number of policy states internal to the FSC policy.
  */
-FSCPolicy::FSCPolicy(int numPolicyStates)
+PolicyFSC::PolicyFSC(int numPolicyStates)
 {
-	current = FSCPolicyState();
+	current = PolicyFSCState();
 }
 
 /**
  * A virtual deconstructor to prevent errors upon the deletion of a child object.
  */
-FSCPolicy::~FSCPolicy()
+PolicyFSC::~PolicyFSC()
 { }
 
 /**
@@ -45,7 +44,7 @@ FSCPolicy::~FSCPolicy()
  * @param filename The name and path of the file to load.
  * @return Return @code{true} if an error occurred, @code{false} otherwise.
  */
-bool FSCPolicy::load(std::string filename)
+bool PolicyFSC::load(std::string filename)
 {
 	return false;
 }
@@ -55,7 +54,7 @@ bool FSCPolicy::load(std::string filename)
  * @param filename The name and path of the file to save.
  * @return Return @code{true} if an error occurred, @code{false} otherwise.
  */
-bool FSCPolicy::save(std::string filename) const
+bool PolicyFSC::save(std::string filename) const
 {
 	return false;
 }
@@ -64,7 +63,7 @@ bool FSCPolicy::save(std::string filename) const
  * A function which follows the defined policy, having the current state stored internally,
  * and returns the action to select next.
  */
-Action *FSCPolicy::next()
+Action *PolicyFSC::next()
 {
 	return nullptr;
 }
@@ -72,7 +71,7 @@ Action *FSCPolicy::next()
 /**
  * Reset the policy to the initial state.
  */
-void FSCPolicy::reset()
+void PolicyFSC::reset()
 { }
 
 /**
@@ -80,5 +79,5 @@ void FSCPolicy::reset()
  * such as the random initial selection of the internal FSC state following the
  * distribution over initial states.
  */
-void FSCPolicy::initialize()
+void PolicyFSC::initialize()
 { }

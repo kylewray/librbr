@@ -25,7 +25,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "../../../include/core/policy/map_policy.h"
+#include "../../../include/core/policy/policy_map.h"
 
 #include "../../../include/utilities/log.h"
 
@@ -38,7 +38,7 @@
 /**
  * The default constructor for a MapPolicy object. It defaults to 1 level.
  */
-MapPolicy::MapPolicy()
+PolicyMap::PolicyMap()
 {
 	policy.resize(1);
 }
@@ -47,7 +47,7 @@ MapPolicy::MapPolicy()
  * A constructor for a MapPolicy object which specifies the horizon.
  * @param horizon The horizon of the problem; 0 represents infinite horizon.
  */
-MapPolicy::MapPolicy(unsigned int horizon)
+PolicyMap::PolicyMap(unsigned int horizon)
 {
 	if (horizon > 0) {
 		policy.resize(horizon);
@@ -60,7 +60,7 @@ MapPolicy::MapPolicy(unsigned int horizon)
  * A constructor for a MapPolicy object which specifies the horizon.
  * @param horizon The horizon object from the MDP-like object.
  */
-MapPolicy::MapPolicy(const Horizon *horizon)
+PolicyMap::PolicyMap(const Horizon *horizon)
 {
 	if (horizon->get_horizon() > 0) {
 		policy.resize(horizon->get_horizon());
@@ -72,7 +72,7 @@ MapPolicy::MapPolicy(const Horizon *horizon)
 /**
  * A virtual deconstructor to prevent errors upon the deletion of a child object.
  */
-MapPolicy::~MapPolicy()
+PolicyMap::~PolicyMap()
 { }
 
 /**
@@ -80,7 +80,7 @@ MapPolicy::~MapPolicy()
  * @param state		The state to define.
  * @param action	The action which should be taken at the state.
  */
-void MapPolicy::set(State *state, Action *action)
+void PolicyMap::set(State *state, Action *action)
 {
 	policy[0][state] = action;
 }
@@ -92,7 +92,7 @@ void MapPolicy::set(State *state, Action *action)
  * @param action			The action which should be taken at the state.
  * @throws PolicyException	The horizon was invalid.
  */
-void MapPolicy::set(unsigned int horizon, State *state, Action *action)
+void PolicyMap::set(unsigned int horizon, State *state, Action *action)
 {
 	if (horizon >= policy.size()) {
 		throw PolicyException();
@@ -107,7 +107,7 @@ void MapPolicy::set(unsigned int horizon, State *state, Action *action)
  * @return The action to take at the given state.
  * @throws PolicyException The policy was not defined for this state.
  */
-Action *MapPolicy::get(State *state) const
+Action *PolicyMap::get(State *state) const
 {
 	std::map<State *, Action *>::const_iterator result = policy[0].find(state);
 	if (result == policy[0].end()) {
@@ -124,7 +124,7 @@ Action *MapPolicy::get(State *state) const
  * @return The action to take at the given state.
  * @throws PolicyException The policy was not defined for this state, or horizon was invalid.
  */
-Action *MapPolicy::get(unsigned int horizon, State *state) const
+Action *PolicyMap::get(unsigned int horizon, State *state) const
 {
 	if (horizon >= policy.size()) {
 		throw PolicyException();
@@ -146,7 +146,7 @@ Action *MapPolicy::get(unsigned int horizon, State *state) const
  * @param horizon	The horizons object to ensure valid policy creation.
  * @return Return @code{true} if an error occurred, @code{false} otherwise.
  */
-bool MapPolicy::load(std::string filename, const FiniteStates *states, const FiniteActions *actions, const Horizon *horizon)
+bool PolicyMap::load(std::string filename, const FiniteStates *states, const FiniteActions *actions, const Horizon *horizon)
 {
 	reset();
 
@@ -259,7 +259,7 @@ bool MapPolicy::load(std::string filename, const FiniteStates *states, const Fin
  * @param filename The name and path of the file to save.
  * @return Return @code{true} if an error occurred, @code{false} otherwise.
  */
-bool MapPolicy::save(std::string filename) const
+bool PolicyMap::save(std::string filename) const
 {
 	std::ofstream file(filename);
 	if (!file.is_open()) {
@@ -299,7 +299,7 @@ bool MapPolicy::save(std::string filename) const
 /**
  * Reset the policy mapping.
  */
-void MapPolicy::reset()
+void PolicyMap::reset()
 {
 	policy.clear();
 }

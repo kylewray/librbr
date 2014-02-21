@@ -39,7 +39,7 @@
  * that matters for larger problems is having a unique object to represent an abstract
  * policy state. This structure allows us to expand this state in the future, if desired.
  */
-struct FSCPolicyState { };
+struct PolicyFSCState { };
 
 /**
  * A Finite State Controller (FSC) policy. This FSC captures the policy tree
@@ -51,18 +51,18 @@ struct FSCPolicyState { };
  * selecting an internal FSC state following the given distribution, and then
  * continually following the stochastic policy mappings via the 'next' function.
  */
-class FSCPolicy : public Policy {
+class PolicyFSC : public Policy {
 public:
 	/**
 	 * The constructor for a FSCPolicy object which specifies the number of internal policy states.
 	 * @param numPolicyStates The number of policy states internal to the FSC policy.
 	 */
-	FSCPolicy(int numPolicyStates);
+	PolicyFSC(int numPolicyStates);
 
 	/**
 	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
 	 */
-	virtual ~FSCPolicy();
+	virtual ~PolicyFSC();
 
 	/**
 	 * A function which must load a policy file.
@@ -100,27 +100,27 @@ private:
 	/**
 	 * The FSC states (nodes).
 	 */
-	std::vector<FSCPolicyState> states;
+	std::vector<PolicyFSCState> states;
 
 	/**
 	 * The mapping of FSC states to a distribution over actions.
 	 */
-	std::map<FSCPolicyState, std::map<Action *, double> > policy;
+	std::map<PolicyFSCState, std::map<Action *, double> > policy;
 
 	/**
 	 * The mapping of FSC state-observation pair to a distribution over subsequent FSC states.
 	 */
-	std::map<FSCPolicyState, std::map<Observation *, std::map<FSCPolicyState, double> > > transitions;
+	std::map<PolicyFSCState, std::map<Observation *, std::map<PolicyFSCState, double> > > transitions;
 
 	/**
 	 * The mapping of an initial distribution over FSC states.
 	 */
-	std::map<FSCPolicyState, double> initial;
+	std::map<PolicyFSCState, double> initial;
 
 	/**
 	 * Used in execution, this variable denotes the current internal FSC state.
 	 */
-	FSCPolicyState current;
+	PolicyFSCState current;
 
 };
 

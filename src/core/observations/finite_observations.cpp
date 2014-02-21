@@ -25,6 +25,7 @@
 #include "../../../include/core/observations/finite_observations.h"
 #include "../../../include/core/observations/observation_exception.h"
 
+#include <algorithm>
 
 /**
  * The default constructor for the FiniteObservations class.

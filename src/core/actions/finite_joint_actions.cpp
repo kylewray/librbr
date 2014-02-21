@@ -26,6 +26,7 @@
 #include "../../../include/core/actions/joint_action.h"
 #include "../../../include/core/actions/action_exception.h"
 
+#include <algorithm>
 
 /**
  * The default constructor for the FiniteJointActions class which requires that you

@@ -31,8 +31,8 @@
 
 #include <iostream>
 
-#include "../../include/core/policy/map_policy.h"
-#include "../../include/core/policy/fsc_policy.h"
+#include "../../include/core/policy/policy_map.h"
+#include "../../include/core/policy/policy_fsc.h"
 #include "../../include/core/policy/policy_exception.h"
 
 #include "../../include/core/states/finite_states.h"
@@ -57,9 +57,9 @@ int test_policy()
 	FiniteActions *actions = new FiniteActions({a1, a2});
 	Horizon *horizon = new Horizon((unsigned int)3);
 
-	MapPolicy *policy = new MapPolicy();
+	PolicyMap *policy = new PolicyMap();
 
-	std::cout << "Policy: 'MapPolicy::load' file 'test_01.map_policy'... ";
+	std::cout << "Policy: 'PolicyMap::load' file 'test_01.map_policy'... ";
 	if (!policy->load("tests/resources/policy/test_01.map_policy", states, actions, horizon)) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
@@ -67,7 +67,7 @@ int test_policy()
 		std::cout << " Failure." << std::endl;
 	}
 
-	std::cout << "Policy: Test 'MapPolicy::get' (Check Result)... ";
+	std::cout << "Policy: Test 'PolicyMap::get' (Check Result)... ";
 	try {
 		if (policy->get(s1) == a2 && policy->get(s2) == a1) {
 			std::cout << " Success." << std::endl;
@@ -79,7 +79,7 @@ int test_policy()
 		std::cout << " Failure." << std::endl;
 	}
 
-	std::cout << "Policy: Test 'MapPolicy::set'... ";
+	std::cout << "Policy: Test 'PolicyMap::set'... ";
 
 	policy->set(s1, a1);
 	policy->set(s2, a2);
@@ -103,7 +103,7 @@ int test_policy()
 		std::cout << "\tFailure." << std::endl;
 	}
 
-	std::cout << "Policy: 'MapPolicy::load' file 'test_03.map_policy'... ";
+	std::cout << "Policy: 'PolicyMap::load' file 'test_03.map_policy'... ";
 	if (!policy->load("tests/resources/policy/test_03.map_policy", states, actions, horizon)) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
@@ -111,7 +111,7 @@ int test_policy()
 		std::cout << " Failure." << std::endl;
 	}
 
-	std::cout << "Policy: Test 'MapPolicy::get' (Check Result)... ";
+	std::cout << "Policy: Test 'PolicyMap::get' (Check Result)... ";
 	try {
 		if (policy->get(0, s1) == a2 && policy->get(0, s2) == a1 &&
 				policy->get(1, s1) == a1 && policy->get(1, s2) == a2 &&

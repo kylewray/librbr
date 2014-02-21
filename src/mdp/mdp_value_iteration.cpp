@@ -22,7 +22,7 @@
  */
 
 
-#include "../../include/mdp/value_iteration.h"
+#include "../../include/mdp/mdp_value_iteration.h"
 #include "../../include/mdp/mdp_utilities.h"
 
 #include "../../include/core/states/state_exception.h"
@@ -34,27 +34,27 @@
 #include <math.h>
 
 /**
- * The default constructor for the ValueIteration class.
+ * The default constructor for the MDPValueIteration class.
  */
-ValueIteration::ValueIteration()
+MDPValueIteration::MDPValueIteration()
 {
 	epsilon = 0.001;
 }
 
 /**
- * A constructor for the ValueIteration class which allows for the specification
+ * A constructor for the MDPValueIteration class which allows for the specification
  * of the convergence criterion.
  * @param tolerance The tolerance which determines convergence of value iteration.
  */
-ValueIteration::ValueIteration(double tolerance)
+MDPValueIteration::MDPValueIteration(double tolerance)
 {
 	epsilon = tolerance;
 }
 
 /**
- * The deconstructor for the ValueIteration class.
+ * The deconstructor for the MDPValueIteration class.
  */
-ValueIteration::~ValueIteration()
+MDPValueIteration::~MDPValueIteration()
 { }
 
 /**
@@ -67,7 +67,7 @@ ValueIteration::~ValueIteration()
  * @throws RewardException				The MDP did not have a SASRewards rewards object.
  * @throws PolicyException				An error occurred computing the policy.
  */
-MapPolicy *ValueIteration::solve(const MDP *mdp)
+PolicyMap *MDPValueIteration::solve(const MDP *mdp)
 {
 	// Handle the trivial case.
 	if (mdp == nullptr) {
@@ -118,11 +118,11 @@ MapPolicy *ValueIteration::solve(const MDP *mdp)
  * @return Return the optimal policy.
  * @throws PolicyException An error occurred computing the policy.
  */
-MapPolicy *ValueIteration::solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
+PolicyMap *MDPValueIteration::solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
 		const SASRewards *R, const Horizon *h)
 {
 	// Create the policy based on the horizon.
-	MapPolicy *policy = new MapPolicy(h);
+	PolicyMap *policy = new PolicyMap(h);
 
 	// The value of a states and state's actions.
 	std::map<State *, double> V;
@@ -153,11 +153,11 @@ MapPolicy *ValueIteration::solve_finite_horizon(const FiniteStates *S, const Fin
  * @return Return the optimal policy.
  * @throws PolicyException An error occurred computing the policy.
  */
-MapPolicy *ValueIteration::solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
+PolicyMap *MDPValueIteration::solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
 		const SASRewards *R, const Horizon *h)
 {
 	// Create the policy based on the horizon.
-	MapPolicy *policy = new MapPolicy(h);
+	PolicyMap *policy = new PolicyMap(h);
 
 	// The value of the states.
 	std::map<State *, double> V;

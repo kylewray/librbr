@@ -25,6 +25,7 @@
 #include "../../../include/core/actions/finite_actions.h"
 #include "../../../include/core/actions/action_exception.h"
 
+#include <algorithm>
 
 /**
  * The default constructor for the FiniteActions class.

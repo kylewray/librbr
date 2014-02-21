@@ -28,11 +28,11 @@
 
 #include "mdp.h"
 
-#include "../core/policy/map_policy.h"
+#include "../core/policy/policy_map.h"
 
 #include "../../include/core/states/finite_states.h"
 #include "../../include/core/actions/finite_actions.h"
-#include "../../include/core/state_Transitions/finite_state_transitions.h"
+#include "../../include/core/state_transitions/finite_state_transitions.h"
 #include "../../include/core/rewards/sas_rewards.h"
 #include "../../include/core/horizon.h"
 
@@ -44,25 +44,25 @@
  * - MDP state transitions must be of type FiniteStateTransitions.
  * - MDP rewards must be of type SASRewards.
  */
-class PolicyIteration {
+class MDPPolicyIteration {
 public:
 	/**
 	 * The default constructor for the PolicyIteration class. It uses the exact
 	 * version of policy iteration by default.
 	 */
-	PolicyIteration();
+	MDPPolicyIteration();
 
 	/**
 	 * A constructor for the PolicyIteration class. It uses the modified version of
 	 * policy iteration with a given k value.
 	 * @param k The number of iterations to compute an approximate set of value functions.
 	 */
-	PolicyIteration(unsigned int k);
+	MDPPolicyIteration(unsigned int k);
 
 	/**
 	 * The deconstructor for the PolicyIteration class.
 	 */
-	virtual ~PolicyIteration();
+	virtual ~MDPPolicyIteration();
 
 	/**
 	 * Solve the MDP provided using policy iteration.
@@ -74,7 +74,7 @@ public:
 	 * @throws RewardException				The MDP did not have a SASRewards rewards object.
 	 * @throws PolicyException				An error occurred computing the policy.
 	 */
-	MapPolicy *solve(const MDP *mdp);
+	PolicyMap *solve(const MDP *mdp);
 
 private:
 	/**
@@ -87,7 +87,7 @@ private:
 	 * @return Return the optimal policy.
 	 * @throws PolicyException An error occurred computing the policy.
 	 */
-	MapPolicy *solve_exact(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
+	PolicyMap *solve_exact(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
 			const SASRewards *R, const Horizon *h);
 
 	/**
@@ -100,7 +100,7 @@ private:
 	 * @return Return the optimal policy.
 	 * @throws PolicyException An error occurred computing the policy.
 	 */
-	MapPolicy *solve_modified(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
+	PolicyMap *solve_modified(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
 			const SASRewards *R, const Horizon *h);
 
 	/**

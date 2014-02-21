@@ -26,6 +26,7 @@
 #include "../../../include/core/observations/joint_observation.h"
 #include "../../../include/core/observations/observation_exception.h"
 
+#include <algorithm>
 
 /**
  * The default constructor for the FiniteJointObservations class which requires that you

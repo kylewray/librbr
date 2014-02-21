@@ -22,7 +22,7 @@
  */
 
 
-#include "../../include/mdp/policy_iteration.h"
+#include "../../include/mdp/mdp_policy_iteration.h"
 #include "../../include/mdp/mdp_utilities.h"
 
 #include "../../include/core/states/state_exception.h"
@@ -32,13 +32,13 @@
 #include "../../include/core/policy/policy_exception.h"
 
 #include <math.h>
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
 
 /**
  * The default constructor for the PolicyIteration class. It uses the exact
  * version of policy iteration by default.
  */
-PolicyIteration::PolicyIteration()
+MDPPolicyIteration::MDPPolicyIteration()
 {
 	modifiedK = 0;
 }
@@ -48,7 +48,7 @@ PolicyIteration::PolicyIteration()
  * policy iteration with a given k value.
  * @param k The number of iterations to compute an approximate set of value functions.
  */
-PolicyIteration::PolicyIteration(unsigned int k)
+MDPPolicyIteration::MDPPolicyIteration(unsigned int k)
 {
 	modifiedK = k;
 }
@@ -56,7 +56,7 @@ PolicyIteration::PolicyIteration(unsigned int k)
 /**
  * The deconstructor for the PolicyIteration class.
  */
-PolicyIteration::~PolicyIteration()
+MDPPolicyIteration::~MDPPolicyIteration()
 { }
 
 /**
@@ -69,7 +69,7 @@ PolicyIteration::~PolicyIteration()
  * @throws RewardException				The MDP did not have a SASRewards rewards object.
  * @throws PolicyException				An error occurred computing the policy.
  */
-MapPolicy *PolicyIteration::solve(const MDP *mdp)
+PolicyMap *MDPPolicyIteration::solve(const MDP *mdp)
 {
 	// Handle the trivial case.
 	if (mdp == nullptr) {
@@ -125,10 +125,10 @@ MapPolicy *PolicyIteration::solve(const MDP *mdp)
  * @return Return the optimal policy.
  * @throws PolicyException An error occurred computing the policy.
  */
-MapPolicy *PolicyIteration::solve_exact(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
+PolicyMap *MDPPolicyIteration::solve_exact(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
 		const SASRewards *R, const Horizon *h)
 {
-	MapPolicy *policy = new MapPolicy(h);
+	PolicyMap *policy = new PolicyMap(h);
 	for (State *s : *S) {
 		policy->set(s, A->get(0));
 	}
@@ -215,11 +215,11 @@ MapPolicy *PolicyIteration::solve_exact(const FiniteStates *S, const FiniteActio
  * @return Return the optimal policy.
  * @throws PolicyException An error occurred computing the policy.
  */
-MapPolicy *PolicyIteration::solve_modified(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
+PolicyMap *MDPPolicyIteration::solve_modified(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
 		const SASRewards *R, const Horizon *h)
 {
 	// Create the policy based on the horizon.
-	MapPolicy *policy = new MapPolicy(h);
+	PolicyMap *policy = new PolicyMap(h);
 
 	// The value of the states, which will be constantly improved over iterations.
 	std::map<State *, double> V;

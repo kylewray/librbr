@@ -26,9 +26,10 @@
 #define AGENTS_H
 
 
-#include <vector>
-
 #include "agent.h"
+
+#include <vector>
+#include <algorithm>
 
 /**
  * A class for finite sets of agents in an MDP-like object. The base assumption is that the set of
