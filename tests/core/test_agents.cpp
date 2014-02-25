@@ -143,6 +143,7 @@ int test_agents()
 	}
 
 	delete agents;
+	agents = nullptr;
 
 	return numSuccesses;
 }

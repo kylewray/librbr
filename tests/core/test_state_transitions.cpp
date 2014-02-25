@@ -175,6 +175,7 @@ int test_state_transitions()
 	}
 
 	delete finiteStateTransitions;
+	finiteStateTransitions = nullptr;
 
 	return numSuccesses;
 }

@@ -47,7 +47,7 @@
 #include "../dec_mdp/dec_mdp.h"
 #include "../dec_pomdp/dec_pomdp.h"
 
-#include "string_manipulation.h"
+#include "../utilities/string_manipulation.h"
 
 /**
  * A file loading and saving class called UnifiedFile which acts as an intermediate

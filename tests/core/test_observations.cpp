@@ -113,6 +113,7 @@ int test_observations()
 
 	std::cout << "Observations: Test 'FiniteObservations::remove' (Expecting Error)... ";
 	Observation *doesNotExist = new Observation("doesNotExist");
+
 	try {
 		finiteObservations->remove(doesNotExist);
 		std::cout << " Failure." << std::endl;
@@ -120,7 +121,9 @@ int test_observations()
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	}
+
 	delete doesNotExist;
+	doesNotExist = nullptr;
 
 	std::cout << "Observations: Test 'FiniteObservations::set'... ";
 
@@ -165,6 +168,7 @@ int test_observations()
 	}
 
 	delete finiteObservations;
+	finiteObservations = nullptr;
 
 	o1 = new Observation("o1");
 	o2 = new Observation("o2");
@@ -296,9 +300,15 @@ int test_observations()
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	}
+
 	delete a7;
+	a7 = nullptr;
+
 	delete a8;
+	a8 = nullptr;
+
 	delete doesNotExist2;
+	doesNotExist2 = nullptr;
 
 	std::cout << "Observations: Test 'FiniteJointObservations::set'... ";
 	o1New = new Observation("o1");
@@ -357,6 +367,7 @@ int test_observations()
 	}
 
 	delete finiteJointObservations;
+	finiteJointObservations = nullptr;
 
 	return numSuccesses;
 }

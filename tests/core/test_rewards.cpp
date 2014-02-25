@@ -171,6 +171,7 @@ int test_rewards()
 	}
 
 	delete rewards;
+	rewards = nullptr;
 
 	return numSuccesses;
 }

@@ -50,7 +50,15 @@ void remove_whitespace(std::string &item);
  * @param item The string to split which is delimited by spaces ' '.
  * @return The resulting vector of items.
  */
-std::vector<std::string> split_string(std::string item);
+std::vector<std::string> split_string_by_space(std::string item);
+
+/**
+ * Split a string delimited by colons ':' into a vector of strings. This
+ * trims whitespace around each element.
+ * @param item The string to split which is delimited by colons ':'.
+ * @return The resulting vector of items.
+ */
+std::vector<std::string> split_string_by_colon(std::string item);
 
 
 #endif // MISCELLANEOUS_H

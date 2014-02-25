@@ -52,6 +52,12 @@ public:
 	FiniteObservations();
 
 	/**
+	 * The constructor for the FiniteObservations class which allows the specification of an initial set of observations.
+	 * @param observations The initial vector of observations.
+	 */
+	FiniteObservations(std::vector<Observation *> observations);
+
+	/**
 	 * The default deconstructor for the FiniteObservations class.
 	 */
 	virtual ~FiniteObservations();

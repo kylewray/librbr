@@ -36,7 +36,7 @@
 #include "../../../include/utilities/string_manipulation.h"
 
 /**
- * The default constructor for a MapPolicy object. It defaults to 1 level.
+ * The default constructor for a PolicyMap object. It defaults to a horizon of 1.
  */
 PolicyMap::PolicyMap()
 {
@@ -44,7 +44,7 @@ PolicyMap::PolicyMap()
 }
 
 /**
- * A constructor for a MapPolicy object which specifies the horizon.
+ * A constructor for a PolicyMap object which specifies the horizon.
  * @param horizon The horizon of the problem; 0 represents infinite horizon.
  */
 PolicyMap::PolicyMap(unsigned int horizon)
@@ -57,7 +57,7 @@ PolicyMap::PolicyMap(unsigned int horizon)
 }
 
 /**
- * A constructor for a MapPolicy object which specifies the horizon.
+ * A constructor for a PolicyMap object which specifies the horizon.
  * @param horizon The horizon object from the MDP-like object.
  */
 PolicyMap::PolicyMap(const Horizon *horizon)
@@ -182,18 +182,7 @@ bool PolicyMap::load(std::string filename, const FiniteStates *states, const Fin
 			continue;
 		}
 
-		// Split the key and value of the line, and trim the white spaces.
-		std::istringstream ssLine(line);
-		std::vector<std::string> items;
-		std::string temp;
-
-		while (std::getline(ssLine, temp, ':')) {
-			trim_whitespace(temp);
-			if (temp.length() == 0) {
-				continue;
-			}
-			items.push_back(temp);
-		}
+		std::vector<std::string> items = split_string_by_colon(line);
 
 		// Every line must contain exactly one a colon.
 		if (items.size() != 2) {

@@ -22,8 +22,8 @@
  */
 
 
-#ifndef FSC_POLICY_H
-#define FSC_POLICY_H
+#ifndef POLICY_FSC_H
+#define POLICY_FSC_H
 
 
 #include <string>
@@ -125,4 +125,4 @@ private:
 };
 
 
-#endif // FSC_POLICY_H
+#endif // POLICY_FSC_H

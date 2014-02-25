@@ -31,7 +31,7 @@
 
 #include <iostream>
 
-#include "../../include/utilities/unified_file.h"
+#include "../../include/file_loaders/unified_file.h"
 
 /**
  * Test the UnifiedFile object. Output the success or failure for each test.

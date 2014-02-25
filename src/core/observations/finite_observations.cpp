@@ -34,6 +34,15 @@ FiniteObservations::FiniteObservations()
 { }
 
 /**
+ * The constructor for the FiniteObservations class which allows the specification of an initial set of observations.
+ * @param observations The initial vector of observations.
+ */
+FiniteObservations::FiniteObservations(std::vector<Observation *> observations)
+{
+	set(observations);
+}
+
+/**
  * The default deconstructor for the FiniteObservations class.
  */
 FiniteObservations::~FiniteObservations()

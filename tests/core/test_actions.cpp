@@ -113,6 +113,7 @@ int test_actions()
 
 	std::cout << "Actions: Test 'FiniteActions::remove' (Expecting Error)... ";
 	Action *doesNotExist = new Action("doesNotExist");
+
 	try {
 		finiteActions->remove(doesNotExist);
 		std::cout << " Failure." << std::endl;
@@ -120,7 +121,9 @@ int test_actions()
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	}
+
 	delete doesNotExist;
+	doesNotExist = nullptr;
 
 	std::cout << "Actions: Test 'FiniteActions::set'... ";
 
@@ -165,6 +168,7 @@ int test_actions()
 	}
 
 	delete finiteActions;
+	finiteActions = nullptr;
 
 	a1 = new Action("a1");
 	a2 = new Action("a2");
@@ -297,8 +301,13 @@ int test_actions()
 		numSuccesses++;
 	}
 	delete a7;
+	a7 = nullptr;
+
 	delete a8;
+	a8 = nullptr;
+
 	delete doesNotExist2;
+	doesNotExist2 = nullptr;
 
 	std::cout << "Actions: Test 'FiniteJointActions::set'... ";
 	a1New = new Action("a1");
@@ -357,6 +366,7 @@ int test_actions()
 	}
 
 	delete finiteJointActions;
+	finiteJointActions = nullptr;
 
 	return numSuccesses;
 }

@@ -178,6 +178,7 @@ int test_observation_transitions()
 	}
 
 	delete finiteObservationTransitions;
+	finiteObservationTransitions = nullptr;
 
 	return numSuccesses;
 }

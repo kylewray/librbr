@@ -24,6 +24,8 @@
 
 #include "../../include/utilities/string_manipulation.h"
 
+#include <algorithm>
+
 /**
  * Trim the left and right sides of a string, removing the whitespace.
  * @param item The string to trim.
@@ -66,7 +68,7 @@ void remove_whitespace(std::string &item)
  * @param item The string to split which is delimited by spaces ' '.
  * @return The resulting vector of items.
  */
-std::vector<std::string> split_string(std::string item)
+std::vector<std::string> split_string_by_space(std::string item)
 {
 	std::istringstream ssItem(item);
 	std::vector<std::string> list;
@@ -93,4 +95,28 @@ std::vector<std::string> split_string(std::string item)
 	}
 
 	return list;
+}
+
+/**
+ * Split a string delimited by colons ':' into a vector of strings. This
+ * trims whitespace around each element.
+ * @param item The string to split which is delimited by colons ':'.
+ * @return The resulting vector of items.
+ */
+std::vector<std::string> split_string_by_colon(std::string item)
+{
+	// Split the key and value of the line, and trim the white spaces.
+	std::istringstream ssLine(item);
+	std::vector<std::string> items;
+	std::string temp;
+
+	while (std::getline(ssLine, temp, ':')) {
+		trim_whitespace(temp);
+		if (temp.length() == 0) {
+			continue;
+		}
+		items.push_back(temp);
+	}
+
+	return items;
 }

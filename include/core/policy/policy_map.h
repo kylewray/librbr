@@ -22,8 +22,8 @@
  */
 
 
-#ifndef MAP_POLICY_H
-#define MAP_POLICY_H
+#ifndef POLICY_MAP_H
+#define POLICY_MAP_H
 
 
 #include <vector>
@@ -49,18 +49,18 @@
 class PolicyMap : public Policy {
 public:
 	/**
-	 * The default constructor for a MapPolicy object. It defaults to 1 level.
+	 * The default constructor for a PolicyMap object. It defaults to a horizon of 1.
 	 */
 	PolicyMap();
 
 	/**
-	 * A constructor for a MapPolicy object which specifies the horizon.
+	 * A constructor for a PolicyMap object which specifies the horizon.
 	 * @param horizon The horizon of the problem; 0 represents infinite horizon.
 	 */
 	PolicyMap(unsigned int horizon);
 
 	/**
-	 * A constructor for a MapPolicy object which specifies the horizon.
+	 * A constructor for a PolicyMap object which specifies the horizon.
 	 * @param horizon The horizon object from the MDP-like object.
 	 */
 	PolicyMap(const Horizon *horizon);
@@ -135,4 +135,4 @@ private:
 };
 
 
-#endif // MAP_POLICY_H
+#endif // POLICY_MAP_H
