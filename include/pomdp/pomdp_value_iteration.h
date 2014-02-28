@@ -28,6 +28,7 @@
 
 #include "pomdp.h"
 
+#include "../core/policy/policy_tree.h"
 #include "../core/policy/policy_fsc.h"
 
 #include "../../include/core/states/finite_states.h"
@@ -79,7 +80,7 @@ public:
 	 * @throws RewardException					The POMDP did not have a SASRewards rewards object.
 	 * @throws PolicyException					An error occurred computing the policy.
 	 */
-	PolicyFSC *solve(const POMDP *pomdp);
+	Policy *solve(const POMDP *pomdp);
 
 private:
 	/**
@@ -94,7 +95,7 @@ private:
 	 * @return Return the optimal policy as a tree.
 	 * @throws PolicyException An error occurred computing the policy.
 	 */
-	PolicyFSC *solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+	PolicyTree *solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
 			const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASRewards *R,
 			const Horizon *h);
 

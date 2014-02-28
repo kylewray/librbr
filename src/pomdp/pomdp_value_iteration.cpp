@@ -70,7 +70,7 @@ POMDPValueIteration::~POMDPValueIteration()
  * @throws RewardException					The POMDP did not have a SASRewards rewards object.
  * @throws PolicyException					An error occurred computing the policy.
  */
-PolicyFSC *POMDPValueIteration::solve(const POMDP *pomdp)
+Policy *POMDPValueIteration::solve(const POMDP *pomdp)
 {
 	// Handle the trivial case.
 	if (pomdp == nullptr) {
@@ -136,13 +136,13 @@ PolicyFSC *POMDPValueIteration::solve(const POMDP *pomdp)
  * @return Return the optimal policy as a tree.
  * @throws PolicyException An error occurred computing the policy.
  */
-PolicyFSC *POMDPValueIteration::solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+PolicyTree *POMDPValueIteration::solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
 		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASRewards *R,
 		const Horizon *h)
 {
 	/*
-	// Create the policy based on the horizon.
-	PolicyFSC *policy = new PolicyFSC(h);
+	/// Create the policy based on the horizon.
+	PolicyTree *policy = new PolicyTree(h);
 
 	// The value of a states and state's actions.
 	std::map<State *, double> V;
