@@ -101,7 +101,6 @@ public:
 	 * @param state		The previous state.
 	 * @param action	The action taken at the previous state.
 	 * @return Return a list of available states.
-	 *
 	 */
 	virtual const std::vector<State *> &successor(State *state, Action *action) const;
 

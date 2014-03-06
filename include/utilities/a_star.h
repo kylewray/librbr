@@ -28,7 +28,6 @@
 
 #include <vector>
 #include <map>
-#include <set>
 
 /**
  * An implementation of the A* search algorithm.
@@ -41,9 +40,9 @@ public:
 	 * relevant variables.
 	 * @param heuristic		The heuristic function estimating the distance from a node to the goal.
 	 * @param cost			The cost from the immediate transition from one node to another.
-	 * @param successor		Generate the list of successor nodes.
+	 * @param successors	Generate the list of successors nodes.
 	 */
-	AStar(double (*h)(T node, T goal), double (*cost)(T n1, T n2), std::vector<T> (*successor)(T node));
+	AStar(double (*heuristic)(T node, T goal), double (*cost)(T n1, T n2), std::vector<T> (*successors)(T node));
 
 	/**
 	 * The deconstructor for the AStar class.
@@ -54,20 +53,31 @@ public:
 	 * Solve the search problem given a starting node.
 	 * @param start				The initial node.
 	 * @param goal				The goal node.
-	 * @throws UtilityException	The trace of the route was corrupt.
+	 * @throws UtilityException	Either there is no path from the start to goal, or path reconstruction failed.
 	 */
-	std::vector<T> solve(T start, T goal);
+	void solve(T start, T goal);
+
+	/**
+	 * Get the solution path which was computed from the last call of solve.
+	 * @return The solution path from the start node to the goal node.
+	 */
+	std::vector<T> get_path();
+
+	/**
+	 * Get the number of nodes expanded from the last call of solve.
+	 * @return The number of nodes expanded.
+	 */
+	int get_num_nodes_expanded();
 
 private:
 	/**
-	 * Reconstruct the path given a collection of maps nodes to parents.
-	 * @param start	The initial node.
-	 * @param goal	The goal node.
-	 * @param trace	The trace of all expanded nodes to their parents.
-	 * @return The path from the start node to the goal node.
+	 * Reconstruct the path given a collection of maps nodes to parents and store it internally.
+	 * @param start				The initial node.
+	 * @param goal				The goal node.
+	 * @param trace				The trace of all expanded nodes to their parents.
 	 * @throws UtilityException	The trace of the route was corrupt.
 	 */
-	std::vector<T> reconstruct_path(T start, T goal, std::map<T, T> &trace);
+	void reconstruct_path(T start, T goal, std::map<T, T> &trace);
 
 	/**
 	 * The heuristic function estimating the distance from a node to the goal.
@@ -80,11 +90,22 @@ private:
 	double (*cost)(T n1, T n2);
 
 	/**
-	 * Generate the list of successor nodes.
+	 * Generate the list of successors nodes.
 	 */
-	std::vector<T> (*successor)(T node);
+	std::vector<T> (*successors)(T node);
+
+	/**
+	 * The optimal path from the last call of solve.
+	 */
+	std::vector<T> path;
+
+	/**
+	 * The number of nodes expanded from the last call of solve.
+	 */
+	unsigned int numNodesExpanded;
 
 };
 
+#include "../../src/utilities/a_star.tpp";
 
 #endif // A_STAR_H

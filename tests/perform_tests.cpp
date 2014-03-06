@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 {
 	std::cout << "Performing Tests..." << std::endl;
 
-	int numTests = 10;
+	int numTests = 11;
 
 	int numSuccesses[numTests];
 	for (int i = 0; i < numTests; i++) {
@@ -58,10 +58,10 @@ int main(int argc, char *argv[])
 	numSuccesses[6] = test_observation_transitions();
 
 	numSuccesses[7] = test_policy();
-
 	numSuccesses[8] = test_unified_file();
+	numSuccesses[9] = test_utilities();
 
-	numSuccesses[9] = test_mdp();
+	numSuccesses[10] = test_mdp();
 
 	std::cout << "Agents:                 " << numSuccesses[0] << " / " << NUM_AGENT_TESTS << std::endl;
 	std::cout << "States:                 " << numSuccesses[1] << " / " << NUM_STATE_TESTS << std::endl;
@@ -72,12 +72,13 @@ int main(int argc, char *argv[])
 	std::cout << "ObservationTransitions: " << numSuccesses[6] << " / " << NUM_OBSERVATION_TRANSITION_TESTS << std::endl;
 	std::cout << "Policy:                 " << numSuccesses[7] << " / " << NUM_POLICY_TESTS << std::endl;
 	std::cout << "UnifiedFile:            " << numSuccesses[8] << " / " << NUM_UNIFIED_FILE_TESTS << std::endl;
-	std::cout << "MDP:                    " << numSuccesses[9] << " / " << NUM_MDP_TESTS << std::endl;
+	std::cout << "Utilities:              " << numSuccesses[9] << " / " << NUM_UTILITIES_TESTS << std::endl;
+	std::cout << "MDP:                    " << numSuccesses[10] << " / " << NUM_MDP_TESTS << std::endl;
 
 	int total = 0;
 	int totalPossible = NUM_AGENT_TESTS + NUM_STATE_TESTS + NUM_ACTION_TESTS + NUM_OBSERVATION_TESTS +
 			NUM_REWARD_TESTS + NUM_STATE_TRANSITION_TESTS + NUM_OBSERVATION_TRANSITION_TESTS +
-			NUM_POLICY_TESTS + NUM_UNIFIED_FILE_TESTS + NUM_MDP_TESTS;
+			NUM_POLICY_TESTS + NUM_UNIFIED_FILE_TESTS + NUM_UTILITIES_TESTS + NUM_MDP_TESTS;
 	for (int i = 0; i < numTests; i++) {
 		total += numSuccesses[i];
 	}

@@ -36,6 +36,7 @@
 #define NUM_OBSERVATION_TRANSITION_TESTS 5
 #define NUM_POLICY_TESTS 6
 #define NUM_UNIFIED_FILE_TESTS 20
+#define NUM_UTILITIES_TESTS 3
 #define NUM_MDP_TESTS 6
 
 /**
@@ -91,6 +92,12 @@ int test_policy();
  * @return The number of successes during execution.
  */
 int test_unified_file();
+
+/**
+ * Test the utilities objects. Output the success or failure for each test.
+ * @return The number of successes during execution.
+ */
+int test_utilities();
 
 /**
  * Test the MDP solvers. Output the success or failure for each test.
