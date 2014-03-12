@@ -43,15 +43,15 @@ int test_utilities() {
 	int numSuccesses = 0;
 
 	// Setup the knight problem's functions.
-	auto heuristic = [] (std::pair<int, int> node, std::pair<int, int> goal) {
+	auto knightHeuristic = [] (std::pair<int, int> node, std::pair<int, int> goal) {
 		return sqrt(pow((float)(node.first - goal.first), 2) + pow((float)(node.second - goal.second), 2));
 	};
 
-	auto cost = [] (std::pair<int, int> n1, std::pair<int, int> n2) {
+	auto knightCost = [] (std::pair<int, int> n1, std::pair<int, int> n2) {
 		return 3.0;
 	};
 
-	auto successors = [] (std::pair<int, int> node) {
+	auto knightSuccessors = [] (std::pair<int, int> node) {
 		std::vector<std::pair<int, int> > nodes;
 		for (int i = -2; i <= 2; i++) {
 			for (int j = -2; j <= 2; j++) {
@@ -64,7 +64,7 @@ int test_utilities() {
 		return nodes;
 	};
 
-	AStar<std::pair<int, int>> astar(heuristic, cost, successors);
+	AStar<std::pair<int, int>> astar(knightHeuristic, knightCost, knightSuccessors);
 
 	std::cout << "AStar: Solving Knight Problem #1...";
 	std::cout.flush();
@@ -74,10 +74,19 @@ int test_utilities() {
 	astar.solve(start, goal);
 	std::vector<std::pair<int, int> > solution = astar.get_path();
 
-	std::cout << "Number of Expansions: " << astar.get_num_nodes_expanded() << std::endl;
-	std::cout << "Solution Size: " << solution.size() << std::endl;
-
-	if (solution.size() == 12) {
+	if (solution.size() == 12 &&
+			solution[0].first == 0 && solution[0].second == 0 &&
+			solution[1].first == 2 && solution[1].second == 1 &&
+			solution[2].first == 1 && solution[2].second == 3 &&
+			solution[3].first == 2 && solution[3].second == 5 &&
+			solution[4].first == 3 && solution[4].second == 7 &&
+			solution[5].first == 4 && solution[5].second == 9 &&
+			solution[6].first == 5 && solution[6].second == 11 &&
+			solution[7].first == 6 && solution[7].second == 13 &&
+			solution[8].first == 7 && solution[8].second == 15 &&
+			solution[9].first == 8 && solution[9].second == 17 &&
+			solution[10].first == 6 && solution[10].second == 18 &&
+			solution[11].first == 8 && solution[11].second == 19) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
