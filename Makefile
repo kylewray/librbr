@@ -1,92 +1,84 @@
 CC = g++ 
 CFLAGS = -std=c++11 -g
-SDIR = src
-TDIR = tests
-ODIR  = obj
+tests: all.o tests/core/*.cpp tests/mdp/*.cpp tests/file_loaders/*.cpp tests/utilities/*.cpp
+	mkdir -p tests/obj
+	$(CC) $(CFLAGS) -c -I.. tests/core/*.cpp tests/mdp/*.cpp tests/file_loaders/*.cpp tests/utilities/*.cpp tests/*.cpp
+	$(CC) $(CFLAGS) -o perform_tests obj/*.o *.o
+	rm *.o
 
-CORE_SRC_DIR = $(SDIR)/core
-CORE_OBJ_DIR = $(ODIR)/core
-UTIL_SRC_DIR = $(SDIR)/utilities
-UTIL_OBJ_DIR = $(ODIR)/utilities
-FLOAD_SRC_DIR = $(SDIR)/file_loaders
-FLOAD_OBJ_DIR = $(ODIR)/file_loaders
-MDP_SRC_DIR = $(SDIR)/mdp
-MDP_OBJ_DIR = $(ODIR)/mdp
-STATES_SRC_DIR = $(CORE_SRC_DIR)/states
-STATES_OBJ_DIR = $(CORE_OBJ_DIR)/states
-ACTIONS_SRC_DIR = $(CORE_SRC_DIR)/actions
-ACTIONS_OBJ_DIR = $(CORE_OBJ_DIR)/actions
-STATE_TRANSITIONS_SRC_DIR = $(CORE_SRC_DIR)/state_transitions
-STATE_TRANSITIONS_OBJ_DIR = $(CORE_OBJ_DIR)/state_transitions
-OBSERVATION_TRANSITIONS_SRC_DIR = $(CORE_SRC_DIR)/observation_transitions
-OBSERVATION_TRANSITIONS_OBJ_DIR = $(CORE_OBJ_DIR)/observation_transitions
-OBSERVATIONS_SRC_DIR = $(CORE_SRC_DIR)/observations
-OBSERVATIONS_OBJ_DIR = $(CORE_OBJ_DIR)/observations
-POLICY_SRC_DIR = $(CORE_SRC_DIR)/policy
-POLICY_OBJ_DIR = $(CORE_OBJ_DIR)/policy
-REWARDS_SRC_DIR = $(CORE_SRC_DIR)/rewards
-REWARDS_OBJ_DIR = $(CORE_OBJ_DIR)/rewards
-AGENTS_SRC_DIR = $(CORE_SRC_DIR)/agents
-AGENTS_OBJ_DIR = $(CORE_OBJ_DIR)/agents
+states.o: src/core/states/*.cpp 
+	mkdir -p obj 
+	$(CC) $(CFLAGS) -c src/core/states/*.cpp 
+	mv *.o obj
 
-states.o: $(STATES_SRC_DIR)/*.cpp 
-	mkdir -p $(STATES_OBJ_DIR) 
-	$(CC) $(CFLAGS) -c $(STATES_SRC_DIR)/*.cpp 
-	mv *.o $(STATES_OBJ_DIR)
+actions.o: src/core/actions/*.cpp 
+	mkdir -p obj 
+	$(CC) $(CFLAGS) -c src/core/actions/*.cpp 
+	mv *.o obj
 
-actions.o: $(ACTIONS_SRC_DIR)/*.cpp 
-	mkdir -p $(ACTIONS_OBJ_DIR) 
-	$(CC) $(CFLAGS) -c $(ACTIONS_SRC_DIR)/*.cpp 
-	mv *.o $(ACTIONS_OBJ_DIR)
+state_transitions.o: src/core/state_transitions/*.cpp 
+	mkdir -p obj 
+	$(CC) $(CFLAGS) -c src/core/state_transitions/*.cpp 
+	mv *.o obj
 
-state_transitions.o: $(STATE_TRANSITIONS_SRC_DIR)/*.cpp 
-	mkdir -p $(STATE_TRANSITIONS_OBJ_DIR) 
-	$(CC) $(CFLAGS) -c $(STATE_TRANSITIONS_SRC_DIR)/*.cpp 
-	mv *.o $(STATE_TRANSITIONS_OBJ_DIR)
+observation_transitions.o: src/core/observation_transitions/*.cpp 
+	mkdir -p obj 
+	$(CC) $(CFLAGS) -c src/core/observation_transitions/*.cpp 
+	mv *.o obj
 
-observation_transitions.o: $(OBSERVATION_TRANSITIONS_SRC_DIR)/*.cpp 
-	mkdir -p $(OBSERVATION_TRANSITIONS_OBJ_DIR) 
-	$(CC) $(CFLAGS) -c $(OBSERVATION_TRANSITIONS_SRC_DIR)/*.cpp 
-	mv *.o $(OBSERVATION_TRANSITIONS_OBJ_DIR)
+observations.o: src/core/observations/*.cpp 
+	mkdir -p obj 
+	$(CC) $(CFLAGS) -c src/core/observations/*.cpp 
+	mv *.o obj
 
-observations.o: $(OBSERVATIONS_SRC_DIR)/*.cpp 
-	mkdir -p $(OBSERVATIONS_OBJ_DIR) 
-	$(CC) $(CFLAGS) -c $(OBSERVATIONS_SRC_DIR)/*.cpp 
-	mv *.o $(OBSERVATIONS_OBJ_DIR)
+policy.o: src/core/policy/*.cpp 
+	mkdir -p obj 
+	$(CC) $(CFLAGS) -c src/core/policy/*.cpp 
+	mv *.o obj
 
-policy.o: $(POLICY_SRC_DIR)/*.cpp 
-	mkdir -p $(POLICY_OBJ_DIR) 
-	$(CC) $(CFLAGS) -c $(POLICY_SRC_DIR)/*.cpp 
-	mv *.o $(POLICY_OBJ_DIR)
+rewards.o: src/core/rewards/*.cpp 
+	mkdir -p obj 
+	$(CC) $(CFLAGS) -c src/core/rewards/*.cpp 
+	mv *.o obj
 
-rewards.o: $(REWARDS_SRC_DIR)/*.cpp 
-	mkdir -p $(REWARDS_OBJ_DIR) 
-	$(CC) $(CFLAGS) -c $(REWARDS_SRC_DIR)/*.cpp 
-	mv *.o $(REWARDS_OBJ_DIR)
+agents.o: src/core/agents/*.cpp 
+	mkdir -p obj 
+	$(CC) $(CFLAGS) -c src/core/agents/*.cpp 
+	mv *.o obj
 
-agents.o: $(AGENTS_SRC_DIR)/*.cpp 
-	mkdir -p $(AGENTS_OBJ_DIR) 
-	$(CC) $(CFLAGS) -c $(AGENTS_SRC_DIR)/*.cpp 
-	mv *.o $(AGENTS_OBJ_DIR)
+core.o: src/core/*.cpp 
+	mkdir -p obj 
+	$(CC) $(CFLAGS) -c src/core/*.cpp 
+	mv *.o obj
 
-core.o: $(CORE_SRC_DIR)/*.cpp 
-	mkdir -p $(CORE_OBJ_DIR) 
-	$(CC) $(CFLAGS) -c $(CORE_SRC_DIR)/*.cpp 
-	mv *.o $(CORE_OBJ_DIR)
+util.o: src/utilities/*.cpp 
+	mkdir -p obj 
+	$(CC) $(CFLAGS) -c src/utilities/*.cpp 
+	mv *.o obj
 
-util.o: $(UTIL_SRC_DIR)/*.cpp 
-	mkdir -p $(UTIL_OBJ_DIR) 
-	$(CC) $(CFLAGS) -c $(UTIL_SRC_DIR)/*.cpp 
-	mv *.o $(UTIL_OBJ_DIR)
+fload.o: src/file_loaders/*.cpp 
+	mkdir -p obj 
+	$(CC) $(CFLAGS) -c src/file_loaders/*.cpp 
+	mv *.o obj
 
-mdp.o: $(MDP_SRC_DIR)/*.cpp 
-	mkdir -p $(MDP_OBJ_DIR) 
-	$(CC) $(CFLAGS) -c $(MDP_SRC_DIR)/*.cpp 
-	mv *.o $(MDP_OBJ_DIR)
+mdp.o: src/mdp/*.cpp 
+	mkdir -p obj 
+	$(CC) $(CFLAGS) -c src/mdp/*.cpp 
+	mv *.o obj
 
-fload.o: $(FLOAD_SRC_DIR)/*.cpp 
-	mkdir -p $(FLOAD_OBJ_DIR) 
-	$(CC) $(CFLAGS) -c $(FLOAD_SRC_DIR)/*.cpp 
-	mv *.o $(FLOAD_OBJ_DIR)
+pomdp.o: src/pomdp/*.cpp 
+	mkdir -p obj 
+	$(CC) $(CFLAGS) -c src/pomdp/*.cpp 
+	mv *.o obj
 
-make all.o: states.o actions.o state_transitions.o observation_transitions.o observations.o policy.o rewards.o agents.o core.o util.o fload.o mdp.o
+dec_mdp.o: src/dec_mdp/*.cpp 
+	mkdir -p obj 
+	$(CC) $(CFLAGS) -c src/dec_mdp/*.cpp 
+	mv *.o obj
+
+dec_pomdp.o: src/dec_pomdp/*.cpp 
+	mkdir -p obj 
+	$(CC) $(CFLAGS) -c src/dec_pomdp/*.cpp 
+	mv *.o obj
+
+make all.o: states.o actions.o state_transitions.o observation_transitions.o observations.o policy.o rewards.o agents.o core.o util.o fload.o mdp.o pomdp.o dec_mdp.o dec_pomdp.o
