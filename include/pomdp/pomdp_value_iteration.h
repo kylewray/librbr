@@ -29,7 +29,7 @@
 #include "pomdp.h"
 
 #include "../core/policy/policy_tree.h"
-#include "../core/policy/policy_fsc.h"
+#include "../core/policy/policy_graph.h"
 
 #include "../../include/core/states/finite_states.h"
 #include "../../include/core/actions/finite_actions.h"
@@ -111,7 +111,7 @@ private:
 	 * @return Return the optimal policy as a finite state controller.
 	 * @throws PolicyException An error occurred computing the policy.
 	 */
-	PolicyFSC *solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+	PolicyGraph *solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
 			const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASRewards *R,
 			const Horizon *h);
 

@@ -46,7 +46,7 @@ MDP::MDP()
  * @param is	The initial state, which uses the states parameter.
  * @param h		The horizon.
  */
-MDP::MDP(States *s, Actions *a, StateTransitions *st, Rewards *r, InitialState *is, Horizon *h)
+MDP::MDP(States *s, Actions *a, StateTransitions *st, Rewards *r, Initial *is, Horizon *h)
 {
 	states = s;
 	actions = a;
@@ -121,7 +121,7 @@ const Rewards *MDP::get_rewards() const
  * Get the initial state object.
  * @return The initial state object.
  */
-const InitialState *MDP::get_initial_state() const
+const Initial *MDP::get_initial_state() const
 {
 	return initialState;
 }

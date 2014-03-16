@@ -32,7 +32,7 @@
 #include "../core/state_transitions/state_transitions.h"
 #include "../core/observation_transitions/observation_transitions.h"
 #include "../core/rewards/rewards.h"
-#include "../core/initial_state.h"
+#include "../core/initial.h"
 #include "../core/horizon.h"
 
 #include "../mdp/mdp.h"
@@ -59,7 +59,7 @@ public:
 	 * @param h		The horizon.
 	 */
 	POMDP(States *s, Actions *a, Observations *o, StateTransitions *st, ObservationTransitions *ot,
-			Rewards *r, InitialState *is, Horizon *h);
+			Rewards *r, Initial *is, Horizon *h);
 
 	/**
 	 * A deconstructor for the POMDP class.

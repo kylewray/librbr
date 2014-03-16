@@ -22,21 +22,21 @@
  */
 
 
-#include "../../../include/core/policy/policy_fsc.h"
+#include "../../../include/core/policy/policy_graph.h"
 
 /**
- * The constructor for a FSCPolicy object which specifies the number of internal policy states.
+ * The constructor for a PolicyGraph object which specifies the number of internal policy states.
  * @param numPolicyStates The number of policy states internal to the FSC policy.
  */
-PolicyFSC::PolicyFSC(int numPolicyStates)
+PolicyGraph::PolicyGraph(int numPolicyStates)
 {
-	current = PolicyFSCState();
+	current = PolicyGraphNode();
 }
 
 /**
  * A virtual deconstructor to prevent errors upon the deletion of a child object.
  */
-PolicyFSC::~PolicyFSC()
+PolicyGraph::~PolicyGraph()
 { }
 
 /**
@@ -44,7 +44,7 @@ PolicyFSC::~PolicyFSC()
  * @param filename The name and path of the file to load.
  * @return Return @code{true} if an error occurred, @code{false} otherwise.
  */
-bool PolicyFSC::load(std::string filename)
+bool PolicyGraph::load(std::string filename)
 {
 	return false;
 }
@@ -54,7 +54,7 @@ bool PolicyFSC::load(std::string filename)
  * @param filename The name and path of the file to save.
  * @return Return @code{true} if an error occurred, @code{false} otherwise.
  */
-bool PolicyFSC::save(std::string filename) const
+bool PolicyGraph::save(std::string filename) const
 {
 	return false;
 }
@@ -63,7 +63,7 @@ bool PolicyFSC::save(std::string filename) const
  * A function which follows the defined policy, having the current state stored internally,
  * and returns the action to select next.
  */
-Action *PolicyFSC::next()
+Action *PolicyGraph::next()
 {
 	return nullptr;
 }
@@ -71,7 +71,7 @@ Action *PolicyFSC::next()
 /**
  * Reset the policy to the initial state.
  */
-void PolicyFSC::reset()
+void PolicyGraph::reset()
 { }
 
 /**
@@ -79,5 +79,5 @@ void PolicyFSC::reset()
  * such as the random initial selection of the internal FSC state following the
  * distribution over initial states.
  */
-void PolicyFSC::initialize()
+void PolicyGraph::initialize()
 { }

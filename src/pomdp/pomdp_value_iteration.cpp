@@ -140,15 +140,25 @@ PolicyTree *POMDPValueIteration::solve_finite_horizon(const FiniteStates *S, con
 		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASRewards *R,
 		const Horizon *h)
 {
+	return nullptr;
 	/*
-	/// Create the policy based on the horizon.
+	// Create the policy based on the horizon.
 	PolicyTree *policy = new PolicyTree(h);
 
-	// The value of a states and state's actions.
+	// The value of the states, which will become our alpha vectors.
 	std::map<State *, double> V;
 
+	// Define the initial value function for each state.
+	for (State *s : *S) {
+		V[s] = 0.0;
+		for (State *sPrime : *S) {
+			V[s] += T->get(s, )
+		}
+	}
+
 	// Continue to iterate until the maximum difference between two V[s]'s is less than the tolerance.
-	for (int t = h->get_horizon() - 1; t >= 0; t--){
+	for (int t = 1; t < h->get_horizon(); t++){
+		//
 		// For all the states, compute V(s).
 		for (State *s : *S) {
 			Action *aBest = nullptr;
@@ -160,9 +170,7 @@ PolicyTree *POMDPValueIteration::solve_finite_horizon(const FiniteStates *S, con
 		}
 	}
 
-	return policy;
-	*/
-	return nullptr;
+	return policy;*/
 }
 
 /**
@@ -177,7 +185,7 @@ PolicyTree *POMDPValueIteration::solve_finite_horizon(const FiniteStates *S, con
  * @return Return the optimal policy as a finite state controller.
  * @throws PolicyException An error occurred computing the policy.
  */
-PolicyFSC *POMDPValueIteration::solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+PolicyGraph *POMDPValueIteration::solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
 		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASRewards *R,
 		const Horizon *h)
 {

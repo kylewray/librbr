@@ -45,7 +45,7 @@ DecPOMDP::DecPOMDP() : POMDP()
  * @param h		The horizon.
  */
 DecPOMDP::DecPOMDP(Agents *ag, States *s, Actions *a, Observations *o, StateTransitions *st, ObservationTransitions *ot,
-		Rewards *r, InitialState *is, Horizon *h) : POMDP(s, a, o, st, ot, r, is, h)
+		Rewards *r, Initial *is, Horizon *h) : POMDP(s, a, o, st, ot, r, is, h)
 {
 	agents = ag;
 }

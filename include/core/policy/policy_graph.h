@@ -22,8 +22,8 @@
  */
 
 
-#ifndef POLICY_FSC_H
-#define POLICY_FSC_H
+#ifndef POLICY_GRAPH_H
+#define POLICY_GRAPH_H
 
 
 #include <string>
@@ -35,14 +35,14 @@
 #include "../observations/observation.h"
 
 /**
- * A small structure for Finite State Controller (FSC) policy states. In reality, all
- * that matters for larger problems is having a unique object to represent an abstract
- * policy state. This structure allows us to expand this state in the future, if desired.
+ * A small structure for a policy graph's node (Finite State Controller (FSC) policy states).
+ * In reality, all that matters for larger problems is having a unique object to represent an
+ * abstract policy state. This structure allows us to expand this state in the future, if desired.
  */
-struct PolicyFSCState { };
+struct PolicyGraphNode { };
 
 /**
- * A Finite State Controller (FSC) policy. This FSC captures the policy tree
+ * A policy graph (Finite State Controller (FSC)). This FSC captures the policy tree
  * representation, too. Internally, this object is a stochastic FSC, in which
  * every FSC state maps to a distribution over actions, and a subsequent observation
  * maps to a distribution over the next FSC state (not usually world state).
@@ -51,18 +51,18 @@ struct PolicyFSCState { };
  * selecting an internal FSC state following the given distribution, and then
  * continually following the stochastic policy mappings via the 'next' function.
  */
-class PolicyFSC : public Policy {
+class PolicyGraph : public Policy {
 public:
 	/**
-	 * The constructor for a FSCPolicy object which specifies the number of internal policy states.
+	 * The constructor for a PolicyGraph object which specifies the number of internal policy states.
 	 * @param numPolicyStates The number of policy states internal to the FSC policy.
 	 */
-	PolicyFSC(int numPolicyStates);
+	PolicyGraph(int numPolicyStates);
 
 	/**
 	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
 	 */
-	virtual ~PolicyFSC();
+	virtual ~PolicyGraph();
 
 	/**
 	 * A function which must load a policy file.
@@ -100,29 +100,29 @@ private:
 	/**
 	 * The FSC states (nodes).
 	 */
-	std::vector<PolicyFSCState> states;
+	std::vector<PolicyGraphNode> states;
 
 	/**
 	 * The mapping of FSC states to a distribution over actions.
 	 */
-	std::map<PolicyFSCState, std::map<Action *, double> > policy;
+	std::map<PolicyGraphNode, std::map<Action *, double> > policy;
 
 	/**
 	 * The mapping of FSC state-observation pair to a distribution over subsequent FSC states.
 	 */
-	std::map<PolicyFSCState, std::map<Observation *, std::map<PolicyFSCState, double> > > transitions;
+	std::map<PolicyGraphNode, std::map<Observation *, std::map<PolicyGraphNode, double> > > transitions;
 
 	/**
 	 * The mapping of an initial distribution over FSC states.
 	 */
-	std::map<PolicyFSCState, double> initial;
+	std::map<PolicyGraphNode, double> initial;
 
 	/**
 	 * Used in execution, this variable denotes the current internal FSC state.
 	 */
-	PolicyFSCState current;
+	PolicyGraphNode current;
 
 };
 
 
-#endif // POLICY_FSC_H
+#endif // POLICY_GRAPH_H

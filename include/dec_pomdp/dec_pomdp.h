@@ -33,7 +33,7 @@
 #include "../core/state_transitions/state_transitions.h"
 #include "../core/observation_transitions/observation_transitions.h"
 #include "../core/rewards/rewards.h"
-#include "../core/initial_state.h"
+#include "../core/initial.h"
 #include "../core/horizon.h"
 
 #include "../pomdp/pomdp.h"
@@ -62,7 +62,7 @@ public:
 	 */
 	DecPOMDP(Agents *agents, States *states, Actions *actions, Observations *observations,
 			StateTransitions *stateTransitions, ObservationTransitions *observationTransitions,
-			Rewards *rewards, InitialState *initialState, Horizon *horizon);
+			Rewards *rewards, Initial *initialState, Horizon *horizon);
 
 	/**
 	 * The deconstructor for the DecPOMDP class.

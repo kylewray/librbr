@@ -30,7 +30,7 @@
 #include "../core/actions/actions.h"
 #include "../core/state_transitions/state_transitions.h"
 #include "../core/rewards/rewards.h"
-#include "../core/initial_state.h"
+#include "../core/initial.h"
 #include "../core/horizon.h"
 
 /**
@@ -52,7 +52,7 @@ public:
 	 * @param is	The initial state, which uses the states parameter.
 	 * @param h		The horizon.
 	 */
-	MDP(States *s, Actions *a, StateTransitions *st, Rewards *r, InitialState *is, Horizon *h);
+	MDP(States *s, Actions *a, StateTransitions *st, Rewards *r, Initial *is, Horizon *h);
 
 	/**
 	 * A deconstructor for the MDP class.
@@ -87,7 +87,7 @@ public:
 	 * Get the initial state object.
 	 * @return The initial state object.
 	 */
-	const InitialState *get_initial_state() const;
+	const Initial *get_initial_state() const;
 
 	/**
 	 * Get the horizon object.
@@ -119,7 +119,7 @@ protected:
 	/**
 	 * The initial state or initial belief state; e.g., factored initial state.
 	 */
-	InitialState *initialState;
+	Initial *initialState;
 
 	/**
 	 * The horizon, either a finite time or a discount factor.

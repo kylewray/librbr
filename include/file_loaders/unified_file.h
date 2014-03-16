@@ -39,7 +39,7 @@
 #include "../core/state_transitions/finite_state_transitions.h"
 #include "../core/observation_transitions/finite_observation_transitions.h"
 #include "../core/rewards/sas_rewards.h"
-#include "../core/initial_state.h"
+#include "../core/initial.h"
 #include "../core/horizon.h"
 
 #include "../mdp/mdp.h"
@@ -338,7 +338,7 @@ private:
 	/**
 	 * The initial state or initial belief state; e.g., factored initial state.
 	 */
-	InitialState *initialState;
+	Initial *initialState;
 
 	/**
 	 * The horizon, either a finite time or a discount factor.

@@ -22,31 +22,39 @@
  */
 
 
-#include "../../include/core/initial_state.h"
-
+#include "../../include/core/initial.h"
 
 /**
- * The constructor for the InitialState class.
+ * The constructor for the Initial class.
  */
-InitialState::InitialState()
+Initial::Initial()
 {
 	initialState = nullptr;
 }
 
 /**
- * The constructor for the InitialState class, specifying the true initial state.
+ * The constructor for the Initial class, specifying the true initial state.
  * @param state The true initial state.
  */
-InitialState::InitialState(State *state)
+Initial::Initial(const State *state)
 {
-	set_initial_state(state);
-	set_initial_belief(state, 1.0);
+	initialState = state;
 }
 
 /**
- * The deconstructor for the InitialState class.
+ * The constructor for the Initial class, specifying the belief over the states.
+ * @param belief The belief over the states.
  */
-InitialState::~InitialState()
+Initial::Initial(const BeliefState &belief)
+{
+	initialState = nullptr;
+	initialBelief = belief;
+}
+
+/**
+ * The deconstructor for the Initial class.
+ */
+Initial::~Initial()
 {
 	reset();
 }
@@ -55,26 +63,38 @@ InitialState::~InitialState()
  * Set the true initial state.
  * @param state The true initial state.
  */
-void InitialState::set_initial_state(State *state)
+void Initial::set_initial_state(const State *state)
 {
-	initialState = state;
+	initialState = nullptr;
+	initialBelief.reset();
 }
 
 /**
- * Set the probability of a particular state.
+ * Set the initial belief over states.
+ * @param belief The belief over the states.
+ */
+void Initial::set_initial_belief(const BeliefState &belief)
+{
+	initialState = nullptr;
+	initialBelief = belief;
+}
+
+/**
+ * Set the probability of a particular state, assuming the belief has been created.
  * @param state 		The state to which the probability will be assigned.
  * @param probability	The probability of that the initial state is the state given.
  */
-void InitialState::set_initial_belief(State *state, double probability)
+void Initial::set_initial_belief(const State *state, double probability)
 {
-	initialBelief[state] = 1.0;
+	initialState = nullptr;
+	initialBelief.set(state, probability);
 }
 
 /**
  * Get the true initial state.
  * @return The true initial state.
  */
-State *InitialState::get_initial_state()
+const State *Initial::get_initial_state() const
 {
 	return initialState;
 }
@@ -84,22 +104,16 @@ State *InitialState::get_initial_state()
  * @param state The state to which the probability will be assigned.
  * @return The probability of that the initial state is the state given.
  */
-double InitialState::get_initial_belief(State *state) const
+const BeliefState &Initial::get_initial_belief() const
 {
-	std::map<State *, double>::const_iterator belief = initialBelief.find(state);
-	if (belief == initialBelief.end()) {
-		return 0.0;
-	} else {
-		return belief->second;
-	}
+	return initialBelief;
 }
 
 /**
  * Reset the initial state and the initial belief.
  */
-void InitialState::reset()
+void Initial::reset()
 {
 	initialState = nullptr;
-	initialBelief.clear();
+	initialBelief.reset();
 }
-

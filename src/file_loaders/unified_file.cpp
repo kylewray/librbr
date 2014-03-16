@@ -479,7 +479,7 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 
 	// If the initial state is not yet defined, then create it.
 	if (initialState == nullptr) {
-		initialState = new InitialState();
+		initialState = new Initial();
 	}
 
 	std::vector<std::string> list = split_string_by_space(items[1]);
@@ -560,7 +560,7 @@ bool UnifiedFile::load_initial_state_inclusive(std::vector<std::string> items)
 
 	// If the initial state is not yet defined, then create it.
 	if (initialState == nullptr) {
-		initialState = new InitialState();
+		initialState = new Initial();
 	}
 
 	std::vector<std::string> list = split_string_by_space(items[1]);
@@ -615,7 +615,7 @@ bool UnifiedFile::load_initial_state_exclusive(std::vector<std::string> items)
 
 	// If the initial state is not yet defined, then create it.
 	if (initialState == nullptr) {
-		initialState = new InitialState();
+		initialState = new Initial();
 	}
 
 	std::vector<std::string> list = split_string_by_space(items[1]);

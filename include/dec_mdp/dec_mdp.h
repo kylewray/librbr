@@ -31,7 +31,7 @@
 #include "../core/actions/actions.h"
 #include "../core/state_transitions/state_transitions.h"
 #include "../core/rewards/rewards.h"
-#include "../core/initial_state.h"
+#include "../core/initial.h"
 #include "../core/horizon.h"
 
 #include "../mdp/mdp.h"
@@ -56,7 +56,7 @@ public:
 	 * @param is	The initial state, which uses the states parameter.
 	 * @param h		The horizon.
 	 */
-	DecMDP(Agents *ag, States *s, Actions *a, StateTransitions *st, Rewards *r, InitialState *is, Horizon *h);
+	DecMDP(Agents *ag, States *s, Actions *a, StateTransitions *st, Rewards *r, Initial *is, Horizon *h);
 
 	/**
 	 * A deconstructor for the DecMDP class.

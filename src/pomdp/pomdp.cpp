@@ -45,7 +45,7 @@ POMDP::POMDP() : MDP()
  * @param horizon					The horizon.
  */
 POMDP::POMDP(States *s, Actions *a, Observations *o, StateTransitions *st, ObservationTransitions *ot,
-		Rewards *r, InitialState *is, Horizon *h) : MDP(s, a, st, r, is, h)
+		Rewards *r, Initial *is, Horizon *h) : MDP(s, a, st, r, is, h)
 {
 	observations = o;
 	observationTransitions = ot;

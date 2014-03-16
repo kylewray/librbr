@@ -22,8 +22,8 @@
  */
 
 
-#ifndef MAP_POLICY_H
-#define MAP_POLICY_H
+#ifndef POLICY_TREE_H
+#define POLICY_TREE_H
 
 
 #include <vector>

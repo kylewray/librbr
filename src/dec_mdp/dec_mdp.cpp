@@ -43,7 +43,7 @@ DecMDP::DecMDP() : MDP()
  * @param h		The horizon.
  */
 DecMDP::DecMDP(Agents *ag, States *s, Actions *a, StateTransitions *st, Rewards *r,
-		InitialState *is, Horizon *h) : MDP(s, a, st, r, is, h)
+		Initial *is, Horizon *h) : MDP(s, a, st, r, is, h)
 {
 	agents = ag;
 }
