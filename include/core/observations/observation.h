@@ -28,7 +28,6 @@
 
 #include <string>
 
-
 /**
  * An abstract observation object. Typically, this will just be a string; however, by abstracting
  * the observations, we are able to have observations that are classes in-and-of-themselves.
@@ -81,7 +80,7 @@ public:
 	 * @param other The observation to compare.
 	 * @return Returns @code{true} if this observation is equal to the other; @code{false} otherwise.
 	 */
-	virtual bool operator==(const Observation &other);
+	virtual bool operator==(const Observation &other) const;
 
 	/**
 	 * Overload the less than operator for comparison.

@@ -63,7 +63,7 @@ public:
 	 * @param nextState	The next state with which we assign the reward.
 	 * @param reward	The reward from the provided state-action-state triple.
 	 */
-	void set(State *state, Action *action, State *nextState, double reward);
+	void set(const State *state, const Action *action, const State *nextState, double reward);
 
 	/**
 	 * The probability of a transition following the state-action-state triple provided.
@@ -72,7 +72,7 @@ public:
 	 * @param nextState	The next state with which we assign the reward.
 	 * @return The reward from taking the given action in the given state.
 	 */
-	virtual double get(State *state, Action *action, State *nextState) const;
+	virtual double get(const State *state, const Action *action, const State *nextState) const;
 
 	/**
 	 * Reset the rewards, clearing the internal mapping.
@@ -89,12 +89,12 @@ private:
 	 * @return The reward from taking the given action in the given state.
 	 * @throws RewardException The reward was not defined.
 	 */
-	virtual double get_value(State *state, Action *action, State *nextState) const;
+	virtual double get_value(const State *state, const Action *action, const State *nextState) const;
 
 	/**
 	 * The list of all state-action-state rewards.
 	 */
-	std::map<State *, std::map<Action *, std::map<State *, double> > > rewards;
+	std::map<const State *, std::map<const Action *, std::map<const State *, double> > > rewards;
 
 	/**
 	 * A special state (implicitly constant) referring to a state wildcard.

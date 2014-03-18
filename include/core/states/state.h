@@ -28,7 +28,6 @@
 
 #include <string>
 
-
 /**
  * An abstract state object. Typically, this will just be a string; however, by abstracting
  * the states, we are able to have states that are classes in-and-of-themselves.
@@ -81,7 +80,7 @@ public:
 	 * @param other The state to compare.
 	 * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
 	 */
-	virtual bool operator==(const State &other);
+	virtual bool operator==(const State &other) const;
 
 	/**
 	 * Overload the less than operator for comparison.

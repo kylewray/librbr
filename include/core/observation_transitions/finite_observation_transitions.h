@@ -63,7 +63,7 @@ public:
 	 * @param observation		The next observation to which we assign a probability.
 	 * @param probability		The probability of the observation given we took the action and landed in the state given.
 	 */
-	void set(Action *previousAction, State *state, Observation *observation, double probability);
+	void set(const Action *previousAction, const State *state, const Observation *observation, double probability);
 
 	/**
 	 * The probability of a transition following the observation-action-state triple provided.
@@ -72,7 +72,7 @@ public:
 	 * @param observation		The next observation to which we assign a probability.
 	 * @return The probability of the observation given we took the action and landed in the state given.
 	 */
-	virtual double get(Action *previousAction, State *state, Observation *observation) const;
+	virtual double get(const Action *previousAction, const State *state, const Observation *observation) const;
 
 	/**
 	 * Reset the observation transitions, clearing the internal mapping.
@@ -89,12 +89,12 @@ private:
 	 * @return The probability of the observation given we took the action and landed in the state given.
 	 * @throws ObservationTransitionException The observation transition was not defined.
 	 */
-	virtual double get_value(Action *previousAction, State *state, Observation *observation) const;
+	virtual double get_value(const Action *previousAction, const State *state, const Observation *observation) const;
 
 	/**
 	 * The list of all state-action-state transitions.
 	 */
-	std::map<Action *, std::map<State *, std::map<Observation *, double> > > observationTransitions;
+	std::map<const Action *, std::map<const State *, std::map<const Observation *, double> > > observationTransitions;
 
 	/**
 	 * A special action (implicitly constant) referring to an action wildcard.

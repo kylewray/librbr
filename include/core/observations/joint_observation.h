@@ -31,7 +31,6 @@
 
 #include "observation.h"
 
-
 /**
  * An abstract observation object. Typically, this will just be a string; however, by abstracting
  * the observations, we are able to have observations that are classes in-and-of-themselves.
@@ -50,7 +49,7 @@ public:
 	 * actual joint observation tuple (vector).
 	 * @param jointObservation The list of states which define this joint observation.
 	 */
-	JointObservation(std::vector<Observation *> jointObservation);
+	JointObservation(const std::vector<const Observation *> &jointObservation);
 
 	/**
 	 * The copy constructor of the JointObservation object.
@@ -74,13 +73,13 @@ public:
 	 * Set the joint observation given a list of observations.
 	 * @param jointObservation The list of observations which define this joint observation.
 	 */
-	virtual void set(std::vector<Observation *> jointObservation);
+	virtual void set(const std::vector<const Observation *> &jointObservation);
 
 	/**
 	 * Get the joint observation.
 	 * @return The list of observations.
 	 */
-	virtual std::vector<Observation *> get() const;
+	virtual const std::vector<const Observation *> &get() const;
 
 	/**
 	 * Get a particular observation at a index.
@@ -88,7 +87,7 @@ public:
 	 * @return The observation at the index provided.
 	 * @throws ObservationException The index is not valid.
 	 */
-	virtual Observation *get(int index) const;
+	virtual const Observation *get(int index) const;
 
 	/**
 	 * Overload the equals operator to set this joint observation equal to the observation provided.
@@ -116,7 +115,7 @@ protected:
 	 * The joint observation is defined as a tuple of observations. To remain general, this is a vector, but
 	 * should remain a fixed size. This class will manage the memory of these observation objects.
 	 */
-	std::vector<Observation *> observations;
+	std::vector<const Observation *> observations;
 
 private:
 	/**

@@ -368,17 +368,17 @@ private:
 	/**
 	 * A helper action variable for loading vectors or matrices.
 	 */
-	Action *loadingAction;
+	const Action *loadingAction;
 
 	/**
 	 * A helper state variable for loading vectors or matrices.
 	 */
-	State *loadingState;
+	const State *loadingState;
 
 	/**
 	 * A helper observation variable for loading vectors or matrices.
 	 */
-	Observation *loadingObservation;
+	const Observation *loadingObservation;
 
 };
 

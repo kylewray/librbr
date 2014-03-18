@@ -37,7 +37,7 @@ FiniteActions::FiniteActions()
  * The constructor for the FiniteActions class which allows the specification of an initial set of actions.
  * @param actions The initial vector of actions.
  */
-FiniteActions::FiniteActions(std::vector<Action *> actions)
+FiniteActions::FiniteActions(const std::vector<const Action *> &actions)
 {
 	set(actions);
 }
@@ -54,7 +54,7 @@ FiniteActions::~FiniteActions()
  * Add an action to the set of available actions.
  * @param newAction The new action to include in the set of available actions.
  */
-void FiniteActions::add(Action *newAction)
+void FiniteActions::add(const Action *newAction)
 {
 	actions.push_back(newAction);
 }
@@ -64,7 +64,7 @@ void FiniteActions::add(Action *newAction)
  * @param removeAction		The action to remove from the set of available actions.
  * @throws ActionException	The action was not found in the actions list.
  */
-void FiniteActions::remove(Action *removeAction)
+void FiniteActions::remove(const Action *removeAction)
 {
 	if (std::find(actions.begin(), actions.end(), removeAction) == actions.end()) {
 		throw ActionException();
@@ -79,7 +79,7 @@ void FiniteActions::remove(Action *removeAction)
  * the current list of states and frees the memory.
  * @param newActions The vector of new actions to use.
  */
-void FiniteActions::set(std::vector<Action *> newActions)
+void FiniteActions::set(const std::vector<const Action *> &newActions)
 {
 	reset();
 	actions = newActions;
@@ -92,7 +92,7 @@ void FiniteActions::set(std::vector<Action *> newActions)
  * @return The action at the corresponding index.
  * @throws ActionException The index was invalid.
  */
-Action *FiniteActions::get(int actionIndex) const
+const Action *FiniteActions::get(int actionIndex) const
 {
 	if (actionIndex < 0 || actionIndex >= actions.size()) {
 		throw ActionException();
@@ -105,7 +105,7 @@ Action *FiniteActions::get(int actionIndex) const
  * Return a list of all the available actions.
  * @return Return a list of available actions.
  */
-const std::vector<Action *> &FiniteActions::all() const
+const std::vector<const Action *> &FiniteActions::all() const
 {
 	return actions;
 }
@@ -115,7 +115,7 @@ const std::vector<Action *> &FiniteActions::all() const
  * @param state The current state.
  * @return Return a list of available actions.
  */
-const std::vector<Action *> &FiniteActions::available(State *state) const
+const std::vector<const Action *> &FiniteActions::available(const State *state) const
 {
 	return actions;
 }
@@ -129,17 +129,15 @@ int FiniteActions::get_num_actions() const
 	return actions.size();
 }
 
-#include <iostream>
-
 /**
  * Get a particular action given the name.
  * @param actionName The name of the action.
  * @return The action with the corresponding name provided.
  * @throws ActionException The name was invalid.
  */
-Action *FiniteActions::find(std::string actionName) const
+const Action *FiniteActions::find(std::string actionName) const
 {
-	for (Action *action : actions) {
+	for (const Action *action : actions) {
 		if (action->get_name().compare(actionName) == 0) {
 			return action;
 		}
@@ -152,35 +150,17 @@ Action *FiniteActions::find(std::string actionName) const
  */
 void FiniteActions::reset()
 {
-	for (Action *action : actions) {
+	for (const Action *action : actions) {
 		delete action;
 	}
 	actions.clear();
 }
 
 /**
- * To facilitate easy iteration, return the beginning of the actions vector.
- * @return The iterator which points to the beginning of the actions vector.
- */
-std::vector<Action *>::iterator FiniteActions::begin()
-{
-	return actions.begin();
-}
-
-/**
- * To facilitate easy iteration, return the end of the actions vector.
- * @return The iterator which points to the end of the actions vector.
- */
-std::vector<Action *>::iterator FiniteActions::end()
-{
-	return actions.end();
-}
-
-/**
  * To facilitate easy iteration, return a constant beginning of the actions vector.
  * @return The iterator which points to a constant beginning of the actions vector.
  */
-std::vector<Action *>::const_iterator FiniteActions::begin() const
+std::vector<const Action *>::const_iterator FiniteActions::begin() const
 {
 	return actions.begin();
 }
@@ -189,7 +169,7 @@ std::vector<Action *>::const_iterator FiniteActions::begin() const
  * To facilitate easy iteration, return a constant end of the actions vector.
  * @return The iterator which points to a constant end of the actions vector.
  */
-std::vector<Action *>::const_iterator FiniteActions::end() const
+std::vector<const Action *>::const_iterator FiniteActions::end() const
 {
 	return actions.end();
 }

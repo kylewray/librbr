@@ -77,7 +77,9 @@ public:
 	 */
 	void reset();
 
-	// Allow BeliefState objects to access private members in others.
+	/**
+	 * Allow BeliefState objects to access private members in others for setting.
+	 */
 	friend BeliefState;
 
 private:

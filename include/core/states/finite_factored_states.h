@@ -32,7 +32,6 @@
 #include "states.h"
 #include "finite_states.h"
 
-
 /**
  * A class for finite sets of factored states in an MDP-like object. Informally, there are two basic ways to
  * store finite states: a vector of states or a generator function based on a state and action. In both
@@ -69,7 +68,7 @@ public:
 	 * states list; please call update() once all factors have been set.
 	 * @param newState The new state to include in the set of available states.
 	 */
-	void add_factor(std::vector<State *> newStates);
+	void add_factor(const std::vector<const State *> &newStates);
 
 	/**
 	 * Add a state to the set of available states in a factor. This does *not* update the states list; please
@@ -78,7 +77,7 @@ public:
 	 * @param newState 			The new state to include in the set of available states.
 	 * @throws StateException	The index was invalid.
 	 */
-	void add(int factorIndex, State *newState);
+	void add(int factorIndex, const State *newState);
 
 	/**
 	 * Remove a state to the set of available states in a factor. This frees the memory. This does *not*
@@ -87,7 +86,7 @@ public:
 	 * @param removeState 		The state to remove from the set of available states.
 	 * @throws StateException	The index was invalid, or the state was not found in the states list.
 	 */
-	void remove(int factorIndex, State *removeState);
+	void remove(int factorIndex, const State *removeState);
 
 	/**
 	 * Set the internal states list for a factor given another list, performing a deep copy. This resets
@@ -97,7 +96,7 @@ public:
 	 * @param newStates 		The vector of new states to use.
 	 * @throws StateException	The index was invalid, or newStates was empty.
 	 */
-	void set(int factorIndex, std::vector<State *> newStates);
+	void set(int factorIndex, const std::vector<const State *> &newStates);
 
 	/**
 	 * Get the state at the corresponding index, given the particular factor. The factor index
@@ -108,7 +107,7 @@ public:
 	 * @return The state at the corresponding index.
 	 * @throws StateException The index was invalid.
 	 */
-	State *get(int factorIndex, int stateIndex) const;
+	const State *get(int factorIndex, int stateIndex) const;
 
 	/**
 	 * Update the internal states list which holds all permutations of factored states in an efficient structure.
@@ -139,7 +138,7 @@ protected:
 	/**
 	 * The list of all available states for each state factor.
 	 */
-	std::vector<std::vector<State *> > factoredStates;
+	std::vector<std::vector<const State *> > factoredStates;
 
 private:
 	/**
@@ -147,7 +146,7 @@ private:
 	 * @param currentFactoredState	The current (incomplete) factored state as a vector of states.
 	 * @param currentFactorIndex	The current factor index.
 	 */
-	void update_step(std::vector<State *> currentFactoredState, int currentFactorIndex);
+	void update_step(std::vector<const State *> currentFactoredState, int currentFactorIndex);
 
 };
 

@@ -54,7 +54,8 @@ FiniteObservationTransitions::~FiniteObservationTransitions()
  * @param observation		The next observation to which we assign a probability.
  * @param probability		The probability of the observation given we took the action and landed in the state given.
  */
-void FiniteObservationTransitions::set(Action *previousAction, State *state, Observation *observation, double probability)
+void FiniteObservationTransitions::set(const Action *previousAction, const State *state,
+		const Observation *observation, double probability)
 {
 	if (previousAction == nullptr) {
 		previousAction = actionWildcard;
@@ -76,24 +77,25 @@ void FiniteObservationTransitions::set(Action *previousAction, State *state, Obs
  * @param state				The current state.
  * @return The probability of the observation given we took the action and landed in the state given.
  */
-double FiniteObservationTransitions::get(Action *previousAction, State *state, Observation *observation) const
+double FiniteObservationTransitions::get(const Action *previousAction, const State *state,
+		const Observation *observation) const
 {
 	// Iterate over all possible configurations of wildcards in the get statement.
 	// For each, use the get_value() function to check if the value exists. If it
 	// does, perhaps using a wildcard, then return that, otherwise continue.
 	// Return 0 by default.
 	for (int i = 0; i < 8; i++) {
-		Action *alpha = actionWildcard;
+		const Action *alpha = actionWildcard;
 		if (i & (1 << 1)) {
 			alpha = previousAction;
 		}
 
-		State *beta = stateWildcard;
+		const State *beta = stateWildcard;
 		if (i & (1 << 2)) {
 			beta = state;
 		}
 
-		Observation *gamma = observationWildcard;
+		const Observation *gamma = observationWildcard;
 		if (i & (1 << 0)) {
 			gamma = observation;
 		}
@@ -123,20 +125,21 @@ void FiniteObservationTransitions::reset()
  * @return The probability of the observation given we took the action and landed in the state given.
  * @throws ObservationTransitionException The observation transition was not defined.
  */
-double FiniteObservationTransitions::get_value(Action *previousAction, State *state, Observation *observation) const
+double FiniteObservationTransitions::get_value(const Action *previousAction, const State *state,
+		const Observation *observation) const
 {
-	std::map<Action *, std::map<State *, std::map<Observation *, double> > >::const_iterator alpha =
+	std::map<const Action *, std::map<const State *, std::map<const Observation *, double> > >::const_iterator alpha =
 			observationTransitions.find(previousAction);
 	if (alpha == observationTransitions.end()) {
 		throw ObservationTransitionException();
 	}
 
-	std::map<State *, std::map<Observation *, double> >::const_iterator beta = alpha->second.find(state);
+	std::map<const State *, std::map<const Observation *, double> >::const_iterator beta = alpha->second.find(state);
 	if (beta == alpha->second.end()) {
 		throw ObservationTransitionException();
 	}
 
-	std::map<Observation *, double>::const_iterator gamma = beta->second.find(observation);
+	std::map<const Observation *, double>::const_iterator gamma = beta->second.find(observation);
 	if (gamma == beta->second.end()) {
 		throw ObservationTransitionException();
 	}

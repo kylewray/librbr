@@ -63,7 +63,7 @@ public:
 	 * @param probability	The probability of going from the state, taking the action, then
 	 * 						moving to the nextState.
 	 */
-	void set(State *state, Action *action, State *nextState, double probability);
+	void set(const State *state, const Action *action, const State *nextState, double probability);
 
 	/**
 	 * The probability of a transition following the state-action-state triple provided.
@@ -72,7 +72,7 @@ public:
 	 * @param nextState	The next state with which we assign the probability.
 	 * @return The probability of going from the state, taking the action, then moving to the nextState.
 	 */
-	virtual double get(State *state, Action *action, State *nextState) const;
+	virtual double get(const State *state, const Action *action, const State *nextState) const;
 
 	/**
 	 * Reset the state transitions, clearing the internal mapping.
@@ -89,12 +89,12 @@ private:
 	 * @return The probability of going from the state, taking the action, then moving to the nextState.
 	 * @throws StateTransitionException The state transition was not defined.
 	 */
-	virtual double get_value(State *state, Action *action, State *nextState) const;
+	virtual double get_value(const State *state, const Action *action, const State *nextState) const;
 
 	/**
 	 * The list of all state-action-state transitions.
 	 */
-	std::map<State *, std::map<Action *, std::map<State *, double> > > stateTransitions;
+	std::map<const State *, std::map<const Action *, std::map<const State *, double> > > stateTransitions;
 
 	/**
 	 * A special state (implicitly constant) referring to a state wildcard.

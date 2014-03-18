@@ -39,15 +39,16 @@
  * @param aBest The action which produced the maximum V(s) value. This will be updated.
  */
 void bellman_update(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
-		const SASRewards *R, const Horizon *h, State *s, std::map<State *, double> &V, Action *&aBest)
+		const SASRewards *R, const Horizon *h, const State *s, std::map<const State *, double> &V,
+		const Action *&aBest)
 {
 	double maxQsa = std::numeric_limits<double>::lowest();
 
 	// For all the actions, compute max Q(s, a), and argmax Q(s, a), both over the set of available actions.
-	for (Action *a : A->available(s)) {
+	for (const Action *a : A->available(s)) {
 		// Compute the Q(s, a) estimate.
 		double Qsa = 0.0;
-		for (State *sPrime : S->successor(s, a)) {
+		for (const State *sPrime : S->successor(s, a)) {
 			Qsa += T->get(s, a, sPrime) * (R->get(s, a, sPrime) + h->get_discount_factor() * V[sPrime]);
 		}
 

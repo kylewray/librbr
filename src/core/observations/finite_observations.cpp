@@ -37,7 +37,7 @@ FiniteObservations::FiniteObservations()
  * The constructor for the FiniteObservations class which allows the specification of an initial set of observations.
  * @param observations The initial vector of observations.
  */
-FiniteObservations::FiniteObservations(std::vector<Observation *> observations)
+FiniteObservations::FiniteObservations(const std::vector<const Observation *> &observations)
 {
 	set(observations);
 }
@@ -54,7 +54,7 @@ FiniteObservations::~FiniteObservations()
  * Add a observation to the set of available observations.
  * @param newObservation The new observation to include in the set of available states.
  */
-void FiniteObservations::add(Observation *newObservation)
+void FiniteObservations::add(const Observation *newObservation)
 {
 	observations.push_back(newObservation);
 }
@@ -64,7 +64,7 @@ void FiniteObservations::add(Observation *newObservation)
  * @param removeObservation 	The state to remove from the set of available observations.
  * @throws ObservationException	The observation was not found in the observations list.
  */
-void FiniteObservations::remove(Observation *removeObservation)
+void FiniteObservations::remove(const Observation *removeObservation)
 {
 	if (std::find(observations.begin(), observations.end(), removeObservation) == observations.end()) {
 		throw ObservationException();
@@ -79,7 +79,7 @@ void FiniteObservations::remove(Observation *removeObservation)
  * the current list of observations and frees the memory.
  * @param newObservations The vector of new observations to use.
  */
-void FiniteObservations::set(std::vector<Observation *> newObservations)
+void FiniteObservations::set(const std::vector<const Observation *> &newObservations)
 {
 	reset();
 	observations = newObservations;
@@ -92,7 +92,7 @@ void FiniteObservations::set(std::vector<Observation *> newObservations)
  * @return The observation at the corresponding index.
  * @throws ObservationException The index was invalid.
  */
-Observation *FiniteObservations::get(int observationIndex) const
+const Observation *FiniteObservations::get(int observationIndex) const
 {
 	if (observationIndex < 0 || observationIndex >= observations.size()) {
 		throw ObservationException();
@@ -105,7 +105,7 @@ Observation *FiniteObservations::get(int observationIndex) const
  * Return a list of all the available observations.
  * @return Return a list of available observations.
  */
-const std::vector<Observation *> &FiniteObservations::all() const
+const std::vector<const Observation *> &FiniteObservations::all() const
 {
 	return observations;
 }
@@ -117,7 +117,7 @@ const std::vector<Observation *> &FiniteObservations::all() const
  * @return Return a list of available observations.
  *
  */
-const std::vector<Observation *> &FiniteObservations::available(State *state, Action *action) const
+const std::vector<const Observation *> &FiniteObservations::available(const State *state, const Action *action) const
 {
 	return observations;
 }
@@ -137,9 +137,9 @@ int FiniteObservations::get_num_observations() const
  * @return The observation with the corresponding name provided.
  * @throws ObservationException The name was invalid.
  */
-Observation *FiniteObservations::find(std::string observationName) const
+const Observation *FiniteObservations::find(std::string observationName) const
 {
-	for (Observation *observation : observations) {
+	for (const Observation *observation : observations) {
 		if (observation->get_name().compare(observationName) == 0) {
 			return observation;
 		}
@@ -152,35 +152,17 @@ Observation *FiniteObservations::find(std::string observationName) const
  */
 void FiniteObservations::reset()
 {
-	for (Observation *observation : observations) {
+	for (const Observation *observation : observations) {
 		delete observation;
 	}
 	observations.clear();
 }
 
 /**
- * To facilitate easy iteration, return the beginning of the observations vector.
- * @return The iterator which points to the beginning of the observations vector.
- */
-std::vector<Observation *>::iterator FiniteObservations::begin()
-{
-	return observations.begin();
-}
-
-/**
- * To facilitate easy iteration, return the end of the observations vector.
- * @return The iterator which points to the end of the observations vector.
- */
-std::vector<Observation *>::iterator FiniteObservations::end()
-{
-	return observations.end();
-}
-
-/**
  * To facilitate easy iteration, return a constant beginning of the observations vector.
  * @return The iterator which points to a constant beginning of the observations vector.
  */
-std::vector<Observation *>::const_iterator FiniteObservations::begin() const
+std::vector<const Observation *>::const_iterator FiniteObservations::begin() const
 {
 	return observations.begin();
 }
@@ -189,7 +171,7 @@ std::vector<Observation *>::const_iterator FiniteObservations::begin() const
  * To facilitate easy iteration, return a constant end of the observations vector.
  * @return The iterator which points to a constant end of the observations vector.
  */
-std::vector<Observation *>::const_iterator FiniteObservations::end() const
+std::vector<const Observation *>::const_iterator FiniteObservations::end() const
 {
 	return observations.end();
 }

@@ -24,7 +24,6 @@
 
 #include "../../../include/core/actions/action.h"
 
-
 /**
  * The default constructor of the Action object.
  */
@@ -89,7 +88,7 @@ Action &Action::operator=(const Action &other)
  * @param other The action to compare.
  * @return Returns @code{true} if this action is equal to the other; @code{false} otherwise.
  */
-bool Action::operator==(const Action &other)
+bool Action::operator==(const Action &other) const
 {
 	return name == other.get_name();
 }

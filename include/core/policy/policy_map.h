@@ -75,7 +75,7 @@ public:
 	 * @param state		The state to define.
 	 * @param action	The action which should be taken at the state.
 	 */
-	void set(State *state, Action *action);
+	void set(const State *state, const Action *action);
 
 	/**
 	 * Set the mapping from a state to an action, allowing the explicit specification of the horizon.
@@ -84,7 +84,7 @@ public:
 	 * @param action			The action which should be taken at the state.
 	 * @throws PolicyException	The horizon was invalid.
 	 */
-	void set(unsigned int horizon, State *state, Action *action);
+	void set(unsigned int horizon, const State *state, const Action *action);
 
 	/**
 	 * Get the action for a given state. For finite horizon, it assumes 0 by default.
@@ -92,7 +92,7 @@ public:
 	 * @return The action to take at the given state.
 	 * @throws PolicyException The policy was not defined for this state.
 	 */
-	Action *get(State *state) const;
+	const Action *get(const State *state) const;
 
 	/**
 	 * Get the action for a given state, allowing the explicit specification of the horizon.
@@ -101,7 +101,7 @@ public:
 	 * @return The action to take at the given state.
 	 * @throws PolicyException The policy was not defined for this state, or horizon was invalid.
 	 */
-	Action *get(unsigned int horizon, State *state) const;
+	const Action *get(unsigned int horizon, const State *state) const;
 
 	/**
 	 * A function which must load a policy file.
@@ -130,7 +130,7 @@ private:
 	 * Defines the policy itself; it's the internal mapping from states to actions. There is
 	 * one of these mappings for each level.
 	 */
-	std::vector<std::map<State *, Action *> > policy;
+	std::vector<std::map<const State *, const Action *> > policy;
 
 };
 

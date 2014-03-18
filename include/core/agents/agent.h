@@ -81,7 +81,7 @@ public:
 	 * @param other The agent to compare.
 	 * @return Returns @code{true} if this agent is equal to the other; @code{false} otherwise.
 	 */
-	virtual bool operator==(const Agent &other);
+	virtual bool operator==(const Agent &other) const;
 
 	/**
 	 * Overload the less than operator for comparison.

@@ -55,7 +55,7 @@ public:
 	 * The constructor for the FiniteObservations class which allows the specification of an initial set of observations.
 	 * @param observations The initial vector of observations.
 	 */
-	FiniteObservations(std::vector<Observation *> observations);
+	FiniteObservations(const std::vector<const Observation *> &observations);
 
 	/**
 	 * The default deconstructor for the FiniteObservations class.
@@ -66,21 +66,21 @@ public:
 	 * Add a observation to the set of available observations.
 	 * @param newObservation The new observation to include in the set of available states.
 	 */
-	void add(Observation *newObservation);
+	void add(const Observation *newObservation);
 
 	/**
 	 * Remove a observation to the set of available observations. This frees the memory.
 	 * @param removeObservation 	The state to remove from the set of available observations.
 	 * @throws ObservationException	The observation was not found in the observations list.
 	 */
-	void remove(Observation *removeObservation);
+	void remove(const Observation *removeObservation);
 
 	/**
 	 * Set the internal observations list given another list, performing a deep copy. This resets
 	 * the current list of observations and frees the memory.
 	 * @param newObservations The vector of new observations to use.
 	 */
-	void set(std::vector<Observation *> newObservations);
+	void set(const std::vector<const Observation *> &newObservations);
 
 	/**
 	 * Get the observation at the corresponding index. An observation's index is defined by the order
@@ -89,13 +89,13 @@ public:
 	 * @return The observation at the corresponding index.
 	 * @throws ObservationException The index was invalid.
 	 */
-	Observation *get(int observationIndex) const;
+	const Observation *get(int observationIndex) const;
 
 	/**
 	 * Return a list of all the available observations.
 	 * @return Return a list of available observations.
 	 */
-	virtual const std::vector<Observation *> &all() const;
+	virtual const std::vector<const Observation *> &all() const;
 
 	/**
 	 * Return a list of the observations available given a previous state and the action taken there.
@@ -104,7 +104,7 @@ public:
 	 * @return Return a list of available observations.
 	 *
 	 */
-	virtual const std::vector<Observation *> &available(State *state, Action *action) const;
+	virtual const std::vector<const Observation *> &available(const State *state, const Action *action) const;
 
 	/**
 	 * Return the number of observations.
@@ -118,7 +118,7 @@ public:
 	 * @return The observation with the corresponding name provided.
 	 * @throws ObservationException The name was invalid.
 	 */
-	virtual Observation *find(std::string observationName) const;
+	virtual const Observation *find(std::string observationName) const;
 
 	/**
 	 * Reset the observations, clearing the internal list and freeing the memory.
@@ -126,34 +126,22 @@ public:
 	virtual void reset();
 
 	/**
-	 * To facilitate easy iteration, return the beginning of the observations vector.
-	 * @return The iterator which points to the beginning of the observations vector.
-	 */
-	std::vector<Observation *>::iterator begin();
-
-	/**
-	 * To facilitate easy iteration, return the end of the observations vector.
-	 * @return The iterator which points to the end of the observations vector.
-	 */
-	std::vector<Observation *>::iterator end();
-
-	/**
 	 * To facilitate easy iteration, return a constant beginning of the observations vector.
 	 * @return The iterator which points to a constant beginning of the observations vector.
 	 */
-	std::vector<Observation *>::const_iterator begin() const;
+	std::vector<const Observation *>::const_iterator begin() const;
 
 	/**
 	 * To facilitate easy iteration, return a constant end of the observations vector.
 	 * @return The iterator which points to a constant end of the observations vector.
 	 */
-	std::vector<Observation *>::const_iterator end() const;
+	std::vector<const Observation *>::const_iterator end() const;
 
 protected:
 	/**
 	 * The list of all available observations.
 	 */
-	std::vector<Observation *> observations;
+	std::vector<const Observation *> observations;
 
 };
 

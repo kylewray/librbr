@@ -82,7 +82,7 @@ public:
 	 * A function which follows the defined policy, having the current state stored internally,
 	 * and returns the action to select next.
 	 */
-	virtual Action *next();
+	virtual const Action *next();
 
 	/**
 	 * Reset the policy to the initial state.

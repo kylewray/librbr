@@ -31,7 +31,6 @@
 
 #include "action.h"
 
-
 /**
  * A joint action object. This is essentially a list of actions, each action being an action object itself.
  * Note: This class does *not* manage the memory of the actions provided. Memory should be managed in
@@ -51,7 +50,7 @@ public:
 	 * actual joint action tuple (vector).
 	 * @param jointState The list of actions which define this joint action.
 	 */
-	JointAction(std::vector<Action *> jointAction);
+	JointAction(const std::vector<const Action *> &jointAction);
 
 	/**
 	 * The copy constructor of the JointAction object.
@@ -75,20 +74,20 @@ public:
 	 * Set the joint action given a list of actions.
 	 * @param jointAction The list of actions which define this joint action.
 	 */
-	virtual void set(std::vector<Action *> jointAction);
+	virtual void set(const std::vector<const Action *> &jointAction);
 
 	/**
 	 * Get the joint action.
 	 * @return The list of actions.
 	 */
-	virtual std::vector<Action *> get() const;
+	virtual const std::vector<const Action *> &get() const;
 
 	/**
 	 * Get a particular action at a index.
 	 * @param index The index to retrieve the action.
 	 * @return The action at the index provided.
 	 */
-	virtual Action *get(int index) const;
+	virtual const Action *get(int index) const;
 
 	/**
 	 * Overload the equals operator to set this joint action equal to the state provided.
@@ -116,7 +115,7 @@ protected:
 	 * The joint action is defined as a tuple of actions. To remain general, this is a vector, but
 	 * should remain a fixed size. This class does *not* manage the memory of these action objects.
 	 */
-	std::vector<Action *> actions;
+	std::vector<const Action *> actions;
 
 private:
 	/**

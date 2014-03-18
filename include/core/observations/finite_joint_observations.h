@@ -32,7 +32,6 @@
 #include "observations.h"
 #include "finite_observations.h"
 
-
 /**
  * A class for finite sets of observations in an MDP-like object. Informally, there are two basic ways to
  * store finite observations: a vector of observations or a generator function based on a state and action.
@@ -68,7 +67,7 @@ public:
 	 * @param newObservation 		The new observation to include in the set of available observations.
 	 * @throws ObservationException	The index was invalid.
 	 */
-	void add(int factorIndex, Observation *newObservation);
+	void add(int factorIndex, const Observation *newObservation);
 
 	/**
 	 * Remove an observation to the set of available observations in a factor. This frees the memory. This
@@ -77,7 +76,7 @@ public:
 	 * @param removeObservation 	The observation to remove from the set of available observations.
 	 * @throws ObservationException	The index was invalid, or the observation was not found in the observations list.
 	 */
-	void remove(int factorIndex, Observation *removeObservation);
+	void remove(int factorIndex, const Observation *removeObservation);
 
 	/**
 	 * Set the internal observations list for a factor given another list, performing a deep copy. This resets
@@ -87,7 +86,7 @@ public:
 	 * @param newObservations 		The vector of new observations to use.
 	 * @throws ObservationException	The index was invalid, or newObservations was empty.
 	 */
-	void set(int factorIndex, std::vector<Observation *> newObservations);
+	void set(int factorIndex, const std::vector<const Observation *> &newObservations);
 
 	/**
 	 * Get the observation at the corresponding index, given the particular factor. The factor index
@@ -98,7 +97,7 @@ public:
 	 * @return The observation at the corresponding index.
 	 * @throws ObservationException The index was invalid.
 	 */
-	Observation *get(int factorIndex, int observationIndex) const;
+	const Observation *get(int factorIndex, int observationIndex) const;
 
 	/**
 	 * Update the internal observations list which holds all permutations of joint observations in an efficient structure.
@@ -129,7 +128,7 @@ protected:
 	/**
 	 * The list of all available observations for each observation factor.
 	 */
-	std::vector<std::vector<Observation *> > factoredObservations;
+	std::vector<std::vector<const Observation *> > factoredObservations;
 
 private:
 	/**
@@ -137,7 +136,7 @@ private:
 	 * @param currentJointObservation	The current (incomplete) joint observation as a vector of observations.
 	 * @param currentFactorIndex		The current factor index.
 	 */
-	void update_step(std::vector<Observation *> currentJointObservation, int currentFactorIndex);
+	void update_step(std::vector<const Observation *> currentJointObservation, int currentFactorIndex);
 
 };
 

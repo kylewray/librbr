@@ -52,7 +52,7 @@ SASRewards::~SASRewards()
  * @param nextState	The next state with which we assign the reward.
  * @param reward	The reward from the provided state-action-state triple.
  */
-void SASRewards::set(State *state, Action *action, State *nextState, double reward)
+void SASRewards::set(const State *state, const Action *action, const State *nextState, double reward)
 {
 	if (state == nullptr) {
 		state = stateWildcard;
@@ -74,24 +74,24 @@ void SASRewards::set(State *state, Action *action, State *nextState, double rewa
  * @param nextState	The next state with which we assign the reward.
  * @return The reward from taking the given action in the given state.
  */
-double SASRewards::get(State *state, Action *action, State *nextState) const
+double SASRewards::get(const State *state, const Action *action, const State *nextState) const
 {
 	// Iterate over all possible configurations of wildcards in the get statement.
 	// For each, use the get_value() function to check if the value exists. If it
 	// does, perhaps using a wildcard, then return that, otherwise continue.
 	// Return 0 by default.
 	for (int i = 0; i < 8; i++) {
-		State *alpha = stateWildcard;
+		const State *alpha = stateWildcard;
 		if (!(bool)(i & (1 << 0))) {
 			alpha = state;
 		}
 
-		Action *beta = actionWildcard;
+		const Action *beta = actionWildcard;
 		if (!(bool)(i & (1 << 1))) {
 			beta = action;
 		}
 
-		State *gamma = stateWildcard;
+		const State *gamma = stateWildcard;
 		if (!(bool)(i & (1 << 2))) {
 			gamma = nextState;
 		}
@@ -121,19 +121,20 @@ void SASRewards::reset()
  * @return The reward from taking the given action in the given state.
  * @throws RewardException The reward was not defined.
  */
-double SASRewards::get_value(State *state, Action *action, State *nextState) const
+double SASRewards::get_value(const State *state, const Action *action, const State *nextState) const
 {
-	std::map<State *, std::map<Action *, std::map<State *, double> > >::const_iterator alpha = rewards.find(state);
+	std::map<const State *, std::map<const Action *, std::map<const State *, double> > >::const_iterator alpha =
+			rewards.find(state);
 	if (alpha == rewards.end()) {
 		throw RewardException();
 	}
 
-	std::map<Action *, std::map<State *, double> >::const_iterator beta = alpha->second.find(action);
+	std::map<const Action *, std::map<const State *, double> >::const_iterator beta = alpha->second.find(action);
 	if (beta == alpha->second.end()) {
 		throw RewardException();
 	}
 
-	std::map<State *, double>::const_iterator gamma = beta->second.find(nextState);
+	std::map<const State *, double>::const_iterator gamma = beta->second.find(nextState);
 	if (gamma == beta->second.end()) {
 		throw RewardException();
 	}

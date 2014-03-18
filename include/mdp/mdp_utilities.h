@@ -46,7 +46,8 @@
  * @param aBest The action which produced the maximum V(s) value. This will be updated.
  */
 void bellman_update(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
-		const SASRewards *R, const Horizon *h, State *s, std::map<State *, double> &V, Action *&aBest);
+		const SASRewards *R, const Horizon *h, const State *s, std::map<const State *, double> &V,
+		const Action *&aBest);
 
 
 #endif // SOLVER_UTILITIES_H

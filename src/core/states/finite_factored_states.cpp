@@ -56,7 +56,7 @@ FiniteFactoredStates::~FiniteFactoredStates()
  * states list; please call update() once all factors have been set.
  * @param newState The new state to include in the set of available states.
  */
-void FiniteFactoredStates::add_factor(std::vector<State *> newStates)
+void FiniteFactoredStates::add_factor(const std::vector<const State *> &newStates)
 {
 	factoredStates.push_back(newStates);
 }
@@ -67,7 +67,7 @@ void FiniteFactoredStates::add_factor(std::vector<State *> newStates)
  * @param newState 			The new state to include in the set of available states.
  * @throws StateException	The index was invalid.
  */
-void FiniteFactoredStates::add(int factorIndex, State *newState)
+void FiniteFactoredStates::add(int factorIndex, const State *newState)
 {
 	if (factorIndex < 0 || factorIndex >= factoredStates.size()) {
 		throw StateException();
@@ -82,7 +82,7 @@ void FiniteFactoredStates::add(int factorIndex, State *newState)
  * @param removeState 		The state to remove from the set of available states.
  * @throws StateException	The index was invalid, or the state was not found in the states list.
  */
-void FiniteFactoredStates::remove(int factorIndex, State *removeState)
+void FiniteFactoredStates::remove(int factorIndex, const State *removeState)
 {
 	if (factorIndex < 0 || factorIndex >= factoredStates.size()) {
 		throw StateException();
@@ -105,14 +105,14 @@ void FiniteFactoredStates::remove(int factorIndex, State *removeState)
  * @param newStates 		The vector of new states to use.
  * @throws StateException	The index was invalid, or newStates was empty.
  */
-void FiniteFactoredStates::set(int factorIndex, std::vector<State *> newStates)
+void FiniteFactoredStates::set(int factorIndex, const std::vector<const State *> &newStates)
 {
 	if (factorIndex < 0 || factorIndex >= factoredStates.size() || newStates.size() == 0) {
 		throw StateException();
 	}
 
 	// Delete the current factor's states list.
-	for (State *state : factoredStates[factorIndex]) {
+	for (const State *state : factoredStates[factorIndex]) {
 		delete state;
 	}
 	factoredStates[factorIndex].clear();
@@ -129,7 +129,7 @@ void FiniteFactoredStates::set(int factorIndex, std::vector<State *> newStates)
  * @return The state at the corresponding index.
  * @throws StateException The index was invalid.
  */
-State *FiniteFactoredStates::get(int factorIndex, int stateIndex) const
+const State *FiniteFactoredStates::get(int factorIndex, int stateIndex) const
 {
 	if (factorIndex < 0 || factorIndex >= factoredStates.size() ||
 			stateIndex < 0 || stateIndex >= factoredStates[factorIndex].size()) {
@@ -147,7 +147,7 @@ State *FiniteFactoredStates::get(int factorIndex, int stateIndex) const
 void FiniteFactoredStates::update()
 {
 	// Throw an error if one factor is not defined.
-	for (std::vector<State *> &factor : factoredStates) {
+	for (std::vector<const State *> &factor : factoredStates) {
 		if (factor.size() == 0) {
 			throw StateException();
 		}
@@ -155,7 +155,7 @@ void FiniteFactoredStates::update()
 
 	states.clear();
 
-	std::vector<State *> create;
+	std::vector<const State *> create;
 	update_step(create, 0);
 }
 
@@ -172,8 +172,8 @@ int FiniteFactoredStates::get_num_factors()
  */
 void FiniteFactoredStates::reset()
 {
-	for (std::vector<State *> &factor : factoredStates) {
-		for (State *state : factor) {
+	for (std::vector<const State *> &factor : factoredStates) {
+		for (const State *state : factor) {
 			delete state;
 		}
 		factor.clear();
@@ -187,10 +187,10 @@ void FiniteFactoredStates::reset()
  * @param currentFactoredState	The current (incomplete) factored state as a vector of states.
  * @param currentFactorIndex	The current factor index.
  */
-void FiniteFactoredStates::update_step(std::vector<State *> currentFactoredState, int currentFactorIndex)
+void FiniteFactoredStates::update_step(std::vector<const State *> currentFactoredState, int currentFactorIndex)
 {
 	// At the final factor index, we need to create a bunch of factored states.
-	for (State *state : factoredStates[currentFactorIndex]) {
+	for (const State *state : factoredStates[currentFactorIndex]) {
 		// Begin by pushing a current factor's state on the vector (tuple).
 		currentFactoredState.push_back(state);
 

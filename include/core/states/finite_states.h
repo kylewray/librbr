@@ -32,7 +32,6 @@
 #include "states.h"
 #include "../actions/action.h"
 
-
 /**
  * A class for finite sets of states in an MDP-like object. Informally, there are two basic ways to
  * store finite states: a vector of states or a generator function based on a state and action. In both
@@ -54,7 +53,7 @@ public:
 	 * The constructor for the FiniteStates class which allows the specification of an initial set of states.
 	 * @param states The initial vector of states.
 	 */
-	FiniteStates(std::vector<State *> states);
+	FiniteStates(const std::vector<const State *> &states);
 
 	/**
 	 * The default deconstructor for the FiniteStates class.
@@ -65,21 +64,21 @@ public:
 	 * Add a state to the set of available states.
 	 * @param newState The new state to include in the set of available states.
 	 */
-	void add(State *newState);
+	void add(const State *newState);
 
 	/**
 	 * Remove a state to the set of available states. This frees the memory.
 	 * @param removeState 		The state to remove from the set of available states.
 	 * @throws StateException	The state was not found in the states list.
 	 */
-	void remove(State *removeState);
+	void remove(const State *removeState);
 
 	/**
 	 * Set the internal states list given another list, performing a deep copy. This resets
 	 * the current list of states and frees the memory.
 	 * @param newStates The vector of new states to use.
 	 */
-	void set(std::vector<State *> newStates);
+	void set(const std::vector<const State *> &newStates);
 
 	/**
 	 * Get the state at the corresponding index. A state's index is defined by the order
@@ -88,13 +87,13 @@ public:
 	 * @return The state at the corresponding index.
 	 * @throws StateException The index was invalid.
 	 */
-	State *get(int stateIndex) const;
+	const State *get(int stateIndex) const;
 
 	/**
 	 * Return a list of all the available states.
 	 * @return Return a list of available states.
 	 */
-	virtual const std::vector<State *> &all() const;
+	virtual const std::vector<const State *> &all() const;
 
 	/**
 	 * Return a list of the states available given a previous state and the action taken there.
@@ -102,7 +101,7 @@ public:
 	 * @param action	The action taken at the previous state.
 	 * @return Return a list of available states.
 	 */
-	virtual const std::vector<State *> &successor(State *state, Action *action) const;
+	virtual const std::vector<const State *> &successor(const State *state, const Action *action) const;
 
 	/**
 	 * Return the number of states.
@@ -116,7 +115,7 @@ public:
 	 * @return The state with the corresponding name provided.
 	 * @throws StateException The name was invalid.
 	 */
-	virtual State *find(std::string stateName) const;
+	virtual const State *find(std::string stateName) const;
 
 	/**
 	 * Reset the states, clearing the internal list and freeing the memory.
@@ -124,34 +123,22 @@ public:
 	virtual void reset();
 
 	/**
-	 * To facilitate easy iteration, return the beginning of the states vector.
-	 * @return The iterator which points to the beginning of the states vector.
-	 */
-	std::vector<State *>::iterator begin();
-
-	/**
-	 * To facilitate easy iteration, return the end of the states vector.
-	 * @return The iterator which points to the end of the states vector.
-	 */
-	std::vector<State *>::iterator end();
-
-	/**
 	 * To facilitate easy iteration, return a constant beginning of the states vector.
 	 * @return The iterator which points to a constant beginning of the states vector.
 	 */
-	std::vector<State *>::const_iterator begin() const;
+	std::vector<const State *>::const_iterator begin() const;
 
 	/**
 	 * To facilitate easy iteration, return a constant end of the states vector.
 	 * @return The iterator which points to a constant end of the states vector.
 	 */
-	std::vector<State *>::const_iterator end() const;
+	std::vector<const State *>::const_iterator end() const;
 
 protected:
 	/**
 	 * The list of all available states.
 	 */
-	std::vector<State *> states;
+	std::vector<const State *> states;
 
 };
 

@@ -24,7 +24,6 @@
 
 #include "../../../include/core/agents/agent.h"
 
-
 /**
  * The default constructor of the Agent object.
  */
@@ -89,7 +88,7 @@ Agent &Agent::operator=(const Agent &other)
  * @param other The agent to compare.
  * @return Returns @code{true} if this agent is equal to the other; @code{false} otherwise.
  */
-bool Agent::operator==(const Agent &other)
+bool Agent::operator==(const Agent &other) const
 {
 	return name == other.get_name();
 }

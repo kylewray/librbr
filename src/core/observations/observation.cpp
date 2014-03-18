@@ -24,7 +24,6 @@
 
 #include "../../../include/core/observations/observation.h"
 
-
 /**
  * The default constructor of the Observation object.
  */
@@ -89,7 +88,7 @@ Observation &Observation::operator=(const Observation &other)
  * @param other The observation to compare.
  * @return Returns @code{true} if this observation is equal to the other; @code{false} otherwise.
  */
-bool Observation::operator==(const Observation &other)
+bool Observation::operator==(const Observation &other) const
 {
 	return name == other.get_name();
 }

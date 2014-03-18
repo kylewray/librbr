@@ -106,6 +106,7 @@ private:
 
 };
 
-#include "../../src/utilities/a_star.tpp";
+#include "../../src/utilities/a_star.tpp"
+
 
 #endif // A_STAR_H

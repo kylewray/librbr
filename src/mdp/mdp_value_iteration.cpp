@@ -125,13 +125,13 @@ PolicyMap *MDPValueIteration::solve_finite_horizon(const FiniteStates *S, const 
 	PolicyMap *policy = new PolicyMap(h);
 
 	// The value of a states and state's actions.
-	std::map<State *, double> V;
+	std::map<const State *, double> V;
 
 	// Continue to iterate until the maximum difference between two V[s]'s is less than the tolerance.
 	for (int t = h->get_horizon() - 1; t >= 0; t--){
 		// For all the states, compute V(s).
-		for (State *s : *S) {
-			Action *aBest = nullptr;
+		for (const State *s : *S) {
+			const Action *aBest = nullptr;
 
 			bellman_update(S, A, T, R, h, s, V, aBest);
 
@@ -160,7 +160,7 @@ PolicyMap *MDPValueIteration::solve_infinite_horizon(const FiniteStates *S, cons
 	PolicyMap *policy = new PolicyMap(h);
 
 	// The value of the states.
-	std::map<State *, double> V;
+	std::map<const State *, double> V;
 
 	// Continue to iterate until the maximum difference between two V[s]'s is less than the tolerance.
 	double convergenceCriterion = epsilon * (1.0 - h->get_discount_factor()) / h->get_discount_factor();
@@ -170,8 +170,8 @@ PolicyMap *MDPValueIteration::solve_infinite_horizon(const FiniteStates *S, cons
 		delta = 0.0;
 
 		// For all the states, compute V(s).
-		for (State *s : *S) {
-			Action *aBest = nullptr;
+		for (const State *s : *S) {
+			const Action *aBest = nullptr;
 			double Vs = V[s];
 
 			// Perform the Bellman update, which modifies V and aBest such that V(s) = max Q(s, a)

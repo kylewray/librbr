@@ -130,7 +130,7 @@ int test_actions()
 	Action *a1New = new Action("a1");
 	Action *a2New = new Action("a2");
 
-	std::vector<Action *> testActionsList;
+	std::vector<const Action *> testActionsList;
 	testActionsList.push_back(a1New);
 	testActionsList.push_back(a2New);
 	finiteActions->set(testActionsList);
@@ -147,7 +147,7 @@ int test_actions()
 		std::cout << " Failure." << std::endl;
 	}
 
-	Action *testFindAction = nullptr;
+	const Action *testFindAction = nullptr;
 
 	std::cout << "Actions: Test 'FiniteActions::find'... ";
 	try {

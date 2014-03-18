@@ -488,11 +488,11 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 	// Either this is a single state, uniform, or number of states.
 	if (list[0].compare("uniform") == 0) {
 		double probability = 1.0 / (double)states->get_num_states();
-		for (State *state : *states) {
+		for (const State *state : *states) {
 			initialState->set_initial_belief(state, probability);
 		}
 	} else if (list.size() == 1) {
-		State *state = nullptr;
+		const State *state = nullptr;
 
 		try {
 			state = states->find(list[0]);
@@ -574,7 +574,7 @@ bool UnifiedFile::load_initial_state_inclusive(std::vector<std::string> items)
 	double probability = 1.0 / (double)list.size();
 
 	for (std::string idString : list) {
-		State *state = nullptr;
+		const State *state = nullptr;
 
 		try {
 			state = states->find(idString);
@@ -628,10 +628,10 @@ bool UnifiedFile::load_initial_state_exclusive(std::vector<std::string> items)
 
 	double probability = 1.0 / (double)(states->get_num_states() - list.size());
 
-	std::vector<State *> subset;
+	std::vector<const State *> subset;
 
 	for (std::string idString : list) {
-		State *state = nullptr;
+		const State *state = nullptr;
 
 		try {
 			state = states->find(idString);
@@ -647,7 +647,7 @@ bool UnifiedFile::load_initial_state_exclusive(std::vector<std::string> items)
 	}
 
 	// The remaining states must be defined with a uniform belief.
-	for (State *state : *states) {
+	for (const State *state : *states) {
 		if (std::find(subset.begin(), subset.end(), state) == subset.end()) {
 			initialState->set_initial_belief(state, probability);
 		}
@@ -826,7 +826,7 @@ bool UnifiedFile::load_factored_states(int factorIndex, std::string line)
 	std::vector<std::string> list = split_string_by_space(line);
 
 	// If this is one item, then it must be a number, since there must be at least two states.
-	std::vector<State *> newStates;
+	std::vector<const State *> newStates;
 
 	if (list.size() == 1) {
 		// Attempt to convert this to an integer.
@@ -964,7 +964,7 @@ int UnifiedFile::load_agent_actions(int agentIndex, std::string line)
 	std::vector<std::string> list = split_string_by_space(line);
 
 	// If this is one item, then it must be a number, since there must be at least two actions.
-	std::vector<Action *> newActions;
+	std::vector<const Action *> newActions;
 
 	if (list.size() == 1) {
 		// Attempt to convert this to an integer.
@@ -1102,7 +1102,7 @@ int UnifiedFile::load_agent_observations(int agentIndex, std::string line)
 	std::vector<std::string> list = split_string_by_space(line);
 
 	// If this is one item, then it must be a number, since there must be at least two observations.
-	std::vector<Observation *> newObservations;
+	std::vector<const Observation *> newObservations;
 
 	if (list.size() == 1) {
 		// Attempt to convert this to an integer.
@@ -1171,7 +1171,7 @@ int UnifiedFile::load_state_transition(std::vector<std::string> items)
 	}
 
 	std::string actionName = split_string_by_space(items[1])[0];
-	Action *action = nullptr;
+	const Action *action = nullptr;
 
 	if (actionName.compare("*") != 0) {
 		try {
@@ -1191,7 +1191,7 @@ int UnifiedFile::load_state_transition(std::vector<std::string> items)
 	}
 
 	std::string startStateName = split_string_by_space(items[2])[0];
-	State *startState = nullptr;
+	const State *startState = nullptr;
 
 	if (startStateName.compare("*") != 0) {
 		try {
@@ -1212,7 +1212,7 @@ int UnifiedFile::load_state_transition(std::vector<std::string> items)
 	}
 
 	std::string endStateName = split_string_by_space(items[3])[0];
-	State *endState = nullptr;
+	const State *endState = nullptr;
 
 	if (endStateName.compare("*") != 0) {
 		try {
@@ -1372,7 +1372,7 @@ int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 	}
 
 	std::string actionName = split_string_by_space(items[1])[0];
-	Action *action = nullptr;
+	const Action *action = nullptr;
 
 	if (actionName.compare("*") != 0) {
 		try {
@@ -1392,7 +1392,7 @@ int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 	}
 
 	std::string endStateName = split_string_by_space(items[2])[0];
-	State *endState = nullptr;
+	const State *endState = nullptr;
 
 	if (endStateName.compare("*") != 0) {
 		try {
@@ -1413,7 +1413,7 @@ int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 	}
 
 	std::string observationName = split_string_by_space(items[3])[0];
-	Observation *observation = nullptr;
+	const Observation *observation = nullptr;
 
 	if (observationName.compare("*") != 0) {
 		try {
@@ -1573,7 +1573,7 @@ int UnifiedFile::load_reward(std::vector<std::string> items)
 	}
 
 	std::string actionName = split_string_by_space(items[1])[0];
-	Action *action = nullptr;
+	const Action *action = nullptr;
 
 	if (actionName.compare("*") != 0) {
 		try {
@@ -1593,7 +1593,7 @@ int UnifiedFile::load_reward(std::vector<std::string> items)
 	}
 
 	std::string startStateName = split_string_by_space(items[2])[0];
-	State *startState = nullptr;
+	const State *startState = nullptr;
 
 	if (startStateName.compare("*") != 0) {
 		try {
@@ -1614,7 +1614,7 @@ int UnifiedFile::load_reward(std::vector<std::string> items)
 	}
 
 	std::string endStateName = split_string_by_space(items[3])[0];
-	State *endState = nullptr;
+	const State *endState = nullptr;
 
 	if (endStateName.compare("*") != 0) {
 		try {

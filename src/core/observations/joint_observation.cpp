@@ -25,7 +25,6 @@
 #include "../../../include/core/observations/joint_observation.h"
 #include "../../../include/core/observations/observation_exception.h"
 
-
 /**
  * The constructor of the JointObservation object which allows initial specification of the
  * number of joint states.
@@ -41,7 +40,7 @@ JointObservation::JointObservation(int numJointObservations)
  * actual joint observation tuple (vector).
  * @param jointObservation The list of states which define this joint observation.
  */
-JointObservation::JointObservation(std::vector<Observation *> jointObservation)
+JointObservation::JointObservation(const std::vector<const Observation *> &jointObservation)
 {
 	observations.reserve(jointObservation.size());
 	observations = jointObservation;
@@ -77,7 +76,7 @@ void JointObservation::set_name(std::string newName)
  * Set the joint observation given a list of observations.
  * @param jointObservation The list of observations which define this joint observation.
  */
-void JointObservation::set(std::vector<Observation *> jointObservation)
+void JointObservation::set(const std::vector<const Observation *> &jointObservation)
 {
 	observations = jointObservation;
 	update_name();
@@ -87,7 +86,7 @@ void JointObservation::set(std::vector<Observation *> jointObservation)
  * Get the joint observation.
  * @return The list of observations.
  */
-std::vector<Observation *> JointObservation::get() const
+const std::vector<const Observation *> &JointObservation::get() const
 {
 	return observations;
 }
@@ -98,7 +97,7 @@ std::vector<Observation *> JointObservation::get() const
  * @return The observation at the index provided.
  * @throws ObservationException The index is not valid.
  */
-Observation *JointObservation::get(int index) const
+const Observation *JointObservation::get(int index) const
 {
 	if (index < 0 || index >= observations.size()) {
 		throw ObservationException();
@@ -126,7 +125,7 @@ JointObservation &JointObservation::operator=(const JointObservation &other)
 bool JointObservation::operator==(const JointObservation &other)
 {
 	int counter = 0;
-	for (Observation *observation : observations) {
+	for (const Observation *observation : observations) {
 		if (*observation == *(other.get(counter))) {
 			return false;
 		}
@@ -153,7 +152,7 @@ void JointObservation::update_name()
 	name = "";
 
 	int counter = 0;
-	for (Observation *observation : observations) {
+	for (const Observation *observation : observations) {
 		name += observation->get_name();
 
 		counter++;

@@ -66,7 +66,7 @@ public:
 	 * @param newAction			The new actions to include in the set of available actions.
 	 * @throws ActionException	The index was invalid.
 	 */
-	void add(int factorIndex, Action *newAction);
+	void add(int factorIndex, const Action *newAction);
 
 	/**
 	 * Remove an action to the set of available actions in a factor. This frees the memory. This does *not*
@@ -75,7 +75,7 @@ public:
 	 * @param removeAction 		The action to remove from the set of available actions.
 	 * @throws ActionException	The index was invalid, or the action was not found in the actions list.
 	 */
-	void remove(int factorIndex, Action *removeAction);
+	void remove(int factorIndex, const Action *removeAction);
 
 	/**
 	 * Set the internal actions list for a factor given another list, performing a deep copy. This resets
@@ -85,7 +85,7 @@ public:
 	 * @param newActions 		The vector of new actions to use.
 	 * @throws ActionException	The index was invalid, or newActions was empty.
 	 */
-	void set(int factorIndex, std::vector<Action *> newActions);
+	void set(int factorIndex, const std::vector<const Action *> &newActions);
 
 	/**
 	 * Get the action at the corresponding index, given the particular factor. The factor index
@@ -96,7 +96,7 @@ public:
 	 * @return The action at the corresponding index.
 	 * @throws ActionException The index was invalid.
 	 */
-	Action *get(int factorIndex, int actionIndex) const;
+	const Action *get(int factorIndex, int actionIndex) const;
 
 	/**
 	 * Update the internal actions list which holds all permutations of joint actions in an efficient structure.
@@ -127,7 +127,7 @@ protected:
 	/**
 	 * The list of all available actions for each action factor.
 	 */
-	std::vector<std::vector<Action *> > factoredActions;
+	std::vector<std::vector<const Action *> > factoredActions;
 
 private:
 	/**
@@ -135,7 +135,7 @@ private:
 	 * @param currentJointAction	The current (incomplete) joint action as a vector of actions.
 	 * @param currentFactorIndex	The current factor index.
 	 */
-	void update_step(std::vector<Action *> currentJointAction, int currentFactorIndex);
+	void update_step(std::vector<const Action *> currentJointAction, int currentFactorIndex);
 
 };
 

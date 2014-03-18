@@ -31,7 +31,6 @@
 
 #include "state.h"
 
-
 /**
  * A factored state object. This is essentially a list of states, each state being a state object itself.
  * Note: This class does *not* manage the memory of the states provided. Memory should be managed in
@@ -51,7 +50,7 @@ public:
 	 * actual factored state tuple (vector).
 	 * @param factoredState The list of states which define this factored state.
 	 */
-	FactoredState(std::vector<State *> factoredState);
+	FactoredState(const std::vector<const State *> &factoredState);
 
 	/**
 	 * The copy constructor of the FactoredState object.
@@ -75,20 +74,20 @@ public:
 	 * Set the factored state given a list of states.
 	 * @param factoredState The list of states which define this factored state.
 	 */
-	virtual void set(std::vector<State *> factoredState);
+	virtual void set(const std::vector<const State *> &factoredState);
 
 	/**
 	 * Get the factored state.
 	 * @return The list of states.
 	 */
-	virtual std::vector<State *> get() const;
+	virtual const std::vector<const State *> &get() const;
 
 	/**
 	 * Get a particular state at a index.
 	 * @param index The index to retrieve the state.
 	 * @return The state at the index provided.
 	 */
-	virtual State *get(int index) const;
+	virtual const State *get(int index) const;
 
 	/**
 	 * Overload the equals operator to set this factored state equal to the state provided.
@@ -116,7 +115,7 @@ protected:
 	 * The factored state is defined as a tuple of states. To remain general, this is a vector, but
 	 * should remain a fixed size. This class does *not* manage the memory of these state objects.
 	 */
-	std::vector<State *> states;
+	std::vector<const State *> states;
 
 private:
 	/**

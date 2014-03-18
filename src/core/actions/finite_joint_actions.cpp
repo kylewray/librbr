@@ -53,7 +53,7 @@ FiniteJointActions::~FiniteJointActions()
  * @param newAction			The new actions to include in the set of available actions.
  * @throws ActionException	The index was invalid.
  */
-void FiniteJointActions::add(int factorIndex, Action *newAction)
+void FiniteJointActions::add(int factorIndex, const Action *newAction)
 {
 	if (factorIndex < 0 || factorIndex >= factoredActions.size()) {
 		throw ActionException();
@@ -69,7 +69,7 @@ void FiniteJointActions::add(int factorIndex, Action *newAction)
  * @param removeAction 		The action to remove from the set of available actions.
  * @throws ActionException	The index was invalid, or the action was not found in the actions list.
  */
-void FiniteJointActions::remove(int factorIndex, Action *removeAction)
+void FiniteJointActions::remove(int factorIndex, const Action *removeAction)
 {
 	if (factorIndex < 0 || factorIndex >= factoredActions.size()) {
 		throw ActionException();
@@ -92,14 +92,14 @@ void FiniteJointActions::remove(int factorIndex, Action *removeAction)
  * @param newActions 		The vector of new actions to use.
  * @throws ActionException	The index was invalid, or newActions was empty.
  */
-void FiniteJointActions::set(int factorIndex, std::vector<Action *> newActions)
+void FiniteJointActions::set(int factorIndex, const std::vector<const Action *> &newActions)
 {
 	if (factorIndex < 0 || factorIndex >= factoredActions.size() || newActions.size() == 0) {
 		throw ActionException();
 	}
 
 	// Delete the current factor's actions list.
-	for (Action *action : factoredActions[factorIndex]) {
+	for (const Action *action : factoredActions[factorIndex]) {
 		delete action;
 	}
 	factoredActions[factorIndex].clear();
@@ -116,7 +116,7 @@ void FiniteJointActions::set(int factorIndex, std::vector<Action *> newActions)
  * @return The action at the corresponding index.
  * @throws ActionException The index was invalid.
  */
-Action *FiniteJointActions::get(int factorIndex, int actionIndex) const
+const Action *FiniteJointActions::get(int factorIndex, int actionIndex) const
 {
 	if (factorIndex < 0 || factorIndex >= factoredActions.size() ||
 			actionIndex < 0 || actionIndex >= factoredActions[factorIndex].size()) {
@@ -134,7 +134,7 @@ Action *FiniteJointActions::get(int factorIndex, int actionIndex) const
 void FiniteJointActions::update()
 {
 	// Throw an error if one factor is not defined.
-	for (std::vector<Action *> &factor : factoredActions) {
+	for (std::vector<const Action *> &factor : factoredActions) {
 		if (factor.size() == 0) {
 			throw ActionException();
 		}
@@ -142,7 +142,7 @@ void FiniteJointActions::update()
 
 	actions.clear();
 
-	std::vector<Action *> create;
+	std::vector<const Action *> create;
 	update_step(create, 0);
 }
 
@@ -159,8 +159,8 @@ int FiniteJointActions::get_num_factors()
  */
 void FiniteJointActions::reset()
 {
-	for (std::vector<Action *> &factor : factoredActions) {
-		for (Action *action : factor) {
+	for (std::vector<const Action *> &factor : factoredActions) {
+		for (const Action *action : factor) {
 			delete action;
 		}
 		factor.clear();
@@ -174,10 +174,10 @@ void FiniteJointActions::reset()
  * @param currentJointAction	The current (incomplete) joint action as a vector of actions.
  * @param currentFactorIndex	The current factor index.
  */
-void FiniteJointActions::update_step(std::vector<Action *> currentJointAction, int currentFactorIndex)
+void FiniteJointActions::update_step(std::vector<const Action *> currentJointAction, int currentFactorIndex)
 {
 	// At the final factor index, we need to create a bunch of joint actions.
-	for (Action *action : factoredActions[currentFactorIndex]) {
+	for (const Action *action : factoredActions[currentFactorIndex]) {
 		// Begin by pushing a current factor's action on the vector (tuple).
 		currentJointAction.push_back(action);
 

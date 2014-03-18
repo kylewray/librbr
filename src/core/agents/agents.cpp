@@ -25,7 +25,6 @@
 #include "../../../include/core/agents/agents.h"
 #include "../../../include/core/agents/agent_exception.h"
 
-
 /**
  * The default constructor for the Agents class.
  */
@@ -44,7 +43,7 @@ Agents::~Agents()
  * Add an agent to the set of available agents.
  * @param newAgent The new agent to include in the set of available agents.
  */
-void Agents::add(Agent *newAgent)
+void Agents::add(const Agent *newAgent)
 {
 	agents.push_back(newAgent);
 }
@@ -54,7 +53,7 @@ void Agents::add(Agent *newAgent)
  * @param removeAgent 		The agent to remove from the set of available agents.
  * @throws AgentException	The agent was not found in the agents list.
  */
-void Agents::remove(Agent *removeAgent)
+void Agents::remove(const Agent *removeAgent)
 {
 	if (std::find(agents.begin(), agents.end(), removeAgent) == agents.end()) {
 		throw AgentException();
@@ -69,7 +68,7 @@ void Agents::remove(Agent *removeAgent)
  * the current list of states and frees the memory.
  * @param newActions The vector of new actions to use.
  */
-void Agents::set(std::vector<Agent *> newAgents)
+void Agents::set(const std::vector<const Agent *> &newAgents)
 {
 	reset();
 	agents = newAgents;
@@ -82,7 +81,7 @@ void Agents::set(std::vector<Agent *> newAgents)
  * @return The agent at the corresponding index.
  * @throws AgentException The index was invalid.
  */
-Agent *Agents::get(int agentIndex) const
+const Agent *Agents::get(int agentIndex) const
 {
 	if (agentIndex < 0 || agentIndex >= agents.size()) {
 		throw AgentException();
@@ -95,7 +94,7 @@ Agent *Agents::get(int agentIndex) const
  * Return a list of all the available agents.
  * @return Return a list of available agents.
  */
-std::vector<Agent *> Agents::all() const
+const std::vector<const Agent *> &Agents::all() const
 {
 	return agents;
 }
@@ -115,9 +114,9 @@ int Agents::get_num_agents() const
  * @return The agent with the corresponding name provided
  * @throws AgentException The name was invalid.
  */
-Agent *Agents::find(std::string agentName) const
+const Agent *Agents::find(std::string agentName) const
 {
-	for (Agent *agent : agents) {
+	for (const Agent *agent : agents) {
 		if (agent->get_name().compare(agentName) == 0) {
 			return agent;
 		}
@@ -130,35 +129,17 @@ Agent *Agents::find(std::string agentName) const
  */
 void Agents::reset()
 {
-	for (Agent *agent : agents) {
+	for (const Agent *agent : agents) {
 		delete agent;
 	}
 	agents.clear();
 }
 
 /**
- * To facilitate easy iteration, return the beginning of the agents vector.
- * @return The iterator which points to the beginning of the agents vector.
- */
-std::vector<Agent *>::iterator Agents::begin()
-{
-	return agents.begin();
-}
-
-/**
- * To facilitate easy iteration, return the end of the agents vector.
- * @return The iterator which points to the end of the agents vector.
- */
-std::vector<Agent *>::iterator Agents::end()
-{
-	return agents.end();
-}
-
-/**
  * To facilitate easy iteration, return a constant beginning of the agents vector.
  * @return The iterator which points to a constant beginning of the agents vector.
  */
-std::vector<Agent *>::const_iterator Agents::begin() const
+std::vector<const Agent *>::const_iterator Agents::begin() const
 {
 	return agents.begin();
 }
@@ -167,7 +148,7 @@ std::vector<Agent *>::const_iterator Agents::begin() const
  * To facilitate easy iteration, return a constant end of the agents vector.
  * @return The iterator which points to a constant end of the agents vector.
  */
-std::vector<Agent *>::const_iterator Agents::end() const
+std::vector<const Agent *>::const_iterator Agents::end() const
 {
 	return agents.end();
 }

@@ -37,7 +37,7 @@ FiniteStates::FiniteStates()
  * The constructor for the FiniteStates class which allows the specification of an initial set of FiniteStates.
  * @param FiniteStates The initial vector of FiniteStates.
  */
-FiniteStates::FiniteStates(std::vector<State *> states)
+FiniteStates::FiniteStates(const std::vector<const State *> &states)
 {
 	set(states);
 }
@@ -54,7 +54,7 @@ FiniteStates::~FiniteStates()
  * Add a state to the set of available states.
  * @param newState The new state to include in the set of available states.
  */
-void FiniteStates::add(State *newState)
+void FiniteStates::add(const State *newState)
 {
 	states.push_back(newState);
 }
@@ -64,7 +64,7 @@ void FiniteStates::add(State *newState)
  * @param removeState 		The state to remove from the set of available states.
  * @throws StateException	The state was not found in the states list.
  */
-void FiniteStates::remove(State *removeState)
+void FiniteStates::remove(const State *removeState)
 {
 	if (std::find(states.begin(), states.end(), removeState) == states.end()) {
 		throw StateException();
@@ -79,7 +79,7 @@ void FiniteStates::remove(State *removeState)
  * the current list of states and frees the memory.
  * @param newStates The vector of new states to use.
  */
-void FiniteStates::set(std::vector<State *> newStates)
+void FiniteStates::set(const std::vector<const State *> &newStates)
 {
 	reset();
 	states = newStates;
@@ -92,7 +92,7 @@ void FiniteStates::set(std::vector<State *> newStates)
  * @return The state at the corresponding index.
  * @throws StateException The index was invalid.
  */
-State *FiniteStates::get(int stateIndex) const
+const State *FiniteStates::get(int stateIndex) const
 {
 	if (stateIndex < 0 || stateIndex >= states.size()) {
 		throw StateException();
@@ -105,7 +105,7 @@ State *FiniteStates::get(int stateIndex) const
  * Return a list of all the available states.
  * @return Return a list of available states.
  */
-const std::vector<State *> &FiniteStates::all() const
+const std::vector<const State *> &FiniteStates::all() const
 {
 	return states;
 }
@@ -117,7 +117,7 @@ const std::vector<State *> &FiniteStates::all() const
  * @return Return a list of available states.
  *
  */
-const std::vector<State *> &FiniteStates::successor(State *state, Action *action) const
+const std::vector<const State *> &FiniteStates::successor(const State *state, const Action *action) const
 {
 	return states;
 }
@@ -137,9 +137,9 @@ int FiniteStates::get_num_states() const
  * @return The state with the corresponding name provided.
  * @throws StateException The name was invalid.
  */
-State *FiniteStates::find(std::string stateName) const
+const State *FiniteStates::find(std::string stateName) const
 {
-	for (State *state : states) {
+	for (const State *state : states) {
 		if (state->get_name().compare(stateName) == 0) {
 			return state;
 		}
@@ -153,35 +153,17 @@ State *FiniteStates::find(std::string stateName) const
  */
 void FiniteStates::reset()
 {
-	for (State *state : states) {
+	for (const State *state : states) {
 		delete state;
 	}
 	states.clear();
 }
 
 /**
- * To facilitate easy iteration, return the beginning of the states vector.
- * @return The iterator which points to the beginning of the states vector.
- */
-std::vector<State *>::iterator FiniteStates::begin()
-{
-	return states.begin();
-}
-
-/**
- * To facilitate easy iteration, return the end of the states vector.
- * @return The iterator which points to the end of the states vector.
- */
-std::vector<State *>::iterator FiniteStates::end()
-{
-	return states.end();
-}
-
-/**
  * To facilitate easy iteration, return a constant beginning of the states vector.
  * @return The iterator which points to a constant beginning of the states vector.
  */
-std::vector<State *>::const_iterator FiniteStates::begin() const
+std::vector<const State *>::const_iterator FiniteStates::begin() const
 {
 	return states.begin();
 }
@@ -190,7 +172,7 @@ std::vector<State *>::const_iterator FiniteStates::begin() const
  * To facilitate easy iteration, return a constant end of the states vector.
  * @return The iterator which points to a constant end of the states vector.
  */
-std::vector<State *>::const_iterator FiniteStates::end() const
+std::vector<const State *>::const_iterator FiniteStates::end() const
 {
 	return states.end();
 }

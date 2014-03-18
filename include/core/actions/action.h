@@ -81,7 +81,7 @@ public:
 	 * @param other The action to compare.
 	 * @return Returns @code{true} if this action is equal to the other; @code{false} otherwise.
 	 */
-	virtual bool operator==(const Action &other);
+	virtual bool operator==(const Action &other) const;
 
 	/**
 	 * Overload the less than operator for comparison.

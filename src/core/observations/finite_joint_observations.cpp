@@ -53,7 +53,7 @@ FiniteJointObservations::~FiniteJointObservations()
  * @param newObservation 		The new observation to include in the set of available observations.
  * @throws ObservationException	The index was invalid.
  */
-void FiniteJointObservations::add(int factorIndex, Observation *newObservation)
+void FiniteJointObservations::add(int factorIndex, const Observation *newObservation)
 {
 	if (factorIndex < 0 || factorIndex >= factoredObservations.size()) {
 		throw ObservationException();
@@ -69,7 +69,7 @@ void FiniteJointObservations::add(int factorIndex, Observation *newObservation)
  * @param removeObservation 	The observation to remove from the set of available observations.
  * @throws ObservationException	The index was invalid, or the observation was not found in the observations list.
  */
-void FiniteJointObservations::remove(int factorIndex, Observation *removeObservation)
+void FiniteJointObservations::remove(int factorIndex, const Observation *removeObservation)
 {
 	if (factorIndex < 0 || factorIndex >= factoredObservations.size()) {
 		throw ObservationException();
@@ -93,14 +93,14 @@ void FiniteJointObservations::remove(int factorIndex, Observation *removeObserva
  * @param newObservations 		The vector of new observations to use.
  * @throws ObservationException	The index was invalid, or newObservations was empty.
  */
-void FiniteJointObservations::set(int factorIndex, std::vector<Observation *> newObservations)
+void FiniteJointObservations::set(int factorIndex, const std::vector<const Observation *> &newObservations)
 {
 	if (factorIndex < 0 || factorIndex >= factoredObservations.size() || newObservations.size() == 0) {
 		throw ObservationException();
 	}
 
 	// Delete the current factor's observations list.
-	for (Observation *observation : factoredObservations[factorIndex]) {
+	for (const Observation *observation : factoredObservations[factorIndex]) {
 		delete observation;
 	}
 	factoredObservations[factorIndex].clear();
@@ -117,7 +117,7 @@ void FiniteJointObservations::set(int factorIndex, std::vector<Observation *> ne
  * @return The observation at the corresponding index.
  * @throws ObservationException The index was invalid.
  */
-Observation *FiniteJointObservations::get(int factorIndex, int observationIndex) const
+const Observation *FiniteJointObservations::get(int factorIndex, int observationIndex) const
 {
 	if (factorIndex < 0 || factorIndex >= factoredObservations.size() ||
 			observationIndex < 0 || observationIndex >= factoredObservations[factorIndex].size()) {
@@ -135,7 +135,7 @@ Observation *FiniteJointObservations::get(int factorIndex, int observationIndex)
 void FiniteJointObservations::update()
 {
 	// Throw an error if one factor is not defined.
-	for (std::vector<Observation *> &factor : factoredObservations) {
+	for (std::vector<const Observation *> &factor : factoredObservations) {
 		if (factor.size() == 0) {
 			throw ObservationException();
 		}
@@ -143,7 +143,7 @@ void FiniteJointObservations::update()
 
 	observations.clear();
 
-	std::vector<Observation *> create;
+	std::vector<const Observation *> create;
 	update_step(create, 0);
 }
 
@@ -160,8 +160,8 @@ int FiniteJointObservations::get_num_factors()
  */
 void FiniteJointObservations::reset()
 {
-	for (std::vector<Observation *> &factor : factoredObservations) {
-		for (Observation *observation : factor) {
+	for (std::vector<const Observation *> &factor : factoredObservations) {
+		for (const Observation *observation : factor) {
 			delete observation;
 		}
 		factor.clear();
@@ -176,10 +176,10 @@ void FiniteJointObservations::reset()
  * @param currentJointObservation	The current (incomplete) joint observation as a vector of observations.
  * @param currentFactorIndex		The current factor index.
  */
-void FiniteJointObservations::update_step(std::vector<Observation *> currentJointObservation, int currentFactorIndex)
+void FiniteJointObservations::update_step(std::vector<const Observation *> currentJointObservation, int currentFactorIndex)
 {
 	// At the final factor index, we need to create a bunch of joint observations.
-	for (Observation *observation : factoredObservations[currentFactorIndex]) {
+	for (const Observation *observation : factoredObservations[currentFactorIndex]) {
 		// Begin by pushing a current factor's observation on the vector (tuple).
 		currentJointObservation.push_back(observation);
 

@@ -24,7 +24,6 @@
 
 #include "../../../include/core/states/state.h"
 
-
 /**
  * The default constructor of the State object.
  */
@@ -89,7 +88,7 @@ State &State::operator=(const State &other)
  * @param other The state to compare.
  * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
  */
-bool State::operator==(const State &other)
+bool State::operator==(const State &other) const
 {
 	return name == other.get_name();
 }

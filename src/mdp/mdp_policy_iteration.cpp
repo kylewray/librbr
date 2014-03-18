@@ -129,7 +129,7 @@ PolicyMap *MDPPolicyIteration::solve_exact(const FiniteStates *S, const FiniteAc
 		const SASRewards *R, const Horizon *h)
 {
 	PolicyMap *policy = new PolicyMap(h);
-	for (State *s : *S) {
+	for (const State *s : *S) {
 		policy->set(s, A->get(0));
 	}
 
@@ -148,9 +148,9 @@ PolicyMap *MDPPolicyIteration::solve_exact(const FiniteStates *S, const FiniteAc
 
 		// Update the matrix M with the new policy changes.
 		unsigned int i = 0;
-		for (State *si : *S) {
+		for (const State *si : *S) {
 			unsigned int j = 0;
-			for (State *sj : *S) {
+			for (const State *sj : *S) {
 				M(i, j) = h->get_discount_factor() * T->get(si, policy->get(si), sj);
 
 				// Handle the special case for the diagonal, which will be one less since we subtracted
@@ -165,9 +165,9 @@ PolicyMap *MDPPolicyIteration::solve_exact(const FiniteStates *S, const FiniteAc
 
 		// Update the vector b with the new policy changes.
 		i = 0;
-		for (State *si : *S) {
+		for (const State *si : *S) {
 			b(i) = 0.0;
-			for (State *sj : *S) {
+			for (const State *sj : *S) {
 				b(i) -= T->get(si, policy->get(si), sj) * R->get(si, policy->get(si), sj);
 			}
 			i++;
@@ -178,9 +178,9 @@ PolicyMap *MDPPolicyIteration::solve_exact(const FiniteStates *S, const FiniteAc
 		x = M.colPivHouseholderQr().solve(b);
 
 		// Store updates in V.
-		std::map<State *, double> V;
+		std::map<const State *, double> V;
 		i = 0;
-		for (State *s : *S) {
+		for (const State *s : *S) {
 			V[s] = x(i);
 			i++;
 		}
@@ -188,9 +188,9 @@ PolicyMap *MDPPolicyIteration::solve_exact(const FiniteStates *S, const FiniteAc
 		// Compute the action which maximizes the expected reward. During the computation, check if any
 		// policy changes occur.
 		i = 0;
-		for (State *s : *S) {
+		for (const State *s : *S) {
 			// Perform the Bellman update, but we only care about aBest = argmax Q(s, a).
-			Action *aBest = nullptr;
+			const Action *aBest = nullptr;
 			bellman_update(S, A, T, R, h, s, V, aBest);
 
 			// Check if a policy change was required. Also, handle the initial case with an undefined mapping.
@@ -222,7 +222,7 @@ PolicyMap *MDPPolicyIteration::solve_modified(const FiniteStates *S, const Finit
 	PolicyMap *policy = new PolicyMap(h);
 
 	// The value of the states, which will be constantly improved over iterations.
-	std::map<State *, double> V;
+	std::map<const State *, double> V;
 
 	// Continue to iterate until the policy is unchanged in between two iterations.
 	bool unchanged = false;
@@ -233,8 +233,8 @@ PolicyMap *MDPPolicyIteration::solve_modified(const FiniteStates *S, const Finit
 		// Continue to iterate a number of times equal to the constant k specified at initialization.
 		for (int k = 0; k < modifiedK; k++) {
 			// For all the states, compute V(s).
-			for (State *s : *S) {
-				Action *aBest = nullptr;
+			for (const State *s : *S) {
+				const Action *aBest = nullptr;
 
 				// Perform the Bellman update, which modifies V and aBest such that V(s) = max Q(s, a)
 				// and aBest = argmax Q(s, a).

@@ -1,4 +1,4 @@
-CC = g++ 
+CC = g++
 CFLAGS = -std=c++11 -g
 tests: all.o tests/core/*.cpp tests/mdp/*.cpp tests/file_loaders/*.cpp tests/utilities/*.cpp
 	mkdir -p tests/obj

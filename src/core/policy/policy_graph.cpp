@@ -63,7 +63,7 @@ bool PolicyGraph::save(std::string filename) const
  * A function which follows the defined policy, having the current state stored internally,
  * and returns the action to select next.
  */
-Action *PolicyGraph::next()
+const Action *PolicyGraph::next()
 {
 	return nullptr;
 }

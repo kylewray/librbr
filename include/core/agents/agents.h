@@ -52,21 +52,21 @@ public:
 	 * Add an agent to the set of available agents.
 	 * @param newAgent The new agent to include in the set of available agents.
 	 */
-	void add(Agent *newAgent);
+	void add(const Agent *newAgent);
 
 	/**
 	 * Remove an agent to the set of available agents. This frees the memory.
 	 * @param removeAgent 		The agent to remove from the set of available agents.
 	 * @throws AgentException	The agent was not found in the agents list.
 	 */
-	void remove(Agent *removeAgent);
+	void remove(const Agent *removeAgent);
 
 	/**
 	 * Set the internal actions list given another list, performing a deep copy. This resets
 	 * the current list of states and frees the memory.
 	 * @param newActions The vector of new actions to use.
 	 */
-	void set(std::vector<Agent *> newAgents);
+	void set(const std::vector<const Agent *> &newAgents);
 
 	/**
 	 * Get an agent at a particular index. The index is determined by the order in which
@@ -75,13 +75,13 @@ public:
 	 * @return The agent at the corresponding index.
 	 * @throws AgentException The index was invalid.
 	 */
-	Agent *get(int agentIndex) const;
+	const Agent *get(int agentIndex) const;
 
 	/**
 	 * Return a list of all the available agents.
 	 * @return Return a list of available agents.
 	 */
-	std::vector<Agent *> all() const;
+	const std::vector<const Agent *> &all() const;
 
 	/**
 	 * Return the number of agents.
@@ -95,7 +95,7 @@ public:
 	 * @return The agent with the corresponding name provided.
 	 * @throws AgentException The name was invalid.
 	 */
-	virtual Agent *find(std::string agentName) const;
+	virtual const Agent *find(std::string agentName) const;
 
 	/**
 	 * Reset the agents, clearing the internal list and freeing the memory.
@@ -103,34 +103,22 @@ public:
 	void reset();
 
 	/**
-	 * To facilitate easy iteration, return the beginning of the agents vector.
-	 * @return The iterator which points to the beginning of the agents vector.
-	 */
-	std::vector<Agent *>::iterator begin();
-
-	/**
-	 * To facilitate easy iteration, return the end of the agents vector.
-	 * @return The iterator which points to the end of the agents vector.
-	 */
-	std::vector<Agent *>::iterator end();
-
-	/**
 	 * To facilitate easy iteration, return a constant beginning of the agents vector.
 	 * @return The iterator which points to a constant beginning of the agents vector.
 	 */
-	std::vector<Agent *>::const_iterator begin() const;
+	std::vector<const Agent *>::const_iterator begin() const;
 
 	/**
 	 * To facilitate easy iteration, return a constant end of the agents vector.
 	 * @return The iterator which points to a constant end of the agents vector.
 	 */
-	std::vector<Agent *>::const_iterator end() const;
+	std::vector<const Agent *>::const_iterator end() const;
 
 protected:
 	/**
 	 * The list of all agents.
 	 */
-	std::vector<Agent *> agents;
+	std::vector<const Agent *> agents;
 
 };
 

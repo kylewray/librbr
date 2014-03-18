@@ -130,7 +130,7 @@ int test_observations()
 	Observation *o1New = new Observation("o1");
 	Observation *o2New = new Observation("o2");
 
-	std::vector<Observation *> testObservationsList;
+	std::vector<const Observation *> testObservationsList;
 	testObservationsList.push_back(o1New);
 	testObservationsList.push_back(o2New);
 	finiteObservations->set(testObservationsList);
@@ -147,7 +147,7 @@ int test_observations()
 		std::cout << " Failure." << std::endl;
 	}
 
-	Observation *testFindObservation = nullptr;
+	const Observation *testFindObservation = nullptr;
 
 	std::cout << "Observations: Test 'FiniteObservations::find'... ";
 	try {

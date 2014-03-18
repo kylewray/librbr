@@ -53,7 +53,7 @@ FiniteStateTransitions::~FiniteStateTransitions()
  * @param probability	The probability of going from the state, taking the action, then
  * 						moving to the nextState.
  */
-void FiniteStateTransitions::set(State *state, Action *action, State *nextState, double probability)
+void FiniteStateTransitions::set(const State *state, const Action *action, const State *nextState, double probability)
 {
 	if (state == nullptr) {
 		state = stateWildcard;
@@ -75,24 +75,24 @@ void FiniteStateTransitions::set(State *state, Action *action, State *nextState,
  * @param nextState	The next state with which we assign the probability.
  * @return The probability of going from the state, taking the action, then moving to the nextState.
  */
-double FiniteStateTransitions::get(State *state, Action *action, State *nextState) const
+double FiniteStateTransitions::get(const State *state, const Action *action, const State *nextState) const
 {
 	// Iterate over all possible configurations of wildcards in the get statement.
 	// For each, use the get_value() function to check if the value exists. If it
 	// does, perhaps using a wildcard, then return that, otherwise continue.
 	// Return 0 by default.
 	for (int i = 0; i < 8; i++) {
-		State *alpha = stateWildcard;
+		const State *alpha = stateWildcard;
 		if (i & (1 << 0)) {
 			alpha = state;
 		}
 
-		Action *beta = actionWildcard;
+		const Action *beta = actionWildcard;
 		if (i & (1 << 1)) {
 			beta = action;
 		}
 
-		State *gamma = stateWildcard;
+		const State *gamma = stateWildcard;
 		if (i & (1 << 2)) {
 			gamma = nextState;
 		}
@@ -122,19 +122,20 @@ void FiniteStateTransitions::reset()
  * @return The probability of going from the state, taking the action, then moving to the nextState.
  * @throws StateTransitionException The state transition was not defined.
  */
-double FiniteStateTransitions::get_value(State *state, Action *action, State *nextState) const
+double FiniteStateTransitions::get_value(const State *state, const Action *action, const State *nextState) const
 {
-	std::map<State *, std::map<Action *, std::map<State *, double> > >::const_iterator alpha = stateTransitions.find(state);
+	std::map<const State *, std::map<const Action *, std::map<const State *, double> > >::const_iterator alpha =
+			stateTransitions.find(state);
 	if (alpha == stateTransitions.end()) {
 		throw StateTransitionException();
 	}
 
-	std::map<Action *, std::map<State *, double> >::const_iterator beta = alpha->second.find(action);
+	std::map<const Action *, std::map<const State *, double> >::const_iterator beta = alpha->second.find(action);
 	if (beta == alpha->second.end()) {
 		throw StateTransitionException();
 	}
 
-	std::map<State *, double>::const_iterator gamma = beta->second.find(nextState);
+	std::map<const State *, double>::const_iterator gamma = beta->second.find(nextState);
 	if (gamma == beta->second.end()) {
 		throw StateTransitionException();
 	}

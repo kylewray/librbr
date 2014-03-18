@@ -25,7 +25,6 @@
 #include "../../../include/core/states/factored_state.h"
 #include "../../../include/core/states/state_exception.h"
 
-
 /**
  * The constructor of the FactoredState object which allows initial specification of the
  * number of factored states.
@@ -41,7 +40,7 @@ FactoredState::FactoredState(int numFactoredStates)
  * actual factored state tuple (vector).
  * @param factoredState The list of states which define this factored state.
  */
-FactoredState::FactoredState(std::vector<State *> factoredState)
+FactoredState::FactoredState(const std::vector<const State *> &factoredState)
 {
 	states.reserve(factoredState.size());
 	states = factoredState;
@@ -77,7 +76,7 @@ void FactoredState::set_name(std::string newName)
  * Set the factored state given a list of states.
  * @param factoredState The list of states which define this factored state.
  */
-void FactoredState::set(std::vector<State *> factoredState)
+void FactoredState::set(const std::vector<const State *> &factoredState)
 {
 	states = factoredState;
 	update_name();
@@ -87,7 +86,7 @@ void FactoredState::set(std::vector<State *> factoredState)
  * Get the factored state.
  * @return The list of states.
  */
-std::vector<State *> FactoredState::get() const
+const std::vector<const State *> &FactoredState::get() const
 {
 	return states;
 }
@@ -98,7 +97,7 @@ std::vector<State *> FactoredState::get() const
  * @return The state at the index provided.
  * @throws StateException The index is not valid.
  */
-State *FactoredState::get(int index) const
+const State *FactoredState::get(int index) const
 {
 	if (index < 0 || index >= states.size()) {
 		throw StateException();
@@ -126,7 +125,7 @@ FactoredState &FactoredState::operator=(const FactoredState &other)
 bool FactoredState::operator==(const FactoredState &other)
 {
 	int counter = 0;
-	for (State *state : states) {
+	for (const State *state : states) {
 		if (*state == *(other.get(counter))) {
 			return false;
 		}
@@ -153,7 +152,7 @@ void FactoredState::update_name()
 	name = "";
 
 	int counter = 0;
-	for (State *state : states) {
+	for (const State *state : states) {
 		name += state->get_name();
 
 		counter++;

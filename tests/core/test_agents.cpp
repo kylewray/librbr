@@ -95,7 +95,7 @@ int test_agents()
 
 	alice = new Agent("Alice");
 
-	std::vector<Agent *> testAgentsList;
+	std::vector<const Agent *> testAgentsList;
 	testAgentsList.push_back(alice);
 	testAgentsList.push_back(charlie);
 
@@ -123,7 +123,7 @@ int test_agents()
 
 	std::cout << "Agents: Test 'Agents::find'... ";
 
-	Agent *testFindAgent = nullptr;
+	const Agent *testFindAgent = nullptr;
 
 	try {
 		testFindAgent = agents->find("Charlie");

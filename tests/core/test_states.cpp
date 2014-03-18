@@ -127,7 +127,7 @@ int test_states()
 	State *s1New = new State("s1");
 	State *s2New = new State("s2");
 
-	std::vector<State *> testStatesList;
+	std::vector<const State *> testStatesList;
 	testStatesList.push_back(s1New);
 	testStatesList.push_back(s2New);
 	finiteStates->set(testStatesList);
@@ -144,7 +144,7 @@ int test_states()
 		std::cout << " Failure." << std::endl;
 	}
 
-	State *testFindState = nullptr;
+	const State *testFindState = nullptr;
 
 	std::cout << "States: Test 'FiniteStates::find'... ";
 	try {

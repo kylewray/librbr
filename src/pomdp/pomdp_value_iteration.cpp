@@ -23,6 +23,7 @@
 
 
 #include "../../include/pomdp/pomdp_value_iteration.h"
+#include "../../include/pomdp/pomdp_alpha_vector.h"
 
 #include "../../include/core/states/state_exception.h"
 #include "../../include/core/actions/action_exception.h"
@@ -31,6 +32,7 @@
 #include "../../include/core/observation_transitions/observation_transition_exception.h"
 #include "../../include/core/rewards/reward_exception.h"
 #include "../../include/core/policy/policy_exception.h"
+
 
 #include <math.h>
 
@@ -189,6 +191,27 @@ PolicyGraph *POMDPValueIteration::solve_infinite_horizon(const FiniteStates *S, 
 		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASRewards *R,
 		const Horizon *h)
 {
+	// Create the set of alpha vectors, which we call Gamma. As well as the previous Gamma set.
+	std::vector<POMDPAlphaVector *> gamma;
+	std::vector<POMDPAlphaVector *> gammaPrev;
+
+	// Initialize gamma with the default reward values for horizon 0 -> 1 action selections.
+	for (const Action *action : *A) {
+		POMDPAlphaVector *gammaAStar = new POMDPAlphaVector(action);
+		for (const State *state : *S) {
+			// Compute the immediate state-action-state reward.
+			double immediateReward = 0.0;
+			for (const State *nextState : *S) {
+				immediateReward += T->get(state, action, nextState) * R->get(state, action, nextState);
+			}
+			gammaAStar->set(state, immediateReward);
+		}
+		gamma.push_back(gammaAStar);
+	}
+
+	return nullptr;
+
+
 	/*
 	// Create the policy based on the horizon.
 	PolicyFSC *policy = new PolicyFSC(h);
@@ -224,5 +247,4 @@ PolicyGraph *POMDPValueIteration::solve_infinite_horizon(const FiniteStates *S, 
 
 	return policy;
 	*/
-	return nullptr;
 }

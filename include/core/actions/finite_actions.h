@@ -54,7 +54,7 @@ public:
 	 * The constructor for the FiniteActions class which allows the specification of an initial set of actions.
 	 * @param actions The initial vector of actions.
 	 */
-	FiniteActions(std::vector<Action *> actions);
+	FiniteActions(const std::vector<const Action *> &actions);
 
 	/**
 	 * The default deconstructor for the FiniteActions class.
@@ -65,21 +65,21 @@ public:
 	 * Add an action to the set of available actions.
 	 * @param newAction The new action to include in the set of available actions.
 	 */
-	void add(Action *newAction);
+	void add(const Action *newAction);
 
 	/**
 	 * Remove an action to the set of available actions. This frees the memory.
 	 * @param removeAction 		The action to remove from the set of available actions.
 	 * @throws ActionException	The action was not found in the actions list.
 	 */
-	void remove(Action *removeAction);
+	void remove(const Action *removeAction);
 
 	/**
 	 * Set the internal actions list given another list, performing a deep copy. This resets
 	 * the current list of states and frees the memory.
 	 * @param newActions The vector of new actions to use.
 	 */
-	void set(std::vector<Action *> newActions);
+	void set(const std::vector<const Action *> &newActions);
 
 	/**
 	 * Get the action at the corresponding index. An action's index is defined by the order
@@ -88,20 +88,20 @@ public:
 	 * @return The action at the corresponding index.
 	 * @throws ActionException The index was invalid.
 	 */
-	Action *get(int actionIndex) const;
+	const Action *get(int actionIndex) const;
 
 	/**
 	 * Return a list of all the available actions.
 	 * @return Return a list of available actions.
 	 */
-	virtual const std::vector<Action *> &all() const;
+	virtual const std::vector<const Action *> &all() const;
 
 	/**
 	 * Return a list of the actions available given a state.
 	 * @param state The current state.
 	 * @return Return a list of available actions.
 	 */
-	virtual const std::vector<Action *> &available(State *state) const;
+	virtual const std::vector<const Action *> &available(const State *state) const;
 
 	/**
 	 * Return the number of actions.
@@ -115,7 +115,7 @@ public:
 	 * @return The action with the corresponding name provided.
 	 * @throws ActionException The name was invalid.
 	 */
-	virtual Action *find(std::string actionName) const;
+	virtual const Action *find(std::string actionName) const;
 
 	/**
 	 * Reset the actions, clearing the internal list.
@@ -123,34 +123,22 @@ public:
 	virtual void reset();
 
 	/**
-	 * To facilitate easy iteration, return the beginning of the actions vector.
-	 * @return The iterator which points to the beginning of the actions vector.
-	 */
-	std::vector<Action *>::iterator begin();
-
-	/**
-	 * To facilitate easy iteration, return the end of the actions vector.
-	 * @return The iterator which points to the end of the actions vector.
-	 */
-	std::vector<Action *>::iterator end();
-
-	/**
 	 * To facilitate easy iteration, return a constant beginning of the actions vector.
 	 * @return The iterator which points to a constant beginning of the actions vector.
 	 */
-	std::vector<Action *>::const_iterator begin() const;
+	std::vector<const Action *>::const_iterator begin() const;
 
 	/**
 	 * To facilitate easy iteration, return a constant end of the actions vector.
 	 * @return The iterator which points to a constant end of the actions vector.
 	 */
-	std::vector<Action *>::const_iterator end() const;
+	std::vector<const Action *>::const_iterator end() const;
 
 protected:
 	/**
 	 * The list of all available actions.
 	 */
-	std::vector<Action *> actions;
+	std::vector<const Action *> actions;
 
 };
 

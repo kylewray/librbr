@@ -25,7 +25,6 @@
 #include "../../../include/core/actions/joint_action.h"
 #include "../../../include/core/actions/action_exception.h"
 
-
 /**
  * The constructor of the JointAction object which allows initial specification of the
  * number of joint actions.
@@ -41,7 +40,7 @@ JointAction::JointAction(int numJointActions)
  * actual joint action tuple (vector).
  * @param jointState The list of actions which define this joint action.
  */
-JointAction::JointAction(std::vector<Action *> jointAction)
+JointAction::JointAction(const std::vector<const Action *> &jointAction)
 {
 	actions.reserve(jointAction.size());
 	actions = jointAction;
@@ -77,7 +76,7 @@ void JointAction::set_name(std::string newName)
  * Set the joint action given a list of actions.
  * @param jointAction The list of actions which define this joint action.
  */
-void JointAction::set(std::vector<Action *> jointAction)
+void JointAction::set(const std::vector<const Action *> &jointAction)
 {
 	actions = jointAction;
 	update_name();
@@ -87,7 +86,7 @@ void JointAction::set(std::vector<Action *> jointAction)
  * Get the joint action.
  * @return The list of actions.
  */
-std::vector<Action *> JointAction::get() const
+const std::vector<const Action *> &JointAction::get() const
 {
 	return actions;
 }
@@ -97,7 +96,7 @@ std::vector<Action *> JointAction::get() const
  * @param index The index to retrieve the action.
  * @return The action at the index provided.
  */
-Action *JointAction::get(int index) const
+const Action *JointAction::get(int index) const
 {
 	if (index < 0 || index >= actions.size()) {
 		throw ActionException();
@@ -125,7 +124,7 @@ JointAction &JointAction::operator=(const JointAction &other)
 bool JointAction::operator==(const JointAction &other)
 {
 	int counter = 0;
-	for (Action *action : actions) {
+	for (const Action *action : actions) {
 		if (*action == *(other.get(counter))) {
 			return false;
 		}
@@ -152,7 +151,7 @@ void JointAction::update_name()
 	name = "";
 
 	int counter = 0;
-	for (Action *action : actions) {
+	for (const Action *action : actions) {
 		name += action->get_name();
 
 		counter++;
