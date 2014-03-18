@@ -22,8 +22,8 @@
  */
 
 
-#ifndef SOLVER_UTILITIES_H
-#define SOLVER_UTILITIES_H
+#ifndef MDP_UTILITIES_H
+#define MDP_UTILITIES_H
 
 
 #include "../../include/core/states/state.h"
@@ -50,4 +50,4 @@ void bellman_update(const FiniteStates *S, const FiniteActions *A, const FiniteS
 		const Action *&aBest);
 
 
-#endif // SOLVER_UTILITIES_H
+#endif // MDP_UTILITIES_H

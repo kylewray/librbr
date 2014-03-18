@@ -24,6 +24,7 @@
 
 #include "../../include/pomdp/pomdp_value_iteration.h"
 #include "../../include/pomdp/pomdp_alpha_vector.h"
+#include "../../include/pomdp/pomdp_utilities.h"
 
 #include "../../include/core/states/state_exception.h"
 #include "../../include/core/actions/action_exception.h"
@@ -32,7 +33,6 @@
 #include "../../include/core/observation_transitions/observation_transition_exception.h"
 #include "../../include/core/rewards/reward_exception.h"
 #include "../../include/core/policy/policy_exception.h"
-
 
 #include <math.h>
 
@@ -191,22 +191,33 @@ PolicyGraph *POMDPValueIteration::solve_infinite_horizon(const FiniteStates *S, 
 		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASRewards *R,
 		const Horizon *h)
 {
+	// Before anything, cache Gamma_{a,*} for all actions. This is used in every single cross-sum computation.
+	std::map<const Action *, std::vector<POMDPAlphaVector *> > gammaAStar;
+	for (const Action *action : *A) {
+		gammaAStar[action] = create_gamma_a_star(S, A, T, R, action);
+	}
+
 	// Create the set of alpha vectors, which we call Gamma. As well as the previous Gamma set.
 	std::vector<POMDPAlphaVector *> gamma;
 	std::vector<POMDPAlphaVector *> gammaPrev;
 
-	// Initialize gamma with the default reward values for horizon 0 -> 1 action selections.
-	for (const Action *action : *A) {
-		POMDPAlphaVector *gammaAStar = new POMDPAlphaVector(action);
-		for (const State *state : *S) {
-			// Compute the immediate state-action-state reward.
-			double immediateReward = 0.0;
-			for (const State *nextState : *S) {
-				immediateReward += T->get(state, action, nextState) * R->get(state, action, nextState);
-			}
-			gammaAStar->set(state, immediateReward);
+	// Continue to iterate until the maximum difference between two V[s]'s is less than the tolerance.
+	double convergenceCriterion = epsilon * (1.0 - h->get_discount_factor()) / h->get_discount_factor();
+	double delta = convergenceCriterion + 1.0;
+
+	while (delta > convergenceCriterion) {
+		delta = 0.0;
+
+		// Compute the new set of alpha vectors, gamma.
+		gammaPrev = gamma;
+		for (const Action *action : *A) {
+			std::vector<POMDPAlphaVector *> alphaVector = bellman_update(S, A, Z, T, O, R, h, action, gammaAStar[action], gamma);
+			gamma.insert(gamma.end(), alphaVector.begin(), alphaVector.end());
 		}
-		gamma.push_back(gammaAStar);
+
+		// TODO: Compute delta by looking at the max_{s in S} |max_{alpha in gamma} alpha[s] - max_{alpha in gammaPrev} gammaPrev[s]|.
+		// HACK: TERMINATE IMMEDIATELY!
+//		delta = ???;
 	}
 
 	return nullptr;

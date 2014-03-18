@@ -47,7 +47,7 @@ POMDPAlphaVector::POMDPAlphaVector(const Action *action)
  */
 POMDPAlphaVector::POMDPAlphaVector(const POMDPAlphaVector &other)
 {
-
+	*this = other;
 }
 
 /**
@@ -128,10 +128,50 @@ POMDPAlphaVector &POMDPAlphaVector::operator=(const POMDPAlphaVector &other)
 }
 
 /**
+ * Overload the plus operator to return the summation of all elements in the vectors.
+ * @param other The alpha vector to add to this one.
+ * @return The resultant alpha vector from the sum of this one and the other one provided.
+ */
+POMDPAlphaVector POMDPAlphaVector::operator+(const POMDPAlphaVector &other)
+{
+	POMDPAlphaVector result;
+
+	for (std::map<const State *, double>::value_type alpha : alphaVector) {
+		double a = alpha.second;
+		double b = other.get(alpha.first);
+		result.set(alpha.first, a + b);
+	}
+
+	return result;
+}
+
+/**
  * Reset the alpha vector.
  */
 void POMDPAlphaVector::reset()
 {
 	alphaVector.clear();
 	alphaVectorAction = nullptr;
+}
+
+/**
+ * Compute the cross-sum of two alpha vectors.
+ * @param A The left set of alpha vectors.
+ * @param B The right set of alpha vectors.
+ * @return The result from performing the cross-sum on the two sets of alpha vectors.
+ */
+std::vector<POMDPAlphaVector *> POMDPAlphaVector::cross_sum(const std::vector<POMDPAlphaVector *> &A,
+		const std::vector<POMDPAlphaVector *> &B)
+{
+	std::vector<POMDPAlphaVector *> C;
+
+	// Perform the cross-sum and store the result in C.
+	for (POMDPAlphaVector *a : A) {
+		for (POMDPAlphaVector *b : B) {
+			POMDPAlphaVector *c = new POMDPAlphaVector(*a + *b);
+			C.push_back(c);
+		}
+	}
+
+	return C;
 }

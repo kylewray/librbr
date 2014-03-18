@@ -63,7 +63,7 @@ public:
 	 * @param state The state to get a belief over.
 	 * @return The belief probability of the state.
 	 */
-	const double get(const State *state) const;
+	double get(const State *state) const;
 
 	/**
 	 * Overload the equals operator to set this belief state equal to the belief state provided.

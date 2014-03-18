@@ -62,7 +62,7 @@ void BeliefState::set(const State *state, double probability)
  * @param state The state to get a belief over.
  * @return The belief probability of the state.
  */
-const double BeliefState::get(const State *state) const
+double BeliefState::get(const State *state) const
 {
 	std::map<const State *, double>::const_iterator result = belief.find(state);
 	if (result == belief.end()) {

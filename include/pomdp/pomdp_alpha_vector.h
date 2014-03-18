@@ -29,6 +29,8 @@
 #include "../core/actions/action.h"
 #include "../core/states/belief_state.h"
 
+#include <vector>
+
 /**
  * A small class to manipulate alpha vectors for POMDPs. This stores an action
  * to take should this alpha vector define the maximal value of the belief state
@@ -98,9 +100,24 @@ public:
 	POMDPAlphaVector &operator=(const POMDPAlphaVector &other);
 
 	/**
+	 * Overload the plus operator to return the summation of all elements in the vectors.
+	 * @param other The alpha vector to add to this one.
+	 * @return The resultant alpha vector from the sum of this one and the other one provided.
+	 */
+	POMDPAlphaVector operator+(const POMDPAlphaVector &other);
+
+	/**
 	 * Reset the alpha vector.
 	 */
 	void reset();
+
+	/**
+	 * Compute the cross-sum of two alpha vectors.
+	 * @param A The left set of alpha vectors.
+	 * @param B The right set of alpha vectors.
+	 * @return The result from performing the cross-sum on the two sets of alpha vectors.
+	 */
+	static std::vector<POMDPAlphaVector *> cross_sum(const std::vector<POMDPAlphaVector *> &A, const std::vector<POMDPAlphaVector *> &B);
 
 	/**
 	 * Allow POMDPAlphaVector objects to access private members in others for setting.
