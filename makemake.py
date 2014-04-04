@@ -20,7 +20,7 @@
  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
  
- def printtarget(f, name, sdir, odir):
+def printtarget(f, name, sdir, odir):
     """ Prints a target rule to the specified file.
     
         Parameters:

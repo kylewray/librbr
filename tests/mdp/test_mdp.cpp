@@ -83,7 +83,7 @@ int test_mdp()
 		std::cout << " Failure." << std::endl;
 	}
 
-	mapPolicy->save("tests/resources/mdp/test_mdp_value_iteration_finite_horizon.map_policy");
+	mapPolicy->save("tests/tmp/test_mdp_value_iteration_finite_horizon.map_policy");
 
 	delete mdp;
 	mdp = nullptr;
@@ -120,7 +120,7 @@ int test_mdp()
 		std::cout << " Failure." << std::endl;
 	}
 
-	mapPolicy->save("tests/resources/mdp/test_mdp_value_iteration_infinite_horizon.map_policy");
+	mapPolicy->save("tests/tmp/test_mdp_value_iteration_infinite_horizon.map_policy");
 
 	delete mapPolicy;
 	mapPolicy = nullptr;
@@ -145,7 +145,7 @@ int test_mdp()
 		std::cout << " Failure." << std::endl;
 	}
 
-	mapPolicy->save("tests/resources/mdp/test_mdp_policy_iteration_exact_infinite_horizon.map_policy");
+	mapPolicy->save("tests/tmp/test_mdp_policy_iteration_exact_infinite_horizon.map_policy");
 
 	delete mapPolicy;
 	mapPolicy = nullptr;
@@ -170,7 +170,7 @@ int test_mdp()
 		std::cout << " Failure." << std::endl;
 	}
 
-	mapPolicy->save("tests/resources/mdp/test_mdp_policy_iteration_modified_infinite_horizon.map_policy");
+	mapPolicy->save("tests/tmp/test_mdp_policy_iteration_modified_infinite_horizon.map_policy");
 
 	delete mdp;
 	mdp = nullptr;

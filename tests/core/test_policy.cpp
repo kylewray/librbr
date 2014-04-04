@@ -114,7 +114,7 @@ int test_policy()
 	}
 
 	std::cout << "Policy: 'PolicyMap::save' file 'test_03.policy_map'... ";
-	if (!policyMap->save("tests/resources/policy/test_03.policy_map")) {
+	if (!policyMap->save("tests/tmp/test_03.policy_map")) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -122,7 +122,7 @@ int test_policy()
 	}
 
 	std::cout << "Policy: 'PolicyMap::load' file 'test_03.policy_map' (Check Result)... ";
-	if (!policyMap->load("tests/resources/policy/test_03.policy_map", states, actions, horizon)) {
+	if (!policyMap->load("tests/tmp/test_03.policy_map", states, actions, horizon)) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
