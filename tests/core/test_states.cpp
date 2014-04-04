@@ -32,6 +32,7 @@
 #include <iostream>
 
 #include "../../include/core/states/state.h"
+#include "../../include/core/states/named_state.h"
 #include "../../include/core/states/finite_states.h"
 #include "../../include/core/states/factored_state.h"
 #include "../../include/core/states/finite_factored_states.h"
@@ -45,9 +46,9 @@ int test_states()
 {
 	int numSuccesses = 0;
 
-	State *s1 = new State("s1");
-	State *s2 = new State("s2");
-	State *s3 = new State("s3");
+	State *s1 = new NamedState("s1");
+	State *s2 = new NamedState("s2");
+	State *s3 = new NamedState("s3");
 
 	FiniteStates *finiteStates = new FiniteStates();
 
@@ -72,7 +73,7 @@ int test_states()
 	std::cout << "States: Test 'FiniteStates::remove'... ";
 	try {
 		finiteStates->remove(s2);
-		s2 = new State("s2");
+		s2 = new NamedState("s2");
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} catch (const StateException &err) {
@@ -91,7 +92,7 @@ int test_states()
 	std::cout << "States: Test 'FiniteStates::add' and 'FiniteStates::remove'... ";
 	try {
 		finiteStates->remove(s1);
-		s1 = new State("s1");
+		s1 = new NamedState("s1");
 
 		finiteStates->add(s2);
 		finiteStates->add(s1);
@@ -112,7 +113,7 @@ int test_states()
 	}
 
 	std::cout << "States: Test 'FiniteStates::remove' (Expecting Error)... ";
-	State *doesNotExist = new State("doesNotExist");
+	State *doesNotExist = new NamedState("doesNotExist");
 	try {
 		finiteStates->remove(doesNotExist);
 		std::cout << " Failure." << std::endl;
@@ -124,8 +125,8 @@ int test_states()
 
 	std::cout << "States: Test 'FiniteStates::set'... ";
 
-	State *s1New = new State("s1");
-	State *s2New = new State("s2");
+	State *s1New = new NamedState("s1");
+	State *s2New = new NamedState("s2");
 
 	std::vector<const State *> testStatesList;
 	testStatesList.push_back(s1New);
@@ -134,7 +135,7 @@ int test_states()
 
 	s1 = s1New;
 	s2 = s2New;
-	s3 = new State("s3");
+	s3 = new NamedState("s3");
 
 	if (finiteStates->get_num_states() == 2 && finiteStates->get(0) == s1 &&
 			finiteStates->get(1) == s2) {
@@ -148,7 +149,7 @@ int test_states()
 
 	std::cout << "States: Test 'FiniteStates::find'... ";
 	try {
-		testFindState = finiteStates->find(s1->get_name());
+		testFindState = finiteStates->find(s1->to_string());
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} catch (const StateException &err) {
@@ -157,7 +158,7 @@ int test_states()
 
 	std::cout << "States: Test 'FiniteStates::find' (Expecting Error)... ";
 	try {
-		testFindState = finiteStates->find(s3->get_name());
+		testFindState = finiteStates->find(s3->to_string());
 		std::cout << " Failure." << std::endl;
 	} catch (const StateException &err) {
 		std::cout << " Success." << std::endl;
@@ -166,10 +167,10 @@ int test_states()
 
 	delete finiteStates;
 
-	s1 = new State("s1");
-	s2 = new State("s2");
-	s3 = new State("s3");
-	State *s4 = new State("s4");
+	s1 = new NamedState("s1");
+	s2 = new NamedState("s2");
+	s3 = new NamedState("s3");
+	State *s4 = new NamedState("s4");
 
 	FiniteFactoredStates *finiteFactoredStates = new FiniteFactoredStates(2);
 
@@ -230,7 +231,7 @@ int test_states()
 	std::cout << "States: Test 'FiniteFactoredStates::remove'... ";
 	try {
 		finiteFactoredStates->remove(0, s2);
-		s2 = new State("s2");
+		s2 = new NamedState("s2");
 
 		finiteFactoredStates->update();
 		std::cout << " Success." << std::endl;
@@ -257,7 +258,7 @@ int test_states()
 	std::cout << "States: Test 'FiniteFactoredStates::add' and 'FiniteFactoredStates::remove'... ";
 	try {
 		finiteFactoredStates->remove(1, s3);
-		s3 = new State("s3");
+		s3 = new NamedState("s3");
 
 		finiteFactoredStates->add(0, s3);
 		finiteFactoredStates->add(0, s2);
@@ -285,8 +286,8 @@ int test_states()
 	}
 
 	std::cout << "States: Test 'FiniteFactoredStates::remove' (Expecting Error)... ";
-	State *a7 = new State("a7");
-	State *a8 = new State("a8");
+	State *a7 = new NamedState("a7");
+	State *a8 = new NamedState("a8");
 	FactoredState *doesNotExist2 = new FactoredState({a7, a8});
 	try {
 		finiteFactoredStates->remove(0, doesNotExist2);
@@ -301,8 +302,8 @@ int test_states()
 	delete doesNotExist2;
 
 	std::cout << "States: Test 'FiniteFactoredStates::set'... ";
-	s1New = new State("s1");
-	s2New = new State("s2");
+	s1New = new NamedState("s1");
+	s2New = new NamedState("s2");
 
 	testStatesList.clear();
 	testStatesList.push_back(s2New);
@@ -319,7 +320,7 @@ int test_states()
 
 	s1 = s1New;
 	s2 = s2New;
-	s3 = new State("s3");
+	s3 = new NamedState("s3");
 
 	std::cout << "States: Test 'FiniteFactoredStates::set' (Check Result)... ";
 	try {

@@ -35,6 +35,7 @@
 #include "../../include/core/policy/policy_tree.h"
 #include "../../include/core/policy/policy_exception.h"
 
+#include "../../include/core/states/named_state.h"
 #include "../../include/core/states/finite_states.h"
 #include "../../include/core/actions/finite_actions.h"
 #include "../../include/core/observations/finite_observations.h"
@@ -48,8 +49,8 @@ int test_policy()
 {
 	int numSuccesses = 0;
 
-	State *s1 = new State("s1");
-	State *s2 = new State("s2");
+	State *s1 = new NamedState("s1");
+	State *s2 = new NamedState("s2");
 
 	Action *a1 = new Action("a1");
 	Action *a2 = new Action("a2");

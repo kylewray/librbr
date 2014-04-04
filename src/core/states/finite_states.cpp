@@ -140,7 +140,7 @@ int FiniteStates::get_num_states() const
 const State *FiniteStates::find(std::string stateName) const
 {
 	for (const State *state : states) {
-		if (state->get_name().compare(stateName) == 0) {
+		if (state->to_string().compare(stateName) == 0) {
 			return state;
 		}
 	}

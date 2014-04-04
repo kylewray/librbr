@@ -31,21 +31,11 @@ State::State()
 { }
 
 /**
- * The constructor of the State object which allows initial specification of the unique name.
- * @param initialName The unique name of the state.
- */
-State::State(std::string initialName)
-{
-	name = initialName;
-}
-
-/**
  * The copy constructor of the State object.
- * @param other The state to copy.
  */
 State::State(const State &other)
 {
-	*this = other;
+    *this = other;
 }
 
 /**
@@ -54,51 +44,13 @@ State::State(const State &other)
 State::~State()
 { }
 
-/**
- * Set the name.
- * @param newName The new name.
- */
-void State::set_name(std::string newName)
-{
-	name = newName;
-}
 
 /**
- * Get the name.
- * @return The current name.
- */
-std::string State::get_name() const
+  * Overload the equals operator to set this state equal to the state provided.
+  * @param other The state to copy.
+  * @return The new version of this state.
+  */
+State &State::operator=(const State &s)
 {
-	return name;
-}
-
-/**
- * Overload the equals operator to set this state equal to the state provided.
- * @param other The state to copy.
- * @return The new version of this state.
- */
-State &State::operator=(const State &other)
-{
-	name = other.get_name();
-	return *this;
-}
-
-/**
- * Overload the equality comparison operator.
- * @param other The state to compare.
- * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
- */
-bool State::operator==(const State &other) const
-{
-	return name == other.get_name();
-}
-
-/**
- * Overload the less than operator for comparison.
- * @param other The state to compare.
- * @return Returns @code{true} if this state is less than the other; @code{false} otherwise.
- */
-bool State::operator<(const State &other) const
-{
-	return name < other.get_name();
+    return *this;
 }

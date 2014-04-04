@@ -77,11 +77,6 @@ public:
 	 */
 	void reset();
 
-	/**
-	 * Allow BeliefState objects to access private members in others for setting.
-	 */
-	friend BeliefState;
-
 private:
 	/**
 	 * The belief over the states. If a state is not mapped, then it

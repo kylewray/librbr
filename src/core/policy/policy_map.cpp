@@ -264,7 +264,7 @@ bool PolicyMap::save(std::string filename) const
 			file << "horizon: " << h << std::endl;
 
 			for (std::map<const State *, const Action *>::value_type iter : p) {
-				file << iter.first->get_name() << ": " << iter.second->get_name() << std::endl;
+				file << iter.first->to_string() << ": " << iter.second->get_name() << std::endl;
 			}
 
 			file << std::endl;
@@ -272,7 +272,7 @@ bool PolicyMap::save(std::string filename) const
 		}
 	} else if (policy.size() == 1) {
 		for (std::map<const State *, const Action *>::value_type iter : policy[0]) {
-			file << iter.first->get_name() << ": " << iter.second->get_name() << std::endl;
+			file << iter.first->to_string() << ": " << iter.second->get_name() << std::endl;
 		}
 	} else {
 		sprintf(error, "Failed to save file '%s'. No policy was defined.", filename.c_str());

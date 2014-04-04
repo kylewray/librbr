@@ -24,13 +24,14 @@
 
 #include "../../../include/core/rewards/sas_rewards.h"
 #include "../../../include/core/rewards/reward_exception.h"
+#include "../../../include/core/states/named_state.h"
 
 /**
  * The default constructor for the SASRewards class.
  */
 SASRewards::SASRewards()
 {
-	stateWildcard = new State("*");
+	stateWildcard = new NamedState("*");
 	actionWildcard = new Action("*");
 }
 

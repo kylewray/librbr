@@ -32,6 +32,7 @@
 #include <iostream>
 
 #include "../../include/core/observation_transitions/finite_observation_transitions.h"
+#include "../../include/core/states/named_state.h"
 
 /**
  * Test the observation transition objects. Output the success or failure for each test.
@@ -44,8 +45,8 @@ int test_observation_transitions()
 	Observation *o1 = new Observation("o1");
 	Observation *o2 = new Observation("o2");
 
-	State *s1 = new State("s1");
-	State *s2 = new State("s2");
+	State *s1 = new NamedState("s1");
+	State *s2 = new NamedState("s2");
 
 	Action *a1 = new Action("a1");
 	Action *a2 = new Action("a2");

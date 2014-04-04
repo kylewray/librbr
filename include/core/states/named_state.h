@@ -1,3 +1,4 @@
+
 /**
  *  The MIT License (MIT)
  *
@@ -22,52 +23,72 @@
  */
 
 
-#ifndef STATE_H
-#define STATE_H
+#ifndef NAMED_STATE_H
+#define NAMED_STATE_H
 
 #include <string>
 
+#include "state.h"
+
 /**
- * An abstract state object. 
+ * An state object identified by a unique name. 
  */
-class State {
+class NamedState : public State {
 public:
     /**
-     * The default constructor of the State object.
+     * The default constructor of the NamedState object.
      */
-    State();
+    NamedState();
+
+    /**
+     * The constructor of the NamedState object which allows initial specification of the unique name.
+     * @param initialName The unique name of the state.
+     */
+    NamedState(std::string initialName);
 
     /**
      * The copy constructor of the State object.
      * @param other The state to copy.
      */
-    State(const State &other);
+    NamedState(const NamedState &other);
 
     /**
      * The default deconstructor of the State object.
      */
-    virtual ~State();
+    virtual ~NamedState();
+
+    /**
+     * Set the name.
+     * @param newName The new name.
+     */
+    virtual void set_name(std::string newName);
+
+    /**
+     * Get the name.
+     * @return The current name.
+     */
+    virtual std::string get_name() const;
 
     /**
      * Overload the equals operator to set this state equal to the state provided.
      * @param other The state to copy.
      * @return The new version of this state.
      */
-    virtual State &operator=(const State &other) =0;
+    virtual State &operator=(const State &other);
 
     /**
      * Overload the equality comparison operator.
      * @param other The state to compare.
      * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
      */
-    virtual bool operator==(const State &other) const =0;
+    virtual bool operator==(const State &other) const;
 
     /**
      * Overload the less than operator for comparison.
      * @param other The state to compare.
      * @return Returns @code{true} if this state is less than the other; @code{false} otherwise.
      */
-    virtual bool operator<(const State &other) const =0;
+    virtual bool operator<(const State &other) const;
 
     /**
      * Returns a string representation of this state.
@@ -77,14 +98,23 @@ public:
      * e.g., continuous states.     * 
      * @return Returns the string representing this state.
      */
-    virtual std::string to_string() const =0;
+    virtual std::string to_string() const;
     
     /**
      * Returns a hash value used to quickly identify this state in a collection of states.
      * @returns Returns the hash value of this state.
      */
-    virtual int hash_value() const =0;
+    virtual int hash_value() const;
+    
+protected:
+    /**
+     * All states must have the ability to convert the internal representation to a string.
+     * For most policy solvers, this must be unique; however, this need not always be the case,
+     * e.g., continuous states.
+     */
+    std::string name;
+
 };
 
 
-#endif // STATE_H
+#endif // NAMED_STATE_H

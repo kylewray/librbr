@@ -110,10 +110,11 @@ const State *FactoredState::get(int index) const
  * @param other The factored state to copy.
  * @return The new version of this state.
  */
-FactoredState &FactoredState::operator=(const FactoredState &other)
+State &FactoredState::operator=(const State &s)
 {
-	states = other.get();
-	name = other.get_name();
+    const FactoredState *other = static_cast<const FactoredState *> (&s);
+	states = other->states;
+	name = other->name;
 	return *this;
 }
 
@@ -122,11 +123,12 @@ FactoredState &FactoredState::operator=(const FactoredState &other)
  * @param other The factored state to compare.
  * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
  */
-bool FactoredState::operator==(const FactoredState &other)
+bool FactoredState::operator==(const State &s)
 {
+    const FactoredState *other = static_cast<const FactoredState *> (&s);
 	int counter = 0;
 	for (const State *state : states) {
-		if (*state == *(other.get(counter))) {
+		if (*state == *(other->get(counter))) {
 			return false;
 		}
 		counter++;
@@ -139,9 +141,10 @@ bool FactoredState::operator==(const FactoredState &other)
  * @param other The factored state to compare.
  * @return Returns @code{true} if this state is less than the other; @code{false} otherwise.
  */
-bool FactoredState::operator<(const FactoredState &other) const
+bool FactoredState::operator<(const State &s) const
 {
-	return name < other.get_name();
+    const FactoredState *other = static_cast<const FactoredState *> (&s);
+	return name < other->name;
 }
 
 /**
@@ -153,7 +156,7 @@ void FactoredState::update_name()
 
 	int counter = 0;
 	for (const State *state : states) {
-		name += state->get_name();
+		name += state->to_string();
 
 		counter++;
 		if (counter < states.size()) {

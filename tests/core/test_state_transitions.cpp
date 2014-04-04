@@ -31,6 +31,8 @@
 
 #include <iostream>
 
+#include "../../include/core/states/named_state.h"
+#include "../../include/core/states/finite_states.h"
 #include "../../include/core/state_transitions/finite_state_transitions.h"
 
 /**
@@ -41,8 +43,8 @@ int test_state_transitions()
 {
 	int numSuccesses = 0;
 
-	State *s1 = new State("s1");
-	State *s2 = new State("s2");
+	State *s1 = new NamedState("s1");
+	State *s2 = new NamedState("s2");
 
 	Action *a1 = new Action("a1");
 	Action *a2 = new Action("a2");

@@ -24,13 +24,14 @@
 
 #include "../../../include/core/observation_transitions/finite_observation_transitions.h"
 #include "../../../include/core/observation_transitions/observation_transition_exception.h"
+#include "../../../include/core/states/named_state.h"
 
 /**
  * The default constructor for the FiniteObservationTransitions class.
  */
 FiniteObservationTransitions::FiniteObservationTransitions()
 {
-	stateWildcard = new State("*");
+	stateWildcard = new NamedState("*");
 	actionWildcard = new Action("*");
 	observationWildcard = new Observation("*");
 }

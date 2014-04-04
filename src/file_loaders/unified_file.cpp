@@ -36,6 +36,7 @@
 #include "../../include/core/state_transitions/state_transition_exception.h"
 #include "../../include/core/observation_transitions/observation_transition_exception.h"
 #include "../../include/core/rewards/reward_exception.h"
+#include "../../include/core/states/named_state.h"
 
 /**
  * The default constructor for a unified file.
@@ -790,12 +791,12 @@ int UnifiedFile::load_states(std::vector<std::string> items)
 		char stateName[16];
 		for (int i = 0; i < n; i++) {
 			sprintf(stateName, "%i", i);
-			states->add(new State(stateName));
+			states->add(new NamedState(stateName));
 		}
 	} else {
 		// This must be a full list of unique state names.
 		for (std::string stateName : list) {
-			states->add(new State(stateName));
+			states->add(new NamedState(stateName));
 		}
 	}
 
@@ -854,12 +855,12 @@ bool UnifiedFile::load_factored_states(int factorIndex, std::string line)
 		char stateName[16];
 		for (int i = 0; i < n; i++) {
 			sprintf(stateName, "%i", i);
-			newStates.push_back(new State(stateName));
+			newStates.push_back(new NamedState(stateName));
 		}
 	} else {
 		// This must be a full list of unique state names.
 		for (std::string stateName : list) {
-			newStates.push_back(new State(stateName));
+			newStates.push_back(new NamedState(stateName));
 		}
 	}
 

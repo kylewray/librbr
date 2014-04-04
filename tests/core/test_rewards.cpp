@@ -32,6 +32,7 @@
 #include <iostream>
 
 #include "../../include/core/rewards/sas_rewards.h"
+#include "../../include/core/states/named_state.h"
 
 /**
  * Test the reward objects. Output the success or failure for each test.
@@ -41,8 +42,8 @@ int test_rewards()
 {
 	int numSuccesses = 0;
 
-	State *s1 = new State("s1");
-	State *s2 = new State("s2");
+	State *s1 = new NamedState("s1");
+	State *s2 = new NamedState("s2");
 
 	Action *a1 = new Action("a1");
 	Action *a2 = new Action("a2");

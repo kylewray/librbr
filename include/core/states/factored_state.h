@@ -29,14 +29,14 @@
 #include <string>
 #include <vector>
 
-#include "state.h"
+#include "named_state.h"
 
 /**
  * A factored state object. This is essentially a list of states, each state being a state object itself.
  * Note: This class does *not* manage the memory of the states provided. Memory should be managed in
  * a class such as FiniteFactoredStates.
  */
-class FactoredState : public State {
+class FactoredState : public NamedState {
 public:
 	/**
 	 * The constructor of the FactoredState object which allows initial specification of the
@@ -94,21 +94,21 @@ public:
 	 * @param other The factored state to copy.
 	 * @return The new version of this state.
 	 */
-	virtual FactoredState &operator=(const FactoredState &other);
+	virtual State &operator=(const State &other);
 
 	/**
 	 * Overload the equality comparison operator.
 	 * @param other The factored state to compare.
 	 * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
 	 */
-	virtual bool operator==(const FactoredState &other);
+	virtual bool operator==(const State &other);
 
 	/**
 	 * Overload the less than operator for comparison.
 	 * @param other The factored state to compare.
 	 * @return Returns @code{true} if this state is less than the other; @code{false} otherwise.
 	 */
-	virtual bool operator<(const FactoredState &other) const;
+	virtual bool operator<(const State &other) const;
 
 protected:
 	/**
