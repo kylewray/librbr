@@ -106,7 +106,7 @@ double SASORewardsMap::get(const State *state, const Action *action, const State
 		}
 
 		const Observation *delta = observationWildcard;
-		if (!(bool)(i & (1 << 2))) {
+		if (!(bool)(i & (1 << 3))) {
 			delta = observation;
 		}
 
