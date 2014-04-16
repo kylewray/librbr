@@ -22,42 +22,32 @@
  */
 
 
-#ifndef SAS_REWARDS_H
-#define SAS_REWARDS_H
+#ifndef SAS_REWARDS_MAP_H
+#define SAS_REWARDS_MAP_H
 
 
 #include <map>
 
-#include "saso_rewards.h"
+#include "sas_rewards.h"
 
 #include "../states/state.h"
 #include "../actions/action.h"
 
 /**
- * A class for state-action-state rewards in an MDP-like object. Informally, there are two basic
- * ways to store state-action rewards: a table lookup mapping state-action-state triples to real
- * values, or a generator function based on a given state-action-state triple. In both cases, we
- * require that any class with provide certain get functions so that any generic solver can handle
- * both cases.
- *
- * If you want to create a map, table, or generator SASRewards class, please create a child class
- * which implements the function in the virtual functions described below.
- *
- * Always use this class for MDP-like object solvers (as part of a dynamic cast, for example). The
- * particular underlying storage structure will be defined by a child class of SASRewards, e.g.,
- * SASRewardsMap.
+ * A class for state-action-state rewards in an MDP-like object, internally storing the rewards as
+ * a map.
  */
-class SASRewards : public SASORewards {
+class SASRewardsMap : public SASRewards {
 public:
 	/**
-	 * The default constructor for the SASRewards class.
+	 * The default constructor for the SASRewardsMap class.
 	 */
-	SASRewards();
+	SASRewardsMap();
 
 	/**
-	 * The default deconstructor for the SASRewards class.
+	 * The default deconstructor for the SASRewardsMap class.
 	 */
-	virtual ~SASRewards();
+	virtual ~SASRewardsMap();
 
 	/**
 	 * Set a state transition from a particular state-action-state triple to a probability.
@@ -104,6 +94,33 @@ public:
 	 */
 	virtual void reset();
 
+private:
+	/**
+	 * The actual get function which returns a value. This will throw an error if the value is undefined.
+	 * It is used as a helper function for the public get function.
+	 * @param state		The current state of the system.
+	 * @param action	The action taken at the current state.
+	 * @param nextState	The next state with which we assign the reward.
+	 * @return The reward from taking the given action in the given state.
+	 * @throws RewardException The reward was not defined.
+	 */
+	virtual double get_value(const State *state, const Action *action, const State *nextState) const;
+
+	/**
+	 * The list of all state-action-state rewards.
+	 */
+	std::map<const State *, std::map<const Action *, std::map<const State *, double> > > rewards;
+
+	/**
+	 * A special state (implicitly constant) referring to a state wildcard.
+	 */
+	State *stateWildcard;
+
+	/**
+	 * A special action (implicitly constant) referring to an action wildcard.
+	 */
+	Action *actionWildcard;
+
 };
 
-#endif // SAS_REWARDS_H
+#endif // SAS_REWARDS_MAP_H

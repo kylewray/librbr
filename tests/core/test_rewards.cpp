@@ -31,7 +31,7 @@
 
 #include <iostream>
 
-#include "../../include/core/rewards/sas_rewards.h"
+#include "../../include/core/rewards/sas_rewards_map.h"
 #include "../../include/core/states/named_state.h"
 
 /**
@@ -48,9 +48,9 @@ int test_rewards()
 	Action *a1 = new Action("a1");
 	Action *a2 = new Action("a2");
 
-	SASRewards *rewards = new SASRewards();
+	SASRewardsMap *rewards = new SASRewardsMap();
 
-	std::cout << "Rewards: Test 'SASRewards::set' and 'SASRewards::get' (All Values Mapped)... ";
+	std::cout << "Rewards: Test 'SASRewardsMap::set' and 'SASRewardsMap::get' (All Values Mapped)... ";
 
 	rewards->set(s1, a1, s1, 3.0);
 	rewards->set(s1, a1, s2, -2.9);
@@ -72,9 +72,9 @@ int test_rewards()
 	}
 
 	delete rewards;
-	rewards = new SASRewards();
+	rewards = new SASRewardsMap();
 
-	std::cout << "Rewards: Test 'SASRewards::set' and 'SASRewards::get' (Default Zero Values)... ";
+	std::cout << "Rewards: Test 'SASRewardsMap::set' and 'SASRewardsMap::get' (Default Zero Values)... ";
 
 //	rewards->set(s1, a1, s1, 3.0); // Leave undefined to test the default zero value for the next state s1.
 	rewards->set(s1, a1, s2, -2.9);
@@ -96,9 +96,9 @@ int test_rewards()
 	}
 
 	delete rewards;
-	rewards = new SASRewards();
+	rewards = new SASRewardsMap();
 
-	std::cout << "Rewards: Test 'SASRewards::set' and 'SASRewards::get' (Wildcard Next State)... ";
+	std::cout << "Rewards: Test 'SASRewardsMap::set' and 'SASRewardsMap::get' (Wildcard Next State)... ";
 
 	rewards->set(s1, a1, s1, 3.0);
 	rewards->set(s1, a1, s2, -2.9);
@@ -121,9 +121,9 @@ int test_rewards()
 	}
 
 	delete rewards;
-	rewards = new SASRewards();
+	rewards = new SASRewardsMap();
 
-	std::cout << "Rewards: Test 'SASRewards::set' and 'SASRewards::get' (Wildcard Action)... ";
+	std::cout << "Rewards: Test 'SASRewardsMap::set' and 'SASRewardsMap::get' (Wildcard Action)... ";
 
 	rewards->set(s1, a1, s1, 3.0);
 	rewards->set(s1, a1, s2, -2.9);
@@ -147,9 +147,9 @@ int test_rewards()
 	}
 
 	delete rewards;
-	rewards = new SASRewards();
+	rewards = new SASRewardsMap();
 
-	std::cout << "Rewards: Test 'SASRewards::set' and 'SASRewards::get' (Wildcard Previous State)... ";
+	std::cout << "Rewards: Test 'SASRewardsMap::set' and 'SASRewardsMap::get' (Wildcard Previous State)... ";
 
 	rewards->set(s1, a1, s1, 3.0);
 	rewards->set(s1, a1, s2, -2.9);

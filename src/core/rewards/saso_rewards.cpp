@@ -22,33 +22,23 @@
  */
 
 
-#include "../../../include/core/rewards/sas_rewards.h"
+#include "../../../include/core/rewards/saso_rewards.h"
 #include "../../../include/core/rewards/reward_exception.h"
 #include "../../../include/core/states/named_state.h"
 
 /**
- * The default constructor for the SASRewards class.
+ * The default constructor for the SASORewards class.
  */
-SASRewards::SASRewards()
+SASORewards::SASORewards()
 { }
 
 /**
- * The default deconstructor for the SASRewards class.
+ * The default deconstructor for the SASORewards class.
  */
-SASRewards::~SASRewards()
+SASORewards::~SASORewards()
 {
 	reset();
 }
-
-/**
- * Set a state transition from a particular state-action-state triple to a probability.
- * @param state		The current state of the system.
- * @param action	The action taken in the current state.
- * @param nextState	The next state with which we assign the reward.
- * @param reward	The reward from the provided state-action-state triple.
- */
-void SASRewards::set(const State *state, const Action *action, const State *nextState, double reward)
-{ }
 
 /**
  * Set a state transition from a particular state-action-state-observation quadruple to a probability.
@@ -58,21 +48,9 @@ void SASRewards::set(const State *state, const Action *action, const State *next
  * @param observation	The observation made at the next state.
  * @param reward		The reward from the provided state-action-state-observation quadruple.
  */
-void SASRewards::set(const State *state, const Action *action, const State *nextState,
+void SASORewards::set(const State *state, const Action *action, const State *nextState,
 		const Observation *observation, double reward)
 { }
-
-/**
- * The probability of a transition following the state-action-state triple provided.
- * @param state		The current state of the system.
- * @param action	The action taken at the current state.
- * @param nextState	The next state with which we assign the reward.
- * @return The reward from taking the given action in the given state.
- */
-double SASRewards::get(const State *state, const Action *action, const State *nextState) const
-{
-	return 0.0;
-}
 
 /**
  * The probability of a transition following the state-action-state-observation quadruple provided.
@@ -82,7 +60,7 @@ double SASRewards::get(const State *state, const Action *action, const State *ne
  * @param observation	The observation made at the next state.
  * @return The reward from taking the given action in the given state.
  */
-double SASRewards::get(const State *state, const Action *action, const State *nextState,
+double SASORewards::get(const State *state, const Action *action, const State *nextState,
 		const Observation *observation) const
 {
 	return 0.0;
@@ -91,5 +69,5 @@ double SASRewards::get(const State *state, const Action *action, const State *ne
 /**
  * Reset the rewards, clearing the internal mapping.
  */
-void SASRewards::reset()
+void SASORewards::reset()
 { }

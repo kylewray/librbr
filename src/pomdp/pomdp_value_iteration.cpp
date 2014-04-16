@@ -34,7 +34,10 @@
 #include "../../include/core/rewards/reward_exception.h"
 #include "../../include/core/policy/policy_exception.h"
 
+#include <vector>
 #include <math.h>
+#include <coin/OsiSolverInterface.hpp>
+#include <coin/OsiClpSolverInterface.hpp>
 
 /**
  * The default constructor for the POMDPValueIteration class.
@@ -198,8 +201,8 @@ PolicyGraph *POMDPValueIteration::solve_infinite_horizon(const FiniteStates *S, 
 	}
 
 	// Create the set of alpha vectors, which we call Gamma. As well as the previous Gamma set.
-	std::vector<POMDPAlphaVector *> gamma;
-	std::vector<POMDPAlphaVector *> gammaPrev;
+	std::vector<POMDPAlphaVector *> gamma[2];
+	bool current = false;
 
 	// Continue to iterate until the maximum difference between two V[s]'s is less than the tolerance.
 	double convergenceCriterion = epsilon * (1.0 - h->get_discount_factor()) / h->get_discount_factor();
@@ -209,11 +212,18 @@ PolicyGraph *POMDPValueIteration::solve_infinite_horizon(const FiniteStates *S, 
 		delta = 0.0;
 
 		// Compute the new set of alpha vectors, gamma.
-		gammaPrev = gamma;
 		for (const Action *action : *A) {
-			std::vector<POMDPAlphaVector *> alphaVector = bellman_update(S, A, Z, T, O, R, h, action, gammaAStar[action], gamma);
-			gamma.insert(gamma.end(), alphaVector.begin(), alphaVector.end());
+			std::vector<POMDPAlphaVector *> alphaVector = bellman_update(S, A, Z, T, O, R, h, action,
+					gammaAStar[action], gamma[current]);
+			gamma[current].insert(gamma[current].end(), alphaVector.begin(), alphaVector.end());
 		}
+
+		// Prune alpha vectors by solving a linear program.
+//		OsiSolverInterface *si = new OsiClpSolverInterface();
+//
+//		si
+//
+//		delete si;
 
 		// TODO: Compute delta by looking at the max_{s in S} |max_{alpha in gamma} alpha[s] - max_{alpha in gammaPrev} gammaPrev[s]|.
 		// HACK: TERMINATE IMMEDIATELY!

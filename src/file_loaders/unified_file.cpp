@@ -1570,7 +1570,7 @@ int UnifiedFile::load_reward(std::vector<std::string> items)
 
 	// Create the rewards object if it has not been made yet.
 	if (rewards == nullptr) {
-		rewards = new SASRewards();
+		rewards = new SASRewardsMap();
 	}
 
 	std::string actionName = split_string_by_space(items[1])[0];
