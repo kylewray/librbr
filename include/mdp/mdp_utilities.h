@@ -26,12 +26,12 @@
 #define MDP_UTILITIES_H
 
 
-#include "../../include/core/states/state.h"
-#include "../../include/core/states/finite_states.h"
-#include "../../include/core/actions/finite_actions.h"
-#include "../../include/core/state_transitions/finite_state_transitions.h"
-#include "../../include/core/rewards/sas_rewards.h"
-#include "../../include/core/horizon.h"
+#include "../core/states/state.h"
+#include "../core/states/finite_states.h"
+#include "../core/actions/finite_actions.h"
+#include "../core/state_transitions/finite_state_transitions.h"
+#include "../core/rewards/sas_rewards.h"
+#include "../core/horizon.h"
 
 /**
  * Compute the Bellman update/backup for a given state and compute the action which achieves the

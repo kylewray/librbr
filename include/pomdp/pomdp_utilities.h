@@ -26,32 +26,35 @@
 #define POMDP_UTILITIES_H
 
 
-#include "../../include/core/states/state.h"
-#include "../../include/core/states/belief_state.h"
-#include "../../include/core/actions/action.h"
-#include "../../include/core/observations/observation.h"
+#include "../core/states/state.h"
+#include "../core/states/belief_state.h"
+#include "../core/actions/action.h"
+#include "../core/observations/observation.h"
 
-#include "../../include/core/states/finite_states.h"
-#include "../../include/core/actions/finite_actions.h"
-#include "../../include/core/observations/finite_observations.h"
-#include "../../include/core/state_transitions/finite_state_transitions.h"
-#include "../../include/core/observation_transitions/finite_observation_transitions.h"
-#include "../../include/core/rewards/sas_rewards.h"
-#include "../../include/core/horizon.h"
+#include "../core/states/finite_states.h"
+#include "../core/actions/finite_actions.h"
+#include "../core/observations/finite_observations.h"
+#include "../core/state_transitions/finite_state_transitions.h"
+#include "../core/observation_transitions/finite_observation_transitions.h"
+#include "../core/rewards/saso_rewards.h"
+#include "../core/horizon.h"
 
-#include "../../include/pomdp/pomdp_alpha_vector.h"
+#include "../core/policy/policy_alpha_vector.h"
 
 /**
  * Create the commonly used Gamma_{a,*}.
  * @param S			The set of finite states.
  * @param A			The set of finite actions.
+ * @param Z			The set of finite observations.
  * @param T			The finite state transition function.
+ * @param O			The finite observation transition function.
  * @param R			The state-action-state rewards function.
  * @param action	The action taken at this time step.
  * @return The alpha vector which is the single element in Gamma_{a,*}.
  */
-std::vector<POMDPAlphaVector *> create_gamma_a_star(const FiniteStates *S, const FiniteActions *A,
-		const FiniteStateTransitions *T, const SASRewards *R, const Action *action);
+PolicyAlphaVector *create_gamma_a_star(const FiniteStates *S, const FiniteActions *A,
+		const FiniteObservations *Z, const FiniteStateTransitions *T, const FiniteObservationTransitions *O,
+		const SASORewards *R, const Action *action);
 
 /**
  * Perform the belief state update equation on the current belief.
@@ -80,12 +83,12 @@ BeliefState belief_state_update(const BeliefState &belief, const FiniteStates *S
  * @param action	 The action taken.
  * @param gammaAStar The initial gamma which is always used in the cross sum: Gamma_{a,*}.
  * @param gamma		 The current Bellman backup, represented as the set Gamma storing alpha-vectors.
- * @return The next Gamma which contains the new set of optimal alpha-vectors.
+ * @return The Gamma_{a} which contains the new set of optimal alpha-vectors, given a particular action.
  */
-std::vector<POMDPAlphaVector *> bellman_update(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
-		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASRewards *R,
-		const Horizon *h, const Action *action, const std::vector<POMDPAlphaVector *> &gammaAStar,
-		const std::vector<POMDPAlphaVector *> &gamma);
+std::vector<PolicyAlphaVector *> bellman_update(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
+		const Horizon *h, const Action *action, const std::vector<PolicyAlphaVector *> &gammaAStar,
+		const std::vector<PolicyAlphaVector *> &gamma);
 
 
 #endif // POMDP_UTILITIES_H

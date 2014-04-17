@@ -22,38 +22,38 @@
  */
 
 
-#include "../../include/pomdp/pomdp_alpha_vector.h"
+#include "../../../include/core/policy/policy_alpha_vector.h"
 
 /**
- * The default constructor for the POMDPAlphaVector class.
+ * The default constructor for the PolicyAlphaVector class.
  */
-POMDPAlphaVector::POMDPAlphaVector()
+PolicyAlphaVector::PolicyAlphaVector()
 {
 	alphaVectorAction = nullptr;
 }
 
 /**
- * A constructor for the POMDPAlphaVector class which specifies the initial action.
+ * A constructor for the PolicyAlphaVector class which specifies the initial action.
  * @param action The action to take if this is the maximal alpha vector.
  */
-POMDPAlphaVector::POMDPAlphaVector(const Action *action)
+PolicyAlphaVector::PolicyAlphaVector(const Action *action)
 {
 	alphaVectorAction = action;
 }
 
 /**
- * The copy constructor for the POMDPAlphaVector class.
+ * The copy constructor for the PolicyAlphaVector class.
  * @param other The other alpha vector to copy.
  */
-POMDPAlphaVector::POMDPAlphaVector(const POMDPAlphaVector &other)
+PolicyAlphaVector::PolicyAlphaVector(const PolicyAlphaVector &other)
 {
 	*this = other;
 }
 
 /**
- * A deconstructor for the POMDPAlphaVector class.
+ * A deconstructor for the PolicyAlphaVector class.
  */
-POMDPAlphaVector::~POMDPAlphaVector()
+PolicyAlphaVector::~PolicyAlphaVector()
 {
 	reset();
 }
@@ -63,7 +63,7 @@ POMDPAlphaVector::~POMDPAlphaVector()
  * @param state	Set the value of this state.
  * @param value The alpha value of the state.
  */
-void POMDPAlphaVector::set(const State *state, double value)
+void PolicyAlphaVector::set(const State *state, double value)
 {
 	alphaVector[state] = value;
 }
@@ -73,7 +73,7 @@ void POMDPAlphaVector::set(const State *state, double value)
  * @param state Get the value of this state.
  * @return The alpha vector's value of the state.
  */
-double POMDPAlphaVector::get(const State *state) const
+double PolicyAlphaVector::get(const State *state) const
 {
 	std::map<const State *, double>::const_iterator result = alphaVector.find(state);
 	if (result == alphaVector.end()) {
@@ -86,7 +86,7 @@ double POMDPAlphaVector::get(const State *state) const
 /**
  * Set the action to take if this alpha vector is optimal for a belief state.
  */
-void POMDPAlphaVector::set_action(const Action *action)
+void PolicyAlphaVector::set_action(const Action *action)
 {
 	alphaVectorAction = action;
 }
@@ -95,7 +95,7 @@ void POMDPAlphaVector::set_action(const Action *action)
  * Get the action to take at this alpha vector.
  * @return The action to take if this alpha vector is optimal for a belief state.
  */
-const Action *POMDPAlphaVector::get_action() const
+const Action *PolicyAlphaVector::get_action() const
 {
 	return alphaVectorAction;
 }
@@ -105,7 +105,7 @@ const Action *POMDPAlphaVector::get_action() const
  * @param belief The belief state 'beta' vector.
  * @return The value of the belief state provided.
  */
-double POMDPAlphaVector::compute_value(const BeliefState *belief)
+double PolicyAlphaVector::compute_value(const BeliefState *belief)
 {
 	// Perform the dot product: dot(beta, alpha), but do so with map objects.
 	double value = 0.0;
@@ -120,7 +120,7 @@ double POMDPAlphaVector::compute_value(const BeliefState *belief)
  * @param other The alpha vector to copy.
  * @return The new version of this alpha vector.
  */
-POMDPAlphaVector &POMDPAlphaVector::operator=(const POMDPAlphaVector &other)
+PolicyAlphaVector &PolicyAlphaVector::operator=(const PolicyAlphaVector &other)
 {
 	alphaVector = other.alphaVector;
 	alphaVectorAction = other.get_action();
@@ -132,9 +132,9 @@ POMDPAlphaVector &POMDPAlphaVector::operator=(const POMDPAlphaVector &other)
  * @param other The alpha vector to add to this one.
  * @return The resultant alpha vector from the sum of this one and the other one provided.
  */
-POMDPAlphaVector POMDPAlphaVector::operator+(const POMDPAlphaVector &other)
+PolicyAlphaVector PolicyAlphaVector::operator+(const PolicyAlphaVector &other)
 {
-	POMDPAlphaVector result;
+	PolicyAlphaVector result;
 
 	for (std::map<const State *, double>::value_type alpha : alphaVector) {
 		double a = alpha.second;
@@ -148,27 +148,27 @@ POMDPAlphaVector POMDPAlphaVector::operator+(const POMDPAlphaVector &other)
 /**
  * Reset the alpha vector.
  */
-void POMDPAlphaVector::reset()
+void PolicyAlphaVector::reset()
 {
 	alphaVector.clear();
 	alphaVectorAction = nullptr;
 }
 
 /**
- * Compute the cross-sum of two alpha vectors.
+ * Compute the cross-sum (Minkowski sum) of two alpha vectors. This creates new PolicyAlphaVector in memory.
  * @param A The left set of alpha vectors.
  * @param B The right set of alpha vectors.
  * @return The result from performing the cross-sum on the two sets of alpha vectors.
  */
-std::vector<POMDPAlphaVector *> POMDPAlphaVector::cross_sum(const std::vector<POMDPAlphaVector *> &A,
-		const std::vector<POMDPAlphaVector *> &B)
+std::vector<PolicyAlphaVector *> PolicyAlphaVector::cross_sum(const std::vector<PolicyAlphaVector *> &A,
+		const std::vector<PolicyAlphaVector *> &B)
 {
-	std::vector<POMDPAlphaVector *> C;
+	std::vector<PolicyAlphaVector *> C;
 
 	// Perform the cross-sum and store the result in C.
-	for (POMDPAlphaVector *a : A) {
-		for (POMDPAlphaVector *b : B) {
-			POMDPAlphaVector *c = new POMDPAlphaVector(*a + *b);
+	for (PolicyAlphaVector *a : A) {
+		for (PolicyAlphaVector *b : B) {
+			PolicyAlphaVector *c = new PolicyAlphaVector(*a + *b);
 			C.push_back(c);
 		}
 	}

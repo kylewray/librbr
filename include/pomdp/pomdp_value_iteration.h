@@ -28,16 +28,16 @@
 
 #include "pomdp.h"
 
-#include "../core/policy/policy_tree.h"
-#include "../core/policy/policy_graph.h"
+#include "../core/policy/policy_alpha_vectors.h"
+#include "../core/policy/policy_alpha_vector.h"
 
-#include "../../include/core/states/finite_states.h"
-#include "../../include/core/actions/finite_actions.h"
-#include "../../include/core/observations/finite_observations.h"
-#include "../../include/core/state_transitions/finite_state_transitions.h"
-#include "../../include/core/observation_transitions/finite_observation_transitions.h"
-#include "../../include/core/rewards/sas_rewards.h"
-#include "../../include/core/horizon.h"
+#include "../core/states/finite_states.h"
+#include "../core/actions/finite_actions.h"
+#include "../core/observations/finite_observations.h"
+#include "../core/state_transitions/finite_state_transitions.h"
+#include "../core/observation_transitions/finite_observation_transitions.h"
+#include "../core/rewards/saso_rewards.h"
+#include "../core/horizon.h"
 
 /**
  * Solve an POMDP via value iteration (finite or infinite horizon). This solver has the
@@ -90,13 +90,13 @@ private:
 	 * @param Z The finite observations.
 	 * @param T The finite state transition function.
 	 * @param O The finite observation transition function.
-	 * @param R The state-action-state rewards.
+	 * @param R The state-action-state-observation rewards.
 	 * @param h The horizon.
-	 * @return Return the optimal policy as a tree.
+	 * @return Return the optimal policy as a collection of alpha vectors.
 	 * @throws PolicyException An error occurred computing the policy.
 	 */
-	PolicyTree *solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
-			const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASRewards *R,
+	PolicyAlphaVectors *solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+			const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
 			const Horizon *h);
 
 	/**
@@ -106,13 +106,13 @@ private:
 	 * @param Z The finite observations.
 	 * @param T The finite state transition function.
 	 * @param O The finite observation transition function.
-	 * @param R The state-action-state rewards.
+	 * @param R The state-action-state-observation rewards.
 	 * @param h The horizon.
-	 * @return Return the optimal policy as a finite state controller.
+	 * @return Return the optimal policy as a collection of alpha vectors.
 	 * @throws PolicyException An error occurred computing the policy.
 	 */
-	PolicyGraph *solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
-			const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASRewards *R,
+	PolicyAlphaVectors *solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+			const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
 			const Horizon *h);
 
 	/**

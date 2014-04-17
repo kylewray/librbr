@@ -23,8 +23,10 @@
 
 
 #include "../../include/pomdp/pomdp_value_iteration.h"
-#include "../../include/pomdp/pomdp_alpha_vector.h"
 #include "../../include/pomdp/pomdp_utilities.h"
+
+#include "../../include/core/policy/policy_alpha_vectors.h"
+#include "../../include/core/policy/policy_alpha_vector.h"
 
 #include "../../include/core/states/state_exception.h"
 #include "../../include/core/actions/action_exception.h"
@@ -114,8 +116,8 @@ Policy *POMDPValueIteration::solve(const POMDP *pomdp)
 		throw ObservationTransitionException();
 	}
 
-	// Attempt to convert the rewards object into SASRewards.
-	const SASRewards *R = dynamic_cast<const SASRewards *>(pomdp->get_rewards());
+	// Attempt to convert the rewards object into SASORewards.
+	const SASORewards *R = dynamic_cast<const SASORewards *>(pomdp->get_rewards());
 	if (R == nullptr) {
 		throw RewardException();
 	}
@@ -136,46 +138,74 @@ Policy *POMDPValueIteration::solve(const POMDP *pomdp)
  * @param Z The finite observations.
  * @param T The finite state transition function.
  * @param O The finite observation transition function.
- * @param R The state-action-state rewards.
+ * @param R The state-action-state-observation rewards.
  * @param h The horizon.
- * @return Return the optimal policy as a tree.
+ * @return Return the optimal policy as a collection of alpha vectors.
  * @throws PolicyException An error occurred computing the policy.
  */
-PolicyTree *POMDPValueIteration::solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
-		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASRewards *R,
+PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
 		const Horizon *h)
 {
-	return nullptr;
-	/*
-	// Create the policy based on the horizon.
-	PolicyTree *policy = new PolicyTree(h);
+	// Create the policy of alpha vectors variable. Set the horizon, to make the object's policy differ over time.
+	PolicyAlphaVectors *policy = new PolicyAlphaVectors(h->get_horizon());
 
-	// The value of the states, which will become our alpha vectors.
-	std::map<State *, double> V;
+	// Before anything, cache Gamma_{a, *} for all actions. This is used in every cross-sum computation.
+	std::map<const Action *, std::vector<PolicyAlphaVector *> > gammaAStar;
+	for (const Action *action : *A) {
+		gammaAStar[action].push_back(create_gamma_a_star(S, A, Z, T, O, R, action));
+	}
 
-	// Define the initial value function for each state.
-	for (State *s : *S) {
-		V[s] = 0.0;
-		for (State *sPrime : *S) {
-			V[s] += T->get(s, )
+	// Continue to iterate until the horizon has been reached.
+	for (int t = 0; t < h->get_horizon(); t++){
+		// Create the set of alpha vectors, which we call Gamma.
+		std::vector<PolicyAlphaVector *> gamma;
+
+		// Compute the new set of alpha vectors, gamma.
+		for (const Action *action : *A) {
+			std::vector<PolicyAlphaVector *> alphaVector = bellman_update(S, A, Z, T, O, R, h,
+					action, gammaAStar[action], gamma);
+			gamma.insert(gamma.end(), alphaVector.begin(), alphaVector.end());
+		}
+
+		// TODO: (Bigger) Move "pomdp_alpha_vector.h" to "core/policy/policy_alpha_vector.h"...
+
+		// TODO: Move the pruning to the PolicyAlphaVectors object, as a static method, and instead:
+
+		// Add the current gamma to the policy object, then call the prune_linear_program static method. This transfers
+		// the responsibility of memory management to the PolicyAlphaVectors object.
+		policy->set(t, gamma);
+
+		// Prune alpha vectors by solving a linear program. The linear program attempts to find a belief (denoted as beta)
+		// for which the alpha vector in question uniquely maximizes the value function at that point in the belief space.
+		// If no belief can be found, i.e., the LP returns unbounded or infeasible, then we can prune the alpha vector
+		// because it implies at least one other alpha vector dominates it at every belief point.
+		for (std::vector<PolicyAlphaVector *>::iterator iter = gamma.begin(); iter != gamma.end(); /* iter++ */) {
+			bool foundBeliefPoint = false;
+
+			// TODO: Setup and solve linear program.
+//			OsiSolverInterface *si = new OsiClpSolverInterface();
+//			si
+//			delete si;
+
+			if (!foundBeliefPoint) {
+				iter = gamma.erase(iter);
+			} else {
+				++iter;
+			}
 		}
 	}
 
-	// Continue to iterate until the maximum difference between two V[s]'s is less than the tolerance.
-	for (int t = 1; t < h->get_horizon(); t++){
-		//
-		// For all the states, compute V(s).
-		for (State *s : *S) {
-			Action *aBest = nullptr;
-
-			bellman_update(S, A, T, R, h, s, V, aBest);
-
-			// Set the policy's action, which will yield the optimal policy at the end.
-			policy->set(t, s, aBest);
+	// Free the memory of Gamma_{a, *}.
+	for (const Action *action : *A) {
+		for (PolicyAlphaVector *alphaVector : gammaAStar[action]) {
+			delete alphaVector;
 		}
+		gammaAStar[action].clear();
 	}
+	gammaAStar.clear();
 
-	return policy;*/
+	return policy;
 }
 
 /**
@@ -185,19 +215,22 @@ PolicyTree *POMDPValueIteration::solve_finite_horizon(const FiniteStates *S, con
  * @param Z The finite observations.
  * @param T The finite state transition function.
  * @param O The finite observation transition function.
- * @param R The state-action-state rewards.
+ * @param R The state-action-state-observation rewards.
  * @param h The horizon.
  * @return Return the optimal policy as a finite state controller.
  * @throws PolicyException An error occurred computing the policy.
  */
-PolicyGraph *POMDPValueIteration::solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
-		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASRewards *R,
+PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
 		const Horizon *h)
 {
-	// Before anything, cache Gamma_{a,*} for all actions. This is used in every single cross-sum computation.
+	return nullptr;
+
+	/*
+	// Before anything, cache Gamma_{a, *} for all actions. This is used in every cross-sum computation.
 	std::map<const Action *, std::vector<POMDPAlphaVector *> > gammaAStar;
 	for (const Action *action : *A) {
-		gammaAStar[action] = create_gamma_a_star(S, A, T, R, action);
+		gammaAStar[action].push_back(create_gamma_a_star(S, A, Z, T, O, R, action));
 	}
 
 	// Create the set of alpha vectors, which we call Gamma. As well as the previous Gamma set.
@@ -213,8 +246,8 @@ PolicyGraph *POMDPValueIteration::solve_infinite_horizon(const FiniteStates *S, 
 
 		// Compute the new set of alpha vectors, gamma.
 		for (const Action *action : *A) {
-			std::vector<POMDPAlphaVector *> alphaVector = bellman_update(S, A, Z, T, O, R, h, action,
-					gammaAStar[action], gamma[current]);
+			std::vector<POMDPAlphaVector *> alphaVector = bellman_update(S, A, Z, T, O, R, h,
+					action, gammaAStar[action], gamma[current]);
 			gamma[current].insert(gamma[current].end(), alphaVector.begin(), alphaVector.end());
 		}
 
@@ -225,12 +258,31 @@ PolicyGraph *POMDPValueIteration::solve_infinite_horizon(const FiniteStates *S, 
 //
 //		delete si;
 
+		// NOTE: Don't forget to swap "current" variable!
+		// NOTE: Don't forget to free memory of the NEW current after you swap the variable!
+
 		// TODO: Compute delta by looking at the max_{s in S} |max_{alpha in gamma} alpha[s] - max_{alpha in gammaPrev} gammaPrev[s]|.
 		// HACK: TERMINATE IMMEDIATELY!
 //		delta = ???;
 	}
 
+	// NOTE: Don't forget to free the memory of the PREVIOUS gamma (i.e., gamma[!current]), and then return/use gamma[current].
+
+	// Free the memory of Gamma_{a, *}.
+	for (const Action *action : *A) {
+		for (POMDPAlphaVector *alphaVector : gammaAStar[action]) {
+			delete alphaVector;
+		}
+		gammaAStar[action].clear();
+	}
+	gammaAStar.clear();
+
 	return nullptr;
+	*/
+
+
+
+
 
 
 	/*

@@ -28,28 +28,33 @@
  * Create the commonly used Gamma_{a,*}.
  * @param S			The set of finite states.
  * @param A			The set of finite actions.
+ * @param Z			The set of finite observations.
  * @param T			The finite state transition function.
+ * @param O			The finite observation transition function.
  * @param R			The state-action-state rewards function.
  * @param action	The action taken at this time step.
  * @return The alpha vector which is the single element in Gamma_{a,*}.
  */
-std::vector<POMDPAlphaVector *> create_gamma_a_star(const FiniteStates *S, const FiniteActions *A,
-		const FiniteStateTransitions *T, const SASRewards *R, const Action *action)
+PolicyAlphaVector *create_gamma_a_star(const FiniteStates *S, const FiniteActions *A,
+		const FiniteObservations *Z, const FiniteStateTransitions *T, const FiniteObservationTransitions *O,
+		const SASORewards *R, const Action *action)
 {
-	POMDPAlphaVector *alpha = new POMDPAlphaVector(action);
+	PolicyAlphaVector *alpha = new PolicyAlphaVector(action);
 
 	for (const State *state : *S) {
-		// Compute the immediate state-action-state reward.
+		// Compute the immediate state-action-state-observation reward.
 		double immediateReward = 0.0;
 		for (const State *nextState : *S) {
-			immediateReward += T->get(state, action, nextState) * R->get(state, action, nextState);
+			double innerImmediateReward = 0.0;
+			for (const Observation *observation : *Z) {
+				innerImmediateReward += O->get(action, nextState, observation) * R->get(state, action, nextState, observation);
+			}
+			immediateReward += T->get(state, action, nextState) * innerImmediateReward;
 		}
 		alpha->set(state, immediateReward);
 	}
 
-	std::vector<POMDPAlphaVector *> gammaAStar;
-	gammaAStar.push_back(alpha);
-	return gammaAStar;
+	return alpha;
 }
 
 /**
@@ -102,23 +107,23 @@ BeliefState belief_state_update(const BeliefState &belief, const FiniteStates *S
  * @param action	 The action taken.
  * @param gammaAStar The initial gamma which is always used in the cross sum: Gamma_{a,*}.
  * @param gamma		 The current Bellman backup, represented as the set Gamma storing alpha-vectors.
- * @return The next Gamma which contains the new set of optimal alpha-vectors.
+ * @return The Gamma_{a} which contains the new set of optimal alpha-vectors, given a particular action.
  */
-std::vector<POMDPAlphaVector *> bellman_update(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
-		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASRewards *R,
-		const Horizon *h, const Action *action, const std::vector<POMDPAlphaVector *> &gammaAStar,
-		const std::vector<POMDPAlphaVector *> &gamma)
+std::vector<PolicyAlphaVector *> bellman_update(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
+		const Horizon *h, const Action *action, const std::vector<PolicyAlphaVector *> &gammaAStar,
+		const std::vector<PolicyAlphaVector *> &gamma)
 {
-	std::vector<POMDPAlphaVector *> nextGamma;
+	std::vector<PolicyAlphaVector *> gammaA = gammaAStar;
 
 	// Iteratively compute and apply the cross-sum of the gamma.
 	for (const Observation *observation : *Z) {
 		// Compute the set Gamma_{a, omega}.
-		std::vector<POMDPAlphaVector *> gammaAOmega;
+		std::vector<PolicyAlphaVector *> gammaAOmega;
 
 		// For each alpha vector in the set Gamma_{a, omega}, we have to consider a different gamma in Gamma^{t-1}.
-		for (POMDPAlphaVector *alphaGamma : gamma) {
-			POMDPAlphaVector *newAlpha = new POMDPAlphaVector(action);
+		for (PolicyAlphaVector *alphaGamma : gamma) {
+			PolicyAlphaVector *newAlpha = new PolicyAlphaVector(action);
 
 			// For each of the columns in the alpha vector.
 			for (const State *state : *S) {
@@ -133,13 +138,22 @@ std::vector<POMDPAlphaVector *> bellman_update(const FiniteStates *S, const Fini
 				newAlpha->set(state, value);
 			}
 
-			// Store the newly created alpha vector in Gamma_{a,omega}.
+			// Store the newly created alpha vector in Gamma_{a, omega}.
 			gammaAOmega.push_back(newAlpha);
 		}
 
-		std::vector<POMDPAlphaVector *> crossSum = POMDPAlphaVector::cross_sum(nextGamma, gammaAOmega);
-		nextGamma.insert(nextGamma.end(), crossSum.begin(), crossSum.end());
+		// Perform the Minkowski sum (cross-sum) and expand the final result (gammaA) by gammaAOmega.
+		std::vector<PolicyAlphaVector *> crossSum = PolicyAlphaVector::cross_sum(gammaA, gammaAOmega);
+		gammaA.insert(gammaA.end(), crossSum.begin(), crossSum.end());
+
+		// Since the cross_sum function allocates memory for the alpha vectors, but we also allocated memory
+		// for the newAlpha inside the for loop above, free this memory. Keep the gammaA memory though, since
+		// that is part of the result of this function.
+		for (PolicyAlphaVector *alphaGamma : gammaAOmega) {
+			delete alphaGamma;
+		}
+		gammaAOmega.clear();
 	}
 
-	return nextGamma;
+	return gammaA;
 }

@@ -22,43 +22,43 @@
  */
 
 
-#ifndef POMDP_ALPHA_VECTOR_H
-#define POMDP_ALPHA_VECTOR_H
+#ifndef POLICY_ALPHA_VECTOR_H
+#define POLICY_ALPHA_VECTOR_H
 
 
-#include "../core/actions/action.h"
-#include "../core/states/belief_state.h"
+#include "../actions/action.h"
+#include "../states/belief_state.h"
 
 #include <vector>
 
 /**
- * A small class to manipulate alpha vectors for POMDPs. This stores an action
- * to take should this alpha vector define the maximal value of the belief state
+ * A small class to manipulate alpha vectors for POMDPs and Dec-POMDPs. This stores an
+ * action to take should this alpha vector define the maximal value of the belief state
  * following equation: dot(beta, alpha) = V(b), where beta = <b(s_1), ..., b(s_n)>.
  */
-class POMDPAlphaVector {
+class PolicyAlphaVector {
 public:
 	/**
-	 * The default constructor for the POMDPAlphaVector class.
+	 * The default constructor for the PolicyAlphaVector class.
 	 */
-	POMDPAlphaVector();
+	PolicyAlphaVector();
 
 	/**
-	 * A constructor for the POMDPAlphaVector class which specifies the initial action.
+	 * A constructor for the PolicyAlphaVector class which specifies the initial action.
 	 * @param action The action to take if this is the maximal alpha vector.
 	 */
-	POMDPAlphaVector(const Action *action);
+	PolicyAlphaVector(const Action *action);
 
 	/**
-	 * The copy constructor for the POMDPAlphaVector class.
+	 * The copy constructor for the PolicyAlphaVector class.
 	 * @param other The other alpha vector to copy.
 	 */
-	POMDPAlphaVector(const POMDPAlphaVector &other);
+	PolicyAlphaVector(const PolicyAlphaVector &other);
 
 	/**
-	 * A deconstructor for the POMDPAlphaVector class.
+	 * A deconstructor for the PolicyAlphaVector class.
 	 */
-	virtual ~POMDPAlphaVector();
+	virtual ~PolicyAlphaVector();
 
 	/**
 	 * Set the value of a state. Unset alpha values are assumed to be 0.
@@ -97,14 +97,14 @@ public:
 	 * @param other The alpha vector to copy.
 	 * @return The new version of this alpha vector.
 	 */
-	POMDPAlphaVector &operator=(const POMDPAlphaVector &other);
+	PolicyAlphaVector &operator=(const PolicyAlphaVector &other);
 
 	/**
 	 * Overload the plus operator to return the summation of all elements in the vectors.
 	 * @param other The alpha vector to add to this one.
 	 * @return The resultant alpha vector from the sum of this one and the other one provided.
 	 */
-	POMDPAlphaVector operator+(const POMDPAlphaVector &other);
+	PolicyAlphaVector operator+(const PolicyAlphaVector &other);
 
 	/**
 	 * Reset the alpha vector.
@@ -112,17 +112,12 @@ public:
 	void reset();
 
 	/**
-	 * Compute the cross-sum of two alpha vectors.
+	 * Compute the cross-sum (Minkowski sum) of two alpha vectors. This creates new PolicyAlphaVector in memory.
 	 * @param A The left set of alpha vectors.
 	 * @param B The right set of alpha vectors.
 	 * @return The result from performing the cross-sum on the two sets of alpha vectors.
 	 */
-	static std::vector<POMDPAlphaVector *> cross_sum(const std::vector<POMDPAlphaVector *> &A, const std::vector<POMDPAlphaVector *> &B);
-
-	/**
-	 * Allow POMDPAlphaVector objects to access private members in others for setting.
-	 */
-	friend POMDPAlphaVector;
+	static std::vector<PolicyAlphaVector *> cross_sum(const std::vector<PolicyAlphaVector *> &A, const std::vector<PolicyAlphaVector *> &B);
 
 private:
 	/**
@@ -139,4 +134,4 @@ private:
 };
 
 
-#endif // POMDP_ALPHA_VECTOR_H
+#endif // POLICY_ALPHA_VECTOR_H

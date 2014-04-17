@@ -30,11 +30,11 @@
 
 #include "../core/policy/policy_map.h"
 
-#include "../../include/core/states/finite_states.h"
-#include "../../include/core/actions/finite_actions.h"
-#include "../../include/core/state_transitions/finite_state_transitions.h"
-#include "../../include/core/rewards/sas_rewards.h"
-#include "../../include/core/horizon.h"
+#include "../core/states/finite_states.h"
+#include "../core/actions/finite_actions.h"
+#include "../core/state_transitions/finite_state_transitions.h"
+#include "../core/rewards/sas_rewards.h"
+#include "../core/horizon.h"
 
 /**
  * Solve an MDP via value iteration (finite or infinite horizon). This solver has the

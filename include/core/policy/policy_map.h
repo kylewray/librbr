@@ -128,7 +128,7 @@ public:
 private:
 	/**
 	 * Defines the policy itself; it's the internal mapping from states to actions. There is
-	 * one of these mappings for each level.
+	 * one of these mappings for each horizon.
 	 */
 	std::vector<std::map<const State *, const Action *> > policy;
 

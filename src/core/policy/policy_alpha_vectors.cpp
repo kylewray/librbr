@@ -25,137 +25,176 @@
 #include <iostream>
 #include <fstream>
 
-#include "../../../include/core/policy/policy_map.h"
+#include "../../../include/core/policy/policy_alpha_vectors.h"
+#include "../../../include/core/policy/policy_alpha_vector.h"
 
 #include "../../../include/utilities/log.h"
 
 #include "../../../include/core/actions/action_exception.h"
 #include "../../../include/core/states/state_exception.h"
+#include "../../../include/core/observations/observation_exception.h"
 #include "../../../include/core/policy/policy_exception.h"
 
 #include "../../../include/utilities/string_manipulation.h"
 
 /**
- * The default constructor for a PolicyMap object. It defaults to a horizon of 1.
+ * The default constructor for a PolicyAlphaVectors object. It defaults to a horizon of 1.
  */
-PolicyMap::PolicyMap()
+PolicyAlphaVectors::PolicyAlphaVectors()
 {
-	policy.resize(1);
+	alphaVectors.resize(1);
 }
 
 /**
- * A constructor for a PolicyMap object which specifies the horizon.
+ * A constructor for a PolicyAlphaVectors object which specifies the horizon.
  * @param horizon The horizon of the problem; 0 represents infinite horizon.
  */
-PolicyMap::PolicyMap(unsigned int horizon)
+PolicyAlphaVectors::PolicyAlphaVectors(unsigned int horizon)
 {
 	if (horizon > 0) {
-		policy.resize(horizon);
+		alphaVectors.resize(horizon);
 	} else {
-		policy.resize(1);
+		alphaVectors.resize(1);
 	}
 }
 
 /**
- * A constructor for a PolicyMap object which specifies the horizon.
+ * A constructor for a PolicyAlphaVectors object which specifies the horizon.
  * @param horizon The horizon object from the MDP-like object.
  */
-PolicyMap::PolicyMap(const Horizon *horizon)
+PolicyAlphaVectors::PolicyAlphaVectors(const Horizon *horizon)
 {
 	if (horizon->get_horizon() > 0) {
-		policy.resize(horizon->get_horizon());
+		alphaVectors.resize(horizon->get_horizon());
 	} else {
-		policy.resize(1);
+		alphaVectors.resize(1);
+	}
+}
+
+/**
+ * A constructor for a PolicyAlphaVectors object which specifies the alpha vectors.
+ * It defaults to a horizon of 1 in this case.
+ * @param alphas The set of alpha vectors.
+ */
+PolicyAlphaVectors::PolicyAlphaVectors(const std::vector<PolicyAlphaVector *> &alphas)
+{
+	alphaVectors.resize(1);
+	set(alphas);
+}
+
+/**
+ * A constructor for a PolicyAlphaVectors object which specifies the alpha vectors.
+ * It defaults to a horizon of 1 in this case.
+ * @param alphas The set of alpha vectors at each horizon.
+ */
+PolicyAlphaVectors::PolicyAlphaVectors(const std::vector<const std::vector<PolicyAlphaVector *> > &alphas)
+{
+	// If no alpha vectors are properly given, then simply reserve the size for 1 horizon.
+	if (alphas.size() == 0 || alphas[0].size() == 0) {
+		alphaVectors.resize(1);
+		return;
+	}
+
+	// Otherwise, set each of the horizon's alpha vectors.
+	alphaVectors.resize(alphas.size());
+	for (const std::vector<PolicyAlphaVector *> &alpha : alphas) {
+		set(alpha);
 	}
 }
 
 /**
  * A virtual deconstructor to prevent errors upon the deletion of a child object.
  */
-PolicyMap::~PolicyMap()
+PolicyAlphaVectors::~PolicyAlphaVectors()
 { }
 
 /**
- * Set the mapping from a state to an action. For finite horizon, it assumes 0 by default.
- * @param state		The state to define.
- * @param action	The action which should be taken at the state.
+ * Set the alpha vectors. For finite horizon, it assumes 0 by default.
+ * @param alphas The set of alpha vectors.
  */
-void PolicyMap::set(const State *state, const Action *action)
+void PolicyAlphaVectors::set(const std::vector<PolicyAlphaVector *> &alphas)
 {
-	set(0, state, action);
-
-	//policy[0][state] = action;
+	set(0, alphas);
 }
 
 /**
- * Set the mapping from a state to an action, allowing the explicit specification of the horizon.
+ * Set the alpha vectors, allowing the explicit specification of the horizon.
  * @param horizon			The horizon to set.
- * @param state				The state to define.
- * @param action			The action which should be taken at the state.
+ * @param alphas 			The set of alpha vectors.
  * @throws PolicyException	The horizon was invalid.
  */
-void PolicyMap::set(unsigned int horizon, const State *state, const Action *action)
+void PolicyAlphaVectors::set(unsigned int horizon, const std::vector<PolicyAlphaVector *> &alphas)
 {
-	if (horizon >= policy.size()) {
+	if (horizon >= alphaVectors.size()) {
 		throw PolicyException();
 	}
 
-	policy[horizon][state] = action;
+	// First, free the memory of the current alpha vectors (if any) at this horizon. Then, set it.
+	for (PolicyAlphaVector *alpha : alphaVectors[horizon]) {
+		delete alpha;
+	}
+	alphaVectors[horizon].clear();
+	alphaVectors[horizon] = alphas;
 }
 
 /**
- * Get the action for a given state. For finite horizon, it assumes 0 by default.
- * @param state The state to retrieve a mapping.
- * @return The action to take at the given state.
+ * Get the action for a given belief state. For finite horizon, it assumes 0 by default. This frees the memory of
+ * previous alpha vectors.
+ * @param belief The belief state to retrieve a mapping.
+ * @return The action to take at the given belief state.
  * @throws PolicyException The policy was not defined for this state.
  */
-const Action *PolicyMap::get(const State *state) const
+const Action *PolicyAlphaVectors::get(const BeliefState *belief) const
 {
-	return get(0, state);
-
-	/*
-	std::map<const State *, const Action *>::const_iterator result = policy[0].find(state);
-	if (result == policy[0].end()) {
-		throw PolicyException();
-	}
-
-	return result->second;
-	*/
+	return get(0, belief);
 }
 
 /**
- * Get the action for a given state, allowing the explicit specification of the horizon.
+ * Get the action for a given belief state, allowing the explicit specification of the horizon. This frees
+ * the memory of previous alpha vectors.
  * @param horizon	The horizon to set.
- * @param state		The state to retrieve a mapping.
- * @return The action to take at the given state.
- * @throws PolicyException The policy was not defined for this state, or horizon was invalid.
+ * @param belief	The belief state to retrieve a mapping.
+ * @return The action to take at the given belief state.
+ * @throws PolicyException The policy was not defined for this belief state, or horizon was invalid.
  */
-const Action *PolicyMap::get(unsigned int horizon, const State *state) const
+const Action *PolicyAlphaVectors::get(unsigned int horizon, const BeliefState *belief) const
 {
-	if (horizon >= policy.size()) {
+	// Ensure that there is an alpha vector defined.
+	if (horizon >= alphaVectors.size() || alphaVectors[horizon].size() == 0) {
 		throw PolicyException();
 	}
 
-	std::map<const State *, const Action *>::const_iterator result = policy[horizon].find(state);
-	if (result == policy[horizon].end()) {
-		throw PolicyException();
+	// Initially assume the first alpha vector is the best.
+	const Action *action = alphaVectors[horizon][0]->get_action();
+	double Vb = alphaVectors[horizon][0]->compute_value(belief);
+
+	// Find the alpha vector which maximizes "dot(b, alpha)" and return the corresponding action.
+	for (PolicyAlphaVector *alpha : alphaVectors[horizon]) {
+		double VbPrime = alpha->compute_value(belief);
+		if (VbPrime > Vb) {
+			Vb = VbPrime;
+			action = alpha->get_action();
+		}
 	}
 
-	return result->second;
+	return action;
 }
 
 /**
  * A function which must load a policy file.
- * @param filename	The name and path of the file to load.
- * @param states	The states object which contains the actual state objects to be mapped.
- * @param actions	The actions object which contains the actual action objects to be mapped.
- * @param horizon	The horizons object to ensure valid policy creation.
+ * @param filename		The name and path of the file to load.
+ * @param states		The states object which contains the actual state objects to be mapped.
+ * @param actions		The actions object which contains the actual action objects to be mapped.
+ * @param observations	The observations object which contains the actual observation objects to be mapped.
+ * @param horizon		The horizons object to ensure valid policy creation.
  * @return Return @code{true} if an error occurred, @code{false} otherwise.
  */
-bool PolicyMap::load(std::string filename, const FiniteStates *states, const FiniteActions *actions, const Horizon *horizon)
+bool PolicyAlphaVectors::load(std::string filename, const FiniteStates *states, const FiniteActions *actions,
+		const FiniteObservations *observations, const Horizon *horizon)
 {
 	reset();
 
+	/*
 	char error[1024];
 
 	// Load the file and return if it failed to open.
@@ -245,6 +284,7 @@ bool PolicyMap::load(std::string filename, const FiniteStates *states, const Fin
 	}
 
 	file.close();
+	*/
 
 	return false;
 }
@@ -254,8 +294,9 @@ bool PolicyMap::load(std::string filename, const FiniteStates *states, const Fin
  * @param filename The name and path of the file to save.
  * @return Return @code{true} if an error occurred, @code{false} otherwise.
  */
-bool PolicyMap::save(std::string filename) const
+bool PolicyAlphaVectors::save(std::string filename) const
 {
+	/*
 	std::ofstream file(filename);
 	if (!file.is_open()) {
 		return true;
@@ -287,14 +328,21 @@ bool PolicyMap::save(std::string filename) const
 	}
 
 	file.close();
+	*/
 
 	return false;
 }
 
 /**
- * Reset the policy mapping.
+ * Reset the alpha vectors, freeing the memory.
  */
-void PolicyMap::reset()
+void PolicyAlphaVectors::reset()
 {
-	policy.clear();
+	for (int t = 0; t < alphaVectors.size(); t++) {
+		for (PolicyAlphaVector *alpha : alphaVectors[t]) {
+			delete alpha;
+		}
+		alphaVectors[t].clear();
+	}
+	alphaVectors.clear();
 }
