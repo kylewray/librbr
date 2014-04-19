@@ -38,8 +38,6 @@
 
 #include <vector>
 #include <math.h>
-#include <coin/OsiSolverInterface.hpp>
-#include <coin/OsiClpSolverInterface.hpp>
 
 /**
  * The default constructor for the POMDPValueIteration class.
@@ -168,32 +166,12 @@ PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const FiniteStates
 			gamma.insert(gamma.end(), alphaVector.begin(), alphaVector.end());
 		}
 
-		// TODO: (Bigger) Move "pomdp_alpha_vector.h" to "core/policy/policy_alpha_vector.h"...
-
-		// TODO: Move the pruning to the PolicyAlphaVectors object, as a static method, and instead:
+		// Prune the dominated alpha vectors from the set.
+		PolicyAlphaVectors::prune_dominated(S, gamma);
 
 		// Add the current gamma to the policy object, then call the prune_linear_program static method. This transfers
 		// the responsibility of memory management to the PolicyAlphaVectors object.
 		policy->set(t, gamma);
-
-		// Prune alpha vectors by solving a linear program. The linear program attempts to find a belief (denoted as beta)
-		// for which the alpha vector in question uniquely maximizes the value function at that point in the belief space.
-		// If no belief can be found, i.e., the LP returns unbounded or infeasible, then we can prune the alpha vector
-		// because it implies at least one other alpha vector dominates it at every belief point.
-		for (std::vector<PolicyAlphaVector *>::iterator iter = gamma.begin(); iter != gamma.end(); /* iter++ */) {
-			bool foundBeliefPoint = false;
-
-			// TODO: Setup and solve linear program.
-//			OsiSolverInterface *si = new OsiClpSolverInterface();
-//			si
-//			delete si;
-
-			if (!foundBeliefPoint) {
-				iter = gamma.erase(iter);
-			} else {
-				++iter;
-			}
-		}
 	}
 
 	// Free the memory of Gamma_{a, *}.

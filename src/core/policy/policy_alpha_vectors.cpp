@@ -37,6 +37,11 @@
 
 #include "../../../include/utilities/string_manipulation.h"
 
+#include <coin/OsiSolverInterface.hpp>
+#include <coin/OsiClpSolverInterface.hpp>
+#include <coin/CoinPackedVector.hpp>
+#include <coin/CoinPackedMatrix.hpp>
+
 /**
  * The default constructor for a PolicyAlphaVectors object. It defaults to a horizon of 1.
  */
@@ -345,4 +350,107 @@ void PolicyAlphaVectors::reset()
 		alphaVectors[t].clear();
 	}
 	alphaVectors.clear();
+}
+
+/**
+ * A static method to prune a set of alpha vectors.
+ * @param S					The finite set of states.
+ * @param alphas 			The set of alpha vectors for which dominated ones will be pruned in place.
+ * @throws PolicyException	The states were invalid, there were zero alpha vectors, or the first alpha vector is null.
+ */
+void PolicyAlphaVectors::prune_dominated(const FiniteStates *S, std::vector<PolicyAlphaVector *> &alphas)
+{
+	if (S == nullptr || S->get_num_states() == 0 || alphas.size() == 0 || alphas[0] == nullptr) {
+		throw PolicyException();
+	}
+
+	// Prune alpha vectors by solving a linear program. The linear program attempts to find a belief (denoted as beta)
+	// for which the alpha vector in question uniquely maximizes the value function at that point in the belief space.
+	// If no belief can be found, i.e., the LP returns unbounded or infeasible, then we can prune the alpha vector
+	// because it implies at least one other alpha vector dominates it at every belief point.
+	for (std::vector<PolicyAlphaVector *>::iterator iter = alphas.begin(); iter != alphas.end(); /* iter++ */) {
+		OsiSolverInterface *si = new OsiClpSolverInterface();
+		int numCols = S->get_num_states();
+
+		// This is the constant vector c, defined to be the particular alpha vector in this iteration.
+		double *objective = new double[numCols];
+		int i = 0;
+		for (const State *state : *S) {
+			// Note: Negative since CLP minimizes the objective function.
+			objective[i] = -(*iter)->get(state);
+			i++;
+		}
+
+		// Create the bounds on the beta (belief) values, which must be between 0 and 1.
+		double *colsLB = new double[numCols];
+		double *colsUB = new double[numCols];
+		for (i = 0; i < S->get_num_states(); i++) {
+			colsLB[i] = 0.0;
+			colsUB[i] = 1.0;
+		}
+
+		// Create the bounds on the constraint matrix (belief) values.
+		int numRows = alphas.size(); // 1 + (alphas.size() - 1)
+		double *rowsLB = new double[numRows];
+		double *rowsUB = new double[numRows];
+
+		// Define the special first row of the constraint matrix.
+		CoinPackedMatrix *constraintMatrix = new CoinPackedMatrix(false, 0, 0);
+		constraintMatrix->setDimensions(0, numCols);
+
+		CoinPackedVector firstRow;
+		for (i = 0; i < S->get_num_states(); i++) {
+			firstRow.insert(i, 1.0);
+		}
+		constraintMatrix->appendRow(firstRow);
+
+		// Set the lower and upper bounds.
+		rowsLB[0] = 1.0;
+		rowsUB[0] = 1.0;
+
+		// Define the rest of the constraint matrix.
+		i = 1;
+		for (std::vector<PolicyAlphaVector *>::iterator iterA = alphas.begin(); iterA != alphas.end(); iterA++) {
+			// Do not include the current alpha vector in the constraint matrix's rows.
+			if (iterA == iter) {
+				continue;
+			}
+
+			// Set the row of the constraint matrix.
+			CoinPackedVector otherRow;
+			int j = 0;
+			for (const State *state : *S) {
+				otherRow.insert(j, (*iterA)->get(state) - (*iter)->get(state));
+				j++;
+			}
+			constraintMatrix->appendRow(otherRow);
+
+			// Set the lower and upper bounds.
+			rowsLB[i] = -1.0 * si->getInfinity();
+			rowsUB[i] = 0.0;
+
+			i++;
+		}
+
+		// Solve the linear program and erase the alpha vector if no solution could be found.
+		si->loadProblem(*constraintMatrix, colsLB, colsUB, objective, rowsLB, rowsUB);
+		si->initialSolve();
+
+		if (!si->isProvenOptimal()) {
+			iter = alphas.erase(iter);
+		} else {
+			++iter;
+		}
+
+		// Free all the memory that has been allocated.
+		delete [] objective;
+		delete [] colsLB;
+		delete [] colsUB;
+
+		delete constraintMatrix;
+		delete [] rowsLB;
+		delete [] rowsUB;
+
+		delete si;
+	}
 }

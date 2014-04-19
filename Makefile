@@ -1,9 +1,10 @@
 CC = g++
 CFLAGS = -std=c++11 -g
+COINFLAGS = `pkg-config --cflags --libs Coin` `pkg-config --cflags --libs clp` `pkg-config --cflags --libs osi` `pkg-config --libs coinutils` `pkg-config --cflags --libs osi-clp`
 tests: all.o tests/core/*.cpp tests/mdp/*.cpp tests/file_loaders/*.cpp tests/utilities/*.cpp
 	mkdir -p tests/obj
 	$(CC) $(CFLAGS) -c -I.. tests/core/*.cpp tests/mdp/*.cpp tests/file_loaders/*.cpp tests/utilities/*.cpp tests/*.cpp
-	$(CC) $(CFLAGS) -o perform_tests obj/*.o *.o
+	$(CC) $(CFLAGS) $(COINFLAGS) -o perform_tests obj/*.o *.o
 	rm *.o
 
 states.o: src/core/states/*.cpp 

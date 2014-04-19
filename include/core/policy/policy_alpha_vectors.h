@@ -144,6 +144,14 @@ public:
 	 */
 	virtual void reset();
 
+	/**
+	 * A static method to prune a set of alpha vectors.
+	 * @param S					The finite set of states.
+	 * @param alphas 			The set of alpha vectors for which dominated ones will be pruned in place.
+	 * @throws PolicyException	The states were invalid, there were zero alpha vectors, or the first alpha vector is null.
+	 */
+	static void prune_dominated(const FiniteStates *S, std::vector<PolicyAlphaVector *> &alphas);
+
 private:
 	/**
 	 * Defines the policy itself; it's the internal mapping from states to actions. There is

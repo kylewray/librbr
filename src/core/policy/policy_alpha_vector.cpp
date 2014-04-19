@@ -101,11 +101,20 @@ const Action *PolicyAlphaVector::get_action() const
 }
 
 /**
+ * Get the dimension of this alpha vector (which is the number of states).
+ * @return The dimension of this alpha vector.
+ */
+int PolicyAlphaVector::get_dimension() const
+{
+	return alphaVector.size();
+}
+
+/**
  * Compute the value of the belief state by computing: dot(beta, alpha).
  * @param belief The belief state 'beta' vector.
  * @return The value of the belief state provided.
  */
-double PolicyAlphaVector::compute_value(const BeliefState *belief)
+double PolicyAlphaVector::compute_value(const BeliefState *belief) const
 {
 	// Perform the dot product: dot(beta, alpha), but do so with map objects.
 	double value = 0.0;
@@ -132,7 +141,7 @@ PolicyAlphaVector &PolicyAlphaVector::operator=(const PolicyAlphaVector &other)
  * @param other The alpha vector to add to this one.
  * @return The resultant alpha vector from the sum of this one and the other one provided.
  */
-PolicyAlphaVector PolicyAlphaVector::operator+(const PolicyAlphaVector &other)
+PolicyAlphaVector PolicyAlphaVector::operator+(const PolicyAlphaVector &other) const
 {
 	PolicyAlphaVector result;
 
@@ -140,6 +149,24 @@ PolicyAlphaVector PolicyAlphaVector::operator+(const PolicyAlphaVector &other)
 		double a = alpha.second;
 		double b = other.get(alpha.first);
 		result.set(alpha.first, a + b);
+	}
+
+	return result;
+}
+
+/**
+ * Overload the minus operator to return the subtraction of all elements in the vectors.
+ * @param other The alpha vector to subtract to this one.
+ * @return The resultant alpha vector from the element-wise subtraction of this one and the other one provided.
+ */
+PolicyAlphaVector PolicyAlphaVector::operator-(const PolicyAlphaVector &other) const
+{
+	PolicyAlphaVector result;
+
+	for (std::map<const State *, double>::value_type alpha : alphaVector) {
+		double a = alpha.second;
+		double b = other.get(alpha.first);
+		result.set(alpha.first, a - b);
 	}
 
 	return result;

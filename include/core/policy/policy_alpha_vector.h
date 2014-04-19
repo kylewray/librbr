@@ -86,11 +86,17 @@ public:
 	const Action *get_action() const;
 
 	/**
+	 * Get the dimension of this alpha vector (which is the number of states).
+	 * @return The dimension of this alpha vector.
+	 */
+	int get_dimension() const;
+
+	/**
 	 * Compute the value of the belief state by computing: dot(beta, alpha).
 	 * @param belief The belief state 'beta' vector.
 	 * @return The value of the belief state provided.
 	 */
-	double compute_value(const BeliefState *belief);
+	double compute_value(const BeliefState *belief) const;
 
 	/**
 	 * Overload the equals operator to set this alpha vector equal to the alpha vector provided.
@@ -104,7 +110,14 @@ public:
 	 * @param other The alpha vector to add to this one.
 	 * @return The resultant alpha vector from the sum of this one and the other one provided.
 	 */
-	PolicyAlphaVector operator+(const PolicyAlphaVector &other);
+	PolicyAlphaVector operator+(const PolicyAlphaVector &other) const;
+
+	/**
+	 * Overload the minus operator to return the subtraction of all elements in the vectors.
+	 * @param other The alpha vector to subtract to this one.
+	 * @return The resultant alpha vector from the element-wise subtraction of this one and the other one provided.
+	 */
+	PolicyAlphaVector operator-(const PolicyAlphaVector &other) const;
 
 	/**
 	 * Reset the alpha vector.

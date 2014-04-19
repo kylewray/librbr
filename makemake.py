@@ -56,7 +56,12 @@ f = open('Makefile', 'w')
 
 # printing flags and directory wildcards
 f.write('CC = g++\n' \
-        'CFLAGS = -std=c++11 -g\n')
+        'CFLAGS = -std=c++11 -g\n' \
+        'COINFLAGS = `pkg-config --cflags --libs Coin` '
+        '`pkg-config --cflags --libs clp` '
+        '`pkg-config --cflags --libs osi` '
+        '`pkg-config --libs coinutils` '
+        '`pkg-config --cflags --libs osi-clp`\n')
 
 # printing target rule for tests
 f.write('tests: all.o ' + testdir + '/core/*.cpp ' \
@@ -65,7 +70,7 @@ f.write('tests: all.o ' + testdir + '/core/*.cpp ' \
 f.write('\tmkdir -p tests/obj\n')
 f.write('\t$(CC) $(CFLAGS) -c -I.. tests/core/*.cpp tests/mdp/*.cpp '\
         'tests/file_loaders/*.cpp tests/utilities/*.cpp tests/*.cpp\n')
-f.write('\t$(CC) $(CFLAGS) -o perform_tests obj/*.o *.o\n')
+f.write('\t$(CC) $(CFLAGS) $(COINFLAGS) -o perform_tests obj/*.o *.o\n')
 f.write('\trm *.o\n\n')
 
 # printing target rules for all object files
