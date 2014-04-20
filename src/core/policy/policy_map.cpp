@@ -162,7 +162,7 @@ bool PolicyMap::load(std::string filename, const FiniteStates *states, const Fin
 	std::ifstream file(filename);
 	if (!file.is_open()) {
 		sprintf(error, "Failed to open file '%s'.", filename.c_str());
-		log_message(std::cout, "MapPolicy::load", error);
+		log_message(std::cout, "PolicyMap::load", error);
 		return true;
 	}
 
@@ -194,7 +194,7 @@ bool PolicyMap::load(std::string filename, const FiniteStates *states, const Fin
 		if (items.size() != 2) {
 			sprintf(error, "Improper statement (perhaps missing a colon) on line %i in file '%s'.",
 					rows, filename.c_str());
-			log_message(std::cout, "MapPolicy::load", error);
+			log_message(std::cout, "PolicyMap::load", error);
 			return true;
 		}
 
@@ -206,15 +206,15 @@ bool PolicyMap::load(std::string filename, const FiniteStates *states, const Fin
 			} catch (const std::invalid_argument &err) {
 				sprintf(error, "Failed to convert '%s' to an integer on line %i in file '%s'.",
 						items[1].c_str(), rows, filename.c_str());
-				log_message(std::cout, "MapPolicy::load", error);
+				log_message(std::cout, "PolicyMap::load", error);
 				return true;
 			}
 
 			// The horizon must be non-negative. A zero horizon can mean infinite, or simply horizon zero.
-			if (h < 0 || h > horizon->get_horizon()) {
+			if (h < 1 || h > horizon->get_horizon()) {
 				sprintf(error, "Horizon %s is invalid on line %i in file '%s'.",
 						items[1].c_str(), rows, filename.c_str());
-				log_message(std::cout, "MapPolicy::load", error);
+				log_message(std::cout, "PolicyMap::load", error);
 				return true;
 			}
 		} else {
@@ -225,7 +225,7 @@ bool PolicyMap::load(std::string filename, const FiniteStates *states, const Fin
 			} catch (const StateException &err) {
 				sprintf(error, "State %s was not defined on line %i in file '%s'.",
 						items[0].c_str(), rows, filename.c_str());
-				log_message(std::cout, "MapPolicy::load", error);
+				log_message(std::cout, "PolicyMap::load", error);
 				return true;
 			}
 
@@ -234,7 +234,7 @@ bool PolicyMap::load(std::string filename, const FiniteStates *states, const Fin
 			} catch (const ActionException &err) {
 				sprintf(error, "Action %s was not defined on line %i in file '%s'.",
 						items[1].c_str(), rows, filename.c_str());
-				log_message(std::cout, "MapPolicy::load", error);
+				log_message(std::cout, "PolicyMap::load", error);
 				return true;
 			}
 
@@ -282,7 +282,7 @@ bool PolicyMap::save(std::string filename) const
 		}
 	} else {
 		sprintf(error, "Failed to save file '%s'. No policy was defined.", filename.c_str());
-		log_message(std::cout, "MapPolicy::save", error);
+		log_message(std::cout, "PolicyMap::save", error);
 		return true;
 	}
 

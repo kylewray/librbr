@@ -114,7 +114,11 @@ std::vector<PolicyAlphaVector *> bellman_update(const FiniteStates *S, const Fin
 		const Horizon *h, const Action *action, const std::vector<PolicyAlphaVector *> &gammaAStar,
 		const std::vector<PolicyAlphaVector *> &gamma)
 {
-	std::vector<PolicyAlphaVector *> gammaA = gammaAStar;
+	// Perform a deep copy on the gammaAStar variable, since we will need fresh PolicyAlphaVectors in the for loop below.
+	std::vector<PolicyAlphaVector *> gammaA;
+	for (PolicyAlphaVector *alphaVector : gammaAStar) {
+		gammaA.push_back(new PolicyAlphaVector(*alphaVector));
+	}
 
 	// Iteratively compute and apply the cross-sum of the gamma.
 	for (const Observation *observation : *Z) {
@@ -123,7 +127,8 @@ std::vector<PolicyAlphaVector *> bellman_update(const FiniteStates *S, const Fin
 
 		// For each alpha vector in the set Gamma_{a, omega}, we have to consider a different gamma in Gamma^{t-1}.
 		for (PolicyAlphaVector *alphaGamma : gamma) {
-			PolicyAlphaVector *newAlpha = new PolicyAlphaVector(action);
+			// Note: It doesn't matter if we set the action here, since cross_sum will create new alpha vectors anyway.
+			PolicyAlphaVector *newAlpha = new PolicyAlphaVector();
 
 			// For each of the columns in the alpha vector.
 			for (const State *state : *S) {
@@ -144,7 +149,13 @@ std::vector<PolicyAlphaVector *> bellman_update(const FiniteStates *S, const Fin
 
 		// Perform the Minkowski sum (cross-sum) and expand the final result (gammaA) by gammaAOmega.
 		std::vector<PolicyAlphaVector *> crossSum = PolicyAlphaVector::cross_sum(gammaA, gammaAOmega);
-		gammaA.insert(gammaA.end(), crossSum.begin(), crossSum.end());
+
+		// Free the memory of the previous values of gammaA, since cross_sum allocates new memory for the alpha vectors. The new
+		// value of gammaA is the result of the Minkowski sum.
+		for (PolicyAlphaVector *alphaGamma : gammaA) {
+			delete alphaGamma;
+		}
+		gammaA = crossSum;
 
 		// Since the cross_sum function allocates memory for the alpha vectors, but we also allocated memory
 		// for the newAlpha inside the for loop above, free this memory. Keep the gammaA memory though, since
@@ -153,6 +164,11 @@ std::vector<PolicyAlphaVector *> bellman_update(const FiniteStates *S, const Fin
 			delete alphaGamma;
 		}
 		gammaAOmega.clear();
+
+		// Lastly, since we made new alpha vectors inside cross_sum, we need to set their actions.
+		for (PolicyAlphaVector *alphaGamma : gammaA) {
+			alphaGamma->set_action(action);
+		}
 	}
 
 	return gammaA;

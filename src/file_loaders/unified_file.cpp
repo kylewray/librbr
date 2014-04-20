@@ -1260,6 +1260,15 @@ bool UnifiedFile::load_state_transition_vector(std::string line)
 	// Split the line into a list of (hopefully) probabilities equal to the number of states.
 	std::vector<std::string> list = split_string_by_space(line);
 
+	// Handle the special case of "uniform".
+	if (list[0].compare("uniform") == 0) {
+		double probability = 1.0 / (double)states->get_num_states();
+		for (int i = 0; i < states->get_num_states(); i++) {
+			stateTransitions->set(loadingState, loadingAction, states->get(i), probability);
+		}
+		return false;
+	}
+
 	if ((int)list.size() != states->get_num_states()) {
 		sprintf(error, "Invalid number of probabilities given: %i != %i on line %i in file '%s'.",
 				(int)list.size(), states->get_num_states(), rows, filename.c_str());
@@ -1313,6 +1322,22 @@ bool UnifiedFile::load_state_transition_matrix(int stateIndex, std::string line)
 				stateIndex, rows, filename.c_str());
 		log_message(std::cout, "UnifiedFile::load_state_transition_matrix", error);
 		return true;
+	}
+
+	// Handle the special cases of "uniform" and "identity".
+	if (list[0].compare("uniform") == 0) {
+		double probability = 1.0 / (double)states->get_num_states();
+		for (int i = 0; i < states->get_num_states(); i++) {
+			for (int j = 0; j < states->get_num_states(); j++) {
+				stateTransitions->set(states->get(i), loadingAction, states->get(j), probability);
+			}
+		}
+		return false;
+	} else if (list[0].compare("identity") == 0) {
+		for (int i = 0; i < states->get_num_states(); i++) {
+			stateTransitions->set(states->get(i), loadingAction, states->get(i), 1.0);
+		}
+		return false;
 	}
 
 	if ((int)list.size() != states->get_num_states()) {
@@ -1461,6 +1486,15 @@ bool UnifiedFile::load_observation_transition_vector(std::string line)
 	// Split the line into a list of (hopefully) probabilities equal to the number of observations.
 	std::vector<std::string> list = split_string_by_space(line);
 
+	// Handle the special case of "uniform".
+	if (list[0].compare("uniform") == 0) {
+		double probability = 1.0 / (double)observations->get_num_observations();
+		for (int i = 0; i < observations->get_num_observations(); i++) {
+			observationTransitions->set(loadingAction, loadingState, observations->get(i), probability);
+		}
+		return false;
+	}
+
 	if ((int)list.size() != observations->get_num_observations()) {
 		sprintf(error, "Invalid number of probabilities given: %i != %i on line %i in file '%s'.",
 				(int)list.size(), observations->get_num_observations(), rows, filename.c_str());
@@ -1514,6 +1548,18 @@ bool UnifiedFile::load_observation_transition_matrix(int stateIndex, std::string
 				stateIndex, rows, filename.c_str());
 		log_message(std::cout, "UnifiedFile::load_observation_transition_matrix", error);
 		return true;
+	}
+
+	// Handle the special case of "uniform". Note: "identity" does not make sense here, since the
+	// number of observations and states may not be equal.
+	if (list[0].compare("uniform") == 0) {
+		double probability = 1.0 / (double)observations->get_num_observations();
+		for (int i = 0; i < states->get_num_states(); i++) {
+			for (int j = 0; j < observations->get_num_observations(); j++) {
+				observationTransitions->set(loadingAction, states->get(i), observations->get(j), probability);
+			}
+		}
+		return false;
 	}
 
 	if ((int)list.size() != observations->get_num_observations()) {
@@ -1779,6 +1825,8 @@ MDP *UnifiedFile::get_mdp()
 	release();
 	return mdp;
 }
+
+#include <iostream>
 
 /**
  * Get an POMDP version of a loaded file. This releases control of the memory to the

@@ -192,11 +192,24 @@ std::vector<PolicyAlphaVector *> PolicyAlphaVector::cross_sum(const std::vector<
 {
 	std::vector<PolicyAlphaVector *> C;
 
-	// Perform the cross-sum and store the result in C.
-	for (PolicyAlphaVector *a : A) {
+	// Handle two fringe cases, and then the normal case.
+	if (A.empty()) {
 		for (PolicyAlphaVector *b : B) {
-			PolicyAlphaVector *c = new PolicyAlphaVector(*a + *b);
+			PolicyAlphaVector *c = new PolicyAlphaVector(*b);
 			C.push_back(c);
+		}
+	} else if (B.empty()) {
+		for (PolicyAlphaVector *a : A) {
+			PolicyAlphaVector *c = new PolicyAlphaVector(*a);
+			C.push_back(c);
+		}
+	} else {
+		// Perform the cross-sum and store the result in C.
+		for (PolicyAlphaVector *a : A) {
+			for (PolicyAlphaVector *b : B) {
+				PolicyAlphaVector *c = new PolicyAlphaVector(*a + *b);
+				C.push_back(c);
+			}
 		}
 	}
 

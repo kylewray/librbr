@@ -41,6 +41,7 @@
 #include <coin/OsiClpSolverInterface.hpp>
 #include <coin/CoinPackedVector.hpp>
 #include <coin/CoinPackedMatrix.hpp>
+#include <coin/CoinMessageHandler.hpp>
 
 /**
  * The default constructor for a PolicyAlphaVectors object. It defaults to a horizon of 1.
@@ -199,14 +200,13 @@ bool PolicyAlphaVectors::load(std::string filename, const FiniteStates *states, 
 {
 	reset();
 
-	/*
 	char error[1024];
 
 	// Load the file and return if it failed to open.
 	std::ifstream file(filename);
 	if (!file.is_open()) {
 		sprintf(error, "Failed to open file '%s'.", filename.c_str());
-		log_message(std::cout, "MapPolicy::load", error);
+		log_message(std::cout, "PolicyAlphaVectors::load", error);
 		return true;
 	}
 
@@ -219,7 +219,7 @@ bool PolicyAlphaVectors::load(std::string filename, const FiniteStates *states, 
 	const Action *action = nullptr;
 
 	// Before starting, reserve the space for the horizon given.
-	policy.resize(horizon->get_horizon());
+	alphaVectors.resize(horizon->get_horizon());
 
 	// Iterate over all lines of the file separately.
 	while (std::getline(file, line)) {
@@ -234,15 +234,15 @@ bool PolicyAlphaVectors::load(std::string filename, const FiniteStates *states, 
 
 		std::vector<std::string> items = split_string_by_colon(line);
 
-		// Every line must contain exactly one a colon.
-		if (items.size() != 2) {
+		// Every line must contain at least one colon.
+		if (items.size() < 2) {
 			sprintf(error, "Improper statement (perhaps missing a colon) on line %i in file '%s'.",
 					rows, filename.c_str());
-			log_message(std::cout, "MapPolicy::load", error);
+			log_message(std::cout, "PolicyAlphaVectors::load", error);
 			return true;
 		}
 
-		// Two cases, either this line defines a new horizon, or it states a mapping.
+		// Two cases, either this line defines a new horizon, or it states an alpha vector for the current horizon.
 		if (items[0].compare("horizon") == 0) {
 			// Try to parse the integer given, raising an error if it fails.
 			try {
@@ -250,58 +250,82 @@ bool PolicyAlphaVectors::load(std::string filename, const FiniteStates *states, 
 			} catch (const std::invalid_argument &err) {
 				sprintf(error, "Failed to convert '%s' to an integer on line %i in file '%s'.",
 						items[1].c_str(), rows, filename.c_str());
-				log_message(std::cout, "MapPolicy::load", error);
+				log_message(std::cout, "PolicyAlphaVectors::load", error);
 				return true;
 			}
 
 			// The horizon must be non-negative. A zero horizon can mean infinite, or simply horizon zero.
-			if (h < 0 || h > horizon->get_horizon()) {
+			if (h < 1 || h > horizon->get_horizon()) {
 				sprintf(error, "Horizon %s is invalid on line %i in file '%s'.",
 						items[1].c_str(), rows, filename.c_str());
-				log_message(std::cout, "MapPolicy::load", error);
+				log_message(std::cout, "PolicyAlphaVectors::load", error);
 				return true;
 			}
 		} else {
-			// Since this is an actual mapping, we simply map the key to the value at the horizon. Note,
-			// however, that we must first find the actual state and action.
-			try {
-				state = states->find(items[0]);
-			} catch (const StateException &err) {
-				sprintf(error, "State %s was not defined on line %i in file '%s'.",
-						items[0].c_str(), rows, filename.c_str());
-				log_message(std::cout, "MapPolicy::load", error);
+			// Before anything, make sure that this has a correct number of defined items.
+			if (items.size() % 2 != 1) {
+				sprintf(error, "Invalid number of defined items on line %i in file '%s'.",
+						rows, filename.c_str());
+				log_message(std::cout, "PolicyAlphaVectors::load", error);
 				return true;
 			}
 
+			// Since this is an alpha vector, the first item must be an action.
 			try {
-				action = actions->find(items[1]);
+				action = actions->find(items[0]);
 			} catch (const ActionException &err) {
 				sprintf(error, "Action %s was not defined on line %i in file '%s'.",
-						items[1].c_str(), rows, filename.c_str());
-				log_message(std::cout, "MapPolicy::load", error);
+						items[0].c_str(), rows, filename.c_str());
+				log_message(std::cout, "PolicyAlphaVectors::load", error);
 				return true;
 			}
 
-			policy[h - 1][state] = action;
+			// The remaining items are state-value pairs.
+			PolicyAlphaVector *newAlphaVector = new PolicyAlphaVector(action);
+			for (int i = 1; i < items.size(); i += 2) {
+				// First is the state in the pair.
+				try {
+					state = states->find(items[i]);
+				} catch (const StateException &err) {
+					sprintf(error, "State %s was not defined on line %i in file '%s'.",
+							items[i].c_str(), rows, filename.c_str());
+					log_message(std::cout, "PolicyAlphaVectors::load", error);
+					return true;
+				}
+
+				// Next is the value function for that state.
+				double alphaValue = 0.0;
+				try {
+					alphaValue = std::stod(items[i + 1]);
+				} catch (const StateException &err) {
+					sprintf(error, "The value '%s' is not a valid number on line %i in file '%s'.",
+							items[i + 1].c_str(), rows, filename.c_str());
+					log_message(std::cout, "PolicyAlphaVectors::load", error);
+					return true;
+				}
+
+				newAlphaVector->set(state, alphaValue);
+			}
+
+			alphaVectors[h - 1].push_back(newAlphaVector);
 		}
 
 		rows++;
 	}
 
 	file.close();
-	*/
 
 	return false;
 }
 
 /**
  * A function which must save a policy file.
- * @param filename The name and path of the file to save.
+ * @param filename 	The name and path of the file to save.
+ * @param states	The states object which contains the actual state objects to be mapped.
  * @return Return @code{true} if an error occurred, @code{false} otherwise.
  */
-bool PolicyAlphaVectors::save(std::string filename) const
+bool PolicyAlphaVectors::save(std::string filename, const FiniteStates *states) const
 {
-	/*
 	std::ofstream file(filename);
 	if (!file.is_open()) {
 		return true;
@@ -309,31 +333,41 @@ bool PolicyAlphaVectors::save(std::string filename) const
 
 	char error[1024];
 
-	if (policy.size() > 1) {
+	if (alphaVectors.size() > 1) {
 		int h = 1;
 
-		for (std::map<const State *, const Action *> p : policy) {
+		// This ranged-based for loop iterates without cloning each set of alpha vectors.
+		for (const std::vector<PolicyAlphaVector *> &alphaVectorSet : alphaVectors) {
 			file << "horizon: " << h << std::endl;
 
-			for (std::map<const State *, const Action *>::value_type iter : p) {
-				file << iter.first->to_string() << ": " << iter.second->get_name() << std::endl;
+			for (PolicyAlphaVector *alpha : alphaVectorSet) {
+				file << alpha->get_action()->get_name();
+				for (const State *state : *states) {
+					file << " : " << state->to_string() << " : " << alpha->get(state);
+				}
+				file << std::endl;
 			}
 
 			file << std::endl;
 			h++;
 		}
-	} else if (policy.size() == 1) {
-		for (std::map<const State *, const Action *>::value_type iter : policy[0]) {
-			file << iter.first->to_string() << ": " << iter.second->get_name() << std::endl;
+	} else if (alphaVectors.size() == 1) {
+		for (PolicyAlphaVector *alpha : alphaVectors[0]) {
+			file << alpha->get_action()->get_name();
+			for (const State *state : *states) {
+				file << " : " << state->to_string() << " : " << alpha->get(state);
+			}
+			file << std::endl;
 		}
+
+		file << std::endl;
 	} else {
 		sprintf(error, "Failed to save file '%s'. No policy was defined.", filename.c_str());
-		log_message(std::cout, "MapPolicy::save", error);
+		log_message(std::cout, "PolicyAlphaVectors::save", error);
 		return true;
 	}
 
 	file.close();
-	*/
 
 	return false;
 }
@@ -353,7 +387,8 @@ void PolicyAlphaVectors::reset()
 }
 
 /**
- * A static method to prune a set of alpha vectors.
+ * A static method to prune a set of alpha vectors. This will free the memory of the alpha vectors inside 'alphas',
+ * for those alpha vectors which are pruned.
  * @param S					The finite set of states.
  * @param alphas 			The set of alpha vectors for which dominated ones will be pruned in place.
  * @throws PolicyException	The states were invalid, there were zero alpha vectors, or the first alpha vector is null.
@@ -371,6 +406,10 @@ void PolicyAlphaVectors::prune_dominated(const FiniteStates *S, std::vector<Poli
 	for (std::vector<PolicyAlphaVector *>::iterator iter = alphas.begin(); iter != alphas.end(); /* iter++ */) {
 		OsiSolverInterface *si = new OsiClpSolverInterface();
 		int numCols = S->get_num_states();
+
+		// Disable the standard output messages that CLP generates.
+		CoinMessageHandler *cmh = si->messageHandler();
+		cmh->setLogLevel(0);
 
 		// This is the constant vector c, defined to be the particular alpha vector in this iteration.
 		double *objective = new double[numCols];
@@ -437,6 +476,8 @@ void PolicyAlphaVectors::prune_dominated(const FiniteStates *S, std::vector<Poli
 		si->initialSolve();
 
 		if (!si->isProvenOptimal()) {
+			// Free the memory of the alpha vector.
+			delete *iter;
 			iter = alphas.erase(iter);
 		} else {
 			++iter;

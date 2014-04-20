@@ -80,7 +80,7 @@ public:
 	 * @throws RewardException					The POMDP did not have a SASRewards rewards object.
 	 * @throws PolicyException					An error occurred computing the policy.
 	 */
-	Policy *solve(const POMDP *pomdp);
+	PolicyAlphaVectors *solve(const POMDP *pomdp);
 
 private:
 	/**

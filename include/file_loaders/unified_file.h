@@ -331,7 +331,7 @@ private:
 	FiniteObservationTransitions *observationTransitions;
 
 	/**
-	 * The reward function in the SCP; e.g., a two-dimensional array mapping to a double.
+	 * The reward function in the MDP-like object; e.g., a two-dimensional array mapping to a double.
 	 */
 	SASRewards *rewards;
 

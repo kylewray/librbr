@@ -24,11 +24,6 @@
 
 #include "perform_tests.h"
 
-
-// Only perform the tests if the flag is set during compilation.
-#ifdef PERFORM_TESTS_H
-
-
 #include <iostream>
 
 /**
@@ -41,7 +36,7 @@ int main(int argc, char *argv[])
 {
 	std::cout << "Performing Tests..." << std::endl;
 
-	int numTests = 11;
+	int numTests = 12;
 
 	int numSuccesses[numTests];
 	for (int i = 0; i < numTests; i++) {
@@ -62,6 +57,7 @@ int main(int argc, char *argv[])
 	numSuccesses[9] = test_utilities();
 
 	numSuccesses[10] = test_mdp();
+	numSuccesses[11] = test_pomdp();
 
 	std::cout << "Agents:                 " << numSuccesses[0] << " / " << NUM_AGENT_TESTS << std::endl;
 	std::cout << "States:                 " << numSuccesses[1] << " / " << NUM_STATE_TESTS << std::endl;
@@ -74,11 +70,12 @@ int main(int argc, char *argv[])
 	std::cout << "UnifiedFile:            " << numSuccesses[8] << " / " << NUM_UNIFIED_FILE_TESTS << std::endl;
 	std::cout << "Utilities:              " << numSuccesses[9] << " / " << NUM_UTILITIES_TESTS << std::endl;
 	std::cout << "MDP:                    " << numSuccesses[10] << " / " << NUM_MDP_TESTS << std::endl;
+	std::cout << "POMDP:                  " << numSuccesses[11] << " / " << NUM_POMDP_TESTS << std::endl;
 
 	int total = 0;
 	int totalPossible = NUM_AGENT_TESTS + NUM_STATE_TESTS + NUM_ACTION_TESTS + NUM_OBSERVATION_TESTS +
 			NUM_REWARD_TESTS + NUM_STATE_TRANSITION_TESTS + NUM_OBSERVATION_TRANSITION_TESTS +
-			NUM_POLICY_TESTS + NUM_UNIFIED_FILE_TESTS + NUM_UTILITIES_TESTS + NUM_MDP_TESTS;
+			NUM_POLICY_TESTS + NUM_UNIFIED_FILE_TESTS + NUM_UTILITIES_TESTS + NUM_MDP_TESTS + NUM_POMDP_TESTS;
 	for (int i = 0; i < numTests; i++) {
 		total += numSuccesses[i];
 	}
@@ -87,6 +84,3 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
-
-
-#endif // PERFORM_TESTS_H

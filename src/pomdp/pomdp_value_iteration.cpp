@@ -75,7 +75,7 @@ POMDPValueIteration::~POMDPValueIteration()
  * @throws RewardException					The POMDP did not have a SASRewards rewards object.
  * @throws PolicyException					An error occurred computing the policy.
  */
-Policy *POMDPValueIteration::solve(const POMDP *pomdp)
+PolicyAlphaVectors *POMDPValueIteration::solve(const POMDP *pomdp)
 {
 	// Handle the trivial case.
 	if (pomdp == nullptr) {
@@ -154,24 +154,30 @@ PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const FiniteStates
 		gammaAStar[action].push_back(create_gamma_a_star(S, A, Z, T, O, R, action));
 	}
 
+	// Create the set of alpha vectors, which we call Gamma. As well as the previous Gamma set.
+	std::vector<PolicyAlphaVector *> gamma[2];
+	bool current = false;
+
 	// Continue to iterate until the horizon has been reached.
 	for (int t = 0; t < h->get_horizon(); t++){
-		// Create the set of alpha vectors, which we call Gamma.
-		std::vector<PolicyAlphaVector *> gamma;
-
 		// Compute the new set of alpha vectors, gamma.
 		for (const Action *action : *A) {
 			std::vector<PolicyAlphaVector *> alphaVector = bellman_update(S, A, Z, T, O, R, h,
-					action, gammaAStar[action], gamma);
-			gamma.insert(gamma.end(), alphaVector.begin(), alphaVector.end());
+					action, gammaAStar[action], gamma[!current]);
+			gamma[current].insert(gamma[current].end(), alphaVector.begin(), alphaVector.end());
 		}
 
 		// Prune the dominated alpha vectors from the set.
-		PolicyAlphaVectors::prune_dominated(S, gamma);
+		PolicyAlphaVectors::prune_dominated(S, gamma[current]);
 
-		// Add the current gamma to the policy object, then call the prune_linear_program static method. This transfers
-		// the responsibility of memory management to the PolicyAlphaVectors object.
-		policy->set(t, gamma);
+		// Add the current gamma to the policy object, then call the prune_linear_program static method.
+		// Note: This transfers the responsibility of memory management to the PolicyAlphaVectors object.
+		policy->set(t, gamma[current]);
+
+		// Prepare the next time step's gamma by clearing it. Remember again, we don't free the memory
+		// because policy manages the previous time step's gamma (above).
+		current = !current;
+		gamma[current].clear();
 	}
 
 	// Free the memory of Gamma_{a, *}.

@@ -22,8 +22,7 @@
  */
 
 
-//#ifdef PERFORM_TESTS_H // Build actual library.
-#ifndef PERFORM_TESTS_H // Build tests executable.
+#ifndef PERFORM_TESTS_H
 #define PERFORM_TESTS_H
 
 
@@ -34,10 +33,11 @@
 #define NUM_REWARD_TESTS 15
 #define NUM_STATE_TRANSITION_TESTS 5
 #define NUM_OBSERVATION_TRANSITION_TESTS 5
-#define NUM_POLICY_TESTS 11
+#define NUM_POLICY_TESTS 20
 #define NUM_UNIFIED_FILE_TESTS 20
 #define NUM_UTILITIES_TESTS 1
 #define NUM_MDP_TESTS 6
+#define NUM_POMDP_TESTS 6
 
 /**
  * Test the agents objects. Output the success or failure for each test.
@@ -104,6 +104,12 @@ int test_utilities();
  * @return The number of successes during execution.
  */
 int test_mdp();
+
+/**
+ * Test the POMDP solvers. Output the success or failure for each test.
+ * @return The number of successes during execution.
+ */
+int test_pomdp();
 
 
 #endif // PERFORM_TESTS_H

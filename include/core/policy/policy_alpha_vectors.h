@@ -134,10 +134,11 @@ public:
 
 	/**
 	 * A function which must save a policy file.
-	 * @param filename The name and path of the file to save.
+	 * @param filename 	The name and path of the file to save.
+	 * @param states	The states object which contains the actual state objects to be mapped.
 	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	virtual bool save(std::string filename) const;
+	bool save(std::string filename, const FiniteStates *states) const;
 
 	/**
 	 * Reset the alpha vectors, freeing the memory.
@@ -145,7 +146,8 @@ public:
 	virtual void reset();
 
 	/**
-	 * A static method to prune a set of alpha vectors.
+	 * A static method to prune a set of alpha vectors. This will free the memory of the alpha vectors inside 'alphas',
+	 * for those alpha vectors which are pruned.
 	 * @param S					The finite set of states.
 	 * @param alphas 			The set of alpha vectors for which dominated ones will be pruned in place.
 	 * @throws PolicyException	The states were invalid, there were zero alpha vectors, or the first alpha vector is null.

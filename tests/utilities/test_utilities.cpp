@@ -90,6 +90,3 @@ int test_utilities() {
 
 	return numSuccesses;
 }
-
-
-#endif // PERFORM_TESTS_H

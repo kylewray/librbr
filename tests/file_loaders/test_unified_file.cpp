@@ -24,11 +24,6 @@
 
 #include "../perform_tests.h"
 
-
-// Only perform the tests if the flag is set during compilation.
-#ifdef PERFORM_TESTS_H
-
-
 #include <iostream>
 
 #include "../../include/file_loaders/unified_file.h"
@@ -204,6 +199,3 @@ int test_unified_file()
 
 	return numSuccesses;
 }
-
-
-#endif // PERFORM_TESTS_H
