@@ -24,22 +24,22 @@
 
 #include "../perform_tests.h"
 
-
-// Only perform the tests if the flag is set during compilation.
-#ifdef PERFORM_TESTS_H
-
-
 #include <iostream>
 
 #include "../../include/core/policy/policy_map.h"
 #include "../../include/core/policy/policy_tree.h"
+#include "../../include/core/policy/policy_alpha_vector.h"
+#include "../../include/core/policy/policy_alpha_vectors.h"
 #include "../../include/core/policy/policy_exception.h"
 
 #include "../../include/core/states/named_state.h"
+#include "../../include/core/states/belief_state.h"
 #include "../../include/core/states/finite_states.h"
 #include "../../include/core/actions/finite_actions.h"
 #include "../../include/core/observations/finite_observations.h"
 #include "../../include/core/horizon.h"
+
+#include <math.h>
 
 /**
  * Test the policy objects. Output the success or failure for each test.
@@ -217,7 +217,187 @@ int test_policy()
 		std::cout << " Failure." << std::endl;
 	}
 
-	// Note: The state and action variables are freed inside the deconstructors of states and actions.
+	std::cout << "Policy: Test 'PolicyAlphaVector::set' and 'PolicyAlphaVector::get'... ";
+
+	PolicyAlphaVector *policyAlphaVector = new PolicyAlphaVector(a1);
+	policyAlphaVector->set(s1, 13.37);
+	policyAlphaVector->set(s2, 42.0);
+
+	if (policyAlphaVector->get(s1) == 13.37 && policyAlphaVector->get(s2) == 42.0) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	std::cout << "Policy: Test 'PolicyAlphaVector::get_dimension', 'PolicyAlphaVector::get_action', and 'PolicyAlphaVector::set_action'... ";
+
+	if (policyAlphaVector->get_dimension() == 2 && policyAlphaVector->get_action() == a1) {
+		policyAlphaVector->set_action(a2);
+		if (policyAlphaVector->get_action() == a2) {
+			std::cout << " Success." << std::endl;
+			numSuccesses++;
+		} else {
+			std::cout << " Failure." << std::endl;
+		}
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	std::cout << "Policy: Test 'PolicyAlphaVector::compute_value'... ";
+
+	BeliefState *b = new BeliefState();
+	b->set(s1, 0.36);
+	b->set(s2, 0.64);
+
+	if (fabs((float)(policyAlphaVector->compute_value(b) - 31.6932)) < 0.0001f) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	std::cout << "Policy: Test 'PolicyAlphaVectors::get'... ";
+
+	std::vector<PolicyAlphaVector *> alphaVectors;
+	policyAlphaVector->set_action(a1);
+	alphaVectors.push_back(policyAlphaVector);
+
+	// Note: PolicyAlphaVectors now will manage these pointers.
+	policyAlphaVector = new PolicyAlphaVector();
+	policyAlphaVector->set_action(a2);
+	policyAlphaVector->set(s1, 100.0);
+	policyAlphaVector->set(s2, 0.0);
+	alphaVectors.push_back(policyAlphaVector);
+
+	PolicyAlphaVectors *policyAlphaVectors = new PolicyAlphaVectors(alphaVectors);
+
+	if (policyAlphaVectors->get(b) == a2) {
+		b->set(s1, 0.15);
+		b->set(s2, 0.85);
+
+		if (policyAlphaVectors->get(b) == a1) {
+			std::cout << " Success." << std::endl;
+			numSuccesses++;
+		} else {
+			std::cout << " Failure." << std::endl;
+		}
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	std::cout << "Policy: Test 'PolicyAlphaVectors::set'... ";
+
+	delete policyAlphaVectors;
+	policyAlphaVectors = new PolicyAlphaVectors(2);
+
+	std::vector<std::vector<PolicyAlphaVector *> > setOfAlphaVectors;
+
+	alphaVectors.clear();
+
+	policyAlphaVector = new PolicyAlphaVector();
+	policyAlphaVector->set_action(a1);
+	policyAlphaVector->set(s1, 10.0);
+	policyAlphaVector->set(s2, -10.0);
+	alphaVectors.push_back(policyAlphaVector);
+
+	policyAlphaVector = new PolicyAlphaVector();
+	policyAlphaVector->set_action(a2);
+	policyAlphaVector->set(s1, -10.0);
+	policyAlphaVector->set(s2, 10.0);
+	alphaVectors.push_back(policyAlphaVector);
+
+	policyAlphaVectors->set(0, alphaVectors);
+
+	setOfAlphaVectors.push_back(alphaVectors);
+
+	std::vector<PolicyAlphaVector *> alphaVectors2;
+
+	policyAlphaVector = new PolicyAlphaVector();
+	policyAlphaVector->set_action(a1);
+	policyAlphaVector->set(s1, -10.0);
+	policyAlphaVector->set(s2, 10.0);
+	alphaVectors2.push_back(policyAlphaVector);
+
+	policyAlphaVector = new PolicyAlphaVector();
+	policyAlphaVector->set_action(a2);
+	policyAlphaVector->set(s1, 10.0);
+	policyAlphaVector->set(s2, -10.0);
+	alphaVectors2.push_back(policyAlphaVector);
+
+	policyAlphaVectors->set(1, alphaVectors2);
+
+	b->set(s1, 0.1);
+	b->set(s2, 0.9);
+
+	if (policyAlphaVectors->get(0, b) == a2 && policyAlphaVectors->get(1, b) == a1) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	std::cout << "Policy: Test 'PolicyAlphaVectors::prune_dominated'... ";
+
+	policyAlphaVector = new PolicyAlphaVector();
+	policyAlphaVector->set_action(a1);
+	policyAlphaVector->set(s1, -20.0);
+	policyAlphaVector->set(s2, -10.0);
+	alphaVectors.push_back(policyAlphaVector);
+
+	policyAlphaVector = new PolicyAlphaVector();
+	policyAlphaVector->set_action(a2);
+	policyAlphaVector->set(s1, 0.0);
+	policyAlphaVector->set(s2, 0.0);
+	alphaVectors.push_back(policyAlphaVector);
+
+	PolicyAlphaVectors::prune_dominated(states, alphaVectors);
+
+	if (alphaVectors.size() == 3 &&
+			alphaVectors[0]->get_action() == a1 && alphaVectors[0]->get(s1) == 10.0 && alphaVectors[0]->get(s2) == -10.0 &&
+			alphaVectors[1]->get_action() == a2 && alphaVectors[1]->get(s1) == -10.0 && alphaVectors[1]->get(s2) == 10.0 &&
+			alphaVectors[2]->get_action() == a2 && alphaVectors[2]->get(s1) == 0.0 && alphaVectors[2]->get(s2) == 0.0) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	// This last alpha vector was not dominated. Therefore, we need to free the memory, since the other one was and will
+	// already be freed inside of 'prune_dominated'. Since this is not managed inside a PolicyAlphaVectors object, we
+	// need to free the memory of this last one we made.
+	delete policyAlphaVector;
+	policyAlphaVector = nullptr;
+
+	std::cout << "Policy: Test 'PolicyAlphaVectors::save'... ";
+
+	if (!policyAlphaVectors->save("tests/tmp/test_05.policy_alpha_vectors", states)) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	std::cout << "Policy: Test 'PolicyAlphaVectors::load'... ";
+
+	if (!policyAlphaVectors->load("tests/tmp/test_05.policy_alpha_vectors", states, actions, observations, horizon)) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	std::cout << "Policy: Test 'PolicyAlphaVectors::load' (Check Result)... ";
+
+	if (policyAlphaVectors->get(0, b) == a2 && policyAlphaVectors->get(1, b) == a1) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	// Note: The state, action, and policy alpha vector variables are freed inside the deconstructors of states, actions,
+	// and policy alpha vectors classes, respectively.
 	delete states;
 	states = nullptr;
 
@@ -236,8 +416,11 @@ int test_policy()
 	delete policyTree;
 	policyTree = nullptr;
 
+	delete policyAlphaVectors;
+	policyAlphaVectors = nullptr;
+
+	delete b;
+	b = nullptr;
+
 	return numSuccesses;
 }
-
-
-#endif // PERFORM_TESTS_H

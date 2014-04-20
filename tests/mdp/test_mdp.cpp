@@ -25,10 +25,6 @@
 #include "../perform_tests.h"
 
 
-// Only perform the tests if the flag is set during compilation.
-#ifdef PERFORM_TESTS_H
-
-
 #include <iostream>
 
 #include "../../include/file_loaders/unified_file.h"
@@ -83,7 +79,7 @@ int test_mdp()
 		std::cout << " Failure." << std::endl;
 	}
 
-	mapPolicy->save("tests/tmp/test_mdp_value_iteration_finite_horizon.map_policy");
+	mapPolicy->save("tests/tmp/test_mdp_value_iteration_finite_horizon.policy_map");
 
 	delete mdp;
 	mdp = nullptr;
@@ -120,7 +116,7 @@ int test_mdp()
 		std::cout << " Failure." << std::endl;
 	}
 
-	mapPolicy->save("tests/tmp/test_mdp_value_iteration_infinite_horizon.map_policy");
+	mapPolicy->save("tests/tmp/test_mdp_value_iteration_infinite_horizon.policy_map");
 
 	delete mapPolicy;
 	mapPolicy = nullptr;
@@ -145,7 +141,7 @@ int test_mdp()
 		std::cout << " Failure." << std::endl;
 	}
 
-	mapPolicy->save("tests/tmp/test_mdp_policy_iteration_exact_infinite_horizon.map_policy");
+	mapPolicy->save("tests/tmp/test_mdp_policy_iteration_exact_infinite_horizon.policy_map");
 
 	delete mapPolicy;
 	mapPolicy = nullptr;
@@ -170,7 +166,7 @@ int test_mdp()
 		std::cout << " Failure." << std::endl;
 	}
 
-	mapPolicy->save("tests/tmp/test_mdp_policy_iteration_modified_infinite_horizon.map_policy");
+	mapPolicy->save("tests/tmp/test_mdp_policy_iteration_modified_infinite_horizon.policy_map");
 
 	delete mdp;
 	mdp = nullptr;
@@ -180,6 +176,3 @@ int test_mdp()
 
 	return numSuccesses;
 }
-
-
-#endif // PERFORM_TESTS_H

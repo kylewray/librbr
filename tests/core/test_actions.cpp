@@ -24,11 +24,6 @@
 
 #include "../perform_tests.h"
 
-
-// Only perform the tests if the flag is set during compilation.
-#ifdef PERFORM_TESTS_H
-
-
 #include <iostream>
 
 #include "../../include/core/actions/action.h"
@@ -370,6 +365,3 @@ int test_actions()
 
 	return numSuccesses;
 }
-
-
-#endif // PERFORM_TESTS_H

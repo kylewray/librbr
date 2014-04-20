@@ -24,11 +24,6 @@
 
 #include "../perform_tests.h"
 
-
-// Only perform the tests if the flag is set during compilation.
-#ifdef PERFORM_TESTS_H
-
-
 #include <iostream>
 
 #include "../../include/core/observation_transitions/finite_observation_transitions.h"
@@ -183,6 +178,3 @@ int test_observation_transitions()
 
 	return numSuccesses;
 }
-
-
-#endif // PERFORM_TESTS_H

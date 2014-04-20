@@ -24,11 +24,6 @@
 
 #include "../perform_tests.h"
 
-
-// Only perform the tests if the flag is set during compilation.
-#ifdef PERFORM_TESTS_H
-
-
 #include <iostream>
 
 #include "../../include/core/rewards/sa_rewards_map.h"
@@ -435,6 +430,3 @@ int test_rewards()
 
 	return numSuccesses;
 }
-
-
-#endif // PERFORM_TESTS_H
