@@ -80,7 +80,7 @@ public:
 	 * It defaults to a horizon of 1 in this case.
 	 * @param alphas The set of alpha vectors at each horizon.
 	 */
-	PolicyAlphaVectors(const std::vector<const std::vector<PolicyAlphaVector *> > &alphas);
+	PolicyAlphaVectors(const std::vector<std::vector<PolicyAlphaVector *> > &alphas);
 
 	/**
 	 * A virtual deconstructor to prevent errors upon the deletion of a child object.

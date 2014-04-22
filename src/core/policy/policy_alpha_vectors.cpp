@@ -93,7 +93,7 @@ PolicyAlphaVectors::PolicyAlphaVectors(const std::vector<PolicyAlphaVector *> &a
  * It defaults to a horizon of 1 in this case.
  * @param alphas The set of alpha vectors at each horizon.
  */
-PolicyAlphaVectors::PolicyAlphaVectors(const std::vector<const std::vector<PolicyAlphaVector *> > &alphas)
+PolicyAlphaVectors::PolicyAlphaVectors(const std::vector<std::vector<PolicyAlphaVector *> > &alphas)
 {
 	// If no alpha vectors are properly given, then simply reserve the size for 1 horizon.
 	if (alphas.size() == 0 || alphas[0].size() == 0) {
