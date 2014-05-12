@@ -151,7 +151,7 @@ void AStar<T>::solve(T start, T goal)
  * @return The solution path from the start node to the goal node.
  */
 template <typename T>
-std::vector<T> AStar<T>::get_path()
+const std::vector<T> &AStar<T>::get_path()
 {
 	return path;
 }

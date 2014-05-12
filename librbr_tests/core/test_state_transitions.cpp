@@ -26,9 +26,9 @@
 
 #include <iostream>
 
-#include "../../include/core/states/named_state.h"
-#include "../../include/core/states/finite_states.h"
-#include "../../include/core/state_transitions/finite_state_transitions.h"
+#include "../../librbr/include/core/states/named_state.h"
+#include "../../librbr/include/core/states/finite_states.h"
+#include "../../librbr/include/core/state_transitions/finite_state_transitions.h"
 
 /**
  * Test the state transition objects. Output the success or failure for each test.

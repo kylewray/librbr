@@ -27,17 +27,18 @@
 
 #include <iostream>
 
-#include "../../include/file_loaders/unified_file.h"
+#include "../../librbr/include/file_loaders/unified_file.h"
 
-#include "../../include/mdp/mdp.h"
-#include "../../include/mdp/mdp_value_iteration.h"
-#include "../../include/mdp/mdp_policy_iteration.h"
+#include "../../librbr/include/mdp/mdp.h"
+#include "../../librbr/include/mdp/mdp_value_iteration.h"
+#include "../../librbr/include/mdp/mdp_policy_iteration.h"
 
-#include "../../include/core/states/state_exception.h"
-#include "../../include/core/actions/action_exception.h"
-#include "../../include/core/state_transitions/state_transition_exception.h"
-#include "../../include/core/rewards/reward_exception.h"
-#include "../../include/core/policy/policy_exception.h"
+#include "../../librbr/include/core/core_exception.h"
+#include "../../librbr/include/core/states/state_exception.h"
+#include "../../librbr/include/core/actions/action_exception.h"
+#include "../../librbr/include/core/state_transitions/state_transition_exception.h"
+#include "../../librbr/include/core/rewards/reward_exception.h"
+#include "../../librbr/include/core/policy/policy_exception.h"
 
 /**
  * Test the MDP solvers. Output the success or failure for each test.
@@ -49,7 +50,7 @@ int test_mdp()
 	UnifiedFile file;
 
 	std::cout << "MDP: Loading 'grid_world_finite_horizon.mdp'...";
-	if (!file.load("tests/resources/mdp/grid_world_finite_horizon.mdp")) {
+	if (!file.load("resources/mdp/grid_world_finite_horizon.mdp")) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -58,15 +59,17 @@ int test_mdp()
 
 	std::cout << "MDP: Solving 'grid_world_finite_horizon.mdp' with MDPValueIteration...";
 
-	MDP *mdp = file.get_mdp();
-
+	MDP *mdp = nullptr;
 	MDPValueIteration vi;
 	PolicyMap *policyMap = nullptr;
 
 	try {
+		mdp = file.get_mdp();
 		policyMap = vi.solve(mdp);
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
+	} catch (const CoreException &err) {
+		std::cout << " Failure." << std::endl;
 	} catch (const StateException &err) {
 		std::cout << " Failure." << std::endl;
 	} catch (const ActionException &err) {
@@ -79,17 +82,19 @@ int test_mdp()
 		std::cout << " Failure." << std::endl;
 	}
 
-	policyMap->save("tests/tmp/test_mdp_value_iteration_finite_horizon.policy_map");
-
-	delete mdp;
-	mdp = nullptr;
-
-	delete policyMap;
+	if (policyMap != nullptr) {
+		policyMap->save("tmp/test_mdp_value_iteration_finite_horizon.policy_map");
+		delete policyMap;
+	}
 	policyMap = nullptr;
 
+	if (mdp != nullptr) {
+		delete mdp;
+	}
+	mdp = nullptr;
+
 	std::cout << "MDP: Loading 'grid_world_infinite_horizon.mdp'...";
-//	if (!file.load("/Users/infinite/Downloads/hallway.POMDP")) {
-	if (!file.load("tests/resources/mdp/grid_world_infinite_horizon.mdp")) {
+	if (!file.load("resources/mdp/grid_world_infinite_horizon.mdp")) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -98,12 +103,13 @@ int test_mdp()
 
 	std::cout << "MDP: Solving 'grid_world_infinite_horizon.mdp' with MDPValueIteration...";
 
-	mdp = file.get_mdp();
-
 	try {
+		mdp = file.get_mdp();
 		policyMap = vi.solve(mdp);
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
+	} catch (const CoreException &err) {
+		std::cout << " Failure." << std::endl;
 	} catch (const StateException &err) {
 		std::cout << " Failure." << std::endl;
 	} catch (const ActionException &err) {
@@ -116,9 +122,10 @@ int test_mdp()
 		std::cout << " Failure." << std::endl;
 	}
 
-	policyMap->save("tests/tmp/test_mdp_value_iteration_infinite_horizon.policy_map");
-
-	delete policyMap;
+	if (policyMap != nullptr) {
+		policyMap->save("tmp/test_mdp_value_iteration_infinite_horizon.policy_map");
+		delete policyMap;
+	}
 	policyMap = nullptr;
 
 	std::cout << "MDP: Solving 'grid_world_infinite_horizon.mdp' with MDPPolicyIteration (Exact)...";
@@ -129,6 +136,8 @@ int test_mdp()
 		policyMap = piExact.solve(mdp);
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
+	} catch (const CoreException &err) {
+		std::cout << " Failure." << std::endl;
 	} catch (const StateException &err) {
 		std::cout << " Failure." << std::endl;
 	} catch (const ActionException &err) {
@@ -141,9 +150,10 @@ int test_mdp()
 		std::cout << " Failure." << std::endl;
 	}
 
-	policyMap->save("tests/tmp/test_mdp_policy_iteration_exact_infinite_horizon.policy_map");
-
-	delete policyMap;
+	if (policyMap != nullptr) {
+		policyMap->save("tmp/test_mdp_policy_iteration_exact_infinite_horizon.policy_map");
+		delete policyMap;
+	}
 	policyMap = nullptr;
 
 	std::cout << "MDP: Solving 'grid_world_infinite_horizon.mdp' with MDPPolicyIteration (Modified with k=5)...";
@@ -154,6 +164,8 @@ int test_mdp()
 		policyMap = piModified.solve(mdp);
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
+	} catch (const CoreException &err) {
+		std::cout << " Failure." << std::endl;
 	} catch (const StateException &err) {
 		std::cout << " Failure." << std::endl;
 	} catch (const ActionException &err) {
@@ -166,13 +178,14 @@ int test_mdp()
 		std::cout << " Failure." << std::endl;
 	}
 
-	policyMap->save("tests/tmp/test_mdp_policy_iteration_modified_infinite_horizon.policy_map");
+	if (policyMap != nullptr) {
+		policyMap->save("tmp/test_mdp_policy_iteration_modified_infinite_horizon.policy_map");
+		delete policyMap;
+	}
+	policyMap = nullptr;
 
 	delete mdp;
 	mdp = nullptr;
-
-	delete policyMap;
-	policyMap = nullptr;
 
 	return numSuccesses;
 }

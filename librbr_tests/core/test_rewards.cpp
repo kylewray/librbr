@@ -26,10 +26,10 @@
 
 #include <iostream>
 
-#include "../../include/core/rewards/sa_rewards_map.h"
-#include "../../include/core/rewards/sas_rewards_map.h"
-#include "../../include/core/rewards/saso_rewards_map.h"
-#include "../../include/core/states/named_state.h"
+#include "../../librbr/include/core/rewards/sa_rewards_map.h"
+#include "../../librbr/include/core/rewards/sas_rewards_map.h"
+#include "../../librbr/include/core/rewards/saso_rewards_map.h"
+#include "../../librbr/include/core/states/named_state.h"
 
 /**
  * Test the reward objects. Output the success or failure for each test.

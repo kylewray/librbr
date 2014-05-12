@@ -33,11 +33,11 @@
 #define NUM_REWARD_TESTS 15
 #define NUM_STATE_TRANSITION_TESTS 5
 #define NUM_OBSERVATION_TRANSITION_TESTS 5
-#define NUM_POLICY_TESTS 20
+#define NUM_POLICY_TESTS 19
 #define NUM_UNIFIED_FILE_TESTS 20
 #define NUM_UTILITIES_TESTS 1
 #define NUM_MDP_TESTS 6
-#define NUM_POMDP_TESTS 6
+#define NUM_POMDP_TESTS 2
 
 /**
  * Test the agents objects. Output the success or failure for each test.

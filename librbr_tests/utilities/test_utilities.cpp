@@ -28,7 +28,7 @@
 #include <tuple>
 #include <math.h>
 
-#include "../../include/utilities/a_star.h"
+#include "../../librbr/include/utilities/a_star.h"
 
 /**
  * Test the utilities objects. Output the success or failure for each test.

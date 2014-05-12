@@ -26,8 +26,8 @@
 
 #include <iostream>
 
-#include "../../include/core/observation_transitions/finite_observation_transitions.h"
-#include "../../include/core/states/named_state.h"
+#include "../../librbr/include/core/observation_transitions/finite_observation_transitions.h"
+#include "../../librbr/include/core/states/named_state.h"
 
 /**
  * Test the observation transition objects. Output the success or failure for each test.

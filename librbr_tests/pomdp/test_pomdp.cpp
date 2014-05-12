@@ -26,18 +26,19 @@
 
 #include <iostream>
 
-#include "../../include/file_loaders/unified_file.h"
+#include "../../librbr/include/file_loaders/unified_file.h"
 
-#include "../../include/pomdp/pomdp.h"
-#include "../../include/pomdp/pomdp_value_iteration.h"
+#include "../../librbr/include/pomdp/pomdp.h"
+#include "../../librbr/include/pomdp/pomdp_value_iteration.h"
 
-#include "../../include/core/states/state_exception.h"
-#include "../../include/core/actions/action_exception.h"
-#include "../../include/core/observations/observation_exception.h"
-#include "../../include/core/state_transitions/state_transition_exception.h"
-#include "../../include/core/observation_transitions/observation_transition_exception.h"
-#include "../../include/core/rewards/reward_exception.h"
-#include "../../include/core/policy/policy_exception.h"
+#include "../../librbr/include/core/core_exception.h"
+#include "../../librbr/include/core/states/state_exception.h"
+#include "../../librbr/include/core/actions/action_exception.h"
+#include "../../librbr/include/core/observations/observation_exception.h"
+#include "../../librbr/include/core/state_transitions/state_transition_exception.h"
+#include "../../librbr/include/core/observation_transitions/observation_transition_exception.h"
+#include "../../librbr/include/core/rewards/reward_exception.h"
+#include "../../librbr/include/core/policy/policy_exception.h"
 
 /**
  * Test the POMDP solvers. Output the success or failure for each test.
@@ -49,7 +50,7 @@ int test_pomdp()
 	UnifiedFile file;
 
 	std::cout << "POMDP: Loading 'tiger.pomdp'...";
-	if (!file.load("tests/resources/pomdp/tiger.pomdp")) {
+	if (!file.load("resources/pomdp/tiger.pomdp")) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -58,15 +59,18 @@ int test_pomdp()
 
 	std::cout << "POMDP: Solving 'tiger.pomdp' with POMDPValueIteration...";
 
-	POMDP *pomdp = file.get_pomdp();
+	POMDP *pomdp = nullptr;
 
 	POMDPValueIteration vi;
 	PolicyAlphaVectors *policyAlphaVectors = nullptr;
 
 	try {
+		pomdp = file.get_pomdp();
 		policyAlphaVectors = vi.solve(pomdp);
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
+	} catch (const CoreException &err) {
+		std::cout << " Failure." << std::endl;
 	} catch (const StateException &err) {
 		std::cout << " Failure." << std::endl;
 	} catch (const ActionException &err) {
@@ -83,10 +87,11 @@ int test_pomdp()
 		std::cout << " Failure." << std::endl;
 	}
 
-	policyAlphaVectors->save("tests/tmp/test_pomdp_value_iteration_finite_horizon.pomdp_alpha_vectors",
-			(const FiniteStates *)pomdp->get_states());
-
-	delete pomdp;
+	if (pomdp != nullptr) {
+		policyAlphaVectors->save("tmp/test_pomdp_value_iteration_finite_horizon.pomdp_alpha_vectors",
+				(const FiniteStates *)pomdp->get_states());
+		delete pomdp;
+	}
 	pomdp = nullptr;
 
 	delete policyAlphaVectors;

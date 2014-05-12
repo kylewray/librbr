@@ -61,7 +61,7 @@ public:
 	 * Get the solution path which was computed from the last call of solve.
 	 * @return The solution path from the start node to the goal node.
 	 */
-	std::vector<T> get_path();
+	const std::vector<T> &get_path();
 
 	/**
 	 * Get the number of nodes expanded from the last call of solve.

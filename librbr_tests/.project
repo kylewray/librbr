@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>librbr</name>
+	<name>librbr_tests</name>
 	<comment></comment>
 	<projects>
+		<project>librbr</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

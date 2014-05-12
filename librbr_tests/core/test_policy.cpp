@@ -26,18 +26,18 @@
 
 #include <iostream>
 
-#include "../../include/core/policy/policy_map.h"
-#include "../../include/core/policy/policy_tree.h"
-#include "../../include/core/policy/policy_alpha_vector.h"
-#include "../../include/core/policy/policy_alpha_vectors.h"
-#include "../../include/core/policy/policy_exception.h"
+#include "../../librbr/include/core/policy/policy_map.h"
+#include "../../librbr/include/core/policy/policy_tree.h"
+#include "../../librbr/include/core/policy/policy_alpha_vector.h"
+#include "../../librbr/include/core/policy/policy_alpha_vectors.h"
+#include "../../librbr/include/core/policy/policy_exception.h"
 
-#include "../../include/core/states/named_state.h"
-#include "../../include/core/states/belief_state.h"
-#include "../../include/core/states/finite_states.h"
-#include "../../include/core/actions/finite_actions.h"
-#include "../../include/core/observations/finite_observations.h"
-#include "../../include/core/horizon.h"
+#include "../../librbr/include/core/states/named_state.h"
+#include "../../librbr/include/core/states/belief_state.h"
+#include "../../librbr/include/core/states/finite_states.h"
+#include "../../librbr/include/core/actions/finite_actions.h"
+#include "../../librbr/include/core/observations/finite_observations.h"
+#include "../../librbr/include/core/horizon.h"
 
 #include <math.h>
 
@@ -62,7 +62,7 @@ int test_policy()
 	PolicyMap *policyMap = new PolicyMap();
 
 	std::cout << "Policy: 'PolicyMap::load' file 'test_01.policy_map'... ";
-	if (!policyMap->load("tests/resources/policy/test_01.policy_map", states, actions, horizon)) {
+	if (!policyMap->load("resources/policy/test_01.policy_map", states, actions, horizon)) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -98,7 +98,7 @@ int test_policy()
 	}
 
 	std::cout << "Policy: 'test_02.policy_map' (Expecting Error)...\n\t";
-	if (policyMap->load("tests/resources/policy/test_02.policy_map", states, actions, horizon)) {
+	if (policyMap->load("resources/policy/test_02.policy_map", states, actions, horizon)) {
 		std::cout << "\tSuccess." << std::endl;
 		numSuccesses++;
 	} else {
@@ -106,7 +106,7 @@ int test_policy()
 	}
 
 	std::cout << "Policy: 'PolicyMap::load' file 'test_03.policy_map'... ";
-	if (!policyMap->load("tests/resources/policy/test_03.policy_map", states, actions, horizon)) {
+	if (!policyMap->load("resources/policy/test_03.policy_map", states, actions, horizon)) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -114,7 +114,7 @@ int test_policy()
 	}
 
 	std::cout << "Policy: 'PolicyMap::save' file 'test_03.policy_map'... ";
-	if (!policyMap->save("tests/tmp/test_03.policy_map")) {
+	if (!policyMap->save("tmp/test_03.policy_map")) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -122,7 +122,7 @@ int test_policy()
 	}
 
 	std::cout << "Policy: 'PolicyMap::load' file 'test_03.policy_map' (Check Result)... ";
-	if (!policyMap->load("tests/tmp/test_03.policy_map", states, actions, horizon)) {
+	if (!policyMap->load("tmp/test_03.policy_map", states, actions, horizon)) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -152,7 +152,7 @@ int test_policy()
 
 	PolicyTree *policyTree = new PolicyTree(observations, horizon);
 
-	if (!policyTree->load("tests/resources/policy/test_04.policy_tree", actions, observations, horizon)) {
+	if (!policyTree->load("resources/policy/test_04.policy_tree", actions, observations, horizon)) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -354,9 +354,12 @@ int test_policy()
 	PolicyAlphaVectors::prune_dominated(states, alphaVectors);
 
 	if (alphaVectors.size() == 3 &&
-			alphaVectors[0]->get_action() == a1 && alphaVectors[0]->get(s1) == 10.0 && alphaVectors[0]->get(s2) == -10.0 &&
-			alphaVectors[1]->get_action() == a2 && alphaVectors[1]->get(s1) == -10.0 && alphaVectors[1]->get(s2) == 10.0 &&
-			alphaVectors[2]->get_action() == a2 && alphaVectors[2]->get(s1) == 0.0 && alphaVectors[2]->get(s2) == 0.0) {
+			((PolicyAlphaVector *)alphaVectors[0])->get_action() == a1 &&
+			((PolicyAlphaVector *)alphaVectors[0])->get(s1) == 10.0 && ((PolicyAlphaVector *)alphaVectors[0])->get(s2) == -10.0 &&
+			((PolicyAlphaVector *)alphaVectors[1])->get_action() == a2 &&
+			((PolicyAlphaVector *)alphaVectors[1])->get(s1) == -10.0 && ((PolicyAlphaVector *)alphaVectors[1])->get(s2) == 10.0 &&
+			((PolicyAlphaVector *)alphaVectors[2])->get_action() == a2 &&
+			((PolicyAlphaVector *)alphaVectors[2])->get(s1) == 0.0 && ((PolicyAlphaVector *)alphaVectors[2])->get(s2) == 0.0) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -371,7 +374,7 @@ int test_policy()
 
 	std::cout << "Policy: Test 'PolicyAlphaVectors::save'... ";
 
-	if (!policyAlphaVectors->save("tests/tmp/test_05.policy_alpha_vectors", states)) {
+	if (!policyAlphaVectors->save("tmp/test_05.policy_alpha_vectors", states)) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -380,18 +383,13 @@ int test_policy()
 
 	std::cout << "Policy: Test 'PolicyAlphaVectors::load'... ";
 
-	if (!policyAlphaVectors->load("tests/tmp/test_05.policy_alpha_vectors", states, actions, observations, horizon)) {
-		std::cout << " Success." << std::endl;
-		numSuccesses++;
-	} else {
-		std::cout << " Failure." << std::endl;
-	}
-
-	std::cout << "Policy: Test 'PolicyAlphaVectors::load' (Check Result)... ";
-
-	if (policyAlphaVectors->get(0, b) == a2 && policyAlphaVectors->get(1, b) == a1) {
-		std::cout << " Success." << std::endl;
-		numSuccesses++;
+	if (!policyAlphaVectors->load("tmp/test_05.policy_alpha_vectors", states, actions, observations, horizon)) {
+		if (policyAlphaVectors->get(0, b) == a2 && policyAlphaVectors->get(1, b) == a1) {
+			std::cout << " Success." << std::endl;
+			numSuccesses++;
+		} else {
+			std::cout << " Failure." << std::endl;
+		}
 	} else {
 		std::cout << " Failure." << std::endl;
 	}

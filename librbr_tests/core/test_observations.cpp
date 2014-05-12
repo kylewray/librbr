@@ -26,11 +26,11 @@
 
 #include <iostream>
 
-#include "../../include/core/observations/observation.h"
-#include "../../include/core/observations/finite_observations.h"
-#include "../../include/core/observations/joint_observation.h"
-#include "../../include/core/observations/finite_joint_observations.h"
-#include "../../include/core/observations/observation_exception.h"
+#include "../../librbr/include/core/observations/observation.h"
+#include "../../librbr/include/core/observations/finite_observations.h"
+#include "../../librbr/include/core/observations/joint_observation.h"
+#include "../../librbr/include/core/observations/finite_joint_observations.h"
+#include "../../librbr/include/core/observations/observation_exception.h"
 
 /**
  * Test the observation objects. Output the success or failure for each test.

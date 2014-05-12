@@ -26,12 +26,12 @@
 
 #include <iostream>
 
-#include "../../include/core/states/state.h"
-#include "../../include/core/states/named_state.h"
-#include "../../include/core/states/finite_states.h"
-#include "../../include/core/states/factored_state.h"
-#include "../../include/core/states/finite_factored_states.h"
-#include "../../include/core/states/state_exception.h"
+#include "../../librbr/include/core/states/state.h"
+#include "../../librbr/include/core/states/named_state.h"
+#include "../../librbr/include/core/states/finite_states.h"
+#include "../../librbr/include/core/states/factored_state.h"
+#include "../../librbr/include/core/states/finite_factored_states.h"
+#include "../../librbr/include/core/states/state_exception.h"
 
 /**
  * Test the states objects. Output the success or failure for each test.

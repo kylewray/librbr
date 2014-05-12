@@ -28,41 +28,45 @@ def printtarget(f, name, sdir, odir):
     """ Prints a target rule to the specified file.
     
         Parameters:
-            f    -- the file where the output will be printed to. 
-            name -- the name of the target rule. 
-            sdir -- the source directory to compile this rule.
-            odir -- the object directory to store the .o files.
+            f    -- The file where the output will be printed to. 
+            name -- The name of the target rule. 
+            sdir -- The source directory to compile this rule.
+            odir -- The object directory to store the .o files.
     """
+
     f.write(name + ': ' + sdir + '/*.cpp \n')
     prcompmov(f, sdir, odir)
 
+
 def prcompmov(f, sdir, odir):
     """ Prints a set of bash comands to create an object directory (if it 
-    doesn't exists), compile all source files in a source directory and
-    move the object files to the object directory.
+        doesn't exists), compile all source files in a source directory and
+        move the object files to the object directory.
 
         Parameters:
-            f    -- the file where the output will be printed to. 
-            sdir -- the directory where the source files are stored.
-            odir -- the directory to where the .o files will be stored.
+            f    -- The file where the output will be printed to. 
+            sdir -- The directory where the source files are stored.
+            odir -- The directory to where the .o files will be stored.
     """
+
     f.write('\tmkdir -p ' + odir + ' \n' \
             + '\t$(CC) $(CFLAGS) -c ' + sdir + '/*.cpp \n' \
             + '\tmv *.o ' + odir + '\n\n')
 
 
-srcdir = 'src'
-objdir = 'obj'
-testdir = 'tests'
-coresubdir = ('states','actions','state_transitions','observation_transitions' \
-              ,'observations','policy','rewards','agents')             
+srcdir = 'librbr/src'
+objdir = 'librbr/obj'
+testdir = 'librbr_tests'
+coresubdir = ['states', 'actions', 'state_transitions', \
+            'observation_transitions', 'observations', 'policy', \
+            'rewards','agents']
 
 f = open('Makefile', 'w')
 
 
-# Test if the 'obj', 'tests', 'tests/tmp', and 'tests/obj' directories exist and
-# make them if they do not.
-directories = ['obj', 'tests', 'tests/tmp', 'tests/obj']
+# Test if the 'librbr/obj', 'librbr_tests/obj', and 'tmp'
+# directories exist and make them if they do not.
+directories = ['librbr/obj', 'librbr_tests/obj', 'librbr_tests/tmp']
 for d in directories:
     if not os.path.exists(d):
         os.makedirs(d)
@@ -78,14 +82,16 @@ f.write('CC = g++\n' \
         '`pkg-config --cflags --libs osi-clp`\n')
 
 # Printing target rule for tests.
-f.write('tests: all.o ' + testdir + '/core/*.cpp ' \
-        + testdir + '/mdp/*.cpp ' + testdir + '/file_loaders/*.cpp ' \
-        + testdir + '/utilities/*.cpp\n')
-f.write('\tmkdir -p tests/obj\n')
-f.write('\t$(CC) $(CFLAGS) -c -I.. tests/core/*.cpp tests/mdp/*.cpp ' \
-        'tests/pomdp/*.cpp tests/file_loaders/*.cpp tests/utilities/*.cpp ' \
-        'tests/*.cpp\n')
-f.write('\t$(CC) $(CFLAGS) $(COINFLAGS) -o perform_tests obj/*.o *.o\n')
+f.write('tests: all.o ' + testdir + '/core/*.cpp ' + \
+        testdir + '/mdp/*.cpp ' + testdir + '/file_loaders/*.cpp ' + \
+        testdir + '/utilities/*.cpp\n')
+f.write('\tmkdir -p ' + testdir + '/obj\n')
+f.write('\t$(CC) $(CFLAGS) -c -I.. ' + testdir + '/core/*.cpp ' + \
+        testdir + '/mdp/*.cpp ' + testdir + '/pomdp/*.cpp ' + \
+        testdir + '/file_loaders/*.cpp ' + testdir + '/utilities/*.cpp ' + \
+        testdir + '/*.cpp\n')
+f.write('\t$(CC) $(CFLAGS) $(COINFLAGS) -o perform_tests ' + \
+        objdir + '/*.o *.o\n')
 f.write('\trm *.o\n\n')
 
 # Printing target rules for all object files.
