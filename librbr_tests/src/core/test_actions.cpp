@@ -22,15 +22,15 @@
  */
 
 
-#include "../perform_tests.h"
+#include "../../include/perform_tests.h"
 
 #include <iostream>
 
-#include "../../librbr/include/core/actions/action.h"
-#include "../../librbr/include/core/actions/finite_actions.h"
-#include "../../librbr/include/core/actions/joint_action.h"
-#include "../../librbr/include/core/actions/finite_joint_actions.h"
-#include "../../librbr/include/core/actions/action_exception.h"
+#include "../../../librbr/include/core/actions/action.h"
+#include "../../../librbr/include/core/actions/finite_actions.h"
+#include "../../../librbr/include/core/actions/joint_action.h"
+#include "../../../librbr/include/core/actions/finite_joint_actions.h"
+#include "../../../librbr/include/core/actions/action_exception.h"
 
 /**
  * Test the actions objects. Output the success or failure for each test.

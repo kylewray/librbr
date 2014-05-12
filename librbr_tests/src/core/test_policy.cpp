@@ -22,22 +22,22 @@
  */
 
 
-#include "../perform_tests.h"
+#include "../../include/perform_tests.h"
 
 #include <iostream>
 
-#include "../../librbr/include/core/policy/policy_map.h"
-#include "../../librbr/include/core/policy/policy_tree.h"
-#include "../../librbr/include/core/policy/policy_alpha_vector.h"
-#include "../../librbr/include/core/policy/policy_alpha_vectors.h"
-#include "../../librbr/include/core/policy/policy_exception.h"
+#include "../../../librbr/include/core/policy/policy_map.h"
+#include "../../../librbr/include/core/policy/policy_tree.h"
+#include "../../../librbr/include/core/policy/policy_alpha_vector.h"
+#include "../../../librbr/include/core/policy/policy_alpha_vectors.h"
+#include "../../../librbr/include/core/policy/policy_exception.h"
 
-#include "../../librbr/include/core/states/named_state.h"
-#include "../../librbr/include/core/states/belief_state.h"
-#include "../../librbr/include/core/states/finite_states.h"
-#include "../../librbr/include/core/actions/finite_actions.h"
-#include "../../librbr/include/core/observations/finite_observations.h"
-#include "../../librbr/include/core/horizon.h"
+#include "../../../librbr/include/core/states/named_state.h"
+#include "../../../librbr/include/core/states/belief_state.h"
+#include "../../../librbr/include/core/states/finite_states.h"
+#include "../../../librbr/include/core/actions/finite_actions.h"
+#include "../../../librbr/include/core/observations/finite_observations.h"
+#include "../../../librbr/include/core/horizon.h"
 
 #include <math.h>
 

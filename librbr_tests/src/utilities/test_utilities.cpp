@@ -22,13 +22,13 @@
  */
 
 
-#include "../perform_tests.h"
+#include "../../include/perform_tests.h"
 
 #include <iostream>
 #include <tuple>
 #include <math.h>
 
-#include "../../librbr/include/utilities/a_star.h"
+#include "../../../librbr/include/utilities/a_star.h"
 
 /**
  * Test the utilities objects. Output the success or failure for each test.

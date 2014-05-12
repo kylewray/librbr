@@ -22,13 +22,13 @@
  */
 
 
-#include "../perform_tests.h"
+#include "../../include/perform_tests.h"
 
 #include <iostream>
 
-#include "../../librbr/include/core/agents/agent.h"
-#include "../../librbr/include/core/agents/agents.h"
-#include "../../librbr/include/core/agents/agent_exception.h"
+#include "../../../librbr/include/core/agents/agent.h"
+#include "../../../librbr/include/core/agents/agents.h"
+#include "../../../librbr/include/core/agents/agent_exception.h"
 
 /**
  * Test the agents objects. Output the success or failure for each test.

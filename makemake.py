@@ -82,17 +82,17 @@ f.write('CC = g++\n' \
         '`pkg-config --cflags --libs osi-clp`\n')
 
 # Printing target rule for tests.
-f.write('tests: all.o ' + testdir + '/core/*.cpp ' + \
-        testdir + '/mdp/*.cpp ' + testdir + '/file_loaders/*.cpp ' + \
-        testdir + '/utilities/*.cpp\n')
+f.write('tests: all.o ' + testdir + '/src/core/*.cpp ' + \
+        testdir + '/src/mdp/*.cpp ' + testdir + '/src/file_loaders/*.cpp ' + \
+        testdir + '/src/utilities/*.cpp\n')
 f.write('\tmkdir -p ' + testdir + '/obj\n')
-f.write('\t$(CC) $(CFLAGS) -c -I.. ' + testdir + '/core/*.cpp ' + \
-        testdir + '/mdp/*.cpp ' + testdir + '/pomdp/*.cpp ' + \
-        testdir + '/file_loaders/*.cpp ' + testdir + '/utilities/*.cpp ' + \
-        testdir + '/*.cpp\n')
+f.write('\t$(CC) $(CFLAGS) -c -I.. ' + testdir + '/src/core/*.cpp ' + \
+        testdir + '/src/mdp/*.cpp ' + testdir + '/src/pomdp/*.cpp ' + \
+        testdir + '/src/file_loaders/*.cpp ' + testdir + '/src/utilities/*.cpp ' + \
+        testdir + '/src/*.cpp\n')
 f.write('\t$(CC) $(CFLAGS) $(COINFLAGS) -o perform_tests ' + \
         objdir + '/*.o *.o\n')
-f.write('\trm *.o\n\n')
+f.write('\tmv *.o ' + testdir + '/obj\n\n')
 
 # Printing target rules for all object files.
 for sd in coresubdir:

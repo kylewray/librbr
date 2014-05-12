@@ -22,7 +22,7 @@
  */
 
 
-#include "perform_tests.h"
+#include "../include/perform_tests.h"
 
 #include <iostream>
 

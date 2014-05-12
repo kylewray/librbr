@@ -22,11 +22,11 @@
  */
 
 
-#include "../perform_tests.h"
+#include "../../include/perform_tests.h"
 
 #include <iostream>
 
-#include "../../librbr/include/file_loaders/unified_file.h"
+#include "../../../librbr/include/file_loaders/unified_file.h"
 
 /**
  * Test the UnifiedFile object. Output the success or failure for each test.

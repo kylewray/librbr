@@ -22,23 +22,23 @@
  */
 
 
-#include "../perform_tests.h"
+#include "../../include/perform_tests.h"
 
 
 #include <iostream>
 
-#include "../../librbr/include/file_loaders/unified_file.h"
+#include "../../../librbr/include/file_loaders/unified_file.h"
 
-#include "../../librbr/include/mdp/mdp.h"
-#include "../../librbr/include/mdp/mdp_value_iteration.h"
-#include "../../librbr/include/mdp/mdp_policy_iteration.h"
+#include "../../../librbr/include/mdp/mdp.h"
+#include "../../../librbr/include/mdp/mdp_value_iteration.h"
+#include "../../../librbr/include/mdp/mdp_policy_iteration.h"
 
-#include "../../librbr/include/core/core_exception.h"
-#include "../../librbr/include/core/states/state_exception.h"
-#include "../../librbr/include/core/actions/action_exception.h"
-#include "../../librbr/include/core/state_transitions/state_transition_exception.h"
-#include "../../librbr/include/core/rewards/reward_exception.h"
-#include "../../librbr/include/core/policy/policy_exception.h"
+#include "../../../librbr/include/core/core_exception.h"
+#include "../../../librbr/include/core/states/state_exception.h"
+#include "../../../librbr/include/core/actions/action_exception.h"
+#include "../../../librbr/include/core/state_transitions/state_transition_exception.h"
+#include "../../../librbr/include/core/rewards/reward_exception.h"
+#include "../../../librbr/include/core/policy/policy_exception.h"
 
 /**
  * Test the MDP solvers. Output the success or failure for each test.
