@@ -30,6 +30,9 @@
 
 #include "../../../librbr/include/pomdp/pomdp.h"
 #include "../../../librbr/include/pomdp/pomdp_value_iteration.h"
+#include "../../../librbr/include/pomdp/pomdp_pbvi.h"
+
+#include "../../../librbr/include/core/states/belief_state.h"
 
 #include "../../../librbr/include/core/core_exception.h"
 #include "../../../librbr/include/core/states/state_exception.h"
@@ -87,8 +90,71 @@ int test_pomdp()
 		std::cout << " Failure." << std::endl;
 	}
 
+	// Save and destroy the alpha vectors.
 	if (pomdp != nullptr) {
-		policyAlphaVectors->save("tmp/test_pomdp_value_iteration_finite_horizon.pomdp_alpha_vectors",
+		policyAlphaVectors->save("tmp/test_pomdp_vi_finite_horizon.pomdp_alpha_vectors",
+				(const FiniteStates *)pomdp->get_states());
+	}
+
+	delete policyAlphaVectors;
+	policyAlphaVectors = nullptr;
+
+	std::cout << "POMDP: Solving 'tiger.pomdp' with POMDPPBVI...";
+
+	POMDPPBVI pbvi;
+
+	try {
+		const FiniteStates *states = (const FiniteStates *)pomdp->get_states();
+
+		BeliefState *b = new BeliefState();
+		b->set(states->get(0), 1.0);
+		b->set(states->get(1), 0.0);
+		pbvi.add_initial_belief_state(b);
+
+		b = new BeliefState();
+		b->set(states->get(0), 0.0);
+		b->set(states->get(1), 1.0);
+		pbvi.add_initial_belief_state(b);
+
+		b = new BeliefState();
+		b->set(states->get(0), 0.25);
+		b->set(states->get(1), 0.75);
+		pbvi.add_initial_belief_state(b);
+
+		b = new BeliefState();
+		b->set(states->get(0), 0.75);
+		b->set(states->get(1), 0.25);
+		pbvi.add_initial_belief_state(b);
+
+		b = new BeliefState();
+		b->set(states->get(0), 0.5);
+		b->set(states->get(1), 0.5);
+		pbvi.add_initial_belief_state(b);
+
+		policyAlphaVectors = pbvi.solve(pomdp);
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} catch (const CoreException &err) {
+		std::cout << " Failure." << std::endl;
+	} catch (const StateException &err) {
+		std::cout << " Failure." << std::endl;
+	} catch (const ActionException &err) {
+		std::cout << " Failure." << std::endl;
+	} catch (const ObservationException &err) {
+		std::cout << " Failure." << std::endl;
+	} catch (const StateTransitionException &err) {
+		std::cout << " Failure." << std::endl;
+	} catch (const ObservationTransitionException &err) {
+		std::cout << " Failure." << std::endl;
+	} catch (const RewardException &err) {
+		std::cout << " Failure." << std::endl;
+	} catch (const PolicyException &err) {
+		std::cout << " Failure." << std::endl;
+	}
+
+	// Save and destroy the alpha vectors. Also, We are done with the tiger problem, so destroy it.
+	if (pomdp != nullptr) {
+		policyAlphaVectors->save("tmp/test_pomdp_pbvi_finite_horizon.pomdp_alpha_vectors",
 				(const FiniteStates *)pomdp->get_states());
 		delete pomdp;
 	}

@@ -113,11 +113,25 @@ public:
 	PolicyAlphaVector operator+(const PolicyAlphaVector &other) const;
 
 	/**
+	 * Overload the plus-equals operator to return the summation of all elements in the vectors.
+	 * @param other The alpha vector to add to this one.
+	 * @return The resultant alpha vector from the sum of this one and the other one provided.
+	 */
+	PolicyAlphaVector &operator+=(const PolicyAlphaVector &other);
+
+	/**
 	 * Overload the minus operator to return the subtraction of all elements in the vectors.
 	 * @param other The alpha vector to subtract to this one.
 	 * @return The resultant alpha vector from the element-wise subtraction of this one and the other one provided.
 	 */
 	PolicyAlphaVector operator-(const PolicyAlphaVector &other) const;
+
+	/**
+	 * Overload the minus-equals operator to return the subtraction of all elements in the vectors.
+	 * @param other The alpha vector to subtract to this one.
+	 * @return The resultant alpha vector from the element-wise subtraction of this one and the other one provided.
+	 */
+	PolicyAlphaVector &operator-=(const PolicyAlphaVector &other);
 
 	/**
 	 * Reset the alpha vector.

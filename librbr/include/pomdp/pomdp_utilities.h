@@ -70,9 +70,9 @@ BeliefState belief_state_update(const BeliefState &belief, const FiniteStates *S
 		const FiniteObservationTransitions *O, const Action *action, const Observation *observation);
 
 /**
- * Compute the Bellman update/backup for a given belief state. Since the value function V' = HV, is over the belief state
- * space, and we can represent the value function approximately as a PWLC set of alpha vectors, it returns this set of
- * alpha vectors.
+ * Compute the Bellman update/backup using the cross sum operation, fully expanding all possible alpha vectors. Since the value
+ * function V' = HV, is over the belief state space, and we can represent the value function approximately as a PWLC set of alpha
+ * vectors, it returns this set of alpha vectors.
  * @param S 		 The finite states.
  * @param A 		 The finite actions.
  * @param Z			 The finite observations.
@@ -80,15 +80,36 @@ BeliefState belief_state_update(const BeliefState &belief, const FiniteStates *S
  * @param O			 The finite observation transition function.
  * @param R 		 The state-action-state rewards.
  * @param h 		 The horizon.
- * @param action	 The action taken.
  * @param gammaAStar The initial gamma which is always used in the cross sum: Gamma_{a,*}.
  * @param gamma		 The current Bellman backup, represented as the set Gamma storing alpha-vectors.
+ * @param action	 The action taken.
  * @return The Gamma_{a} which contains the new set of optimal alpha-vectors, given a particular action.
  */
-std::vector<PolicyAlphaVector *> bellman_update(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+std::vector<PolicyAlphaVector *> bellman_update_cross_sum(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
 		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
-		const Horizon *h, const Action *action, const std::vector<PolicyAlphaVector *> &gammaAStar,
-		const std::vector<PolicyAlphaVector *> &gamma);
+		const Horizon *h, const std::vector<PolicyAlphaVector *> &gammaAStar, const std::vector<PolicyAlphaVector *> &gamma,
+		const Action *action);
+
+/**
+ * Compute the Bellman update/backup for one specific belief state, returning the new optimal alpha-vector for this belief state. In
+ * this case, we assume an action has been taken to construct the new alpha vector.
+ * @param S 		 The finite states.
+ * @param A 		 The finite actions.
+ * @param Z			 The finite observations.
+ * @param T 		 The finite state transition function.
+ * @param O			 The finite observation transition function.
+ * @param R 		 The state-action-state rewards.
+ * @param h 		 The horizon.
+ * @param gammaAStar The initial gamma which is always used in the cross sum: Gamma_{a,*}.
+ * @param gamma		 The current Bellman backup, represented as the set Gamma storing alpha-vectors.
+ * @param action	 The action taken.
+ * @param b			 The belief state for which to compute the updated alpha vector.
+ * @return The optimal alpha-vector at this belief state, given a particular action.
+ */
+PolicyAlphaVector *bellman_update_belief_state(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
+		const Horizon *h, const std::vector<PolicyAlphaVector *> &gammaAStar, const std::vector<PolicyAlphaVector *> &gamma,
+		const Action *action, const BeliefState *b);
 
 
 #endif // POMDP_UTILITIES_H

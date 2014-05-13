@@ -155,6 +155,20 @@ PolicyAlphaVector PolicyAlphaVector::operator+(const PolicyAlphaVector &other) c
 }
 
 /**
+ * Overload the plus-equals operator to return the summation of all elements in the vectors.
+ * @param other The alpha vector to add to this one.
+ * @return The resultant alpha vector from the sum of this one and the other one provided.
+ */
+PolicyAlphaVector &PolicyAlphaVector::operator+=(const PolicyAlphaVector &other)
+{
+	for (std::map<const State *, double>::value_type &alpha :alphaVector) {
+		alpha.second += other.get(alpha.first);
+	}
+
+	return *this;
+}
+
+/**
  * Overload the minus operator to return the subtraction of all elements in the vectors.
  * @param other The alpha vector to subtract to this one.
  * @return The resultant alpha vector from the element-wise subtraction of this one and the other one provided.
@@ -170,6 +184,20 @@ PolicyAlphaVector PolicyAlphaVector::operator-(const PolicyAlphaVector &other) c
 	}
 
 	return result;
+}
+
+/**
+ * Overload the minus-equals operator to return the subtraction of all elements in the vectors.
+ * @param other The alpha vector to subtract to this one.
+ * @return The resultant alpha vector from the element-wise subtraction of this one and the other one provided.
+ */
+PolicyAlphaVector &PolicyAlphaVector::operator-=(const PolicyAlphaVector &other)
+{
+	for (std::map<const State *, double>::value_type &alpha :alphaVector) {
+		alpha.second -= other.get(alpha.first);
+	}
+
+	return *this;
 }
 
 /**
