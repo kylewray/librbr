@@ -52,16 +52,17 @@
 class POMDPValueIteration {
 public:
 	/**
-	 * The default constructor for the POMDPValueIteration class. The default tolerance is 0.001.
+	 * The default constructor for the POMDPValueIteration class. Default number of iterations
+	 * for infinite horizon POMDPs is 1.
 	 */
 	POMDPValueIteration();
 
 	/**
 	 * A constructor for the POMDPValueIteration class which allows for the specification
-	 * of the convergence criterion (tolerance).
-	 * @param tolerance The tolerance which determines convergence of value iteration.
+	 * of the number of iterations to run for infinite horizon. Default is 1.
+	 * @param numIterations The number of iterations to run for infinite horizon POMDPs.
 	 */
-	POMDPValueIteration(double tolerance);
+	POMDPValueIteration(unsigned int numIterations);
 
 	/**
 	 * The deconstructor for the POMDPValueIteration class.
@@ -69,15 +70,37 @@ public:
 	virtual ~POMDPValueIteration();
 
 	/**
+	 * Set the number of iterations to run for infinite horizon POMDPs.
+	 * @param numIterations The number of iterations to run for infinite horizon POMDPs.
+	 */
+	void set_num_iterations(unsigned int numIterations);
+
+	/**
+	 * Get the number of iterations to run for infinite horizon POMDPs.
+	 * @return The number of iterations to run for infinite horizon POMDPs.
+	 */
+	unsigned int get_num_iterations();
+
+	/**
+	 * Compute the optimal number of iterations to run for infinite horizon POMDPs, given
+	 * the desired tolerance, requiring knowledge of the reward function.
+	 * @param pomdp 			The partially observable Markov decision process to use.
+	 * @param epsilon			The desired tolerance between value functions to check for convergence.
+	 * @throws RewardException	The POMDP did not have a SASORewards rewards object.
+	 */
+	void compute_num_iterations(const POMDP *pomdp, double epsilon);
+
+	/**
 	 * Solve the POMDP provided using value iteration.
 	 * @param pomdp The partially observable Markov decision process to solve.
 	 * @return Return the optimal policy as a finite state controller (infinite horizon) or tree (finite horizon).
+	 * @throws CoreException					The POMDP was null.
 	 * @throws StateException					The POMDP did not have a FiniteStates states object.
 	 * @throws ActionException					The POMDP did not have a FiniteActions actions object.
 	 * @throws ObservationException				The POMDP did not have a FiniteObservations observations object.
 	 * @throws StateTransitionsException		The POMDP did not have a FiniteStateTransitions state transitions object.
 	 * @throws ObservationTransitionsException	The POMDP did not have a FiniteObservationTransitions observation transitions object.
-	 * @throws RewardException					The POMDP did not have a SASRewards rewards object.
+	 * @throws RewardException					The POMDP did not have a SASORewards rewards object.
 	 * @throws PolicyException					An error occurred computing the policy.
 	 */
 	PolicyAlphaVectors *solve(const POMDP *pomdp);
@@ -116,9 +139,9 @@ private:
 			const Horizon *h);
 
 	/**
-	 * The tolerance convergence criterion.
+	 * The number of iterations until the solver stops for infinite horizon POMDPs.
 	 */
-	double epsilon;
+	unsigned int iterations;
 
 };
 

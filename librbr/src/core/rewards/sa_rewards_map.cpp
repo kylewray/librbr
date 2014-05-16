@@ -33,6 +33,8 @@ SARewardsMap::SARewardsMap()
 {
 	stateWildcard = new NamedState("*");
 	actionWildcard = new Action("*");
+	Rmin = std::numeric_limits<double>::lowest() * -1.0;
+	Rmax = std::numeric_limits<double>::lowest();
 }
 
 /**
@@ -62,6 +64,13 @@ void SARewardsMap::set(const State *state, const Action *action, double reward)
 	}
 
 	rewards[state][action] = reward;
+
+	if (Rmin > reward) {
+		Rmin = reward;
+	}
+	if (Rmax < reward) {
+		Rmax = reward;
+	}
 }
 
 /**
@@ -153,6 +162,8 @@ double SARewardsMap::get(const State *state, const Action *action, const State *
 void SARewardsMap::reset()
 {
 	rewards.clear();
+	Rmin = std::numeric_limits<double>::lowest() * -1.0;
+	Rmax = std::numeric_limits<double>::lowest();
 }
 
 /**
@@ -177,4 +188,22 @@ double SARewardsMap::get_value(const State *state, const Action *action) const
 	}
 
 	return beta->second;
+}
+
+/**
+ * Get the minimal R-value.
+ * @return The minimal R-value.
+ */
+double SARewardsMap::get_min() const
+{
+	return Rmin;
+}
+
+/**
+ * Get the maximal R-value.
+ * @return The maximal R-value.
+ */
+double SARewardsMap::get_max() const
+{
+	return Rmax;
 }

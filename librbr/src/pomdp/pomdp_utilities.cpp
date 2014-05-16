@@ -174,8 +174,6 @@ std::vector<PolicyAlphaVector *> bellman_update_cross_sum(const FiniteStates *S,
 	return gammaA;
 }
 
-#include <iostream>
-
 /**
  * Compute the Bellman update/backup for one specific belief state, returning the new optimal alpha-vector for this belief state. In
  * this case, we assume an action has been taken to construct the new alpha vector.
@@ -200,26 +198,15 @@ PolicyAlphaVector *bellman_update_belief_state(const FiniteStates *S, const Fini
 	PolicyAlphaVector *alphaBAStar = new PolicyAlphaVector(*gammaAStar[0]);
 	alphaBAStar->set_action(action);
 
-	std::cout << "\t\tA" << std::endl;
-	std::cout.flush();
-
 	// Add to its value for each state following a summation, instead of the cross-sum. This operation iterates over the
 	// possible observations and selects the optimal policy for that subtree given the current set of alpha vectors in gamma.
 	for (const Observation *observation : *Z) {
-
-		std::cout << "\t\tB -- " << observation->get_name() << std::endl;
-		std::cout.flush();
-
 		// The argmax of alpha dot beta given the belief point, action, and observation.
 		PolicyAlphaVector *maxAlphaBAOmega = nullptr;
 		double maxAlphaDotBeta = 0.0;
 
 		// For each alpha vector in the set Gamma_{b, a, omega}, we have to consider a different gamma in Gamma^{t-1}.
 		for (PolicyAlphaVector *alphaGamma : gamma) {
-
-			std::cout << "\t\t\tC -- " << maxAlphaDotBeta << std::endl;
-			std::cout.flush();
-
 			// Note: It doesn't matter if we set the action here, since cross_sum will create new alpha vectors anyway.
 			PolicyAlphaVector *newAlpha = new PolicyAlphaVector();
 
@@ -236,9 +223,6 @@ PolicyAlphaVector *bellman_update_belief_state(const FiniteStates *S, const Fini
 				newAlpha->set(state, value);
 			}
 
-			std::cout << "\t\t\tD -- " << maxAlphaDotBeta << std::endl;
-			std::cout.flush();
-
 			// Compute the value at the belief state for this alpha vector.
 			double alphaDotBeta = newAlpha->compute_value(b);
 			if (maxAlphaBAOmega == nullptr || alphaDotBeta > maxAlphaDotBeta) {
@@ -254,23 +238,14 @@ PolicyAlphaVector *bellman_update_belief_state(const FiniteStates *S, const Fini
 				// it is not better than the current best.
 				delete newAlpha;
 			}
-			std::cout << "\t\t\tE -- " << maxAlphaDotBeta << std::endl;
-			std::cout.flush();
-
 		}
 
 		// Add this optimal value given the observation to the alpha vector we are computing.
 		*alphaBAStar += *maxAlphaBAOmega;
 
-		std::cout << "\t\tF -- " << maxAlphaDotBeta << std::endl;
-		std::cout.flush();
-
 		// Since the loop above allocates memory for the alpha vector, free this memory.
 		delete maxAlphaBAOmega;
 	}
-
-	std::cout << "\tDONE BELLMAN UPDATE!" << std::endl;
-	std::cout.flush();
 
 	return alphaBAStar;
 }

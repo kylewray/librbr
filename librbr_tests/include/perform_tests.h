@@ -37,7 +37,7 @@
 #define NUM_UNIFIED_FILE_TESTS 20
 #define NUM_UTILITIES_TESTS 1
 #define NUM_MDP_TESTS 6
-#define NUM_POMDP_TESTS 2
+#define NUM_POMDP_TESTS 6
 
 /**
  * Test the agents objects. Output the success or failure for each test.

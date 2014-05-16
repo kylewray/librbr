@@ -67,6 +67,24 @@ double SASORewards::get(const State *state, const Action *action, const State *n
 }
 
 /**
+ * Get the minimal R-value.
+ * @return The minimal R-value.
+ */
+double SASORewards::get_min() const
+{
+	return 0.0;
+}
+
+/**
+ * Get the maximal R-value.
+ * @return The maximal R-value.
+ */
+double SASORewards::get_max() const
+{
+	return 0.0;
+}
+
+/**
  * Reset the rewards, clearing the internal mapping.
  */
 void SASORewards::reset()

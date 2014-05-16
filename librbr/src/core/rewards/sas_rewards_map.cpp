@@ -33,6 +33,8 @@ SASRewardsMap::SASRewardsMap()
 {
 	stateWildcard = new NamedState("*");
 	actionWildcard = new Action("*");
+	Rmin = std::numeric_limits<double>::lowest() * -1.0;
+	Rmax = std::numeric_limits<double>::lowest();
 }
 
 /**
@@ -66,6 +68,13 @@ void SASRewardsMap::set(const State *state, const Action *action, const State *n
 	}
 
 	rewards[state][action][nextState] = reward;
+
+	if (Rmin > reward) {
+		Rmin = reward;
+	}
+	if (Rmax < reward) {
+		Rmax = reward;
+	}
 }
 
 /**
@@ -139,6 +148,8 @@ double SASRewardsMap::get(const State *state, const Action *action, const State 
 void SASRewardsMap::reset()
 {
 	rewards.clear();
+	Rmin = std::numeric_limits<double>::lowest() * -1.0;
+	Rmax = std::numeric_limits<double>::lowest();
 }
 
 /**
@@ -169,4 +180,22 @@ double SASRewardsMap::get_value(const State *state, const Action *action, const 
 	}
 
 	return gamma->second;
+}
+
+/**
+ * Get the minimal R-value.
+ * @return The minimal R-value.
+ */
+double SASRewardsMap::get_min() const
+{
+	return Rmin;
+}
+
+/**
+ * Get the maximal R-value.
+ * @return The maximal R-value.
+ */
+double SASRewardsMap::get_max() const
+{
+	return Rmax;
 }

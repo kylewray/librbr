@@ -26,6 +26,8 @@
 #include "../../../include/core/rewards/reward_exception.h"
 #include "../../../include/core/states/named_state.h"
 
+#include <limits.h>
+
 /**
  * The default constructor for the SASORewardsMap class.
  */
@@ -34,6 +36,8 @@ SASORewardsMap::SASORewardsMap()
 	stateWildcard = new NamedState("*");
 	actionWildcard = new Action("*");
 	observationWildcard = new Observation("*");
+	Rmin = std::numeric_limits<double>::lowest() * -1.0;
+	Rmax = std::numeric_limits<double>::lowest();
 }
 
 /**
@@ -72,6 +76,13 @@ void SASORewardsMap::set(const State *state, const Action *action, const State *
 	}
 
 	rewards[state][action][nextState][observation] = reward;
+
+	if (Rmin > reward) {
+		Rmin = reward;
+	}
+	if (Rmax < reward) {
+		Rmax = reward;
+	}
 }
 
 /**
@@ -124,6 +135,8 @@ double SASORewardsMap::get(const State *state, const Action *action, const State
 void SASORewardsMap::reset()
 {
 	rewards.clear();
+	Rmin = std::numeric_limits<double>::lowest() * -1.0;
+	Rmax = std::numeric_limits<double>::lowest();
 }
 
 /**
@@ -163,4 +176,22 @@ double SASORewardsMap::get_value(const State *state, const Action *action, const
 	}
 
 	return delta->second;
+}
+
+/**
+ * Get the minimal R-value.
+ * @return The minimal R-value.
+ */
+double SASORewardsMap::get_min() const
+{
+	return Rmin;
+}
+
+/**
+ * Get the maximal R-value.
+ * @return The maximal R-value.
+ */
+double SASORewardsMap::get_max() const
+{
+	return Rmax;
 }

@@ -52,15 +52,15 @@ int test_pomdp()
 	int numSuccesses = 0;
 	UnifiedFile file;
 
-	std::cout << "POMDP: Loading 'tiger.pomdp'...";
-	if (!file.load("resources/pomdp/tiger.pomdp")) {
+	std::cout << "POMDP: Loading 'tiger_finite.pomdp'...";
+	if (!file.load("resources/pomdp/tiger_finite.pomdp")) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
 		std::cout << " Failure." << std::endl;
 	}
 
-	std::cout << "POMDP: Solving 'tiger.pomdp' with POMDPValueIteration...";
+	std::cout << "POMDP: Solving 'tiger_finite.pomdp' with POMDPValueIteration...";
 
 	POMDP *pomdp = nullptr;
 
@@ -99,7 +99,7 @@ int test_pomdp()
 	delete policyAlphaVectors;
 	policyAlphaVectors = nullptr;
 
-	std::cout << "POMDP: Solving 'tiger.pomdp' with POMDPPBVI...";
+	std::cout << "POMDP: Solving 'tiger_finite.pomdp' with POMDPPBVI...";
 
 	POMDPPBVI pbvi;
 
@@ -163,29 +163,34 @@ int test_pomdp()
 	delete policyAlphaVectors;
 	policyAlphaVectors = nullptr;
 
-	/*
-	std::cout << "MDP: Loading 'grid_world_infinite_horizon.mdp'...";
-//	if (!file.load("/Users/infinite/Downloads/hallway.POMDP")) {
-	if (!file.load("tests/resources/mdp/grid_world_infinite_horizon.mdp")) {
+	std::cout << "POMDP: Loading 'tiger_infinite.pomdp'...";
+	if (!file.load("resources/pomdp/tiger_infinite.pomdp")) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
 		std::cout << " Failure." << std::endl;
 	}
 
-	std::cout << "MDP: Solving 'grid_world_infinite_horizon.mdp' with MDPValueIteration...";
+	std::cout << "POMDP: Solving 'tiger_infinite.pomdp' with POMDPValueIteration...";
 
-	mdp = file.get_mdp();
+	vi.set_num_iterations(5);
 
 	try {
-		mapPolicy = vi.solve(mdp);
+		pomdp = file.get_pomdp();
+		policyAlphaVectors = vi.solve(pomdp);
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
+	} catch (const CoreException &err) {
+		std::cout << " Failure." << std::endl;
 	} catch (const StateException &err) {
 		std::cout << " Failure." << std::endl;
 	} catch (const ActionException &err) {
 		std::cout << " Failure." << std::endl;
+	} catch (const ObservationException &err) {
+		std::cout << " Failure." << std::endl;
 	} catch (const StateTransitionException &err) {
+		std::cout << " Failure." << std::endl;
+	} catch (const ObservationTransitionException &err) {
 		std::cout << " Failure." << std::endl;
 	} catch (const RewardException &err) {
 		std::cout << " Failure." << std::endl;
@@ -193,24 +198,64 @@ int test_pomdp()
 		std::cout << " Failure." << std::endl;
 	}
 
-	mapPolicy->save("tests/tmp/test_mdp_value_iteration_infinite_horizon.policy_map");
+	// Save and destroy the alpha vectors.
+	if (pomdp != nullptr) {
+		policyAlphaVectors->save("tmp/test_pomdp_vi_infinite_horizon.pomdp_alpha_vectors",
+				(const FiniteStates *)pomdp->get_states());
+	}
 
-	delete mapPolicy;
-	mapPolicy = nullptr;
+	delete policyAlphaVectors;
+	policyAlphaVectors = nullptr;
 
-	std::cout << "MDP: Solving 'grid_world_infinite_horizon.mdp' with MDPPolicyIteration (Exact)...";
+	std::cout << "POMDP: Solving 'tiger_infinite.pomdp' with POMDPPBVI...";
 
-	MDPPolicyIteration piExact;
+	pbvi.set_num_expansion_iterations(2);
+//	pbvi.set_num_iterations(50);
+	pbvi.compute_num_update_iterations(pomdp, 0.01);
+	pbvi.reset();
 
 	try {
-		mapPolicy = piExact.solve(mdp);
+		const FiniteStates *states = (const FiniteStates *)pomdp->get_states();
+
+		BeliefState *b = new BeliefState();
+		b->set(states->get(0), 1.0);
+		b->set(states->get(1), 0.0);
+		pbvi.add_initial_belief_state(b);
+
+		b = new BeliefState();
+		b->set(states->get(0), 0.0);
+		b->set(states->get(1), 1.0);
+		pbvi.add_initial_belief_state(b);
+
+		b = new BeliefState();
+		b->set(states->get(0), 0.25);
+		b->set(states->get(1), 0.75);
+		pbvi.add_initial_belief_state(b);
+
+		b = new BeliefState();
+		b->set(states->get(0), 0.75);
+		b->set(states->get(1), 0.25);
+		pbvi.add_initial_belief_state(b);
+
+		b = new BeliefState();
+		b->set(states->get(0), 0.5);
+		b->set(states->get(1), 0.5);
+		pbvi.add_initial_belief_state(b);
+
+		policyAlphaVectors = pbvi.solve(pomdp);
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
+	} catch (const CoreException &err) {
+		std::cout << " Failure." << std::endl;
 	} catch (const StateException &err) {
 		std::cout << " Failure." << std::endl;
 	} catch (const ActionException &err) {
 		std::cout << " Failure." << std::endl;
+	} catch (const ObservationException &err) {
+		std::cout << " Failure." << std::endl;
 	} catch (const StateTransitionException &err) {
+		std::cout << " Failure." << std::endl;
+	} catch (const ObservationTransitionException &err) {
 		std::cout << " Failure." << std::endl;
 	} catch (const RewardException &err) {
 		std::cout << " Failure." << std::endl;
@@ -218,40 +263,16 @@ int test_pomdp()
 		std::cout << " Failure." << std::endl;
 	}
 
-	mapPolicy->save("tests/tmp/test_mdp_policy_iteration_exact_infinite_horizon.policy_map");
-
-	delete mapPolicy;
-	mapPolicy = nullptr;
-
-	std::cout << "MDP: Solving 'grid_world_infinite_horizon.mdp' with MDPPolicyIteration (Modified with k=5)...";
-
-	MDPPolicyIteration piModified(5);
-
-	try {
-		mapPolicy = piModified.solve(mdp);
-		std::cout << " Success." << std::endl;
-		numSuccesses++;
-	} catch (const StateException &err) {
-		std::cout << " Failure." << std::endl;
-	} catch (const ActionException &err) {
-		std::cout << " Failure." << std::endl;
-	} catch (const StateTransitionException &err) {
-		std::cout << " Failure." << std::endl;
-	} catch (const RewardException &err) {
-		std::cout << " Failure." << std::endl;
-	} catch (const PolicyException &err) {
-		std::cout << " Failure." << std::endl;
+	// Save and destroy the alpha vectors. Also, We are done with the tiger problem, so destroy it.
+	if (pomdp != nullptr) {
+		policyAlphaVectors->save("tmp/test_pomdp_pbvi_infinite_horizon.pomdp_alpha_vectors",
+				(const FiniteStates *)pomdp->get_states());
+		delete pomdp;
 	}
+	pomdp = nullptr;
 
-	mapPolicy->save("tests/tmp/test_mdp_policy_iteration_modified_infinite_horizon.policy_map");
-
-	delete mdp;
-	mdp = nullptr;
-
-	delete mapPolicy;
-	mapPolicy = nullptr;
-
-	*/
+	delete policyAlphaVectors;
+	policyAlphaVectors = nullptr;
 
 	return numSuccesses;
 }

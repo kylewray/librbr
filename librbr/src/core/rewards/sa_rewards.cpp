@@ -109,6 +109,24 @@ double SARewards::get(const State *state, const Action *action, const State *nex
 }
 
 /**
+ * Get the minimal R-value.
+ * @return The minimal R-value.
+ */
+double SARewards::get_min() const
+{
+	return 0.0;
+}
+
+/**
+ * Get the maximal R-value.
+ * @return The maximal R-value.
+ */
+double SARewards::get_max() const
+{
+	return 0.0;
+}
+
+/**
  * Reset the rewards, clearing the internal mapping.
  */
 void SARewards::reset()

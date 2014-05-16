@@ -28,6 +28,7 @@
 #include "../../include/core/policy/policy_alpha_vectors.h"
 #include "../../include/core/policy/policy_alpha_vector.h"
 
+#include "../../include/core/core_exception.h"
 #include "../../include/core/states/state_exception.h"
 #include "../../include/core/actions/action_exception.h"
 #include "../../include/core/observations/observation_exception.h"
@@ -40,21 +41,22 @@
 #include <math.h>
 
 /**
- * The default constructor for the POMDPValueIteration class.
+ * The default constructor for the POMDPValueIteration class. Default number of iterations
+ * for infinite horizon POMDPs is 1.
  */
 POMDPValueIteration::POMDPValueIteration()
 {
-	epsilon = 0.001;
+	set_num_iterations(1);
 }
 
 /**
  * A constructor for the POMDPValueIteration class which allows for the specification
- * of the convergence criterion.
- * @param tolerance The tolerance which determines convergence of value iteration.
+ * of the number of iterations to run for infinite horizon. Default is 1.
+ * @param numIterations The number of iterations to run for infinite horizon POMDPs.
  */
-POMDPValueIteration::POMDPValueIteration(double tolerance)
+POMDPValueIteration::POMDPValueIteration(unsigned int numIterations)
 {
-	epsilon = tolerance;
+	set_num_iterations(numIterations);
 }
 
 /**
@@ -64,22 +66,76 @@ POMDPValueIteration::~POMDPValueIteration()
 { }
 
 /**
+ * Set the number of iterations to run for infinite horizon POMDPs.
+ * @param numIterations The number of iterations to run for infinite horizon POMDPs.
+ */
+void POMDPValueIteration::set_num_iterations(unsigned int numIterations)
+{
+	iterations = numIterations;
+	if (iterations == 0) {
+		iterations = 1;
+	}
+}
+
+/**
+ * Get the number of iterations to run for infinite horizon POMDPs.
+ * @return The number of iterations to run for infinite horizon POMDPs.
+ */
+unsigned int POMDPValueIteration::get_num_iterations()
+{
+	return iterations;
+}
+
+/**
+ * Compute the optimal number of iterations to run for infinite horizon POMDPs, given
+ * the desired tolerance, requiring knowledge of the reward function.
+ * @param pomdp 			The partially observable Markov decision process to use.
+ * @param epsilon			The desired tolerance between value functions to check for convergence.
+ * @throws RewardException	The POMDP did not have a SASORewards rewards object.
+ */
+void POMDPValueIteration::compute_num_iterations(const POMDP *pomdp, double epsilon)
+{
+	// Handle the trivial case.
+	if (pomdp == nullptr) {
+		throw CoreException();
+	}
+
+	// Attempt to convert the rewards object into SASORewards.
+	const SASORewards *R = dynamic_cast<const SASORewards *>(pomdp->get_rewards());
+	if (R == nullptr) {
+		throw RewardException();
+	}
+
+	const Horizon *h = pomdp->get_horizon();
+
+	// Make sure we do not take the log of 0.
+	double Rmin = R->get_min();
+	double Rmax = R->get_max();
+	if (Rmax - Rmin < 0.000001) {
+		Rmax = Rmin + 0.000001;
+	}
+
+	iterations = (int)((log(epsilon) - log(Rmax - Rmin)) / log(h->get_discount_factor()));
+}
+
+/**
  * Solve the POMDP provided using value iteration.
  * @param pomdp The partially observable Markov decision process to solve.
  * @return Return the optimal policy as a finite state controller (infinite horizon) or tree (finite horizon).
+ * @throws CoreException					The POMDP was null.
  * @throws StateException					The POMDP did not have a FiniteStates states object.
  * @throws ActionException					The POMDP did not have a FiniteActions actions object.
  * @throws ObservationException				The POMDP did not have a FiniteObservations observations object.
  * @throws StateTransitionsException		The POMDP did not have a FiniteStateTransitions state transitions object.
  * @throws ObservationTransitionsException	The POMDP did not have a FiniteObservationTransitions observation transitions object.
- * @throws RewardException					The POMDP did not have a SASRewards rewards object.
+ * @throws RewardException					The POMDP did not have a SASORewards rewards object.
  * @throws PolicyException					An error occurred computing the policy.
  */
 PolicyAlphaVectors *POMDPValueIteration::solve(const POMDP *pomdp)
 {
 	// Handle the trivial case.
 	if (pomdp == nullptr) {
-		return nullptr;
+		throw CoreException();
 	}
 
 	// Attempt to convert the states object into FiniteStates.
@@ -159,7 +215,7 @@ PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const FiniteStates
 	bool current = false;
 
 	// Continue to iterate until the horizon has been reached.
-	for (int t = 0; t < h->get_horizon(); t++){
+	for (int t = 0; t < h->get_horizon(); t++) {
 		// Compute the new set of alpha vectors, gamma.
 		for (const Action *action : *A) {
 			std::vector<PolicyAlphaVector *> alphaVector = bellman_update_cross_sum(S, A, Z, T, O, R, h,
@@ -208,100 +264,49 @@ PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(const FiniteStat
 		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
 		const Horizon *h)
 {
-	return nullptr;
+	// Create the policy of alpha vectors variable. Set the horizon, to make the object's policy differ over time.
+	PolicyAlphaVectors *policy = new PolicyAlphaVectors(h->get_horizon());
 
-	/*
 	// Before anything, cache Gamma_{a, *} for all actions. This is used in every cross-sum computation.
-	std::map<const Action *, std::vector<POMDPAlphaVector *> > gammaAStar;
+	std::map<const Action *, std::vector<PolicyAlphaVector *> > gammaAStar;
 	for (const Action *action : *A) {
 		gammaAStar[action].push_back(create_gamma_a_star(S, A, Z, T, O, R, action));
 	}
 
 	// Create the set of alpha vectors, which we call Gamma. As well as the previous Gamma set.
-	std::vector<POMDPAlphaVector *> gamma[2];
+	std::vector<PolicyAlphaVector *> gamma[2];
 	bool current = false;
 
-	// Continue to iterate until the maximum difference between two V[s]'s is less than the tolerance.
-	double convergenceCriterion = epsilon * (1.0 - h->get_discount_factor()) / h->get_discount_factor();
-	double delta = convergenceCriterion + 1.0;
-
-	while (delta > convergenceCriterion) {
-		delta = 0.0;
-
+	// Continue to iterate until the number of iterations has been reached.
+	for (int t = 0; t < iterations; t++) {
 		// Compute the new set of alpha vectors, gamma.
 		for (const Action *action : *A) {
-			std::vector<POMDPAlphaVector *> alphaVector = bellman_update(S, A, Z, T, O, R, h,
-					action, gammaAStar[action], gamma[current]);
+			std::vector<PolicyAlphaVector *> alphaVector = bellman_update_cross_sum(S, A, Z, T, O, R, h,
+					gammaAStar[action], gamma[!current], action);
 			gamma[current].insert(gamma[current].end(), alphaVector.begin(), alphaVector.end());
 		}
 
-		// Prune alpha vectors by solving a linear program.
-//		OsiSolverInterface *si = new OsiClpSolverInterface();
-//
-//		si
-//
-//		delete si;
+		// Prune the dominated alpha vectors from the set.
+		PolicyAlphaVectors::prune_dominated(S, gamma[current]);
 
-		// NOTE: Don't forget to swap "current" variable!
-		// NOTE: Don't forget to free memory of the NEW current after you swap the variable!
+		// Add the current gamma to the policy object, then call the prune_linear_program static method.
+		// Note: This transfers the responsibility of memory management to the PolicyAlphaVectors object.
+		policy->set(gamma[current]);
 
-		// TODO: Compute delta by looking at the max_{s in S} |max_{alpha in gamma} alpha[s] - max_{alpha in gammaPrev} gammaPrev[s]|.
-		// HACK: TERMINATE IMMEDIATELY!
-//		delta = ???;
+		// Prepare the next time step's gamma by clearing it. Remember again, we don't free the memory
+		// because policy manages the previous time step's gamma (above).
+		current = !current;
+		gamma[current].clear();
 	}
-
-	// NOTE: Don't forget to free the memory of the PREVIOUS gamma (i.e., gamma[!current]), and then return/use gamma[current].
 
 	// Free the memory of Gamma_{a, *}.
 	for (const Action *action : *A) {
-		for (POMDPAlphaVector *alphaVector : gammaAStar[action]) {
+		for (PolicyAlphaVector *alphaVector : gammaAStar[action]) {
 			delete alphaVector;
 		}
 		gammaAStar[action].clear();
 	}
 	gammaAStar.clear();
 
-	return nullptr;
-	*/
-
-
-
-
-
-
-	/*
-	// Create the policy based on the horizon.
-	PolicyFSC *policy = new PolicyFSC(h);
-
-	// The value of the states.
-	std::map<State *, double> V;
-
-	// Continue to iterate until the maximum difference between two V[s]'s is less than the tolerance.
-	double convergenceCriterion = epsilon * (1.0 - h->get_discount_factor()) / h->get_discount_factor();
-	double delta = convergenceCriterion + 1.0;
-
-	while (delta > convergenceCriterion) {
-		delta = 0.0;
-
-		// For all the states, compute V(s).
-		for (State *s : *S) {
-			Action *aBest = nullptr;
-			double Vs = V[s];
-
-			// Perform the Bellman update, which modifies V and aBest such that V(s) = max Q(s, a)
-			// and aBest = argmax Q(s, a).
-			bellman_update(S, A, T, R, h, s, V, aBest);
-
-			// Find the maximum difference, as part of our convergence criterion check.
-			if (fabs(V[s] - Vs) > delta) {
-				delta = fabs(V[s] - Vs);
-			}
-
-			// Set the policy's action, which will yield the optimal policy at the end.
-			policy->set(s, aBest);
-		}
-	}
-
 	return policy;
-	*/
 }

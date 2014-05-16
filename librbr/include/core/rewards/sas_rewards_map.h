@@ -90,6 +90,18 @@ public:
 			const Observation *observation) const;
 
 	/**
+	 * Get the minimal R-value.
+	 * @return The minimal R-value.
+	 */
+	virtual double get_min() const;
+
+	/**
+	 * Get the maximal R-value.
+	 * @return The maximal R-value.
+	 */
+	virtual double get_max() const;
+
+	/**
 	 * Reset the rewards, clearing the internal mapping.
 	 */
 	virtual void reset();
@@ -120,6 +132,16 @@ private:
 	 * A special action (implicitly constant) referring to an action wildcard.
 	 */
 	Action *actionWildcard;
+
+	/**
+	 * The minimum R-value.
+	 */
+	double Rmin;
+
+	/**
+	 * The maximum R-value.
+	 */
+	double Rmax;
 
 };
 
