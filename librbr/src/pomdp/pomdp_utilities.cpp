@@ -58,7 +58,7 @@ PolicyAlphaVector *create_gamma_a_star(const FiniteStates *S, const FiniteAction
 }
 
 /**
- * Perform the belief state update equation on the current belief.
+ * Perform the belief state update equation on the current belief. This creates a new belief state in memory.
  * @param S				The finite states object.
  * @param T				The finite state transition function.
  * @param O				The finite observation transition function.
@@ -67,9 +67,10 @@ PolicyAlphaVector *create_gamma_a_star(const FiniteStates *S, const FiniteAction
  * @param observation	The observation observed after taking the action in the current belief state.
  * @return The resultant new belief state.
  */
-BeliefState belief_state_update(const BeliefState &belief, const FiniteStates *S, const FiniteStateTransitions *T,
-		const FiniteObservationTransitions *O, const Action *action, const Observation *observation) {
-	BeliefState nextBelief;
+BeliefState *belief_state_update(const FiniteStates *S, const FiniteStateTransitions *T,
+		const FiniteObservationTransitions *O, const BeliefState *belief, const Action *action,
+		const Observation *observation) {
+	BeliefState *nextBelief = new BeliefState();
 
 	// First, compute all of the numerators and the denominator independently.
 	double N = 0.0;
@@ -77,17 +78,17 @@ BeliefState belief_state_update(const BeliefState &belief, const FiniteStates *S
 		double b = 0.0;
 
 		for (const State *state : *S) {
-			b += T->get(state, action, nextState) * belief.get(state);
+			b += T->get(state, action, nextState) * belief->get(state);
 		}
 		b *= O->get(action, nextState, observation);
 
-		nextBelief.set(nextState, b);
+		nextBelief->set(nextState, b);
 		N += b;
 	}
 
 	// Normalize by the denominator.
 	for (const State *nextState : *S) {
-		nextBelief.set(nextState, nextBelief.get(nextState) / N);
+		nextBelief->set(nextState, nextBelief->get(nextState) / N);
 	}
 
 	return nextBelief;

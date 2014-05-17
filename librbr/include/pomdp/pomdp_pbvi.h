@@ -43,6 +43,7 @@
  * List the possible expansion rules available while using PBVI.
  */
 enum POMDPPBVIExpansionRule {
+	NONE,
 	RANDOM_BELIEF_SELECTION,
 	STOCHASTIC_SIMULATION_RANDOM_ACTION,
 	STOCHASTIC_SIMULATION_GREEDY_ACTION,
@@ -218,18 +219,37 @@ private:
 
 	/**
 	 * Expand the set of beliefs following Stochastic Simulation with Random Actions.
+	 * @param S The finite states.
+	 * @param A The finite actions.
+	 * @param Z The finite observations.
+	 * @param T The finite state transition function.
+	 * @param O The finite observation transition function.
 	 */
-	void expand_stochastic_simulation_random_actions();
+	void expand_stochastic_simulation_random_actions(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+			const FiniteStateTransitions *T, const FiniteObservationTransitions *O);
 
 	/**
 	 * Expand the set of beliefs following Stochastic Simulation with Greedy Action.
+	 * @param S 	The finite states.
+	 * @param A 	The finite actions.
+	 * @param Z 	The finite observations.
+	 * @param T 	The finite state transition function.
+	 * @param O 	The finite observation transition function.
+	 * @param gamma The current set of alpha vectors.
 	 */
-	void expand_stochastic_simulation_greedy_action();
+	void expand_stochastic_simulation_greedy_action(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+			const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const std::vector<PolicyAlphaVector *> &gamma);
 
 	/**
 	 * Expand the set of beliefs following Stochastic Simulation with Exploratory Action.
+	 * @param S The finite states.
+	 * @param A The finite actions.
+	 * @param Z The finite observations.
+	 * @param T The finite state transition function.
+	 * @param O The finite observation transition function.
 	 */
-	void expand_stochastic_simulation_exploratory_action();
+	void expand_stochastic_simulation_exploratory_action(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+			const FiniteStateTransitions *T, const FiniteObservationTransitions *O);
 
 	/**
 	 * Expand the set of beliefs following Greedy Error Reduction.

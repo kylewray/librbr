@@ -486,17 +486,19 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(const FiniteStates *S, con
 
 		// Perform an expansion based on the rule the user wishes to use.
 		switch (rule) {
+		case POMDPPBVIExpansionRule::NONE:
+			break;
 		case POMDPPBVIExpansionRule::RANDOM_BELIEF_SELECTION:
 			expand_random_belief_selection(S);
 			break;
 		case POMDPPBVIExpansionRule::STOCHASTIC_SIMULATION_RANDOM_ACTION:
-			expand_stochastic_simulation_random_actions();
+			expand_stochastic_simulation_random_actions(S, A, Z, T, O);
 			break;
 		case POMDPPBVIExpansionRule::STOCHASTIC_SIMULATION_GREEDY_ACTION:
-			expand_stochastic_simulation_greedy_action();
+			expand_stochastic_simulation_greedy_action(S, A, Z, T, O, gamma[!current]);
 			break;
 		case POMDPPBVIExpansionRule::STOCHASTIC_SIMULATION_EXPLORATORY_ACTION:
-			expand_stochastic_simulation_exploratory_action();
+			expand_stochastic_simulation_exploratory_action(S, A, Z, T, O);
 			break;
 		case POMDPPBVIExpansionRule::GREEDY_ERROR_REDUCTION:
 			expand_greedy_error_reduction();
@@ -523,15 +525,14 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(const FiniteStates *S, con
 	return policy;
 }
 
-#include <iostream>
-
 /**
  * Expand the set of beliefs following Random Belief Selection.
- *
+ * @param S The finite states.
  */
 void POMDPPBVI::expand_random_belief_selection(const FiniteStates *S)
 {
 	std::vector<const BeliefState *> Bnew;
+
 	for (int b = 0; b < B.size(); b++) {
 		std::vector<double> bTmp;
 		bTmp.resize(S->get_num_states());
@@ -561,35 +562,270 @@ void POMDPPBVI::expand_random_belief_selection(const FiniteStates *S)
 	}
 
 	B.insert(B.end(), Bnew.begin(), Bnew.end());
-
-//	std::cout << "New Size of B = " << B.size() << std::endl;
-//	for (const BeliefState *b : B) {
-//		std::cout << b->get(S->get(0)) << "  " << b->get(S->get(1)) << std::endl;
-//	}
 }
 
 /**
  * Expand the set of beliefs following Stochastic Simulation with Random Actions.
+ * @param S The finite states.
+ * @param A The finite actions.
+ * @param Z The finite observations.
+ * @param T The finite state transition function.
+ * @param O The finite observation transition function.
  */
-void POMDPPBVI::expand_stochastic_simulation_random_actions()
+void POMDPPBVI::expand_stochastic_simulation_random_actions(const FiniteStates *S, const FiniteActions *A,
+		const FiniteObservations *Z, const FiniteStateTransitions *T, const FiniteObservationTransitions *O)
 {
+	std::vector<const BeliefState *> Bnew;
 
+	for (const BeliefState *b : B) {
+		// Randomly select the state following Multinomial(b).
+		const State *state = nullptr;
+
+		double rnd = (double)rand() / (double)RAND_MAX;
+		double sum = 0.0f;
+
+		for (const State *s : *S) {
+			sum += b->get(s);
+			if (sum >= rnd) {
+				state = s;
+				break;
+			}
+		}
+
+		// Randomly select the action following Uniform(A).
+		const Action *action = nullptr;
+
+		rnd = (double)((int)rand() % A->get_num_actions());
+		sum = 0.0;
+
+		for (const Action *a : *A) {
+			sum += 1.0;
+			if (sum >= rnd) {
+				action = a;
+				break;
+			}
+		}
+
+		// Randomly select the state following Multinomial(T(s, a, *)).
+		const State *nextState = nullptr;
+
+		rnd = (double)rand() / (double)RAND_MAX;
+		sum = 0.0f;
+
+		for (const State *s : *S) {
+			sum += T->get(state, action, s);
+			if (sum >= rnd) {
+				nextState = s;
+				break;
+			}
+		}
+
+		// Randomly select the state following Multinomial(O(a, s', *)).
+		const Observation *observation = nullptr;
+
+		rnd = (double)rand() / (double)RAND_MAX;
+		sum = 0.0f;
+
+		for (const Observation *z : *Z) {
+			sum += O->get(action, nextState, z);
+			if (sum >= rnd) {
+				observation = z;
+				break;
+			}
+		}
+
+		BeliefState *bNew = belief_state_update(S, T, O, b, action, observation);
+		Bnew.push_back(bNew);
+	}
+
+	B.insert(B.end(), Bnew.begin(), Bnew.end());
 }
 
 /**
  * Expand the set of beliefs following Stochastic Simulation with Greedy Action.
+ * @param S 	The finite states.
+ * @param A 	The finite actions.
+ * @param Z 	The finite observations.
+ * @param T 	The finite state transition function.
+ * @param O 	The finite observation transition function.
+ * @param gamma The current set of alpha vectors.
  */
-void POMDPPBVI::expand_stochastic_simulation_greedy_action()
+void POMDPPBVI::expand_stochastic_simulation_greedy_action(const FiniteStates *S, const FiniteActions *A,
+		const FiniteObservations *Z, const FiniteStateTransitions *T, const FiniteObservationTransitions *O,
+		const std::vector<PolicyAlphaVector *> &gamma)
 {
+	std::vector<const BeliefState *> Bnew;
 
+	for (const BeliefState *b : B) {
+		// Randomly select the state following Multinomial(b).
+		const State *state = nullptr;
+
+		double rnd = (double)rand() / (double)RAND_MAX;
+		double sum = 0.0f;
+
+		for (const State *s : *S) {
+			sum += b->get(s);
+			if (sum >= rnd) {
+				state = s;
+				break;
+			}
+		}
+
+		// Randomly select the action following Uniform(A) with probability epsilon. Or, with probability
+		// 1 - epsilon, select the 'optimal' action.
+		const Action *action = nullptr;
+
+		// Assume epsilon is 0.1.
+		if ((int)rand() % 10 == 0) {
+			// Explore the actions.
+			rnd = (double)((int)rand() % A->get_num_actions());
+			sum = 0.0;
+
+			for (const Action *a : *A) {
+				sum += 1.0;
+				if (sum >= rnd) {
+					action = a;
+					break;
+				}
+			}
+		} else {
+			// Optimize the action.
+			double maxVal = std::numeric_limits<double>::lowest();
+			for (const PolicyAlphaVector *alpha : gamma) {
+				double val = alpha->compute_value(b);
+				if (val > maxVal) {
+					maxVal = val;
+					action = alpha->get_action();
+				}
+			}
+		}
+
+		// Randomly select the state following Multinomial(T(s, a, *)).
+		const State *nextState = nullptr;
+
+		rnd = (double)rand() / (double)RAND_MAX;
+		sum = 0.0f;
+
+		for (const State *s : *S) {
+			sum += T->get(state, action, s);
+			if (sum >= rnd) {
+				nextState = s;
+				break;
+			}
+		}
+
+		// Randomly select the state following Multinomial(O(a, s', *)).
+		const Observation *observation = nullptr;
+
+		rnd = (double)rand() / (double)RAND_MAX;
+		sum = 0.0f;
+
+		for (const Observation *z : *Z) {
+			sum += O->get(action, nextState, z);
+			if (sum >= rnd) {
+				observation = z;
+				break;
+			}
+		}
+
+		BeliefState *bNew = belief_state_update(S, T, O, b, action, observation);
+		Bnew.push_back(bNew);
+	}
+
+	B.insert(B.end(), Bnew.begin(), Bnew.end());
 }
 
 /**
  * Expand the set of beliefs following Stochastic Simulation with Exploratory Action.
+ * @param S The finite states.
+ * @param A The finite actions.
+ * @param Z The finite observations.
+ * @param T The finite state transition function.
+ * @param O The finite observation transition function.
  */
-void POMDPPBVI::expand_stochastic_simulation_exploratory_action()
+void POMDPPBVI::expand_stochastic_simulation_exploratory_action(const FiniteStates *S, const FiniteActions *A,
+		const FiniteObservations *Z, const FiniteStateTransitions *T, const FiniteObservationTransitions *O)
 {
+	std::vector<const BeliefState *> Bnew;
 
+	for (const BeliefState *b : B) {
+		BeliefState *bNew = nullptr;
+		double bVal = std::numeric_limits<double>::lowest();
+
+		// For each action, we will randomly generate a belief.
+		for (const Action *action : *A) {
+			// Randomly select the state following Multinomial(b).
+			const State *state = nullptr;
+
+			double rnd = (double)rand() / (double)RAND_MAX;
+			double sum = 0.0f;
+
+			for (const State *s : *S) {
+				sum += b->get(s);
+				if (sum >= rnd) {
+					state = s;
+					break;
+				}
+			}
+
+			// Randomly select the state following Multinomial(T(s, a, *)).
+			const State *nextState = nullptr;
+
+			rnd = (double)rand() / (double)RAND_MAX;
+			sum = 0.0f;
+
+			for (const State *s : *S) {
+				sum += T->get(state, action, s);
+				if (sum >= rnd) {
+					nextState = s;
+					break;
+				}
+			}
+
+			// Randomly select the state following Multinomial(O(a, s', *)).
+			const Observation *observation = nullptr;
+
+			rnd = (double)rand() / (double)RAND_MAX;
+			sum = 0.0f;
+
+			for (const Observation *z : *Z) {
+				sum += O->get(action, nextState, z);
+				if (sum >= rnd) {
+					observation = z;
+					break;
+				}
+			}
+
+			// Compute the belief given this action, and the other selected items.
+			BeliefState *ba = belief_state_update(S, T, O, b, action, observation);
+
+			// Compute the min over the belief points, finding the 1-norm between the ba and all
+			// other belief points possible.
+			double baMin = std::numeric_limits<double>::lowest();
+			for (const BeliefState *bp : Bnew) {
+				sum = 0.0;
+				for (const State *s : *S) {
+					sum += std::fabs(ba->get(s) - bp->get(s));
+				}
+				if (sum < baMin) {
+					baMin = sum;
+				}
+			}
+
+			// Finally, we are computing the max over the actions. Thus, if this is a better max,
+			// then store it, otherwise destroy it.
+			if (baMin > bVal) {
+				bNew = ba;
+				bVal = baMin;
+			} else {
+				delete ba;
+			}
+		}
+
+		Bnew.push_back(bNew);
+	}
+
+	B.insert(B.end(), Bnew.begin(), Bnew.end());
 }
 
 /**

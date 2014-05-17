@@ -209,6 +209,7 @@ int test_pomdp()
 
 	std::cout << "POMDP: Solving 'tiger_infinite.pomdp' with POMDPPBVI...";
 
+	pbvi.set_expansion_rule(POMDPPBVIExpansionRule::STOCHASTIC_SIMULATION_EXPLORATORY_ACTION);
 	pbvi.set_num_expansion_iterations(2);
 //	pbvi.set_num_iterations(50);
 	pbvi.compute_num_update_iterations(pomdp, 0.01);
