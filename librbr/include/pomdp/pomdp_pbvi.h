@@ -212,13 +212,19 @@ private:
 			const Horizon *h);
 
 	/**
-	 * Expand the set of beliefs following Random Belief Selection.
+	 * Expand the set of beliefs following Random Belief Selection. This works by randomly selecting a set of new
+	 * belief points at each expansion. One new point is selected for each current belief point, doubling the total
+	 * quantity each time.
 	 * @param S The finite states.
 	 */
 	void expand_random_belief_selection(const FiniteStates *S);
 
 	/**
-	 * Expand the set of beliefs following Stochastic Simulation with Random Actions.
+	 * Expand the set of beliefs following Stochastic Simulation with Random Actions. "Stochastic Simulation" means it
+	 * generates belief points which are reachable given the initial set of belief points, i.e., it traverses the belief
+	 * tree. In this case, for each belief point it randomly selects a state, proportional to the belief, then randomly
+	 * selects an action (uniformly), then randomly selects a next state and next observation. The result is a new belief
+	 * point.
 	 * @param S The finite states.
 	 * @param A The finite actions.
 	 * @param Z The finite observations.
@@ -229,7 +235,11 @@ private:
 			const FiniteStateTransitions *T, const FiniteObservationTransitions *O);
 
 	/**
-	 * Expand the set of beliefs following Stochastic Simulation with Greedy Action.
+	 * Expand the set of beliefs following Stochastic Simulation with Greedy Action. "Stochastic Simulation" means it
+	 * generates belief points which are reachable given the initial set of belief points, i.e., it traverses the belief
+	 * tree. In this case, for each belief point it randomly selects a state, proportional to the belief, then randomly
+	 * rolls a die. If it is less than some epsilon, it randomly selects an action (uniformly); otherwise, it selects the
+	 * optimal action. Next, it randomly selects a next state and next observation. The result is a new belief point.
 	 * @param S 	The finite states.
 	 * @param A 	The finite actions.
 	 * @param Z 	The finite observations.
@@ -241,7 +251,10 @@ private:
 			const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const std::vector<PolicyAlphaVector *> &gamma);
 
 	/**
-	 * Expand the set of beliefs following Stochastic Simulation with Exploratory Action.
+	 * Expand the set of beliefs following Stochastic Simulation with Exploratory Action. "Stochastic Simulation" means it
+	 * generates belief points which are reachable given the initial set of belief points, i.e., it traverses the belief
+	 * tree. In this case, for each belief point it adds a new belief point which maximizes over the actions, given a randomly
+	 * selected next belief point following this action, selecting the point which is farthest away from the closest belief point.
 	 * @param S The finite states.
 	 * @param A The finite actions.
 	 * @param Z The finite observations.
@@ -252,7 +265,7 @@ private:
 			const FiniteStateTransitions *T, const FiniteObservationTransitions *O);
 
 	/**
-	 * Expand the set of beliefs following Greedy Error Reduction.
+	 * Expand the set of beliefs following Greedy Error Reduction. TODO: Implement.
 	 */
 	void expand_greedy_error_reduction();
 

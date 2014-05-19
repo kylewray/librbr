@@ -342,49 +342,77 @@ PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(const FiniteStates *S, const
 		gamma[!current].push_back(zeroAlphaVector);
 	}
 
-	// Continue to iterate until the horizon has been reached.
-	for (int t = 0; t < h->get_horizon(); t++){
-		// For each of the belief points, we must compute the optimal alpha vector.
-		for (const BeliefState *belief : B) {
-			PolicyAlphaVector *maxAlphaB = nullptr;
-			double maxAlphaDotBeta = 0.0;
+	// Perform a predefined number of expansions. Each update adds more belief points to the set B.
+	for (int e = 0; e < expansions; e++) {
+		// Continue to iterate until the horizon has been reached.
+		for (int t = 0; t < h->get_horizon(); t++){
+			// For each of the belief points, we must compute the optimal alpha vector.
+			for (const BeliefState *belief : B) {
+				PolicyAlphaVector *maxAlphaB = nullptr;
+				double maxAlphaDotBeta = 0.0;
 
-			// Compute the optimal alpha vector for this belief state.
-			for (const Action *action : *A) {
-				PolicyAlphaVector *alphaBA = bellman_update_belief_state(S, A, Z, T, O, R, h,
-						gammaAStar[action], gamma[!current], action, belief);
+				// Compute the optimal alpha vector for this belief state.
+				for (const Action *action : *A) {
+					PolicyAlphaVector *alphaBA = bellman_update_belief_state(S, A, Z, T, O, R, h,
+							gammaAStar[action], gamma[!current], action, belief);
 
-				double alphaDotBeta = alphaBA->compute_value(belief);
-				if (maxAlphaB == nullptr || alphaDotBeta > maxAlphaDotBeta) {
-					// This is the maximal alpha vector, so delete the old one.
-					if (maxAlphaB != nullptr) {
-						delete maxAlphaB;
+					double alphaDotBeta = alphaBA->compute_value(belief);
+					if (maxAlphaB == nullptr || alphaDotBeta > maxAlphaDotBeta) {
+						// This is the maximal alpha vector, so delete the old one.
+						if (maxAlphaB != nullptr) {
+							delete maxAlphaB;
+						}
+						maxAlphaB = alphaBA;
+						maxAlphaDotBeta = alphaDotBeta;
+					} else {
+						// This was not the maximal alpha vector, so delete it.
+						delete alphaBA;
 					}
-					maxAlphaB = alphaBA;
-					maxAlphaDotBeta = alphaDotBeta;
-				} else {
-					// This was not the maximal alpha vector, so delete it.
-					delete alphaBA;
+				}
+
+				gamma[current].push_back(maxAlphaB);
+			}
+
+			// Add the current gamma to the policy object. Note: This transfers the responsibility of
+			// memory management to the PolicyAlphaVectors object.
+			policy->set(t, gamma[current]);
+
+			// Prepare the next time step's gamma by clearing it. Remember again, we don't free the memory
+			// because policy manages the previous time step's gamma (above). If this is the first horizon,
+			// however, we actually do need to clear the set of zero alpha vectors.
+			current = !current;
+			if (h == 0) {
+				for (PolicyAlphaVector *zeroAlphaVector : gamma[current]) {
+					delete zeroAlphaVector;
 				}
 			}
-
-			gamma[current].push_back(maxAlphaB);
+			gamma[current].clear();
 		}
 
-		// Add the current gamma to the policy object. Note: This transfers the responsibility of
-		// memory management to the PolicyAlphaVectors object.
-		policy->set(t, gamma[current]);
-
-		// Prepare the next time step's gamma by clearing it. Remember again, we don't free the memory
-		// because policy manages the previous time step's gamma (above). If this is the first horizon,
-		// however, we actually do need to clear the set of zero alpha vectors.
-		current = !current;
-		if (h == 0) {
-			for (PolicyAlphaVector *zeroAlphaVector : gamma[current]) {
-				delete zeroAlphaVector;
-			}
-		}
-		gamma[current].clear();
+		// Perform an expansion based on the rule the user wishes to use.
+		switch (rule) {
+		case POMDPPBVIExpansionRule::NONE:
+			e = expansions; // Stop immediately if the user does not want to expand.
+			break;
+		case POMDPPBVIExpansionRule::RANDOM_BELIEF_SELECTION:
+			expand_random_belief_selection(S);
+			break;
+		case POMDPPBVIExpansionRule::STOCHASTIC_SIMULATION_RANDOM_ACTION:
+			expand_stochastic_simulation_random_actions(S, A, Z, T, O);
+			break;
+		case POMDPPBVIExpansionRule::STOCHASTIC_SIMULATION_GREEDY_ACTION:
+			expand_stochastic_simulation_greedy_action(S, A, Z, T, O, gamma[!current]);
+			break;
+		case POMDPPBVIExpansionRule::STOCHASTIC_SIMULATION_EXPLORATORY_ACTION:
+			expand_stochastic_simulation_exploratory_action(S, A, Z, T, O);
+			break;
+		case POMDPPBVIExpansionRule::GREEDY_ERROR_REDUCTION:
+			expand_greedy_error_reduction();
+			break;
+		default:
+			throw PolicyException();
+			break;
+		};
 	}
 
 	// Free the memory of Gamma_{a, *}.
@@ -487,6 +515,7 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(const FiniteStates *S, con
 		// Perform an expansion based on the rule the user wishes to use.
 		switch (rule) {
 		case POMDPPBVIExpansionRule::NONE:
+			e = expansions; // Stop immediately if the user does not want to expand.
 			break;
 		case POMDPPBVIExpansionRule::RANDOM_BELIEF_SELECTION:
 			expand_random_belief_selection(S);
@@ -565,7 +594,11 @@ void POMDPPBVI::expand_random_belief_selection(const FiniteStates *S)
 }
 
 /**
- * Expand the set of beliefs following Stochastic Simulation with Random Actions.
+ * Expand the set of beliefs following Stochastic Simulation with Random Actions. "Stochastic Simulation" means it
+ * generates belief points which are reachable given the initial set of belief points, i.e., it traverses the belief
+ * tree. In this case, for each belief point it randomly selects a state, proportional to the belief, then randomly
+ * selects an action (uniformly), then randomly selects a next state and next observation. The result is a new belief
+ * point.
  * @param S The finite states.
  * @param A The finite actions.
  * @param Z The finite observations.
@@ -642,7 +675,11 @@ void POMDPPBVI::expand_stochastic_simulation_random_actions(const FiniteStates *
 }
 
 /**
- * Expand the set of beliefs following Stochastic Simulation with Greedy Action.
+ * Expand the set of beliefs following Stochastic Simulation with Greedy Action. "Stochastic Simulation" means it
+ * generates belief points which are reachable given the initial set of belief points, i.e., it traverses the belief
+ * tree. In this case, for each belief point it randomly selects a state, proportional to the belief, then randomly
+ * rolls a die. If it is less than some epsilon, it randomly selects an action (uniformly); otherwise, it selects the
+ * optimal action. Next, it randomly selects a next state and next observation. The result is a new belief point.
  * @param S 	The finite states.
  * @param A 	The finite actions.
  * @param Z 	The finite observations.
@@ -736,7 +773,10 @@ void POMDPPBVI::expand_stochastic_simulation_greedy_action(const FiniteStates *S
 }
 
 /**
- * Expand the set of beliefs following Stochastic Simulation with Exploratory Action.
+ * Expand the set of beliefs following Stochastic Simulation with Exploratory Action. "Stochastic Simulation" means it
+ * generates belief points which are reachable given the initial set of belief points, i.e., it traverses the belief
+ * tree. In this case, for each belief point it adds a new belief point which maximizes over the actions, given a randomly
+ * selected next belief point following this action, selecting the point which is farthest away from the closest belief point.
  * @param S The finite states.
  * @param A The finite actions.
  * @param Z The finite observations.
@@ -801,7 +841,16 @@ void POMDPPBVI::expand_stochastic_simulation_exploratory_action(const FiniteStat
 
 			// Compute the min over the belief points, finding the 1-norm between the ba and all
 			// other belief points possible.
-			double baMin = std::numeric_limits<double>::lowest();
+			double baMin = std::numeric_limits<double>::lowest() * -1.0;
+			for (const BeliefState *bp : B) {
+				sum = 0.0;
+				for (const State *s : *S) {
+					sum += std::fabs(ba->get(s) - bp->get(s));
+				}
+				if (sum < baMin) {
+					baMin = sum;
+				}
+			}
 			for (const BeliefState *bp : Bnew) {
 				sum = 0.0;
 				for (const State *s : *S) {
@@ -829,9 +878,9 @@ void POMDPPBVI::expand_stochastic_simulation_exploratory_action(const FiniteStat
 }
 
 /**
- * Expand the set of beliefs following Greedy Error Reduction.
+ * Expand the set of beliefs following Greedy Error Reduction. TODO: Implement.
  */
 void POMDPPBVI::expand_greedy_error_reduction()
 {
-
+	// TODO: Implement.
 }
