@@ -1,6 +1,7 @@
 /**
  *  The MIT License (MIT)
  *
+ *  Copyright (c) 2014 Kyle Wray
  *  Copyright (c) 2013 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -22,8 +23,8 @@
  */
 
 
-#ifndef MISCELLANEOUS_H
-#define MISCELLANEOUS_H
+#ifndef STRING_MANIPULATION_H
+#define STRING_MANIPULATION_H
 
 
 #include <sstream>
@@ -61,4 +62,4 @@ std::vector<std::string> split_string_by_space(std::string item);
 std::vector<std::string> split_string_by_colon(std::string item);
 
 
-#endif // MISCELLANEOUS_H
+#endif // STRING_MANIPULATION_H

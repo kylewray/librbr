@@ -1,6 +1,7 @@
 /**
  *  The MIT License (MIT)
  *
+ *  Copyright (c) 2014 Kyle Wray
  *  Copyright (c) 2013 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -555,7 +556,9 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(const FiniteStates *S, con
 }
 
 /**
- * Expand the set of beliefs following Random Belief Selection.
+ * Expand the set of beliefs following Random Belief Selection. This works by randomly selecting a set of new
+ * belief points at each expansion. One new point is selected for each current belief point, doubling the total
+ * quantity each time.
  * @param S The finite states.
  */
 void POMDPPBVI::expand_random_belief_selection(const FiniteStates *S)

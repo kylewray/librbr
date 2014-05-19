@@ -1,6 +1,7 @@
 /**
  *  The MIT License (MIT)
  *
+ *  Copyright (c) 2014 Kyle Wray
  *  Copyright (c) 2013 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -23,7 +24,6 @@
 
 
 #include "../../include/perform_tests.h"
-
 
 #include <iostream>
 
