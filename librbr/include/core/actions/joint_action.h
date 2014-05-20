@@ -65,13 +65,6 @@ public:
 	virtual ~JointAction();
 
 	/**
-	 * Override set name (leave get_name() alone) to raise an error when it is called.
-	 * @param newName The new name.
-	 * @throws ActionException This is no longer a valid function.
-	 */
-	virtual void set_name(std::string newName);
-
-	/**
 	 * Set the joint action given a list of actions.
 	 * @param jointAction The list of actions which define this joint action.
 	 */
@@ -91,25 +84,43 @@ public:
 	virtual const Action *get(int index) const;
 
 	/**
+	 * Get the number of actions within the joint action.
+	 * @return The number of actions within the joint action.
+	 */
+	virtual int get_num_actions() const;
+
+	/**
 	 * Overload the equals operator to set this joint action equal to the state provided.
 	 * @param other The joint action to copy.
 	 * @return The new version of this action.
 	 */
-	virtual JointAction &operator=(const JointAction &other);
+	virtual JointAction &operator=(const Action &other);
 
 	/**
 	 * Overload the equality comparison operator.
 	 * @param other The joint action to compare.
 	 * @return Returns @code{true} if this action is equal to the other; @code{false} otherwise.
 	 */
-	virtual bool operator==(const JointAction &other);
+	virtual bool operator==(const Action &other) const;
 
 	/**
 	 * Overload the less than operator for comparison.
 	 * @param other The joint action to compare.
 	 * @return Returns @code{true} if this action is less than the other; @code{false} otherwise.
 	 */
-	virtual bool operator<(const JointAction &other) const;
+	virtual bool operator<(const Action &other) const;
+
+	/**
+	 * Returns a string representation of this action.
+	 * @return Returns the string representing this action.
+	 */
+	virtual std::string to_string() const;
+
+	/**
+	 * Returns a hash value used to quickly identify this action in a collection of actions.
+	 * @returns Returns the hash value of this action.
+	 */
+	virtual int hash_value() const;
 
 protected:
 	/**
@@ -117,12 +128,6 @@ protected:
 	 * should remain a fixed size. This class does *not* manage the memory of these action objects.
 	 */
 	std::vector<const Action *> actions;
-
-private:
-	/**
-	 * A helper function to compute the name of the joint action, once the actions are set.
-	 */
-	void update_name();
 
 };
 

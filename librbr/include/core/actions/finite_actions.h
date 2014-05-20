@@ -92,12 +92,6 @@ public:
 	const Action *get(int actionIndex) const;
 
 	/**
-	 * Return a list of all the available actions.
-	 * @return Return a list of available actions.
-	 */
-	virtual const std::vector<const Action *> &all() const;
-
-	/**
 	 * Return a list of the actions available given a state.
 	 * @param state The current state.
 	 * @return Return a list of available actions.
@@ -109,14 +103,6 @@ public:
 	 * @return The number of actions.
 	 */
 	virtual int get_num_actions() const;
-
-	/**
-	 * Get a particular action given the name.
-	 * @param actionName The name of the action.
-	 * @return The action with the corresponding name provided.
-	 * @throws ActionException The name was invalid.
-	 */
-	virtual const Action *find(std::string actionName) const;
 
 	/**
 	 * Reset the actions, clearing the internal list.

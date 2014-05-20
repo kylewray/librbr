@@ -28,13 +28,14 @@
 
 #include "../../../include/core/policy/policy_map.h"
 
-#include "../../../include/utilities/log.h"
-
 #include "../../../include/core/actions/action_exception.h"
 #include "../../../include/core/states/state_exception.h"
 #include "../../../include/core/policy/policy_exception.h"
 
+#include "../../../include/utilities/log.h"
 #include "../../../include/utilities/string_manipulation.h"
+
+#include "../../../include/core/actions/action_utilities.h"
 
 /**
  * The default constructor for a PolicyMap object. It defaults to a horizon of 1.
@@ -231,7 +232,7 @@ bool PolicyMap::load(std::string filename, const FiniteStates *states, const Fin
 			}
 
 			try {
-				action = actions->find(items[1]);
+				action = find_action(actions, items[1]);
 			} catch (const ActionException &err) {
 				sprintf(error, "Action %s was not defined on line %i in file '%s'.",
 						items[1].c_str(), rows, filename.c_str());
@@ -271,7 +272,7 @@ bool PolicyMap::save(std::string filename) const
 			file << "horizon: " << h << std::endl;
 
 			for (std::map<const State *, const Action *>::value_type iter : p) {
-				file << iter.first->to_string() << ": " << iter.second->get_name() << std::endl;
+				file << iter.first->to_string() << ": " << iter.second->to_string() << std::endl;
 			}
 
 			file << std::endl;
@@ -279,7 +280,7 @@ bool PolicyMap::save(std::string filename) const
 		}
 	} else if (policy.size() == 1) {
 		for (std::map<const State *, const Action *>::value_type iter : policy[0]) {
-			file << iter.first->to_string() << ": " << iter.second->get_name() << std::endl;
+			file << iter.first->to_string() << ": " << iter.second->to_string() << std::endl;
 		}
 	} else {
 		sprintf(error, "Failed to save file '%s'. No policy was defined.", filename.c_str());

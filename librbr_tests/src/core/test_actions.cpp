@@ -27,11 +27,12 @@
 
 #include <iostream>
 
-#include "../../../librbr/include/core/actions/action.h"
+#include "../../../librbr/include/core/actions/named_action.h"
 #include "../../../librbr/include/core/actions/finite_actions.h"
 #include "../../../librbr/include/core/actions/joint_action.h"
 #include "../../../librbr/include/core/actions/finite_joint_actions.h"
 #include "../../../librbr/include/core/actions/action_exception.h"
+#include "../../../librbr/include/core/actions/action_utilities.h"
 
 /**
  * Test the actions objects. Output the success or failure for each test.
@@ -41,9 +42,9 @@ int test_actions()
 {
 	int numSuccesses = 0;
 
-	Action *a1 = new Action("a1");
-	Action *a2 = new Action("a2");
-	Action *a3 = new Action("a3");
+	NamedAction *a1 = new NamedAction("a1");
+	NamedAction *a2 = new NamedAction("a2");
+	NamedAction *a3 = new NamedAction("a3");
 
 	FiniteActions *finiteActions = new FiniteActions();
 
@@ -68,7 +69,7 @@ int test_actions()
 	std::cout << "Actions: Test 'FiniteActions::remove'... ";
 	try {
 		finiteActions->remove(a2);
-		a2 = new Action("a2");
+		a2 = new NamedAction("a2");
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} catch (const ActionException &err) {
@@ -87,7 +88,7 @@ int test_actions()
 	std::cout << "Actions: Test 'FiniteActions::add' and 'FiniteActions::remove'... ";
 	try {
 		finiteActions->remove(a1);
-		a1 = new Action("a1");
+		a1 = new NamedAction("a1");
 
 		finiteActions->add(a2);
 		finiteActions->add(a1);
@@ -99,8 +100,7 @@ int test_actions()
 
 	std::cout << "Actions: Test 'FiniteActions::add', 'FiniteActions::remove' (Check Result), and 'FiniteActions::all'... ";
 	if (finiteActions->get_num_actions() == 3 && finiteActions->get(0) == a3 &&
-			finiteActions->get(1) == a2 && finiteActions->get(2) == a1 &&
-			finiteActions->all().size() == finiteActions->get_num_actions()) {
+			finiteActions->get(1) == a2 && finiteActions->get(2) == a1) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -108,7 +108,7 @@ int test_actions()
 	}
 
 	std::cout << "Actions: Test 'FiniteActions::remove' (Expecting Error)... ";
-	Action *doesNotExist = new Action("doesNotExist");
+	NamedAction *doesNotExist = new NamedAction("doesNotExist");
 
 	try {
 		finiteActions->remove(doesNotExist);
@@ -123,8 +123,8 @@ int test_actions()
 
 	std::cout << "Actions: Test 'FiniteActions::set'... ";
 
-	Action *a1New = new Action("a1");
-	Action *a2New = new Action("a2");
+	NamedAction *a1New = new NamedAction("a1");
+	NamedAction *a2New = new NamedAction("a2");
 
 	std::vector<const Action *> testActionsList;
 	testActionsList.push_back(a1New);
@@ -133,7 +133,7 @@ int test_actions()
 
 	a1 = a1New;
 	a2 = a2New;
-	a3 = new Action("a3");
+	a3 = new NamedAction("a3");
 
 	if (finiteActions->get_num_actions() == 2 && finiteActions->get(0) == a1 &&
 			finiteActions->get(1) == a2) {
@@ -147,7 +147,7 @@ int test_actions()
 
 	std::cout << "Actions: Test 'FiniteActions::find'... ";
 	try {
-		testFindAction = finiteActions->find(a1->get_name());
+		testFindAction = find_action(finiteActions, a1->get_name());
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} catch (const ActionException &err) {
@@ -156,7 +156,7 @@ int test_actions()
 
 	std::cout << "Actions: Test 'FiniteActions::find' (Expecting Error)... ";
 	try {
-		testFindAction = finiteActions->find(a3->get_name());
+		testFindAction = find_action(finiteActions, a3->get_name());
 		std::cout << " Failure." << std::endl;
 	} catch (const ActionException &err) {
 		std::cout << " Success." << std::endl;
@@ -166,10 +166,10 @@ int test_actions()
 	delete finiteActions;
 	finiteActions = nullptr;
 
-	a1 = new Action("a1");
-	a2 = new Action("a2");
-	a3 = new Action("a3");
-	Action *a4 = new Action("a4");
+	a1 = new NamedAction("a1");
+	a2 = new NamedAction("a2");
+	a3 = new NamedAction("a3");
+	Action *a4 = new NamedAction("a4");
 
 	FiniteJointActions *finiteJointActions = new FiniteJointActions(2);
 
@@ -230,7 +230,7 @@ int test_actions()
 	std::cout << "Actions: Test 'FiniteJointActions::remove'... ";
 	try {
 		finiteJointActions->remove(0, a2);
-		a2 = new Action("a2");
+		a2 = new NamedAction("a2");
 
 		finiteJointActions->update();
 		std::cout << " Success." << std::endl;
@@ -257,7 +257,7 @@ int test_actions()
 	std::cout << "Actions: Test 'FiniteJointActions::add' and 'FiniteJointActions::remove'... ";
 	try {
 		finiteJointActions->remove(1, a3);
-		a3 = new Action("a3");
+		a3 = new NamedAction("a3");
 
 		finiteJointActions->add(0, a3);
 		finiteJointActions->add(0, a2);
@@ -285,8 +285,8 @@ int test_actions()
 	}
 
 	std::cout << "Actions: Test 'FiniteJointActions::remove' (Expecting Error)... ";
-	Action *a7 = new Action("a7");
-	Action *a8 = new Action("a8");
+	Action *a7 = new NamedAction("a7");
+	Action *a8 = new NamedAction("a8");
 	JointAction *doesNotExist2 = new JointAction({a7, a8});
 	try {
 		finiteJointActions->remove(0, doesNotExist2);
@@ -306,8 +306,8 @@ int test_actions()
 	doesNotExist2 = nullptr;
 
 	std::cout << "Actions: Test 'FiniteJointActions::set'... ";
-	a1New = new Action("a1");
-	a2New = new Action("a2");
+	a1New = new NamedAction("a1");
+	a2New = new NamedAction("a2");
 
 	testActionsList.clear();
 	testActionsList.push_back(a2New);
@@ -324,7 +324,7 @@ int test_actions()
 
 	a1 = a1New;
 	a2 = a2New;
-	a3 = new Action("a3");
+	a3 = new NamedAction("a3");
 
 	std::cout << "Actions: Test 'FiniteJointActions::set' (Check Result)... ";
 	try {
@@ -345,7 +345,7 @@ int test_actions()
 
 	std::cout << "Actions: Test 'FiniteJointActions::find'... ";
 	try {
-		testFindAction = finiteJointActions->find("a1 a4");
+		testFindAction = find_action(finiteJointActions, "a1 a4");
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} catch (const ActionException &err) {
@@ -354,7 +354,7 @@ int test_actions()
 
 	std::cout << "Actions: Test 'finiteJointActions::find' (Expecting Error)... ";
 	try {
-		testFindAction = finiteJointActions->find("a3 a2");
+		testFindAction = find_action(finiteJointActions, "a3 a2");
 		std::cout << " Failure." << std::endl;
 	} catch (const ActionException &err) {
 		std::cout << " Success." << std::endl;

@@ -23,31 +23,51 @@
  */
 
 
-#ifndef ACTION_H
-#define ACTION_H
+#ifndef NAMED_ACTION_H
+#define NAMED_ACTION_H
 
 #include <string>
 
+#include "action.h"
+
 /**
- * An abstract action object.
+ * An action object identified by a unique name.
  */
-class Action {
+class NamedAction : public Action {
 public:
 	/**
-	 * The default constructor of the Action object.
+	 * The default constructor of the NamedAction object.
 	 */
-	Action();
+	NamedAction();
 
 	/**
-	 * The copy constructor of the Action object. Required by use as a map key.
+	 * The constructor of the NamedAction object which allows initial specification of the unique name.
+	 * @param initialName The unique name of the state.
+	 */
+	NamedAction(std::string initialName);
+
+	/**
+	 * The copy constructor of the NamedAction object. Required by use as a map key.
 	 * @param other The action to copy.
 	 */
-	Action(const Action &other);
+	NamedAction(const NamedAction &other);
 
 	/**
-	 * The default deconstructor of the Action object.
+	 * The default deconstructor of the NamedAction object.
 	 */
-	virtual ~Action();
+	virtual ~NamedAction();
+
+	/**
+	 * Set the name.
+	 * @param newName The new name.
+	 */
+	virtual void set_name(std::string newName);
+
+	/**
+	 * Get the name.
+	 * @return The current name.
+	 */
+	virtual std::string get_name() const;
 
 	/**
 	 * Overload the equals operator to set this action equal to the action provided.
@@ -61,26 +81,26 @@ public:
 	 * @param other The action to compare.
 	 * @return Returns @code{true} if this action is equal to the other; @code{false} otherwise.
 	 */
-	virtual bool operator==(const Action &other) const = 0;
+	virtual bool operator==(const Action &other) const;
 
 	/**
 	 * Overload the less than operator for comparison.
 	 * @param other The action to compare.
 	 * @return Returns @code{true} if this action is less than the other; @code{false} otherwise.
 	 */
-	virtual bool operator<(const Action &other) const = 0;
+	virtual bool operator<(const Action &other) const;
 
 	/**
 	 * Returns a string representation of this action.
 	 * @return Returns the string representing this action.
 	 */
-	virtual std::string to_string() const = 0;
+	virtual std::string to_string() const;
 
 	/**
 	 * Returns a hash value used to quickly identify this action in a collection of actions.
 	 * @returns Returns the hash value of this action.
 	 */
-	virtual int hash_value() const = 0;
+	virtual int hash_value() const;
 
 protected:
 	/**
@@ -93,4 +113,4 @@ protected:
 };
 
 
-#endif // ACTION_H
+#endif // NAMED_ACTION_H

@@ -28,7 +28,9 @@
 #include <iostream>
 
 #include "../../../librbr/include/core/observation_transitions/finite_observation_transitions.h"
+
 #include "../../../librbr/include/core/states/named_state.h"
+#include "../../../librbr/include/core/actions/named_action.h"
 
 /**
  * Test the observation transition objects. Output the success or failure for each test.
@@ -44,8 +46,8 @@ int test_observation_transitions()
 	State *s1 = new NamedState("s1");
 	State *s2 = new NamedState("s2");
 
-	Action *a1 = new Action("a1");
-	Action *a2 = new Action("a2");
+	Action *a1 = new NamedAction("a1");
+	Action *a2 = new NamedAction("a2");
 
 	FiniteObservationTransitions *finiteObservationTransitions = new FiniteObservationTransitions();
 

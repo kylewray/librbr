@@ -45,7 +45,6 @@ FactoredState::FactoredState(const std::vector<const State *> &factoredState)
 {
 	states.reserve(factoredState.size());
 	states = factoredState;
-	update_name();
 }
 
 /**
@@ -64,23 +63,12 @@ FactoredState::~FactoredState()
 { }
 
 /**
- * Override set name (leave get_name() alone) to raise an error when it is called.
- * @param newName The new name.
- * @throws StateException This is no longer a valid function.
- */
-void FactoredState::set_name(std::string newName)
-{
-	throw StateException();
-}
-
-/**
  * Set the factored state given a list of states.
  * @param factoredState The list of states which define this factored state.
  */
 void FactoredState::set(const std::vector<const State *> &factoredState)
 {
 	states = factoredState;
-	update_name();
 }
 
 /**
@@ -111,11 +99,10 @@ const State *FactoredState::get(int index) const
  * @param other The factored state to copy.
  * @return The new version of this state.
  */
-State &FactoredState::operator=(const State &s)
+State &FactoredState::operator=(const State &other)
 {
-    const FactoredState *other = static_cast<const FactoredState *> (&s);
-	states = other->states;
-	name = other->name;
+    const FactoredState *s = static_cast<const FactoredState *> (&other);
+	states = s->states;
 	return *this;
 }
 
@@ -124,12 +111,12 @@ State &FactoredState::operator=(const State &s)
  * @param other The factored state to compare.
  * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
  */
-bool FactoredState::operator==(const State &s)
+bool FactoredState::operator==(const State &other) const
 {
-    const FactoredState *other = static_cast<const FactoredState *> (&s);
+    const FactoredState *s = static_cast<const FactoredState *> (&other);
 	int counter = 0;
 	for (const State *state : states) {
-		if (*state == *(other->get(counter))) {
+		if (*state == *(s->get(counter))) {
 			return false;
 		}
 		counter++;
@@ -142,26 +129,37 @@ bool FactoredState::operator==(const State &s)
  * @param other The factored state to compare.
  * @return Returns @code{true} if this state is less than the other; @code{false} otherwise.
  */
-bool FactoredState::operator<(const State &s) const
+bool FactoredState::operator<(const State &other) const
 {
-    const FactoredState *other = static_cast<const FactoredState *> (&s);
-	return name < other->name;
+	return hash_value() < other.hash_value();
+}
+
+
+/**
+ * Returns a string representation of this state.
+ * @return Returns the string representing this state.
+ */
+std::string FactoredState::to_string() const
+{
+	std::string jointState = "";
+	for (int i = 0; i < states.size(); i++) {
+		jointState += states[i]->to_string();
+		if (i != states.size() - 1) {
+			jointState += " ";
+		}
+	}
+	return "<" + jointState + ">";
 }
 
 /**
- * A helper function to compute the name of the factored state, once the states are set.
+ * Returns a hash value used to quickly identify this state in a collection of states.
+ * @returns Returns the hash value of this state.
  */
-void FactoredState::update_name()
+int FactoredState::hash_value() const
 {
-	name = "";
-
-	int counter = 0;
+	int hash = 7;
 	for (const State *state : states) {
-		name += state->to_string();
-
-		counter++;
-		if (counter < states.size()) {
-			name += " ";
-		}
+		hash = 31 * hash + state->hash_value();
 	}
+	return hash;
 }

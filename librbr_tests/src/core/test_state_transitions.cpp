@@ -28,7 +28,7 @@
 #include <iostream>
 
 #include "../../../librbr/include/core/states/named_state.h"
-#include "../../../librbr/include/core/states/finite_states.h"
+#include "../../../librbr/include/core/actions/named_action.h"
 #include "../../../librbr/include/core/state_transitions/finite_state_transitions.h"
 
 /**
@@ -42,8 +42,8 @@ int test_state_transitions()
 	State *s1 = new NamedState("s1");
 	State *s2 = new NamedState("s2");
 
-	Action *a1 = new Action("a1");
-	Action *a2 = new Action("a2");
+	Action *a1 = new NamedAction("a1");
+	Action *a2 = new NamedAction("a2");
 
 	FiniteStateTransitions *finiteStateTransitions = new FiniteStateTransitions();
 

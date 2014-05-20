@@ -103,15 +103,6 @@ const Action *FiniteActions::get(int actionIndex) const
 }
 
 /**
- * Return a list of all the available actions.
- * @return Return a list of available actions.
- */
-const std::vector<const Action *> &FiniteActions::all() const
-{
-	return actions;
-}
-
-/**
  * Return a list of the actions available given a state.
  * @param state The current state.
  * @return Return a list of available actions.
@@ -128,22 +119,6 @@ const std::vector<const Action *> &FiniteActions::available(const State *state) 
 int FiniteActions::get_num_actions() const
 {
 	return actions.size();
-}
-
-/**
- * Get a particular action given the name.
- * @param actionName The name of the action.
- * @return The action with the corresponding name provided.
- * @throws ActionException The name was invalid.
- */
-const Action *FiniteActions::find(std::string actionName) const
-{
-	for (const Action *action : actions) {
-		if (action->get_name().compare(actionName) == 0) {
-			return action;
-		}
-	}
-	throw ActionException();
 }
 
 /**

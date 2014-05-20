@@ -30,7 +30,9 @@
 #include "../../../librbr/include/core/rewards/sa_rewards_map.h"
 #include "../../../librbr/include/core/rewards/sas_rewards_map.h"
 #include "../../../librbr/include/core/rewards/saso_rewards_map.h"
+
 #include "../../../librbr/include/core/states/named_state.h"
+#include "../../../librbr/include/core/actions/named_action.h"
 
 /**
  * Test the reward objects. Output the success or failure for each test.
@@ -43,8 +45,8 @@ int test_rewards()
 	State *s1 = new NamedState("s1");
 	State *s2 = new NamedState("s2");
 
-	Action *a1 = new Action("a1");
-	Action *a2 = new Action("a2");
+	Action *a1 = new NamedAction("a1");
+	Action *a2 = new NamedAction("a2");
 
 	Observation *o1 = new Observation("o1");
 	Observation *o2 = new Observation("o2");

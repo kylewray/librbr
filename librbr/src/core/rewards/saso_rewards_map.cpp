@@ -25,7 +25,9 @@
 
 #include "../../../include/core/rewards/saso_rewards_map.h"
 #include "../../../include/core/rewards/reward_exception.h"
+
 #include "../../../include/core/states/named_state.h"
+#include "../../../include/core/actions/named_action.h"
 
 #include <limits.h>
 
@@ -35,7 +37,7 @@
 SASORewardsMap::SASORewardsMap()
 {
 	stateWildcard = new NamedState("*");
-	actionWildcard = new Action("*");
+	actionWildcard = new NamedAction("*");
 	observationWildcard = new Observation("*");
 	Rmin = std::numeric_limits<double>::lowest() * -1.0;
 	Rmax = std::numeric_limits<double>::lowest();

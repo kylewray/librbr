@@ -25,7 +25,9 @@
 
 #include "../../../include/core/state_transitions/finite_state_transitions.h"
 #include "../../../include/core/state_transitions/state_transition_exception.h"
+
 #include "../../../include/core/states/named_state.h"
+#include "../../../include/core/actions/named_action.h"
 
 /**
  * The default constructor for the FiniteStateTransitions class.
@@ -33,7 +35,7 @@
 FiniteStateTransitions::FiniteStateTransitions()
 {
 	stateWildcard = new NamedState("*");
-	actionWildcard = new Action("*");
+	actionWildcard = new NamedAction("*");
 }
 
 /**

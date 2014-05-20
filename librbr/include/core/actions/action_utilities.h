@@ -23,35 +23,20 @@
  */
 
 
-#include "../../../include/core/actions/action.h"
+#ifndef ACTION_UTILITIES_H
+#define ACTION_UTILITIES_H
+
+
+#include "finite_actions.h"
+#include "named_action.h"
 
 /**
- * The default constructor of the Action object.
+ * Find a particular action given the name in a set of actions.
+ * @param actionName The name of the action.
+ * @return The action with the corresponding name provided.
+ * @throws ActionException The name was invalid, or an action was not a NamedAction.
  */
-Action::Action()
-{ }
+const Action *find_action(const FiniteActions *A, std::string actionName);
 
-/**
- * The copy constructor of the Action object. Required by use as a map key.
- * @param other The action to copy.
- */
-Action::Action(const Action &other)
-{
-	*this = other;
-}
 
-/**
- * The default deconstructor of the Action object.
- */
-Action::~Action()
-{ }
-
-/**
- * Overload the equals operator to set this action equal to the action provided.
- * @param other The action to copy.
- * @return The new version of this action.
- */
-Action &Action::operator=(const Action &other)
-{
-	return *this;
-}
+#endif // ACTION_UTILITIES_H

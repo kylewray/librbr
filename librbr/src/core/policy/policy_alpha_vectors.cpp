@@ -29,14 +29,15 @@
 #include "../../../include/core/policy/policy_alpha_vectors.h"
 #include "../../../include/core/policy/policy_alpha_vector.h"
 
-#include "../../../include/utilities/log.h"
-
 #include "../../../include/core/actions/action_exception.h"
 #include "../../../include/core/states/state_exception.h"
 #include "../../../include/core/observations/observation_exception.h"
 #include "../../../include/core/policy/policy_exception.h"
 
+#include "../../../include/utilities/log.h"
 #include "../../../include/utilities/string_manipulation.h"
+
+#include "../../../include/core/actions/action_utilities.h"
 
 #include <coin/OsiSolverInterface.hpp>
 #include <coin/OsiClpSolverInterface.hpp>
@@ -273,7 +274,7 @@ bool PolicyAlphaVectors::load(std::string filename, const FiniteStates *states, 
 
 			// Since this is an alpha vector, the first item must be an action.
 			try {
-				action = actions->find(items[0]);
+				action = find_action(actions, items[0]);
 			} catch (const ActionException &err) {
 				sprintf(error, "Action %s was not defined on line %i in file '%s'.",
 						items[0].c_str(), rows, filename.c_str());
@@ -342,7 +343,7 @@ bool PolicyAlphaVectors::save(std::string filename, const FiniteStates *states) 
 			file << "horizon: " << h << std::endl;
 
 			for (PolicyAlphaVector *alpha : alphaVectorSet) {
-				file << alpha->get_action()->get_name();
+				file << alpha->get_action()->to_string();
 				for (const State *state : *states) {
 					file << " : " << state->to_string() << " : " << alpha->get(state);
 				}
@@ -354,7 +355,7 @@ bool PolicyAlphaVectors::save(std::string filename, const FiniteStates *states) 
 		}
 	} else if (alphaVectors.size() == 1) {
 		for (PolicyAlphaVector *alpha : alphaVectors[0]) {
-			file << alpha->get_action()->get_name();
+			file << alpha->get_action()->to_string();
 			for (const State *state : *states) {
 				file << " : " << state->to_string() << " : " << alpha->get(state);
 			}

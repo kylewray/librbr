@@ -25,7 +25,9 @@
 
 #include "../../../include/core/rewards/sa_rewards_map.h"
 #include "../../../include/core/rewards/reward_exception.h"
+
 #include "../../../include/core/states/named_state.h"
+#include "../../../include/core/actions/named_action.h"
 
 /**
  * The default constructor for the SARewardsMap class.
@@ -33,7 +35,7 @@
 SARewardsMap::SARewardsMap()
 {
 	stateWildcard = new NamedState("*");
-	actionWildcard = new Action("*");
+	actionWildcard = new NamedAction("*");
 	Rmin = std::numeric_limits<double>::lowest() * -1.0;
 	Rmax = std::numeric_limits<double>::lowest();
 }

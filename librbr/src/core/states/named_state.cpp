@@ -41,7 +41,7 @@ NamedState::NamedState(std::string initialName)
 }
 
 /**
- * The copy constructor of the State object.
+ * The copy constructor of the NamedState object.
  * @param other The state to copy.
  */
 NamedState::NamedState(const NamedState &other)
@@ -50,7 +50,7 @@ NamedState::NamedState(const NamedState &other)
 }
 
 /**
- * The default deconstructor of the State object.
+ * The default deconstructor of the NamedState object.
  */
 NamedState::~NamedState()
 { }
@@ -78,10 +78,10 @@ std::string NamedState::get_name() const
  * @param other The state to copy.
  * @return The new version of this state.
  */
-State &NamedState::operator=(const State &s)
+State &NamedState::operator=(const State &other)
 {
-    const NamedState *other = static_cast<const NamedState*> (&s);
-    name = other->name;
+    const NamedState *s = static_cast<const NamedState*> (&other);
+    name = s->get_name();
     return *this;
 }
 
@@ -90,10 +90,10 @@ State &NamedState::operator=(const State &s)
  * @param other The state to compare.
  * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
  */
-bool NamedState::operator==(const State &s) const
+bool NamedState::operator==(const State &other) const
 {
-    const NamedState *other = static_cast<const NamedState*> (&s);
-    return name == other->name;
+    const NamedState *s = static_cast<const NamedState*>(&other);
+    return name == s->get_name();
 }
 
 /**
@@ -101,25 +101,29 @@ bool NamedState::operator==(const State &s) const
  * @param other The state to compare.
  * @return Returns @code{true} if this state is less than the other; @code{false} otherwise.
  */
-bool NamedState::operator<(const State &s) const
+bool NamedState::operator<(const State &other) const
 {
-    const NamedState *other = static_cast<const NamedState*> (&s);
-    return name < other->name;
+	return hash_value() < other.hash_value();
 }
 
 /**
-  * This hash function is based on Java's String.hashCode() implementation.
-  */
-int NamedState::hash_value() const 
+ * Returns a string representation of this state.
+ * @return Returns the string representing this state.
+ */
+std::string NamedState::to_string() const
 {
-    int hash = 7;
-    for (char c : name) {
-        hash = 31*hash + (int) c;
-    }
-    return hash;
+	return name;
 }
 
-std::string NamedState::to_string() const 
+/**
+ * Returns a hash value used to quickly identify this state in a collection of states.
+ * @returns Returns the hash value of this state.
+ */
+int NamedState::hash_value() const 
 {
-    return name;
+	int hash = 7;
+	for (char c : name) {
+		hash = 31 * hash + (int)c;
+	}
+	return hash;
 }

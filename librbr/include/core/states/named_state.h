@@ -31,88 +31,84 @@
 #include "state.h"
 
 /**
- * An state object identified by a unique name. 
+ * A state object identified by a unique name.
  */
 class NamedState : public State {
 public:
-    /**
-     * The default constructor of the NamedState object.
-     */
-    NamedState();
+	/**
+	 * The default constructor of the NamedState object.
+	 */
+	NamedState();
 
-    /**
-     * The constructor of the NamedState object which allows initial specification of the unique name.
-     * @param initialName The unique name of the state.
-     */
-    NamedState(std::string initialName);
+	/**
+	 * The constructor of the NamedState object which allows initial specification of the unique name.
+	 * @param initialName The unique name of the state.
+	 */
+	NamedState(std::string initialName);
 
-    /**
-     * The copy constructor of the State object.
-     * @param other The state to copy.
-     */
-    NamedState(const NamedState &other);
+	/**
+	 * The copy constructor of the NamedState object.
+	 * @param other The state to copy.
+	 */
+	NamedState(const NamedState &other);
 
-    /**
-     * The default deconstructor of the State object.
-     */
-    virtual ~NamedState();
+	/**
+	 * The default deconstructor of the NamedState object.
+	 */
+	virtual ~NamedState();
 
-    /**
-     * Set the name.
-     * @param newName The new name.
-     */
-    virtual void set_name(std::string newName);
+	/**
+	 * Set the name.
+	 * @param newName The new name.
+	 */
+	virtual void set_name(std::string newName);
 
-    /**
-     * Get the name.
-     * @return The current name.
-     */
-    virtual std::string get_name() const;
+	/**
+	 * Get the name.
+	 * @return The current name.
+	 */
+	virtual std::string get_name() const;
 
-    /**
-     * Overload the equals operator to set this state equal to the state provided.
-     * @param other The state to copy.
-     * @return The new version of this state.
-     */
-    virtual State &operator=(const State &other);
+	/**
+	 * Overload the equals operator to set this state equal to the state provided.
+	 * @param other The state to copy.
+	 * @return The new version of this state.
+	 */
+	virtual State &operator=(const State &other);
 
-    /**
-     * Overload the equality comparison operator.
-     * @param other The state to compare.
-     * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
-     */
-    virtual bool operator==(const State &other) const;
+	/**
+	 * Overload the equality comparison operator.
+	 * @param other The state to compare.
+	 * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
+	 */
+	virtual bool operator==(const State &other) const;
 
-    /**
-     * Overload the less than operator for comparison.
-     * @param other The state to compare.
-     * @return Returns @code{true} if this state is less than the other; @code{false} otherwise.
-     */
-    virtual bool operator<(const State &other) const;
+	/**
+	 * Overload the less than operator for comparison.
+	 * @param other The state to compare.
+	 * @return Returns @code{true} if this state is less than the other; @code{false} otherwise.
+	 */
+	virtual bool operator<(const State &other) const;
 
-    /**
-     * Returns a string representation of this state.
-     * 
-     * All states must have the ability to convert the internal representation to a string.
-     * For most policy solvers, this must be unique; however, this need not always be the case,
-     * e.g., continuous states.     * 
-     * @return Returns the string representing this state.
-     */
-    virtual std::string to_string() const;
-    
-    /**
-     * Returns a hash value used to quickly identify this state in a collection of states.
-     * @returns Returns the hash value of this state.
-     */
-    virtual int hash_value() const;
-    
+	/**
+	 * Returns a string representation of this state.
+	 * @return Returns the string representing this state.
+	 */
+	virtual std::string to_string() const;
+
+	/**
+	 * Returns a hash value used to quickly identify this state in a collection of states.
+	 * @returns Returns the hash value of this state.
+	 */
+	virtual int hash_value() const;
+
 protected:
-    /**
-     * All states must have the ability to convert the internal representation to a string.
-     * For most policy solvers, this must be unique; however, this need not always be the case,
-     * e.g., continuous states.
-     */
-    std::string name;
+	/**
+	 * All states must have the ability to convert the internal representation to a string.
+	 * For most policy solvers, this must be unique; however, this need not always be the case,
+	 * e.g., continuous states.
+	 */
+	std::string name;
 
 };
 

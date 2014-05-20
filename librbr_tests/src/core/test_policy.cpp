@@ -36,7 +36,10 @@
 #include "../../../librbr/include/core/states/named_state.h"
 #include "../../../librbr/include/core/states/belief_state.h"
 #include "../../../librbr/include/core/states/finite_states.h"
+
+#include "../../../librbr/include/core/actions/named_action.h"
 #include "../../../librbr/include/core/actions/finite_actions.h"
+
 #include "../../../librbr/include/core/observations/finite_observations.h"
 #include "../../../librbr/include/core/horizon.h"
 
@@ -53,8 +56,8 @@ int test_policy()
 	State *s1 = new NamedState("s1");
 	State *s2 = new NamedState("s2");
 
-	Action *a1 = new Action("a1");
-	Action *a2 = new Action("a2");
+	Action *a1 = new NamedAction("a1");
+	Action *a2 = new NamedAction("a2");
 
 	FiniteStates *states = new FiniteStates({s1, s2});
 	FiniteActions *actions = new FiniteActions({a1, a2});

@@ -38,7 +38,12 @@
 #include "../../include/core/state_transitions/state_transition_exception.h"
 #include "../../include/core/observation_transitions/observation_transition_exception.h"
 #include "../../include/core/rewards/reward_exception.h"
+
 #include "../../include/core/states/named_state.h"
+//#include "../../include/core/actions/state_utilities.h"
+
+#include "../../include/core/actions/named_action.h"
+#include "../../include/core/actions/action_utilities.h"
 
 /**
  * The default constructor for a unified file.
@@ -930,12 +935,12 @@ int UnifiedFile::load_actions(std::vector<std::string> items)
 		char actionName[16];
 		for (int i = 0; i < n; i++) {
 			sprintf(actionName, "%i", i);
-			actions->add(new Action(actionName));
+			actions->add(new NamedAction(actionName));
 		}
 	} else {
 		// This must be a full list of unique action names.
 		for (std::string actionName : list) {
-			actions->add(new Action(actionName));
+			actions->add(new NamedAction(actionName));
 		}
 	}
 
@@ -995,12 +1000,12 @@ int UnifiedFile::load_agent_actions(int agentIndex, std::string line)
 		char actionName[16];
 		for (int i = 0; i < n; i++) {
 			sprintf(actionName, "%i", i);
-			newActions.push_back(new Action(actionName));
+			newActions.push_back(new NamedAction(actionName));
 		}
 	} else {
 		// This must be a full list of unique action names.
 		for (std::string actionName : list) {
-			newActions.push_back(new Action(actionName));
+			newActions.push_back(new NamedAction(actionName));
 		}
 	}
 
@@ -1178,7 +1183,7 @@ int UnifiedFile::load_state_transition(std::vector<std::string> items)
 
 	if (actionName.compare("*") != 0) {
 		try {
-			action = actions->find(actionName);
+			action = find_action(actions, actionName);
 		} catch (const ActionException &err) {
 			sprintf(error, "Action '%s' has not been defined on line %i in file '%s'.",
 					actionName.c_str(), rows, filename.c_str());
@@ -1404,7 +1409,7 @@ int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 
 	if (actionName.compare("*") != 0) {
 		try {
-			action = actions->find(actionName);
+			action = find_action(actions, actionName);
 		} catch (const ActionException &err) {
 			sprintf(error, "Action '%s' has not been defined on line %i in file '%s'.",
 					actionName.c_str(), rows, filename.c_str());
@@ -1626,7 +1631,7 @@ int UnifiedFile::load_reward(std::vector<std::string> items)
 
 	if (actionName.compare("*") != 0) {
 		try {
-			action = actions->find(actionName);
+			action = find_action(actions, actionName);
 		} catch (const ActionException &err) {
 			sprintf(error, "Action '%s' has not been defined on line %i in file '%s'.",
 					actionName.c_str(), rows, filename.c_str());

@@ -34,6 +34,8 @@
 #include "../../../include/utilities/log.h"
 #include "../../../include/utilities/string_manipulation.h"
 
+#include "../../../include/core/actions/action_utilities.h"
+
 /**
  * The default constructor for the PolicyTreeNode class. It defaults to a null action.
  */
@@ -196,7 +198,7 @@ bool PolicyTree::load(std::string filename, const FiniteActions *actions, const 
 			if (counter == items.size()) {
 				// If this is the last observation, then load the action.
 				try {
-					action = actions->find(item);
+					action = find_action(actions, item);
 				} catch (const ActionException &err) {
 					sprintf(error, "Action '%s' was undefined on line %i in file '%s'.",
 							item.c_str(), rows, filename.c_str());
@@ -223,7 +225,7 @@ bool PolicyTree::load(std::string filename, const FiniteActions *actions, const 
 			set(history, action);
 		} catch (const PolicyException &err) {
 			sprintf(error, "Failed to set action '%s' given the history on line %i in file '%s'.",
-					action->get_name().c_str(), rows, filename.c_str());
+					action->to_string().c_str(), rows, filename.c_str());
 			log_message(std::cout, "PolicyTree::load", error);
 			return true;
 		}
@@ -351,7 +353,7 @@ void PolicyTree::save_tree(std::ofstream &file, PolicyTreeNode *node, std::vecto
 		file << o->get_name() << " : ";
 	}
 	if (node->action != nullptr) {
-		file << node->action->get_name();
+		file << node->action->to_string();
 	}
 	file << std::endl;
 

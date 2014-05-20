@@ -30,14 +30,14 @@
 #include <string>
 #include <vector>
 
-#include "named_state.h"
+#include "state.h"
 
 /**
  * A factored state object. This is essentially a list of states, each state being a state object itself.
  * Note: This class does *not* manage the memory of the states provided. Memory should be managed in
  * a class such as FiniteFactoredStates.
  */
-class FactoredState : public NamedState {
+class FactoredState : public State {
 public:
 	/**
 	 * The constructor of the FactoredState object which allows initial specification of the
@@ -63,13 +63,6 @@ public:
 	 * The default deconstructor of the FactoredState object.
 	 */
 	virtual ~FactoredState();
-
-	/**
-	 * Override set name (leave get_name() alone) to raise an error when it is called.
-	 * @param newName The new name.
-	 * @throws StateException This is no longer a valid function.
-	 */
-	virtual void set_name(std::string newName);
 
 	/**
 	 * Set the factored state given a list of states.
@@ -102,7 +95,7 @@ public:
 	 * @param other The factored state to compare.
 	 * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
 	 */
-	virtual bool operator==(const State &other);
+	virtual bool operator==(const State &other) const;
 
 	/**
 	 * Overload the less than operator for comparison.
@@ -111,18 +104,24 @@ public:
 	 */
 	virtual bool operator<(const State &other) const;
 
+	/**
+	 * Returns a string representation of this state.
+	 * @return Returns the string representing this state.
+	 */
+	virtual std::string to_string() const;
+
+	/**
+	 * Returns a hash value used to quickly identify this state in a collection of states.
+	 * @returns Returns the hash value of this state.
+	 */
+	virtual int hash_value() const;
+
 protected:
 	/**
 	 * The factored state is defined as a tuple of states. To remain general, this is a vector, but
 	 * should remain a fixed size. This class does *not* manage the memory of these state objects.
 	 */
 	std::vector<const State *> states;
-
-private:
-	/**
-	 * A helper function to compute the name of the factored state, once the states are set.
-	 */
-	void update_name();
 
 };
 

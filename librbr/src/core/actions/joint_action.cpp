@@ -45,7 +45,6 @@ JointAction::JointAction(const std::vector<const Action *> &jointAction)
 {
 	actions.reserve(jointAction.size());
 	actions = jointAction;
-	update_name();
 }
 
 /**
@@ -64,23 +63,12 @@ JointAction::~JointAction()
 { }
 
 /**
- * Override set name (leave get_name() alone) to raise an error when it is called.
- * @param newName The new name.
- * @throws ActionException This is no longer a valid function.
- */
-void JointAction::set_name(std::string newName)
-{
-	throw ActionException();
-}
-
-/**
  * Set the joint action given a list of actions.
  * @param jointAction The list of actions which define this joint action.
  */
 void JointAction::set(const std::vector<const Action *> &jointAction)
 {
 	actions = jointAction;
-	update_name();
 }
 
 /**
@@ -106,14 +94,23 @@ const Action *JointAction::get(int index) const
 }
 
 /**
+ * Get the number of actions within the joint action.
+ * @return The number of actions within the joint action.
+ */
+int JointAction::get_num_actions() const
+{
+	return actions.size();
+}
+
+/**
  * Overload the equals operator to set this joint action equal to the state provided.
  * @param other The joint action to copy.
  * @return The new version of this action.
  */
-JointAction &JointAction::operator=(const JointAction &other)
+JointAction &JointAction::operator=(const Action &other)
 {
-	actions = other.get();
-	name = other.get_name();
+    const JointAction *a = static_cast<const JointAction*>(&other);
+	actions = a->get();
 	return *this;
 }
 
@@ -122,11 +119,12 @@ JointAction &JointAction::operator=(const JointAction &other)
  * @param other The joint action to compare.
  * @return Returns @code{true} if this action is equal to the other; @code{false} otherwise.
  */
-bool JointAction::operator==(const JointAction &other)
+bool JointAction::operator==(const Action &other) const
 {
+    const JointAction *a = static_cast<const JointAction*>(&other);
 	int counter = 0;
 	for (const Action *action : actions) {
-		if (*action == *(other.get(counter))) {
+		if (*action == *(a->get(counter))) {
 			return false;
 		}
 		counter++;
@@ -139,25 +137,36 @@ bool JointAction::operator==(const JointAction &other)
  * @param other The joint action to compare.
  * @return Returns @code{true} if this action is less than the other; @code{false} otherwise.
  */
-bool JointAction::operator<(const JointAction &other) const
+bool JointAction::operator<(const Action &other) const
 {
-	return name < other.get_name();
+	return hash_value() < other.hash_value();
 }
 
 /**
- * A helper function to compute the name of the joint action, once the actions are set.
+ * Returns a string representation of this action.
+ * @return Returns the string representing this action.
  */
-void JointAction::update_name()
+std::string JointAction::to_string() const
 {
-	name = "";
-
-	int counter = 0;
-	for (const Action *action : actions) {
-		name += action->get_name();
-
-		counter++;
-		if (counter < actions.size()) {
-			name += " ";
+	std::string jointAction = "";
+	for (int i = 0; i < actions.size(); i++) {
+		jointAction += actions[i]->to_string();
+		if (i != actions.size() - 1) {
+			jointAction += " ";
 		}
 	}
+	return "<" + jointAction + ">";
+}
+
+/**
+ * Returns a hash value used to quickly identify this action in a collection of actions.
+ * @returns Returns the hash value of this action.
+ */
+int JointAction::hash_value() const
+{
+	int hash = 7;
+	for (const Action *action : actions) {
+		hash = 31 * hash + action->hash_value();
+	}
+	return hash;
 }
