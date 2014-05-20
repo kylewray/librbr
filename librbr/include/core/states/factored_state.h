@@ -84,6 +84,12 @@ public:
 	virtual const State *get(int index) const;
 
 	/**
+	 * Get the number of states within the joint state.
+	 * @return The number of states within the joint state.
+	 */
+	virtual int get_num_states() const;
+
+	/**
 	 * Overload the equals operator to set this factored state equal to the state provided.
 	 * @param other The factored state to copy.
 	 * @return The new version of this state.

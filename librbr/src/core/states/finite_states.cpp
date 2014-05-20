@@ -103,15 +103,6 @@ const State *FiniteStates::get(int stateIndex) const
 }
 
 /**
- * Return a list of all the available states.
- * @return Return a list of available states.
- */
-const std::vector<const State *> &FiniteStates::all() const
-{
-	return states;
-}
-
-/**
  * Return a list of the states available given a previous state and the action taken there.
  * @param state		The previous state.
  * @param action	The action taken at the previous state.
@@ -130,23 +121,6 @@ const std::vector<const State *> &FiniteStates::successor(const State *state, co
 int FiniteStates::get_num_states() const
 {
 	return states.size();
-}
-
-/**
- * Get a particular state given the name.
- * @param stateName The name of the state.
- * @return The state with the corresponding name provided.
- * @throws StateException The name was invalid.
- */
-const State *FiniteStates::find(std::string stateName) const
-{
-	for (const State *state : states) {
-		if (state->to_string().compare(stateName) == 0) {
-			return state;
-		}
-	}
-
-	throw StateException();
 }
 
 /**

@@ -91,12 +91,6 @@ public:
 	const State *get(int stateIndex) const;
 
 	/**
-	 * Return a list of all the available states.
-	 * @return Return a list of available states.
-	 */
-	virtual const std::vector<const State *> &all() const;
-
-	/**
 	 * Return a list of the states available given a previous state and the action taken there.
 	 * @param state		The previous state.
 	 * @param action	The action taken at the previous state.
@@ -109,14 +103,6 @@ public:
 	 * @return The number of states.
 	 */
 	virtual int get_num_states() const;
-
-	/**
-	 * Get a particular state given the name.
-	 * @param stateName The name of the state.
-	 * @return The state with the corresponding name provided.
-	 * @throws StateException The name was invalid.
-	 */
-	virtual const State *find(std::string stateName) const;
 
 	/**
 	 * Reset the states, clearing the internal list and freeing the memory.

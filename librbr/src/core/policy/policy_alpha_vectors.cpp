@@ -37,6 +37,7 @@
 #include "../../../include/utilities/log.h"
 #include "../../../include/utilities/string_manipulation.h"
 
+#include "../../../include/core/states/state_utilities.h"
 #include "../../../include/core/actions/action_utilities.h"
 
 #include <coin/OsiSolverInterface.hpp>
@@ -287,7 +288,7 @@ bool PolicyAlphaVectors::load(std::string filename, const FiniteStates *states, 
 			for (int i = 1; i < items.size(); i += 2) {
 				// First is the state in the pair.
 				try {
-					state = states->find(items[i]);
+					state = find_state(states, items[i]);
 				} catch (const StateException &err) {
 					sprintf(error, "State %s was not defined on line %i in file '%s'.",
 							items[i].c_str(), rows, filename.c_str());

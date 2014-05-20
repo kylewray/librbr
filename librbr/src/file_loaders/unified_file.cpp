@@ -40,7 +40,7 @@
 #include "../../include/core/rewards/reward_exception.h"
 
 #include "../../include/core/states/named_state.h"
-//#include "../../include/core/actions/state_utilities.h"
+#include "../../include/core/states/state_utilities.h"
 
 #include "../../include/core/actions/named_action.h"
 #include "../../include/core/actions/action_utilities.h"
@@ -503,7 +503,7 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 		const State *state = nullptr;
 
 		try {
-			state = states->find(list[0]);
+			state = find_state(states, list[0]);
 		} catch (const StateException &err) {
 			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
 					list[0].c_str(), rows, filename.c_str());
@@ -585,7 +585,7 @@ bool UnifiedFile::load_initial_state_inclusive(std::vector<std::string> items)
 		const State *state = nullptr;
 
 		try {
-			state = states->find(idString);
+			state = find_state(states, idString);
 		} catch (const StateException &err) {
 			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
 					idString.c_str(), rows, filename.c_str());
@@ -642,7 +642,7 @@ bool UnifiedFile::load_initial_state_exclusive(std::vector<std::string> items)
 		const State *state = nullptr;
 
 		try {
-			state = states->find(idString);
+			state = find_state(states, idString);
 		} catch (const StateException &err) {
 			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
 					idString.c_str(), rows, filename.c_str());
@@ -1203,7 +1203,7 @@ int UnifiedFile::load_state_transition(std::vector<std::string> items)
 
 	if (startStateName.compare("*") != 0) {
 		try {
-			startState = states->find(startStateName);
+			startState = find_state(states, startStateName);
 		} catch (const StateException &err) {
 			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
 					startStateName.c_str(), rows, filename.c_str());
@@ -1224,7 +1224,7 @@ int UnifiedFile::load_state_transition(std::vector<std::string> items)
 
 	if (endStateName.compare("*") != 0) {
 		try {
-			endState = states->find(endStateName);
+			endState = find_state(states, endStateName);
 		} catch (const StateException &err) {
 			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
 					endStateName.c_str(), rows, filename.c_str());
@@ -1429,7 +1429,7 @@ int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 
 	if (endStateName.compare("*") != 0) {
 		try {
-			endState = states->find(endStateName);
+			endState = find_state(states, endStateName);
 		} catch (const StateException &err) {
 			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
 					endStateName.c_str(), rows, filename.c_str());
@@ -1651,7 +1651,7 @@ int UnifiedFile::load_reward(std::vector<std::string> items)
 
 	if (startStateName.compare("*") != 0) {
 		try {
-			startState = states->find(startStateName);
+			startState = find_state(states, startStateName);
 		} catch (const StateException &err) {
 			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
 					startStateName.c_str(), rows, filename.c_str());
@@ -1672,7 +1672,7 @@ int UnifiedFile::load_reward(std::vector<std::string> items)
 
 	if (endStateName.compare("*") != 0) {
 		try {
-			endState = states->find(endStateName);
+			endState = find_state(states, endStateName);
 		} catch (const StateException &err) {
 			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
 					endStateName.c_str(), rows, filename.c_str());

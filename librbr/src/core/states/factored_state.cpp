@@ -95,6 +95,15 @@ const State *FactoredState::get(int index) const
 }
 
 /**
+ * Get the number of states within the joint state.
+ * @return The number of states within the joint state.
+ */
+int FactoredState::get_num_states() const
+{
+	return states.size();
+}
+
+/**
  * Overload the equals operator to set this state equal to the state provided.
  * @param other The factored state to copy.
  * @return The new version of this state.
@@ -133,7 +142,6 @@ bool FactoredState::operator<(const State &other) const
 {
 	return hash_value() < other.hash_value();
 }
-
 
 /**
  * Returns a string representation of this state.

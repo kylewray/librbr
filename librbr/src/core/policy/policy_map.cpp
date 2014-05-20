@@ -35,6 +35,7 @@
 #include "../../../include/utilities/log.h"
 #include "../../../include/utilities/string_manipulation.h"
 
+#include "../../../include/core/states/state_utilities.h"
 #include "../../../include/core/actions/action_utilities.h"
 
 /**
@@ -223,7 +224,7 @@ bool PolicyMap::load(std::string filename, const FiniteStates *states, const Fin
 			// Since this is an actual mapping, we simply map the key to the value at the horizon. Note,
 			// however, that we must first find the actual state and action.
 			try {
-				state = states->find(items[0]);
+				state = find_state(states, items[0]);
 			} catch (const StateException &err) {
 				sprintf(error, "State %s was not defined on line %i in file '%s'.",
 						items[0].c_str(), rows, filename.c_str());
