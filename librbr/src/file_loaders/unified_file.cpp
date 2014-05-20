@@ -45,6 +45,9 @@
 #include "../../include/core/actions/named_action.h"
 #include "../../include/core/actions/action_utilities.h"
 
+#include "../../include/core/observations/named_observation.h"
+#include "../../include/core/observations/observation_utilities.h"
+
 /**
  * The default constructor for a unified file.
  */
@@ -1073,12 +1076,12 @@ int UnifiedFile::load_observations(std::vector<std::string> items)
 		char observationName[16];
 		for (int i = 0; i < n; i++) {
 			sprintf(observationName, "%i", i);
-			observations->add(new Observation(observationName));
+			observations->add(new NamedObservation(observationName));
 		}
 	} else {
 		// This must be a full list of unique observation names.
 		for (std::string observationName : list) {
-			observations->add(new Observation(observationName));
+			observations->add(new NamedObservation(observationName));
 		}
 	}
 
@@ -1138,12 +1141,12 @@ int UnifiedFile::load_agent_observations(int agentIndex, std::string line)
 		char observationName[16];
 		for (int i = 0; i < n; i++) {
 			sprintf(observationName, "%i", i);
-			newObservations.push_back(new Observation(observationName));
+			newObservations.push_back(new NamedObservation(observationName));
 		}
 	} else {
 		// This must be a full list of unique observation names.
 		for (std::string observationName : list) {
-			newObservations.push_back(new Observation(observationName));
+			newObservations.push_back(new NamedObservation(observationName));
 		}
 	}
 
@@ -1450,7 +1453,7 @@ int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 
 	if (observationName.compare("*") != 0) {
 		try {
-			observation = observations->find(observationName);
+			observation = find_observation(observations, observationName);
 		} catch (const ObservationException &err) {
 			sprintf(error, "Observation '%s' has not been defined on line %i in file '%s'.",
 					observationName.c_str(), rows, filename.c_str());

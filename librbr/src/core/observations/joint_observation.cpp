@@ -45,7 +45,6 @@ JointObservation::JointObservation(const std::vector<const Observation *> &joint
 {
 	observations.reserve(jointObservation.size());
 	observations = jointObservation;
-	update_name();
 }
 
 /**
@@ -64,23 +63,12 @@ JointObservation::~JointObservation()
 { }
 
 /**
- * Override set name (leave get_name() alone) to raise an error when it is called.
- * @param newName The new name.
- * @throws ObservationException This is no longer a valid function.
- */
-void JointObservation::set_name(std::string newName)
-{
-	throw ObservationException();
-}
-
-/**
  * Set the joint observation given a list of observations.
  * @param jointObservation The list of observations which define this joint observation.
  */
 void JointObservation::set(const std::vector<const Observation *> &jointObservation)
 {
 	observations = jointObservation;
-	update_name();
 }
 
 /**
@@ -107,14 +95,23 @@ const Observation *JointObservation::get(int index) const
 }
 
 /**
+ * Get the number of observations within the joint observation.
+ * @return The number of observations within the joint observation.
+ */
+int JointObservation::get_num_observations() const
+{
+	return observations.size();
+}
+
+/**
  * Overload the equals operator to set this joint observation equal to the observation provided.
  * @param other The joint observation to copy.
  * @return The new version of this observation.
  */
-JointObservation &JointObservation::operator=(const JointObservation &other)
+Observation &JointObservation::operator=(const Observation &other)
 {
-	observations = other.get();
-	name = other.get_name();
+    const JointObservation *o = static_cast<const JointObservation*>(&other);
+	observations = o->get();
 	return *this;
 }
 
@@ -123,11 +120,12 @@ JointObservation &JointObservation::operator=(const JointObservation &other)
  * @param other The joint observation to compare.
  * @return Returns @code{true} if this observation is equal to the other; @code{false} otherwise.
  */
-bool JointObservation::operator==(const JointObservation &other)
+bool JointObservation::operator==(const Observation &other) const
 {
+	const JointObservation *o = static_cast<const JointObservation*>(&other);
 	int counter = 0;
 	for (const Observation *observation : observations) {
-		if (*observation == *(other.get(counter))) {
+		if (*observation == *(o->get(counter))) {
 			return false;
 		}
 		counter++;
@@ -140,25 +138,37 @@ bool JointObservation::operator==(const JointObservation &other)
  * @param other The joint observation to compare.
  * @return Returns @code{true} if this observation is less than the other; @code{false} otherwise.
  */
-bool JointObservation::operator<(const JointObservation &other) const
+bool JointObservation::operator<(const Observation &other) const
 {
-	return name < other.get_name();
+	return hash_value() < other.hash_value();
 }
 
 /**
- * A helper function to compute the name of the joint observation, once the observations are set.
+ * Returns a string representation of this action.
+ * @return Returns the string representing this action.
  */
-void JointObservation::update_name()
+std::string JointObservation::to_string() const
 {
-	name = "";
-
-	int counter = 0;
-	for (const Observation *observation : observations) {
-		name += observation->get_name();
-
-		counter++;
-		if (counter < observations.size()) {
-			name += " ";
+	std::string jointObservation = "";
+	for (int i = 0; i < observations.size(); i++) {
+		jointObservation += observations[i]->to_string();
+		if (i != observations.size() - 1) {
+			jointObservation += " ";
 		}
 	}
+	return "<" + jointObservation + ">";
 }
+
+/**
+ * Returns a hash value used to quickly identify this action in a collection of actions.
+ * @returns Returns the hash value of this action.
+ */
+int JointObservation::hash_value() const
+{
+	int hash = 7;
+	for (const Observation *observation : observations) {
+		hash = 31 * hash + observation->hash_value();
+	}
+	return hash;
+}
+

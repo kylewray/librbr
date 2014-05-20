@@ -93,12 +93,6 @@ public:
 	const Observation *get(int observationIndex) const;
 
 	/**
-	 * Return a list of all the available observations.
-	 * @return Return a list of available observations.
-	 */
-	virtual const std::vector<const Observation *> &all() const;
-
-	/**
 	 * Return a list of the observations available given a previous state and the action taken there.
 	 * @param state 	The previous state.
 	 * @param action	The action taken at the previous state.
@@ -112,14 +106,6 @@ public:
 	 * @return The number of observations.
 	 */
 	virtual int get_num_observations() const;
-
-	/**
-	 * Get a particular observation given the name.
-	 * @param observationName The name of the observation.
-	 * @return The observation with the corresponding name provided.
-	 * @throws ObservationException The name was invalid.
-	 */
-	virtual const Observation *find(std::string observationName) const;
 
 	/**
 	 * Reset the observations, clearing the internal list and freeing the memory.

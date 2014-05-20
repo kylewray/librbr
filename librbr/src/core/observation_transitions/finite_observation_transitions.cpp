@@ -28,6 +28,7 @@
 
 #include "../../../include/core/states/named_state.h"
 #include "../../../include/core/actions/named_action.h"
+#include "../../../include/core/observations/named_observation.h"
 
 /**
  * The default constructor for the FiniteObservationTransitions class.
@@ -36,7 +37,7 @@ FiniteObservationTransitions::FiniteObservationTransitions()
 {
 	stateWildcard = new NamedState("*");
 	actionWildcard = new NamedAction("*");
-	observationWildcard = new Observation("*");
+	observationWildcard = new NamedObservation("*");
 }
 
 /**

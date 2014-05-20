@@ -40,7 +40,9 @@
 #include "../../../librbr/include/core/actions/named_action.h"
 #include "../../../librbr/include/core/actions/finite_actions.h"
 
+#include "../../../librbr/include/core/observations/named_observation.h"
 #include "../../../librbr/include/core/observations/finite_observations.h"
+
 #include "../../../librbr/include/core/horizon.h"
 
 #include <math.h>
@@ -149,8 +151,8 @@ int test_policy()
 
 	std::cout << "Policy: 'PolicyTree::load' file 'test_04.policy_tree'... ";
 
-	Observation *o1 = new Observation("o1");
-	Observation *o2 = new Observation("o2");
+	NamedObservation *o1 = new NamedObservation("o1");
+	NamedObservation *o2 = new NamedObservation("o2");
 
 	FiniteObservations *observations = new FiniteObservations({o1, o2});
 

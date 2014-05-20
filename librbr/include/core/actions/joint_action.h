@@ -94,7 +94,7 @@ public:
 	 * @param other The joint action to copy.
 	 * @return The new version of this action.
 	 */
-	virtual JointAction &operator=(const Action &other);
+	virtual Action &operator=(const Action &other);
 
 	/**
 	 * Overload the equality comparison operator.

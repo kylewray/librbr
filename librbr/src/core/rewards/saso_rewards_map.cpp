@@ -28,6 +28,7 @@
 
 #include "../../../include/core/states/named_state.h"
 #include "../../../include/core/actions/named_action.h"
+#include "../../../include/core/observations/named_observation.h"
 
 #include <limits.h>
 
@@ -38,7 +39,7 @@ SASORewardsMap::SASORewardsMap()
 {
 	stateWildcard = new NamedState("*");
 	actionWildcard = new NamedAction("*");
-	observationWildcard = new Observation("*");
+	observationWildcard = new NamedObservation("*");
 	Rmin = std::numeric_limits<double>::lowest() * -1.0;
 	Rmax = std::numeric_limits<double>::lowest();
 }

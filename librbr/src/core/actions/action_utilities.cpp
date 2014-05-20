@@ -31,7 +31,8 @@
 
 /**
  * Find a particular action given the name in a set of actions.
- * @param actionName The name of the action.
+ * @param A				The finite set of actions.
+ * @param actionName	The name of the action.
  * @return The action with the corresponding name provided.
  * @throws ActionException The name was invalid, or an action was not a NamedAction.
  */

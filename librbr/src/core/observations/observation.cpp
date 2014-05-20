@@ -32,15 +32,6 @@ Observation::Observation()
 { }
 
 /**
- * The constructor of the Observation object which allows initial specification of the unique name.
- * @param initialName The unique name of the state.
- */
-Observation::Observation(std::string initialName)
-{
-	name = initialName;
-}
-
-/**
  * The copy constructor of the Observation object.
  * @param other The observation to copy.
  */
@@ -56,50 +47,11 @@ Observation::~Observation()
 { }
 
 /**
- * Set the name.
- * @param newName The new name.
- */
-void Observation::set_name(std::string newName)
-{
-	name = newName;
-}
-
-/**
- * Get the name.
- * @return The current name.
- */
-std::string Observation::get_name() const
-{
-	return name;
-}
-
-/**
  * Overload the equals operator to set this observation equal to the observation provided.
  * @param other The observation to copy.
  * @return The new version of this observation.
  */
 Observation &Observation::operator=(const Observation &other)
 {
-	name = other.get_name();
 	return *this;
-}
-
-/**
- * Overload the equality comparison operator.
- * @param other The observation to compare.
- * @return Returns @code{true} if this observation is equal to the other; @code{false} otherwise.
- */
-bool Observation::operator==(const Observation &other) const
-{
-	return name == other.get_name();
-}
-
-/**
- * Overload the less than operator for comparison.
- * @param other The observation to compare.
- * @return Returns @code{true} if this observation is less than the other; @code{false} otherwise.
- */
-bool Observation::operator<(const Observation &other) const
-{
-	return name < other.get_name();
 }

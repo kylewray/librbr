@@ -103,15 +103,6 @@ const Observation *FiniteObservations::get(int observationIndex) const
 }
 
 /**
- * Return a list of all the available observations.
- * @return Return a list of available observations.
- */
-const std::vector<const Observation *> &FiniteObservations::all() const
-{
-	return observations;
-}
-
-/**
  * Return a list of the observations available given a previous state and the action taken there.
  * @param state 	The previous state.
  * @param action	The action taken at the previous state.
@@ -130,22 +121,6 @@ const std::vector<const Observation *> &FiniteObservations::available(const Stat
 int FiniteObservations::get_num_observations() const
 {
 	return observations.size();
-}
-
-/**
- * Get a particular observation given the name.
- * @param observationName The name of the observation.
- * @return The observation with the corresponding name provided.
- * @throws ObservationException The name was invalid.
- */
-const Observation *FiniteObservations::find(std::string observationName) const
-{
-	for (const Observation *observation : observations) {
-		if (observation->get_name().compare(observationName) == 0) {
-			return observation;
-		}
-	}
-	throw ObservationException();
 }
 
 /**

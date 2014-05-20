@@ -64,13 +64,6 @@ public:
 	virtual ~JointObservation();
 
 	/**
-	 * Override set name (leave get_name() alone) to raise an error when it is called.
-	 * @param newName The new name.
-	 * @throws ObservationException This is no longer a valid function.
-	 */
-	virtual void set_name(std::string newName);
-
-	/**
 	 * Set the joint observation given a list of observations.
 	 * @param jointObservation The list of observations which define this joint observation.
 	 */
@@ -91,25 +84,43 @@ public:
 	virtual const Observation *get(int index) const;
 
 	/**
+	 * Get the number of observations within the joint observation.
+	 * @return The number of observations within the joint observation.
+	 */
+	virtual int get_num_observations() const;
+
+	/**
 	 * Overload the equals operator to set this joint observation equal to the observation provided.
 	 * @param other The joint observation to copy.
 	 * @return The new version of this observation.
 	 */
-	virtual JointObservation &operator=(const JointObservation &other);
+	virtual Observation &operator=(const Observation &other);
 
 	/**
 	 * Overload the equality comparison operator.
 	 * @param other The joint observation to compare.
 	 * @return Returns @code{true} if this observation is equal to the other; @code{false} otherwise.
 	 */
-	virtual bool operator==(const JointObservation &other);
+	virtual bool operator==(const Observation &other) const;
 
 	/**
 	 * Overload the less than operator for comparison.
 	 * @param other The joint observation to compare.
 	 * @return Returns @code{true} if this observation is less than the other; @code{false} otherwise.
 	 */
-	virtual bool operator<(const JointObservation &other) const;
+	virtual bool operator<(const Observation &other) const;
+
+	/**
+	 * Returns a string representation of this action.
+	 * @return Returns the string representing this action.
+	 */
+	virtual std::string to_string() const;
+
+	/**
+	 * Returns a hash value used to quickly identify this action in a collection of actions.
+	 * @returns Returns the hash value of this action.
+	 */
+	virtual int hash_value() const;
 
 protected:
 	/**
@@ -117,12 +128,6 @@ protected:
 	 * should remain a fixed size. This class will manage the memory of these observation objects.
 	 */
 	std::vector<const Observation *> observations;
-
-private:
-	/**
-	 * A helper function to compute the name of the joint observation, once the observations are set.
-	 */
-	void update_name();
 
 };
 

@@ -23,21 +23,21 @@
  */
 
 
-#ifndef ACTION_UTILITIES_H
-#define ACTION_UTILITIES_H
+#ifndef OBSERVATION_UTILITIES_H
+#define OBSERVATION_UTILITIES_H
 
 
-#include "finite_actions.h"
-#include "named_action.h"
+#include "finite_observations.h"
+#include "named_observation.h"
 
 /**
- * Find a particular action given the name in a set of actions.
- * @param A				The finite set of actions.
- * @param actionName 	The name of the action.
- * @return The action with the corresponding name provided.
- * @throws ActionException The name was invalid, or an action was not a NamedAction.
+ * Get a particular observation given the name.
+ * @param Z					The finite set of observations.
+ * @param observationName 	The name of the observation.
+ * @return The observation with the corresponding name provided.
+ * @throws ObservationException The name was invalid.
  */
-const Action *find_action(const FiniteActions *A, std::string actionName);
+const Observation *find_observation(const FiniteObservations *Z, std::string observationName);
 
 
 #endif // ACTION_UTILITIES_H

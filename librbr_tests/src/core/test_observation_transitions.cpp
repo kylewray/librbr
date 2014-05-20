@@ -31,6 +31,7 @@
 
 #include "../../../librbr/include/core/states/named_state.h"
 #include "../../../librbr/include/core/actions/named_action.h"
+#include "../../../librbr/include/core/observations/named_observation.h"
 
 /**
  * Test the observation transition objects. Output the success or failure for each test.
@@ -40,8 +41,8 @@ int test_observation_transitions()
 {
 	int numSuccesses = 0;
 
-	Observation *o1 = new Observation("o1");
-	Observation *o2 = new Observation("o2");
+	NamedObservation *o1 = new NamedObservation("o1");
+	NamedObservation *o2 = new NamedObservation("o2");
 
 	State *s1 = new NamedState("s1");
 	State *s2 = new NamedState("s2");

@@ -23,32 +23,52 @@
  */
 
 
-#ifndef OBSERVATION_H
-#define OBSERVATION_H
+#ifndef NAMED_OBSERVATION_H
+#define NAMED_OBSERVATION_H
 
 
 #include <string>
 
+#include "observation.h"
+
 /**
- * An abstract observation object.
+ * An observation object identified by a unique name.
  */
-class Observation {
+class NamedObservation : public Observation {
 public:
 	/**
-	 * The default constructor of the Observation object.
+	 * The default constructor of the NamedObservation object.
 	 */
-	Observation();
+	NamedObservation();
 
 	/**
-	 * The copy constructor of the Observation object.
+	 * The constructor of the NamedObservation object which allows initial specification of the unique name.
+	 * @param initialName The unique name of the state.
+	 */
+	NamedObservation(std::string initialName);
+
+	/**
+	 * The copy constructor of the NamedObservation object.
 	 * @param other The observation to copy.
 	 */
-	Observation(const Observation &other);
+	NamedObservation(const NamedObservation &other);
 
 	/**
-	 * The default deconstructor of the Observation object.
+	 * The default deconstructor of the NamedObservation object.
 	 */
-	virtual ~Observation();
+	virtual ~NamedObservation();
+
+	/**
+	 * Set the name.
+	 * @param newName The new name.
+	 */
+	virtual void set_name(std::string newName);
+
+	/**
+	 * Get the name.
+	 * @return The current name.
+	 */
+	virtual std::string get_name() const;
 
 	/**
 	 * Overload the equals operator to set this observation equal to the observation provided.
@@ -62,28 +82,36 @@ public:
 	 * @param other The observation to compare.
 	 * @return Returns @code{true} if this observation is equal to the other; @code{false} otherwise.
 	 */
-	virtual bool operator==(const Observation &other) const = 0;
+	virtual bool operator==(const Observation &other) const;
 
 	/**
 	 * Overload the less than operator for comparison.
 	 * @param other The observation to compare.
 	 * @return Returns @code{true} if this observation is less than the other; @code{false} otherwise.
 	 */
-	virtual bool operator<(const Observation &other) const = 0;
+	virtual bool operator<(const Observation &other) const;
 
 	/**
 	 * Returns a string representation of this observation.
 	 * @return Returns the string representing this observation.
 	 */
-	virtual std::string to_string() const = 0;
+	virtual std::string to_string() const;
 
 	/**
 	 * Returns a hash value used to quickly identify this observation in a collection of observations.
 	 * @returns Returns the hash value of this observation.
 	 */
-	virtual int hash_value() const = 0;
+	virtual int hash_value() const;
+
+protected:
+	/**
+	 * All observations must have the ability to convert the internal representation to a string.
+	 * For most policy solvers, this must be unique; however, this need not always be the case,
+	 * e.g., continuous observations.
+	 */
+	std::string name;
 
 };
 
 
-#endif // OBSERVATION_H
+#endif // NAMED_OBSERVATION_H

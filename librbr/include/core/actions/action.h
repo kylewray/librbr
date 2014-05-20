@@ -26,6 +26,7 @@
 #ifndef ACTION_H
 #define ACTION_H
 
+
 #include <string>
 
 /**
@@ -81,14 +82,6 @@ public:
 	 * @returns Returns the hash value of this action.
 	 */
 	virtual int hash_value() const = 0;
-
-protected:
-	/**
-	 * All actions must have the ability to convert the internal representation to a string.
-	 * For most policy solvers, this must be unique; however, this need not always be the case,
-	 * e.g., continuous actions.
-	 */
-	std::string name;
 
 };
 

@@ -107,7 +107,7 @@ int JointAction::get_num_actions() const
  * @param other The joint action to copy.
  * @return The new version of this action.
  */
-JointAction &JointAction::operator=(const Action &other)
+Action &JointAction::operator=(const Action &other)
 {
     const JointAction *a = static_cast<const JointAction*>(&other);
 	actions = a->get();

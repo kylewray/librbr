@@ -35,6 +35,7 @@
 #include "../../../include/utilities/string_manipulation.h"
 
 #include "../../../include/core/actions/action_utilities.h"
+#include "../../../include/core/observations/observation_utilities.h"
 
 /**
  * The default constructor for the PolicyTreeNode class. It defaults to a null action.
@@ -208,7 +209,7 @@ bool PolicyTree::load(std::string filename, const FiniteActions *actions, const 
 			} else {
 				// Otherwise, load the observation.
 				try {
-					history.push_back(observations->find(item));
+					history.push_back(find_observation(observations, item));
 				} catch (const ObservationException &err) {
 					sprintf(error, "Observation '%s' was undefined on line %i in file '%s'.",
 							item.c_str(), rows, filename.c_str());
@@ -350,7 +351,7 @@ void PolicyTree::save_tree(std::ofstream &file, PolicyTreeNode *node, std::vecto
 	// Save the history of observations and the corresponding action.
 //	file << history.size() << " : ";
 	for (const Observation *o : history) {
-		file << o->get_name() << " : ";
+		file << o->to_string() << " : ";
 	}
 	if (node->action != nullptr) {
 		file << node->action->to_string();

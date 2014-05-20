@@ -31,6 +31,7 @@
 
 /**
  * Find a particular state given the name in a set of states.
+ * @param S			The finite set of states.
  * @param stateName The name of the state.
  * @return The state with the corresponding name provided.
  * @throws StateException The name was invalid, or a state was not a NamedState.
