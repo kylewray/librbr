@@ -27,7 +27,7 @@
 #define SASO_REWARDS_H
 
 
-#include <map>
+#include <unordered_map>
 
 #include "rewards.h"
 
@@ -70,7 +70,7 @@ public:
 	 * @param reward		The reward from the provided state-action-state-observation quadruple.
 	 */
 	virtual void set(const State *state, const Action *action, const State *nextState,
-			const Observation *observation, double reward);
+			const Observation *observation, double reward) = 0;
 
 	/**
 	 * The probability of a transition following the state-action-state-observation quadruple provided.
@@ -81,24 +81,24 @@ public:
 	 * @return The reward from taking the given action in the given state.
 	 */
 	virtual double get(const State *state, const Action *action, const State *nextState,
-			const Observation *observation) const;
+			const Observation *observation) const = 0;
 
 	/**
 	 * Get the minimal R-value.
 	 * @return The minimal R-value.
 	 */
-	virtual double get_min() const;
+	virtual double get_min() const = 0;
 
 	/**
 	 * Get the maximal R-value.
 	 * @return The maximal R-value.
 	 */
-	virtual double get_max() const;
+	virtual double get_max() const = 0;
 
 	/**
 	 * Reset the rewards, clearing the internal mapping.
 	 */
-	virtual void reset();
+	virtual void reset() = 0;
 
 };
 

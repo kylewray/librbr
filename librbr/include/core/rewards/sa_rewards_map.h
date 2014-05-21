@@ -27,7 +27,7 @@
 #define SA_REWARDS_MAP_H
 
 
-#include <map>
+#include <unordered_map>
 
 #include "sa_rewards.h"
 
@@ -137,7 +137,8 @@ private:
 	/**
 	 * The list of all state-action rewards.
 	 */
-	std::map<const State *, std::map<const Action *, double> > rewards;
+	std::unordered_map<const State *,
+		std::unordered_map<const Action *, double> > rewards;
 
 	/**
 	 * A special state (implicitly constant) referring to a state wildcard.

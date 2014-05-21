@@ -92,7 +92,7 @@ public:
 	 * Get the action at the corresponding index, given the particular factor. The factor index
 	 * is defined by the agent, and an action's index is defined by the order in which they are
 	 * added and removed.
-	 * @param factorIndex THe index of the factor.
+	 * @param factorIndex The index of the factor.
 	 * @param actionIndex The index of the action.
 	 * @return The action at the corresponding index.
 	 * @throws ActionException The index was invalid.

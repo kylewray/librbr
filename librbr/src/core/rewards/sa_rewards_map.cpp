@@ -179,13 +179,14 @@ void SARewardsMap::reset()
  */
 double SARewardsMap::get_value(const State *state, const Action *action) const
 {
-	std::map<const State *, std::map<const Action *, double> >::const_iterator alpha =
+	std::unordered_map<const State *,
+		std::unordered_map<const Action *, double> >::const_iterator alpha =
 			rewards.find(state);
 	if (alpha == rewards.end()) {
 		throw RewardException();
 	}
 
-	std::map<const Action *, double>::const_iterator beta = alpha->second.find(action);
+	std::unordered_map<const Action *, double>::const_iterator beta = alpha->second.find(action);
 	if (beta == alpha->second.end()) {
 		throw RewardException();
 	}

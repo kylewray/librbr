@@ -27,7 +27,7 @@
 #define SAS_REWARDS_H
 
 
-#include <map>
+#include <unordered_map>
 
 #include "saso_rewards.h"
 
@@ -67,7 +67,7 @@ public:
 	 * @param nextState	The next state with which we assign the reward.
 	 * @param reward	The reward from the provided state-action-state triple.
 	 */
-	virtual void set(const State *state, const Action *action, const State *nextState, double reward);
+	virtual void set(const State *state, const Action *action, const State *nextState, double reward) = 0;
 
 	/**
 	 * Set a state transition from a particular state-action-state-observation quadruple to a probability.
@@ -78,7 +78,7 @@ public:
 	 * @param reward		The reward from the provided state-action-state-observation quadruple.
 	 */
 	virtual void set(const State *state, const Action *action, const State *nextState,
-			const Observation *observation, double reward);
+			const Observation *observation, double reward) = 0;
 
 	/**
 	 * The probability of a transition following the state-action-state triple provided.
@@ -87,7 +87,7 @@ public:
 	 * @param nextState	The next state with which we assign the reward.
 	 * @return The reward from taking the given action in the given state.
 	 */
-	virtual double get(const State *state, const Action *action, const State *nextState) const;
+	virtual double get(const State *state, const Action *action, const State *nextState) const = 0;
 
 	/**
 	 * The probability of a transition following the state-action-state-observation quadruple provided.
@@ -98,24 +98,24 @@ public:
 	 * @return The reward from taking the given action in the given state.
 	 */
 	virtual double get(const State *state, const Action *action, const State *nextState,
-			const Observation *observation) const;
+			const Observation *observation) const = 0;
 
 	/**
 	 * Get the minimal R-value.
 	 * @return The minimal R-value.
 	 */
-	virtual double get_min() const;
+	virtual double get_min() const = 0;
 
 	/**
 	 * Get the maximal R-value.
 	 * @return The maximal R-value.
 	 */
-	virtual double get_max() const;
+	virtual double get_max() const = 0;
 
 	/**
 	 * Reset the rewards, clearing the internal mapping.
 	 */
-	virtual void reset();
+	virtual void reset() = 0;
 
 };
 
