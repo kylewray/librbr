@@ -135,9 +135,9 @@ std::string FactoredState::to_string() const
  * Returns a hash value used to quickly identify this state in a collection of states.
  * @returns Returns the hash value of this state.
  */
-int FactoredState::hash_value() const
+unsigned int FactoredState::hash_value() const
 {
-	int hash = 7;
+	unsigned int hash = 7;
 	for (const State *state : states) {
 		hash = 31 * hash + state->hash_value();
 	}

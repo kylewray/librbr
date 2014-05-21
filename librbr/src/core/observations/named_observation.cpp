@@ -98,9 +98,9 @@ std::string NamedObservation::to_string() const
  * Returns a hash value used to quickly identify this observation in a collection of observations.
  * @returns Returns the hash value of this observation.
  */
-int NamedObservation::hash_value() const
+unsigned int NamedObservation::hash_value() const
 {
-	int hash = 7;
+	unsigned int hash = 7;
 	for (char c : name) {
 		hash = 31 * hash + (int)c;
 	}

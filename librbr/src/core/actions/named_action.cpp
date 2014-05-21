@@ -98,9 +98,9 @@ std::string NamedAction::to_string() const
  * Returns a hash value used to quickly identify this action in a collection of actions.
  * @returns Returns the hash value of this action.
  */
-int NamedAction::hash_value() const
+unsigned int NamedAction::hash_value() const
 {
-	int hash = 7;
+	unsigned int hash = 7;
 	for (char c : name) {
 		hash = 31 * hash + (int)c;
 	}

@@ -81,7 +81,7 @@ public:
 	 * Returns a hash value used to quickly identify this state in a collection of states.
 	 * @returns Returns the hash value of this state.
 	 */
-	virtual int hash_value() const = 0;
+	virtual unsigned int hash_value() const = 0;
 
 };
 

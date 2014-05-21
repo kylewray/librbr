@@ -98,9 +98,9 @@ std::string NamedState::to_string() const
  * Returns a hash value used to quickly identify this state in a collection of states.
  * @returns Returns the hash value of this state.
  */
-int NamedState::hash_value() const 
+unsigned int NamedState::hash_value() const
 {
-	int hash = 7;
+	unsigned int hash = 7;
 	for (char c : name) {
 		hash = 31 * hash + (int)c;
 	}

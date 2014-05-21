@@ -81,7 +81,7 @@ public:
 	 * Returns a hash value used to quickly identify this action in a collection of actions.
 	 * @returns Returns the hash value of this action.
 	 */
-	virtual int hash_value() const = 0;
+	virtual unsigned int hash_value() const = 0;
 
 };
 

@@ -100,7 +100,7 @@ public:
 	 * Returns a hash value used to quickly identify this action in a collection of agent.
 	 * @returns Returns the hash value of this agent.
 	 */
-	virtual int hash_value() const;
+	virtual unsigned int hash_value() const;
 
 protected:
 	/**
