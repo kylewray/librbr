@@ -151,18 +151,20 @@ void FiniteObservationTransitions::reset()
 double FiniteObservationTransitions::get_value(const Action *previousAction, const State *state,
 		const Observation *observation) const
 {
-	std::map<const Action *, std::map<const State *, std::map<const Observation *, double> > >::const_iterator alpha =
-			observationTransitions.find(previousAction);
+	std::unordered_map<const Action *,
+		std::unordered_map<const State *,
+		std::unordered_map<const Observation *, double> > >::const_iterator alpha = observationTransitions.find(previousAction);
 	if (alpha == observationTransitions.end()) {
 		throw ObservationTransitionException();
 	}
 
-	std::map<const State *, std::map<const Observation *, double> >::const_iterator beta = alpha->second.find(state);
+	std::unordered_map<const State *,
+		std::unordered_map<const Observation *, double> >::const_iterator beta = alpha->second.find(state);
 	if (beta == alpha->second.end()) {
 		throw ObservationTransitionException();
 	}
 
-	std::map<const Observation *, double>::const_iterator gamma = beta->second.find(observation);
+	std::unordered_map<const Observation *, double>::const_iterator gamma = beta->second.find(observation);
 	if (gamma == beta->second.end()) {
 		throw ObservationTransitionException();
 	}

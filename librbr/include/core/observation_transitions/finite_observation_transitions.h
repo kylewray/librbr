@@ -27,7 +27,7 @@
 #define FINITE_OBSERVATION_TRANSITIONS_H
 
 
-#include <map>
+#include <unordered_map>
 
 #include "observation_transitions.h"
 
@@ -108,7 +108,9 @@ private:
 	/**
 	 * The list of all state-action-state transitions.
 	 */
-	std::map<const Action *, std::map<const State *, std::map<const Observation *, double> > > observationTransitions;
+	std::unordered_map<const Action *,
+		std::unordered_map<const State *,
+		std::unordered_map<const Observation *, double> > > observationTransitions;
 
 	/**
 	 * A special action (implicitly constant) referring to an action wildcard.

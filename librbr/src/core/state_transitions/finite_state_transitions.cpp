@@ -146,18 +146,20 @@ void FiniteStateTransitions::reset()
  */
 double FiniteStateTransitions::get_value(const State *state, const Action *action, const State *nextState) const
 {
-	std::map<const State *, std::map<const Action *, std::map<const State *, double> > >::const_iterator alpha =
-			stateTransitions.find(state);
+	std::unordered_map<const State *,
+		std::unordered_map<const Action *,
+		std::unordered_map<const State *, double> > >::const_iterator alpha = stateTransitions.find(state);
 	if (alpha == stateTransitions.end()) {
 		throw StateTransitionException();
 	}
 
-	std::map<const Action *, std::map<const State *, double> >::const_iterator beta = alpha->second.find(action);
+	std::unordered_map<const Action *,
+		std::unordered_map<const State *, double> >::const_iterator beta = alpha->second.find(action);
 	if (beta == alpha->second.end()) {
 		throw StateTransitionException();
 	}
 
-	std::map<const State *, double>::const_iterator gamma = beta->second.find(nextState);
+	std::unordered_map<const State *, double>::const_iterator gamma = beta->second.find(nextState);
 	if (gamma == beta->second.end()) {
 		throw StateTransitionException();
 	}
