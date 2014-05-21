@@ -40,8 +40,8 @@
  * @param aBest The action which produced the maximum V(s) value. This will be updated.
  */
 void bellman_update(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
-		const SASRewards *R, const Horizon *h, const State *s, std::map<const State *, double> &V,
-		const Action *&aBest)
+		const SASRewards *R, const Horizon *h, const State *s,
+		std::unordered_map<const State *, double> &V, const Action *&aBest)
 {
 	double maxQsa = std::numeric_limits<double>::lowest();
 

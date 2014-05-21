@@ -27,6 +27,8 @@
 #define POMDP_UTILITIES_H
 
 
+#include <vector>
+
 #include "../core/states/state.h"
 #include "../core/states/belief_state.h"
 #include "../core/actions/action.h"

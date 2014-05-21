@@ -32,6 +32,7 @@
 #include "../../include/core/rewards/reward_exception.h"
 #include "../../include/core/policy/policy_exception.h"
 
+#include <unordered_map>
 #include <math.h>
 #include <eigen3/Eigen/Dense>
 
@@ -179,7 +180,7 @@ PolicyMap *MDPPolicyIteration::solve_exact(const FiniteStates *S, const FiniteAc
 		x = M.colPivHouseholderQr().solve(b);
 
 		// Store updates in V.
-		std::map<const State *, double> V;
+		std::unordered_map<const State *, double> V;
 		i = 0;
 		for (const State *s : *S) {
 			V[s] = x(i);
@@ -223,7 +224,7 @@ PolicyMap *MDPPolicyIteration::solve_modified(const FiniteStates *S, const Finit
 	PolicyMap *policy = new PolicyMap(h);
 
 	// The value of the states, which will be constantly improved over iterations.
-	std::map<const State *, double> V;
+	std::unordered_map<const State *, double> V;
 
 	// Continue to iterate until the policy is unchanged in between two iterations.
 	bool unchanged = false;
