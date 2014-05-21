@@ -110,6 +110,24 @@ double FiniteStateTransitions::get(const State *state, const Action *action, con
 }
 
 /**
+ * Return a list of the states available given a previous state and the action taken there.
+ * @param S			The finite set of states.
+ * @param state		The previous state.
+ * @param action	The action taken at the previous state.
+ * @param result	The list to overwrite and set to be the list of successor states.
+ */
+void FiniteStateTransitions::successors(const FiniteStates *S, const State *state,
+		const Action *action, std::vector<const State *> &result) const
+{
+	result.clear();
+	for (const State *nextState : *S) {
+		if (get(state, action, nextState) > 0.0) {
+			result.push_back(nextState);
+		}
+	}
+}
+
+/**
  * Reset the state transitions, clearing the internal mapping.
  */
 void FiniteStateTransitions::reset()

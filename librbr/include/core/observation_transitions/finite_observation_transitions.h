@@ -31,9 +31,12 @@
 
 #include "observation_transitions.h"
 
-#include "../observations/observation.h"
-#include "../actions/action.h"
 #include "../states/state.h"
+
+#include "../actions/action.h"
+
+#include "../observations/observation.h"
+#include "../observations/finite_observations.h"
 
 /**
  * A class for finite observation transitions in an MDP-like object. Informally, there are two basic ways to
@@ -74,6 +77,16 @@ public:
 	 * @return The probability of the observation given we took the action and landed in the state given.
 	 */
 	virtual double get(const Action *previousAction, const State *state, const Observation *observation) const;
+
+	/**
+	 * Return a list of the observations available given a previous state and the action taken there.
+	 * @param Z			A finite set of observations.
+	 * @param action	The action taken at the previous state.
+	 * @param state 	The next state after taking the action in the previous state.
+	 * @param result	The list to overwrite and set to be the list of successor states.
+	 */
+	void available(const FiniteObservations *Z, const Action *action, const State *nextState,
+			std::vector<const Observation *> &result) const;
 
 	/**
 	 * Reset the observation transitions, clearing the internal mapping.

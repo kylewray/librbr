@@ -114,6 +114,24 @@ double FiniteObservationTransitions::get(const Action *previousAction, const Sta
 }
 
 /**
+ * Return a list of the observations available given a previous state and the action taken there.
+ * @param Z			A finite set of observations.
+ * @param action	The action taken at the previous state.
+ * @param state 	The next state after taking the action in the previous state.
+ * @param result	The list to overwrite and set to be the list of successor states.
+ */
+void FiniteObservationTransitions::available(const FiniteObservations *Z, const Action *action,
+		const State *nextState, std::vector<const Observation *> &result) const
+{
+	result.clear();
+	for (const Observation *observation : *Z) {
+		if (get(action, nextState, observation) > 0.0) {
+			result.push_back(observation);
+		}
+	}
+}
+
+/**
  * Reset the observation transitions, clearing the internal mapping.
  */
 void FiniteObservationTransitions::reset()

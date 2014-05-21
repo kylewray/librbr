@@ -103,18 +103,6 @@ const State *FiniteStates::get(int stateIndex) const
 }
 
 /**
- * Return a list of the states available given a previous state and the action taken there.
- * @param state		The previous state.
- * @param action	The action taken at the previous state.
- * @return Return a list of available states.
- *
- */
-const std::vector<const State *> &FiniteStates::successor(const State *state, const Action *action) const
-{
-	return states;
-}
-
-/**
  * Return the number of states.
  * @return The number of states.
  */

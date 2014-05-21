@@ -31,8 +31,10 @@
 
 #include "state_transitions.h"
 
-#include "../actions/action.h"
 #include "../states/state.h"
+#include "../states/finite_states.h"
+
+#include "../actions/action.h"
 
 /**
  * A class for finite state transitions in an MDP-like object. Informally, there are two basic ways to
@@ -74,6 +76,15 @@ public:
 	 * @return The probability of going from the state, taking the action, then moving to the nextState.
 	 */
 	virtual double get(const State *state, const Action *action, const State *nextState) const;
+
+	/**
+	 * Return a list of the states available given a previous state and the action taken there.
+	 * @param S				The finite set of states.
+	 * @param state			The previous state.
+	 * @param action		The action taken at the previous state.
+	 * @param successors	The list to overwrite and set to be the list of successor states.
+	 */
+	virtual void successors(const FiniteStates *S, const State *state, const Action *action, std::vector<const State *> &result) const;
 
 	/**
 	 * Reset the state transitions, clearing the internal mapping.

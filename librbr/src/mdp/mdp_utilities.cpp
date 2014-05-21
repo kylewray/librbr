@@ -49,7 +49,11 @@ void bellman_update(const FiniteStates *S, const FiniteActions *A, const FiniteS
 	for (const Action *a : A->available(s)) {
 		// Compute the Q(s, a) estimate.
 		double Qsa = 0.0;
-		for (const State *sPrime : S->successor(s, a)) {
+
+		std::vector<const State *> successors;
+		T->successors(S, s, a, successors);
+
+		for (const State *sPrime : successors) {
 			Qsa += T->get(s, a, sPrime) * (R->get(s, a, sPrime) + h->get_discount_factor() * V[sPrime]);
 		}
 
