@@ -78,20 +78,6 @@ public:
 	virtual Action &operator=(const Action &other);
 
 	/**
-	 * Overload the equality comparison operator.
-	 * @param other The action to compare.
-	 * @return Returns @code{true} if this action is equal to the other; @code{false} otherwise.
-	 */
-	virtual bool operator==(const Action &other) const;
-
-	/**
-	 * Overload the less than operator for comparison.
-	 * @param other The action to compare.
-	 * @return Returns @code{true} if this action is less than the other; @code{false} otherwise.
-	 */
-	virtual bool operator<(const Action &other) const;
-
-	/**
 	 * Returns a string representation of this action.
 	 * @return Returns the string representing this action.
 	 */

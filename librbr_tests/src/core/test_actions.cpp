@@ -98,7 +98,7 @@ int test_actions()
 		std::cout << " Failure." << std::endl;
 	}
 
-	std::cout << "Actions: Test 'FiniteActions::add', 'FiniteActions::remove' (Check Result), and 'FiniteActions::all'... ";
+	std::cout << "Actions: Test 'FiniteActions::add' and 'FiniteActions::remove' (Check Result)... ";
 	if (finiteActions->get_num_actions() == 3 && finiteActions->get(0) == a3 &&
 			finiteActions->get(1) == a2 && finiteActions->get(2) == a1) {
 		std::cout << " Success." << std::endl;

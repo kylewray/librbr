@@ -97,20 +97,6 @@ public:
 	virtual Observation &operator=(const Observation &other);
 
 	/**
-	 * Overload the equality comparison operator.
-	 * @param other The joint observation to compare.
-	 * @return Returns @code{true} if this observation is equal to the other; @code{false} otherwise.
-	 */
-	virtual bool operator==(const Observation &other) const;
-
-	/**
-	 * Overload the less than operator for comparison.
-	 * @param other The joint observation to compare.
-	 * @return Returns @code{true} if this observation is less than the other; @code{false} otherwise.
-	 */
-	virtual bool operator<(const Observation &other) const;
-
-	/**
 	 * Returns a string representation of this action.
 	 * @return Returns the string representing this action.
 	 */

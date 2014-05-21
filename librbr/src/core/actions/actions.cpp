@@ -25,7 +25,6 @@
 
 #include "../../../include/core/actions/actions.h"
 
-
 /**
  * The deconstructor for the Actions class, which ensures that children classes deconstruct.
  */

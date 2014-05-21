@@ -26,6 +26,7 @@
 #ifndef NAMED_STATE_H
 #define NAMED_STATE_H
 
+
 #include <string>
 
 #include "state.h"
@@ -75,20 +76,6 @@ public:
 	 * @return The new version of this state.
 	 */
 	virtual State &operator=(const State &other);
-
-	/**
-	 * Overload the equality comparison operator.
-	 * @param other The state to compare.
-	 * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
-	 */
-	virtual bool operator==(const State &other) const;
-
-	/**
-	 * Overload the less than operator for comparison.
-	 * @param other The state to compare.
-	 * @return Returns @code{true} if this state is less than the other; @code{false} otherwise.
-	 */
-	virtual bool operator<(const State &other) const;
 
 	/**
 	 * Returns a string representation of this state.

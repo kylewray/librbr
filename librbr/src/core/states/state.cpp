@@ -55,3 +55,23 @@ State &State::operator=(const State &s)
 {
     return *this;
 }
+
+/**
+ * Overload the equality comparison operator.
+ * @param other The factored state to compare.
+ * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
+ */
+bool State::operator==(const State &other) const
+{
+	return hash_value() == other.hash_value();
+}
+
+/**
+ * Overload the less than operator for comparison.
+ * @param other The factored state to compare.
+ * @return Returns @code{true} if this state is less than the other; @code{false} otherwise.
+ */
+bool State::operator<(const State &other) const
+{
+	return hash_value() < other.hash_value();
+}

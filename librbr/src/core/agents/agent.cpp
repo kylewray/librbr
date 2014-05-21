@@ -91,7 +91,7 @@ Agent &Agent::operator=(const Agent &other)
  */
 bool Agent::operator==(const Agent &other) const
 {
-	return name == other.get_name();
+	return hash_value() == other.hash_value();
 }
 
 /**
@@ -101,5 +101,27 @@ bool Agent::operator==(const Agent &other) const
  */
 bool Agent::operator<(const Agent &other) const
 {
-	return name < other.get_name();
+	return hash_value() < other.hash_value();
+}
+
+/**
+ * Returns a string representation of this agent.
+ * @return Returns the string representing this agent.
+ */
+std::string Agent::to_string() const
+{
+	return name;
+}
+
+/**
+ * Returns a hash value used to quickly identify this action in a collection of agent.
+ * @returns Returns the hash value of this agent.
+ */
+int Agent::hash_value() const
+{
+	int hash = 7;
+	for (char c : name) {
+		hash = 31 * hash + (int)c;
+	}
+	return hash;
 }

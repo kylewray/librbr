@@ -26,6 +26,7 @@
 #ifndef STATE_H
 #define STATE_H
 
+
 #include <string>
 
 /**
@@ -61,14 +62,14 @@ public:
 	 * @param other The state to compare.
 	 * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
 	 */
-	virtual bool operator==(const State &other) const = 0;
+	virtual bool operator==(const State &other) const;
 
 	/**
 	 * Overload the less than operator for comparison.
 	 * @param other The state to compare.
 	 * @return Returns @code{true} if this state is less than the other; @code{false} otherwise.
 	 */
-	virtual bool operator<(const State &other) const = 0;
+	virtual bool operator<(const State &other) const;
 
 	/**
 	 * Returns a string representation of this state.

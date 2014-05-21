@@ -116,34 +116,6 @@ Observation &JointObservation::operator=(const Observation &other)
 }
 
 /**
- * Overload the equality comparison operator.
- * @param other The joint observation to compare.
- * @return Returns @code{true} if this observation is equal to the other; @code{false} otherwise.
- */
-bool JointObservation::operator==(const Observation &other) const
-{
-	const JointObservation *o = static_cast<const JointObservation*>(&other);
-	int counter = 0;
-	for (const Observation *observation : observations) {
-		if (*observation == *(o->get(counter))) {
-			return false;
-		}
-		counter++;
-	}
-	return true;
-}
-
-/**
- * Overload the less than operator for comparison.
- * @param other The joint observation to compare.
- * @return Returns @code{true} if this observation is less than the other; @code{false} otherwise.
- */
-bool JointObservation::operator<(const Observation &other) const
-{
-	return hash_value() < other.hash_value();
-}
-
-/**
  * Returns a string representation of this action.
  * @return Returns the string representing this action.
  */

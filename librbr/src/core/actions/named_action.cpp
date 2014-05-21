@@ -86,27 +86,6 @@ Action &NamedAction::operator=(const Action &other)
 }
 
 /**
- * Overload the equality comparison operator.
- * @param other The action to compare.
- * @return Returns @code{true} if this action is equal to the other; @code{false} otherwise.
- */
-bool NamedAction::operator==(const Action &other) const
-{
-    const NamedAction *a = static_cast<const NamedAction*>(&other);
-	return name == a->get_name();
-}
-
-/**
- * Overload the less than operator for comparison.
- * @param other The action to compare.
- * @return Returns @code{true} if this action is less than the other; @code{false} otherwise.
- */
-bool NamedAction::operator<(const Action &other) const
-{
-	return hash_value() < other.hash_value();
-}
-
-/**
  * Returns a string representation of this action.
  * @return Returns the string representing this action.
  */

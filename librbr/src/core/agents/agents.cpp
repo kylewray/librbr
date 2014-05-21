@@ -92,15 +92,6 @@ const Agent *Agents::get(int agentIndex) const
 }
 
 /**
- * Return a list of all the available agents.
- * @return Return a list of available agents.
- */
-const std::vector<const Agent *> &Agents::all() const
-{
-	return agents;
-}
-
-/**
  * Return the number of agents.
  * @return The number of agents.
  */

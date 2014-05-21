@@ -68,9 +68,8 @@ int test_agents()
 		std::cout << " Failure." << std::endl;
 	}
 
-	std::cout << "Agents: Test 'Agents::remove' (Check Result) and 'Agents::all'... ";
-	if (agents->get_num_agents() == 1 && agents->get(0) == bob &&
-			agents->all().size() == agents->get_num_agents()) {
+	std::cout << "Agents: Test 'Agents::remove' (Check Result)... ";
+	if (agents->get_num_agents() == 1 && agents->get(0) == bob) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {

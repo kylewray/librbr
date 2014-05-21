@@ -86,27 +86,6 @@ Observation &NamedObservation::operator=(const Observation &other)
 }
 
 /**
- * Overload the equality comparison operator.
- * @param other The observation to compare.
- * @return Returns @code{true} if this observation is equal to the other; @code{false} otherwise.
- */
-bool NamedObservation::operator==(const Observation &other) const
-{
-    const NamedObservation *o = static_cast<const NamedObservation*>(&other);
-	return name == o->get_name();
-}
-
-/**
- * Overload the less than operator for comparison.
- * @param other The observation to compare.
- * @return Returns @code{true} if this observation is less than the other; @code{false} otherwise.
- */
-bool NamedObservation::operator<(const Observation &other) const
-{
-	return hash_value() < other.hash_value();
-}
-
-/**
  * Returns a string representation of this observation.
  * @return Returns the string representing this observation.
  */

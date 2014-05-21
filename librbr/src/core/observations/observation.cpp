@@ -55,3 +55,23 @@ Observation &Observation::operator=(const Observation &other)
 {
 	return *this;
 }
+
+/**
+ * Overload the equality comparison operator.
+ * @param other The observation to compare.
+ * @return Returns @code{true} if this observation is equal to the other; @code{false} otherwise.
+ */
+bool Observation::operator==(const Observation &other) const
+{
+    return hash_value() == other.hash_value();
+}
+
+/**
+ * Overload the less than operator for comparison.
+ * @param other The observation to compare.
+ * @return Returns @code{true} if this observation is less than the other; @code{false} otherwise.
+ */
+bool Observation::operator<(const Observation &other) const
+{
+	return hash_value() < other.hash_value();
+}

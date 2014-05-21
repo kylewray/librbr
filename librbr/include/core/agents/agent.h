@@ -29,7 +29,6 @@
 
 #include <string>
 
-
 /**
  * An abstract agent object. Typically, this will just be a string; however, by abstracting
  * the agents, we are able to have agents that are classes in-and-of-themselves.
@@ -90,6 +89,18 @@ public:
 	 * @return Returns @code{true} if this agent is less than the other; @code{false} otherwise.
 	 */
 	virtual bool operator<(const Agent &other) const;
+
+	/**
+	 * Returns a string representation of this agent.
+	 * @return Returns the string representing this agent.
+	 */
+	virtual std::string to_string() const;
+
+	/**
+	 * Returns a hash value used to quickly identify this action in a collection of agent.
+	 * @returns Returns the hash value of this agent.
+	 */
+	virtual int hash_value() const;
 
 protected:
 	/**

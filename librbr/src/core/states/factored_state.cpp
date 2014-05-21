@@ -116,34 +116,6 @@ State &FactoredState::operator=(const State &other)
 }
 
 /**
- * Overload the equality comparison operator.
- * @param other The factored state to compare.
- * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
- */
-bool FactoredState::operator==(const State &other) const
-{
-    const FactoredState *s = static_cast<const FactoredState *> (&other);
-	int counter = 0;
-	for (const State *state : states) {
-		if (*state == *(s->get(counter))) {
-			return false;
-		}
-		counter++;
-	}
-	return true;
-}
-
-/**
- * Overload the less than operator for comparison.
- * @param other The factored state to compare.
- * @return Returns @code{true} if this state is less than the other; @code{false} otherwise.
- */
-bool FactoredState::operator<(const State &other) const
-{
-	return hash_value() < other.hash_value();
-}
-
-/**
  * Returns a string representation of this state.
  * @return Returns the string representing this state.
  */

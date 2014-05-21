@@ -98,7 +98,7 @@ int test_observations()
 		std::cout << " Failure." << std::endl;
 	}
 
-	std::cout << "Observations: Test 'FiniteObservations::add', 'FiniteObservations::remove' (Check Result), and 'FiniteObservations::all'... ";
+	std::cout << "Observations: Test 'FiniteObservations::add' and 'FiniteObservations::remove' (Check Result)... ";
 	if (finiteObservations->get_num_observations() == 3 && finiteObservations->get(0) == o3 &&
 			finiteObservations->get(1) == o2 && finiteObservations->get(2) == o1) {
 		std::cout << " Success." << std::endl;

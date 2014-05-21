@@ -98,7 +98,7 @@ int test_states()
 		std::cout << " Failure." << std::endl;
 	}
 
-	std::cout << "States: Test 'FiniteStates::add', 'FiniteStates::remove' (Check Result), and 'FiniteStates::all'... ";
+	std::cout << "States: Test 'FiniteStates::add' and 'FiniteStates::remove' (Check Result)... ";
 	if (finiteStates->get_num_states() == 3 && finiteStates->get(0) == s3 &&
 			finiteStates->get(1) == s2 && finiteStates->get(2) == s1) {
 		std::cout << " Success." << std::endl;
