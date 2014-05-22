@@ -37,10 +37,13 @@ FiniteFactoredStates::FiniteFactoredStates()
 
 /**
  * The constructor for the FiniteFactoredStates class which lets you specify the number of factors.
- * @param numFactors The number of state factors.
+ * @param numFactors The number of state factors, minimum of 1.
  */
 FiniteFactoredStates::FiniteFactoredStates(int numFactors)
 {
+	if (numFactors < 1) {
+		numFactors = 1;
+	}
 	factoredStates.resize(numFactors);
 }
 
@@ -55,10 +58,21 @@ FiniteFactoredStates::~FiniteFactoredStates()
 /**
  * Add a new factor states to the set of available states in a factor. This does *not* update the
  * states list; please call update() once all factors have been set.
- * @param newState The new state to include in the set of available states.
+ * @param newStates			The new states to include in the set of available states.
+ * @throws StateException	The vector was empty, or contained null pointers.
  */
 void FiniteFactoredStates::add_factor(const std::vector<const State *> &newStates)
 {
+	if (newStates.size() == 0) {
+		throw StateException();
+	}
+
+	for (const State *state : newStates) {
+		if (state == nullptr) {
+			throw StateException();
+		}
+	}
+
 	factoredStates.push_back(newStates);
 }
 

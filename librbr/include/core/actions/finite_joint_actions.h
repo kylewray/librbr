@@ -33,7 +33,6 @@
 #include "actions.h"
 #include "finite_actions.h"
 
-
 /**
  * A class for finite sets of joint actions in an MDP-like object. Informally, there are two basic ways to
  * store finite actions: a vector of actions or a generator function based on a state and action. In both
@@ -51,7 +50,7 @@ public:
 	/**
 	 * The default constructor for the FiniteJointActions class which requires that you
 	 * specify the number of factors.
-	 * @param numFactors The number of action factors.
+	 * @param numFactors The number of action factors, minimum of 1.
 	 */
 	FiniteJointActions(int numFactors);
 

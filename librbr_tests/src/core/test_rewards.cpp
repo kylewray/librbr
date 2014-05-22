@@ -30,6 +30,7 @@
 #include "../../../librbr/include/core/rewards/sa_rewards_map.h"
 #include "../../../librbr/include/core/rewards/sas_rewards_map.h"
 #include "../../../librbr/include/core/rewards/saso_rewards_map.h"
+#include "../../../librbr/include/core/rewards/factored_rewards.h"
 
 #include "../../../librbr/include/core/states/named_state.h"
 #include "../../../librbr/include/core/actions/named_action.h"
@@ -416,6 +417,90 @@ int test_rewards()
 
 	delete sasoRewardsMap;
 	sasoRewardsMap = nullptr;
+
+	// ------------------------------------------------------------------------------------------------------------
+
+	std::cout << "Rewards: Test 'FactoredRewards::add_factor' and 'FactoredRewards::get'... ";
+
+	FactoredRewards *factoredRewards = new FactoredRewards();
+
+	saRewardsMap = new SARewardsMap();
+	saRewardsMap->set(s1, a1, 42.0);
+	saRewardsMap->set(s1, a2, 10.0);
+	saRewardsMap->set(s2, a1, -1.0);
+	saRewardsMap->set(s2, a2, -100.0);
+
+	factoredRewards->add_factor(saRewardsMap);
+
+	saRewardsMap = new SARewardsMap();
+	saRewardsMap->set(s1, a1, -1.0);
+	saRewardsMap->set(s1, a2, 0.0);
+	saRewardsMap->set(s2, a1, 1.0);
+	saRewardsMap->set(s2, a2, 2.0);
+
+	factoredRewards->add_factor(saRewardsMap);
+
+	/*
+	std::cout << factoredRewards->get_num_rewards() << std::endl;
+	std::cout << ((SARewards *)(factoredRewards->get(0)))->get(s1, a1) << std::endl;
+	std::cout << ((SARewards *)(factoredRewards->get(0)))->get(s1, a2) << std::endl;
+	std::cout << ((SARewards *)(factoredRewards->get(0)))->get(s2, a1) << std::endl;
+	std::cout << ((SARewards *)(factoredRewards->get(0)))->get(s2, a2) << std::endl;
+	std::cout << ((SARewards *)(factoredRewards->get(1)))->get(s1, a1) << std::endl;
+	std::cout << ((SARewards *)(factoredRewards->get(1)))->get(s1, a2) << std::endl;
+	std::cout << ((SARewards *)(factoredRewards->get(1)))->get(s2, a1) << std::endl;
+	std::cout << ((SARewards *)(factoredRewards->get(1)))->get(s2, a2) << std::endl;
+	 */
+
+	if (factoredRewards->get_num_rewards() == 2 &&
+		((SARewards *)(factoredRewards->get(0)))->get(s1, a1) == 42.0 &&
+		((SARewards *)(factoredRewards->get(0)))->get(s1, a2) == 10.0 &&
+		((SARewards *)(factoredRewards->get(0)))->get(s2, a1) == -1.0 &&
+		((SARewards *)(factoredRewards->get(0)))->get(s2, a2) == -100.0 &&
+		((SARewards *)(factoredRewards->get(1)))->get(s1, a1) == -1.0 &&
+		((SARewards *)(factoredRewards->get(1)))->get(s1, a2) == 0.0 &&
+		((SARewards *)(factoredRewards->get(1)))->get(s2, a1) == 1.0 &&
+		((SARewards *)(factoredRewards->get(1)))->get(s2, a2) == 2.0) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	std::cout << "Rewards: Test 'FactoredRewards::set'... ";
+
+	saRewardsMap = new SARewardsMap();
+	saRewardsMap->set(s1, a1, -1.0);
+	saRewardsMap->set(s1, a2, 0.0);
+	saRewardsMap->set(s2, a1, 1.0);
+	saRewardsMap->set(s2, a2, 2.0);
+
+	factoredRewards->set(0, saRewardsMap);
+
+	saRewardsMap = new SARewardsMap();
+	saRewardsMap->set(s1, a1, 42.0);
+	saRewardsMap->set(s1, a2, 10.0);
+	saRewardsMap->set(s2, a1, -1.0);
+	saRewardsMap->set(s2, a2, -100.0);
+
+	factoredRewards->set(1, saRewardsMap);
+
+	if (factoredRewards->get_num_rewards() == 2 &&
+		((SARewards *)(factoredRewards->get(0)))->get(s1, a1) == -1.0 &&
+		((SARewards *)(factoredRewards->get(0)))->get(s1, a2) == 0.0 &&
+		((SARewards *)(factoredRewards->get(0)))->get(s2, a1) == 1.0 &&
+		((SARewards *)(factoredRewards->get(0)))->get(s2, a2) == 2.0 &&
+		((SARewards *)(factoredRewards->get(1)))->get(s1, a1) == 42.0 &&
+		((SARewards *)(factoredRewards->get(1)))->get(s1, a2) == 10.0 &&
+		((SARewards *)(factoredRewards->get(1)))->get(s2, a1) == -1.0 &&
+		((SARewards *)(factoredRewards->get(1)))->get(s2, a2) == -100.0) {
+		std::cout << " Success." << std::endl;
+		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	delete factoredRewards;
 
 	// ------------------------------------------------------------------------------------------------------------
 

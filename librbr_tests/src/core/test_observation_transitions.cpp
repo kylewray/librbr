@@ -33,6 +33,8 @@
 #include "../../../librbr/include/core/actions/named_action.h"
 #include "../../../librbr/include/core/observations/named_observation.h"
 
+#include "../../../librbr/include/core/observations/finite_observations.h"
+
 /**
  * Test the observation transition objects. Output the success or failure for each test.
  * @return The number of successes during execution.
@@ -178,7 +180,59 @@ int test_observation_transitions()
 	}
 
 	delete finiteObservationTransitions;
+	finiteObservationTransitions = new FiniteObservationTransitions();
+
+	FiniteObservations *Z = new FiniteObservations();
+	Z->add(o1);
+	Z->add(o2);
+
+	std::cout << "ObservationTransitions: Test 'FiniteObservationTransitions::available'... ";
+
+	finiteObservationTransitions->set(a1, s1, o1, 0.0);
+	finiteObservationTransitions->set(a1, s1, o2, 0.0);
+	finiteObservationTransitions->set(a1, s2, o1, 1.0);
+	finiteObservationTransitions->set(a1, s2, o2, 0.0);
+	finiteObservationTransitions->set(a2, s1, o1, 0.0);
+	finiteObservationTransitions->set(a2, s1, o2, 1.0);
+	finiteObservationTransitions->set(a2, s2, o1, 1.0);
+	finiteObservationTransitions->set(a2, s2, o2, 1.0);
+
+	std::vector<const Observation *> tmp;
+	finiteObservationTransitions->available(Z, a1, s1, tmp);
+
+	if (tmp.size() == 0) {
+		finiteObservationTransitions->available(Z, a1, s2, tmp);
+		if (tmp.size() == 1 && tmp[0] == o1) {
+			finiteObservationTransitions->available(Z, a2, s1, tmp);
+			if (tmp.size() == 1 && tmp[0] == o2) {
+				finiteObservationTransitions->available(Z, a2, s2, tmp);
+				if (tmp.size() == 2) {
+					std::cout << " Success." << std::endl;
+					numSuccesses++;
+				} else {
+					std::cout << " Failure." << std::endl;
+				}
+			} else {
+				std::cout << " Failure." << std::endl;
+			}
+		} else {
+			std::cout << " Failure." << std::endl;
+		}
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	delete finiteObservationTransitions;
 	finiteObservationTransitions = nullptr;
+
+	delete Z;
+
+	delete s1;
+	delete s2;
+	delete a1;
+	delete a2;
+//	delete o1; // Taken care of by Z.
+//	delete o2; // Taken care of by Z.
 
 	return numSuccesses;
 }

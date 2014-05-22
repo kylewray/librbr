@@ -52,7 +52,7 @@ public:
 	/**
 	 * The default constructor for the FiniteJointObservations class which requires that you
 	 * specify the number of factors.
-	 * @param numFactors The number of observation factors.
+	 * @param numFactors The number of observation factors, minimum of 1.
 	 */
 	FiniteJointObservations(int numFactors);
 

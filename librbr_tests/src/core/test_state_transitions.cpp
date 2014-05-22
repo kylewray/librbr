@@ -27,9 +27,12 @@
 
 #include <iostream>
 
+#include "../../../librbr/include/core/state_transitions/finite_state_transitions.h"
+
 #include "../../../librbr/include/core/states/named_state.h"
 #include "../../../librbr/include/core/actions/named_action.h"
-#include "../../../librbr/include/core/state_transitions/finite_state_transitions.h"
+
+#include "../../../librbr/include/core/states/finite_states.h"
 
 /**
  * Test the state transition objects. Output the success or failure for each test.
@@ -173,7 +176,57 @@ int test_state_transitions()
 	}
 
 	delete finiteStateTransitions;
+	finiteStateTransitions = new FiniteStateTransitions();
+
+	std::cout << "StateTransitions: Test 'FiniteStateTransitions::successors'... ";
+
+	finiteStateTransitions->set(s1, a1, s1, 0.0);
+	finiteStateTransitions->set(s1, a1, s2, 0.0);
+	finiteStateTransitions->set(s1, a2, s1, 1.0);
+	finiteStateTransitions->set(s1, a2, s2, 0.0);
+	finiteStateTransitions->set(s2, a1, s1, 0.0);
+	finiteStateTransitions->set(s2, a1, s2, 1.0);
+	finiteStateTransitions->set(s2, a2, s1, 1.0);
+	finiteStateTransitions->set(s2, a2, s2, 1.0);
+
+	FiniteStates *S = new FiniteStates();
+	S->add(s1);
+	S->add(s2);
+
+	std::vector<const State *> tmp;
+	finiteStateTransitions->successors(S, s1, a1, tmp);
+
+	if (tmp.size() == 0) {
+		finiteStateTransitions->successors(S, s1, a2, tmp);
+		if (tmp.size() == 1 && tmp[0] == s1) {
+			finiteStateTransitions->successors(S, s2, a1, tmp);
+			if (tmp.size() == 1 && tmp[0] == s2) {
+				finiteStateTransitions->successors(S, s2, a2, tmp);
+				if (tmp.size() == 2) {
+					std::cout << " Success." << std::endl;
+					numSuccesses++;
+				} else {
+					std::cout << " Failure." << std::endl;
+				}
+			} else {
+				std::cout << " Failure." << std::endl;
+			}
+		} else {
+			std::cout << " Failure." << std::endl;
+		}
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	delete finiteStateTransitions;
 	finiteStateTransitions = nullptr;
+
+	delete S;
+
+//	delete s1; // Taken care of by S.
+//	delete s2; // Taken care of by S.
+	delete a1;
+	delete a2;
 
 	return numSuccesses;
 }

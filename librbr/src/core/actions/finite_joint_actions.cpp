@@ -36,6 +36,9 @@
  */
 FiniteJointActions::FiniteJointActions(int numFactors)
 {
+	if (numFactors < 1) {
+		numFactors = 1;
+	}
 	factoredActions.resize(numFactors);
 }
 
