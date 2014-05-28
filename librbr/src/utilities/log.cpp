@@ -29,11 +29,10 @@
  * Log a normal message or error to a stream, e.g., std::cout.
  * Note: This is *not* to be used in any classes within "core." It is exclusively for the MDP-like objects
  * and the various utilities provided.
- * @param os	The output stream, e.g., std::cout.
  * @param msg	The message to output along with the error.
  * @param error	The detailed error message.
  */
-void log_message(std::ostream &os, const std::string &classFunctionName, const std::string &message)
+void log_message(const std::string &classFunctionName, const std::string &message)
 {
-	os << "Error[" << classFunctionName << "]: " << message << std::endl;
+	LOG_STREAM << "Error[" << classFunctionName << "]: " << message << std::endl;
 }

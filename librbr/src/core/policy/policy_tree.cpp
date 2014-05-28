@@ -171,7 +171,7 @@ bool PolicyTree::load(std::string filename, const FiniteActions *actions, const 
 	std::ifstream file(filename);
 	if (!file.is_open()) {
 		sprintf(error, "Failed to open file '%s'.", filename.c_str());
-		log_message(std::cout, "PolicyTree::load", error);
+		log_message("PolicyTree::load", error);
 		return true;
 	}
 
@@ -203,7 +203,7 @@ bool PolicyTree::load(std::string filename, const FiniteActions *actions, const 
 				} catch (const ActionException &err) {
 					sprintf(error, "Action '%s' was undefined on line %i in file '%s'.",
 							item.c_str(), rows, filename.c_str());
-					log_message(std::cout, "PolicyTree::load", error);
+					log_message("PolicyTree::load", error);
 					return true;
 				}
 			} else {
@@ -213,7 +213,7 @@ bool PolicyTree::load(std::string filename, const FiniteActions *actions, const 
 				} catch (const ObservationException &err) {
 					sprintf(error, "Observation '%s' was undefined on line %i in file '%s'.",
 							item.c_str(), rows, filename.c_str());
-					log_message(std::cout, "PolicyTree::load", error);
+					log_message("PolicyTree::load", error);
 					return true;
 				}
 			}
@@ -227,7 +227,7 @@ bool PolicyTree::load(std::string filename, const FiniteActions *actions, const 
 		} catch (const PolicyException &err) {
 			sprintf(error, "Failed to set action '%s' given the history on line %i in file '%s'.",
 					action->to_string().c_str(), rows, filename.c_str());
-			log_message(std::cout, "PolicyTree::load", error);
+			log_message("PolicyTree::load", error);
 			return true;
 		}
 
@@ -249,7 +249,7 @@ bool PolicyTree::save(std::string filename) const
 	std::ofstream file(filename);
 	if (!file.is_open()) {
 		sprintf(error, "Failed to open the file '%s' for saving.", filename.c_str());
-		log_message(std::cout, "PolicyTree::save", error);
+		log_message("PolicyTree::save", error);
 		return true;
 	}
 

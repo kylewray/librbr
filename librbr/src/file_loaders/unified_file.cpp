@@ -115,7 +115,7 @@ bool UnifiedFile::load(std::string path)
 	// If the file failed to open, then do not do anything.
 	if (!file.is_open()) {
 		sprintf(error, "Failed to find file '%s'.", filename.c_str());
-		log_message(std::cout, "UnifiedFile::load", error);
+		log_message("UnifiedFile::load", error);
 		return true;
 	}
 
@@ -292,7 +292,7 @@ bool UnifiedFile::load(std::string path)
 			default:
 				sprintf(error, "Failed loading a factor, vector, or matrix on line %i in file '%s'.",
 						rows, filename.c_str());
-				log_message(std::cout, "UnifiedFile::load", error);
+				log_message("UnifiedFile::load", error);
 				return true;
 				break;
 			}
@@ -381,7 +381,7 @@ bool UnifiedFile::load_horizon(std::vector<std::string> items)
 	// Raise an error if the item is not defined.
 	if (items.size() < 2) {
 		sprintf(error, "Missing horizon definition on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_horizon", error);
+		log_message("UnifiedFile::load_horizon", error);
 		return true;
 	}
 
@@ -405,14 +405,14 @@ bool UnifiedFile::load_horizon(std::vector<std::string> items)
 	} catch (const std::invalid_argument &err) {
 		sprintf(error, "Failed to convert '%s' to an integer on line %i in file '%s'.",
 				items[1].c_str(), rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_horizon", error);
+		log_message("UnifiedFile::load_horizon", error);
 		return true;
 	}
 
 	if (h < 0) {
 		sprintf(error, "Failed to use '%i', because it was negative, on line %i in file '%s'.",
 				h, rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_horizon", error);
+		log_message("UnifiedFile::load_horizon", error);
 		return true;
 	}
 
@@ -432,7 +432,7 @@ bool UnifiedFile::load_discount_factor(std::vector<std::string> items)
 	// Raise an error if the item is not defined.
 	if (items.size() < 2) {
 		sprintf(error, "Missing discount factor definition on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_discount_factor", error);
+		log_message("UnifiedFile::load_discount_factor", error);
 		return true;
 	}
 
@@ -450,14 +450,14 @@ bool UnifiedFile::load_discount_factor(std::vector<std::string> items)
 	} catch (const std::invalid_argument &err) {
 		sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
 				items[1].c_str(), rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_discount_factor", error);
+		log_message("UnifiedFile::load_discount_factor", error);
 		return true;
 	}
 
 	if (d <= 0.0 || d > 1.0) {
 		sprintf(error, "Failed to use '%f', because it is not in (0, 1], on line %i in file '%s'.",
 				d, rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_discount_factor", error);
+		log_message("UnifiedFile::load_discount_factor", error);
 		return true;
 	}
 
@@ -477,14 +477,14 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 	if (states == nullptr) {
 		sprintf(error, "Failed to define 'start', since states are undefined, on line %i in file '%s'.",
 				rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_initial_state", error);
+		log_message("UnifiedFile::load_initial_state", error);
 		return true;
 	}
 
 	// Raise an error if the item is not defined.
 	if (items.size() < 2) {
 		sprintf(error, "Missing state definition on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_initial_state", error);
+		log_message("UnifiedFile::load_initial_state", error);
 		return true;
 	}
 
@@ -510,7 +510,7 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 		} catch (const StateException &err) {
 			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
 					list[0].c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_initial_state", error);
+			log_message("UnifiedFile::load_initial_state", error);
 			return true;
 		}
 
@@ -524,7 +524,7 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 			if (stateIndex >= states->get_num_states()) {
 				sprintf(error, "State integer '%i' out of bounds on line %i in file '%s'.",
 						stateIndex, rows, filename.c_str());
-				log_message(std::cout, "UnifiedFile::load_initial_state", error);
+				log_message("UnifiedFile::load_initial_state", error);
 				return true;
 			}
 
@@ -535,7 +535,7 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 			} catch (const std::invalid_argument &err) {
 				sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
 						items[1].c_str(), rows, filename.c_str());
-				log_message(std::cout, "UnifiedFile::load_initial_state", error);
+				log_message("UnifiedFile::load_initial_state", error);
 				return true;
 			}
 
@@ -558,14 +558,14 @@ bool UnifiedFile::load_initial_state_inclusive(std::vector<std::string> items)
 	if (states == nullptr) {
 		sprintf(error, "Failed to define 'start include', since states are undefined, on line %i in file '%s'.",
 				rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_initial_state_inclusive", error);
+		log_message("UnifiedFile::load_initial_state_inclusive", error);
 		return true;
 	}
 
 	// Raise an error if the item is not defined.
 	if (items.size() < 2) {
 		sprintf(error, "Missing state definition on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_initial_state_inclusive", error);
+		log_message("UnifiedFile::load_initial_state_inclusive", error);
 		return true;
 	}
 
@@ -578,7 +578,7 @@ bool UnifiedFile::load_initial_state_inclusive(std::vector<std::string> items)
 
 	if (list.size() == 0) {
 		sprintf(error, "No states provided on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_initial_state_inclusive", error);
+		log_message("UnifiedFile::load_initial_state_inclusive", error);
 		return true;
 	}
 
@@ -592,7 +592,7 @@ bool UnifiedFile::load_initial_state_inclusive(std::vector<std::string> items)
 		} catch (const StateException &err) {
 			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
 					idString.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_initial_state_inclusive", error);
+			log_message("UnifiedFile::load_initial_state_inclusive", error);
 			return true;
 		}
 
@@ -613,14 +613,14 @@ bool UnifiedFile::load_initial_state_exclusive(std::vector<std::string> items)
 	if (states == nullptr) {
 		sprintf(error, "Failed to define 'start exclude', since states are undefined, on line %i in file '%s'.",
 				rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_initial_state_exclusive", error);
+		log_message("UnifiedFile::load_initial_state_exclusive", error);
 		return true;
 	}
 
 	// Raise an error if the item is not defined.
 	if (items.size() < 2) {
 		sprintf(error, "Missing state definition on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_initial_state_exclusive", error);
+		log_message("UnifiedFile::load_initial_state_exclusive", error);
 		return true;
 	}
 
@@ -633,7 +633,7 @@ bool UnifiedFile::load_initial_state_exclusive(std::vector<std::string> items)
 
 	if (list.size() == 0) {
 		sprintf(error, "No states provided on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_initial_state_exclusive", error);
+		log_message("UnifiedFile::load_initial_state_exclusive", error);
 		return true;
 	}
 
@@ -649,7 +649,7 @@ bool UnifiedFile::load_initial_state_exclusive(std::vector<std::string> items)
 		} catch (const StateException &err) {
 			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
 					idString.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_initial_state_exclusive", error);
+			log_message("UnifiedFile::load_initial_state_exclusive", error);
 			return true;
 		}
 
@@ -677,7 +677,7 @@ bool UnifiedFile::load_value(std::vector<std::string> items)
 	// Raise an error if the item is not defined.
 	if (items.size() < 2) {
 		sprintf(error, "Missing state definition on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_value", error);
+		log_message("UnifiedFile::load_value", error);
 		return true;
 	}
 
@@ -690,7 +690,7 @@ bool UnifiedFile::load_value(std::vector<std::string> items)
 	} else {
 		sprintf(error, "String '%s' must be either 'reward' or 'cost' on line %i in file '%s'.",
 				items[1].c_str(), rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_value", error);
+		log_message("UnifiedFile::load_value", error);
 		return true;
 	}
 
@@ -707,7 +707,7 @@ bool UnifiedFile::load_agents(std::vector<std::string> items)
 	// Raise an error if the item is not defined.
 	if (items.size() < 2) {
 		sprintf(error, "Missing agents definition on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_agents", error);
+		log_message("UnifiedFile::load_agents", error);
 		return true;
 	}
 
@@ -727,7 +727,7 @@ bool UnifiedFile::load_agents(std::vector<std::string> items)
 		} catch (const std::invalid_argument &err) {
 			sprintf(error, "Agent count '%s' is not a valid number on line %i in file '%s'.",
 					list[0].c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_agents", error);
+			log_message("UnifiedFile::load_agents", error);
 			return true;
 		}
 
@@ -735,7 +735,7 @@ bool UnifiedFile::load_agents(std::vector<std::string> items)
 		if (n < 2) {
 			sprintf(error, "Agent count '%s' must be greater than 1 on line %i in file '%s'.",
 					list[0].c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_agents", error);
+			log_message("UnifiedFile::load_agents", error);
 			return true;
 		}
 
@@ -785,7 +785,7 @@ int UnifiedFile::load_states(std::vector<std::string> items)
 		} catch (const std::invalid_argument &err) {
 			sprintf(error, "State count '%s' is not a valid number on line %i in file '%s'.",
 					list[0].c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_states", error);
+			log_message("UnifiedFile::load_states", error);
 			return -1;
 		}
 
@@ -793,7 +793,7 @@ int UnifiedFile::load_states(std::vector<std::string> items)
 		if (n < 2) {
 			sprintf(error, "State count '%s' must be greater than 1 on line %i in file '%s'.",
 					list[0].c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_states", error);
+			log_message("UnifiedFile::load_states", error);
 			return -1;
 		}
 
@@ -824,13 +824,13 @@ bool UnifiedFile::load_factored_states(int factorIndex, std::string line)
 	// Handle an invalid factor index and undefined states variable.
 	if (factorIndex < 0) { // || factorIndex >= ((FiniteFactoredStates *)states)->get_num_factors()) {
 		sprintf(error, "Missing states definition on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_factored_states", error);
+		log_message("UnifiedFile::load_factored_states", error);
 		return -1;
 	}
 
 	if (states == nullptr) {
 		sprintf(error, "States object is not defined on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_factored_states", error);
+		log_message("UnifiedFile::load_factored_states", error);
 		return -1;
 	}
 
@@ -847,7 +847,7 @@ bool UnifiedFile::load_factored_states(int factorIndex, std::string line)
 		} catch (const std::invalid_argument &err) {
 			sprintf(error, "State count '%s' is not a valid number on line %i in file '%s'.",
 					list[0].c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_factored_states", error);
+			log_message("UnifiedFile::load_factored_states", error);
 			return -1;
 		}
 
@@ -855,7 +855,7 @@ bool UnifiedFile::load_factored_states(int factorIndex, std::string line)
 		if (n < 2) {
 			sprintf(error, "State count '%s' must be greater than 1 on line %i in file '%s'.",
 					list[0].c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_factored_states", error);
+			log_message("UnifiedFile::load_factored_states", error);
 			return -1;
 		}
 
@@ -902,7 +902,7 @@ int UnifiedFile::load_actions(std::vector<std::string> items)
 	// Raise an error if the item is not defined.
 	if (items.size() < 2) {
 		sprintf(error, "Missing actions definition on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_actions", error);
+		log_message("UnifiedFile::load_actions", error);
 		return -1;
 	}
 
@@ -922,7 +922,7 @@ int UnifiedFile::load_actions(std::vector<std::string> items)
 		} catch (const std::invalid_argument &err) {
 			sprintf(error, "Action count '%s' is not a valid number on line %i in file '%s'.",
 					list[0].c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_actions", error);
+			log_message("UnifiedFile::load_actions", error);
 			return -1;
 		}
 
@@ -930,7 +930,7 @@ int UnifiedFile::load_actions(std::vector<std::string> items)
 		if (n < 2) {
 			sprintf(error, "Action count '%s' must be greater than 1 on line %i in file '%s'.",
 					list[0].c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_actions", error);
+			log_message("UnifiedFile::load_actions", error);
 			return -1;
 		}
 
@@ -962,13 +962,13 @@ int UnifiedFile::load_agent_actions(int agentIndex, std::string line)
 	// Handle an invalid agent index and undefined agents variable.
 	if (agents == nullptr || agentIndex < 0 || agentIndex >= agents->get_num_agents()) {
 		sprintf(error, "Missing agents definition on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_agent_actions", error);
+		log_message("UnifiedFile::load_agent_actions", error);
 		return -1;
 	}
 
 	if (actions == nullptr) {
 		sprintf(error, "Actions object is not defined on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_agent_actions", error);
+		log_message("UnifiedFile::load_agent_actions", error);
 		return -1;
 	}
 
@@ -985,7 +985,7 @@ int UnifiedFile::load_agent_actions(int agentIndex, std::string line)
 		} catch (const std::invalid_argument &err) {
 			sprintf(error, "Action count '%s' is not a valid number on line %i in file '%s'.",
 					list[0].c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_agent_actions", error);
+			log_message("UnifiedFile::load_agent_actions", error);
 			return -1;
 		}
 
@@ -993,7 +993,7 @@ int UnifiedFile::load_agent_actions(int agentIndex, std::string line)
 		if (n < 2) {
 			sprintf(error, "Action count '%s' must be greater than 1 on line %i in file '%s'.",
 					list[0].c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_agent_actions", error);
+			log_message("UnifiedFile::load_agent_actions", error);
 			return -1;
 		}
 
@@ -1040,7 +1040,7 @@ int UnifiedFile::load_observations(std::vector<std::string> items)
 	// Raise an error if the item is not defined.
 	if (items.size() < 2) {
 		sprintf(error, "Missing observations definition on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_observations", error);
+		log_message("UnifiedFile::load_observations", error);
 		return -1;
 	}
 
@@ -1060,7 +1060,7 @@ int UnifiedFile::load_observations(std::vector<std::string> items)
 		} catch (const std::invalid_argument &err) {
 			sprintf(error, "Observation count '%s' is not a valid number on line %i in file '%s'.",
 					list[0].c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_observations", error);
+			log_message("UnifiedFile::load_observations", error);
 			return -1;
 		}
 
@@ -1068,7 +1068,7 @@ int UnifiedFile::load_observations(std::vector<std::string> items)
 		if (n < 2) {
 			sprintf(error, "Observation count '%s' must be greater than 1 on line %i in file '%s'.",
 					list[0].c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_observations", error);
+			log_message("UnifiedFile::load_observations", error);
 			return -1;
 		}
 
@@ -1100,13 +1100,13 @@ int UnifiedFile::load_agent_observations(int agentIndex, std::string line)
 	// Handle an invalid agent index and undefined agents variable.
 	if (agents == nullptr || agentIndex < 0 || agentIndex >= agents->get_num_agents()) {
 		sprintf(error, "Missing agents definition on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_agent_observations", error);
+		log_message("UnifiedFile::load_agent_observations", error);
 		return -1;
 	}
 
 	if (observations == nullptr) {
 		sprintf(error, "Observations object is not defined on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_agent_observations", error);
+		log_message("UnifiedFile::load_agent_observations", error);
 		return -1;
 	}
 
@@ -1123,7 +1123,7 @@ int UnifiedFile::load_agent_observations(int agentIndex, std::string line)
 		} catch (const std::invalid_argument &err) {
 			sprintf(error, "Observation count '%s' is not a valid number on line %i in file '%s'.",
 					list[0].c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_agent_observations", error);
+			log_message("UnifiedFile::load_agent_observations", error);
 			return -1;
 		}
 
@@ -1131,7 +1131,7 @@ int UnifiedFile::load_agent_observations(int agentIndex, std::string line)
 		if (n < 2) {
 			sprintf(error, "Observation count '%s' must be greater than 1 on line %i in file '%s'.",
 					list[0].c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_agent_observations", error);
+			log_message("UnifiedFile::load_agent_observations", error);
 			return -1;
 		}
 
@@ -1172,7 +1172,7 @@ int UnifiedFile::load_state_transition(std::vector<std::string> items)
 	// Ensure a valid number of items.
 	if (items.size() < 2 || items.size() > 5) {
 		sprintf(error, "Incomplete statement on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_state_transition", error);
+		log_message("UnifiedFile::load_state_transition", error);
 		return -1;
 	}
 
@@ -1190,7 +1190,7 @@ int UnifiedFile::load_state_transition(std::vector<std::string> items)
 		} catch (const ActionException &err) {
 			sprintf(error, "Action '%s' has not been defined on line %i in file '%s'.",
 					actionName.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_state_transition", error);
+			log_message("UnifiedFile::load_state_transition", error);
 			return -1;
 		}
 	}
@@ -1210,7 +1210,7 @@ int UnifiedFile::load_state_transition(std::vector<std::string> items)
 		} catch (const StateException &err) {
 			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
 					startStateName.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_state_transition", error);
+			log_message("UnifiedFile::load_state_transition", error);
 			return -1;
 		}
 	}
@@ -1231,7 +1231,7 @@ int UnifiedFile::load_state_transition(std::vector<std::string> items)
 		} catch (const StateException &err) {
 			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
 					endStateName.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_state_transition", error);
+			log_message("UnifiedFile::load_state_transition", error);
 			return -1;
 		}
 	}
@@ -1244,14 +1244,14 @@ int UnifiedFile::load_state_transition(std::vector<std::string> items)
 	} catch (const std::invalid_argument &err) {
 		sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
 				probabilityString.c_str(), rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_state_transition", error);
+		log_message("UnifiedFile::load_state_transition", error);
 		return -1;
 	}
 
 	if (probability < 0.0 || probability > 1.0) {
 		sprintf(error, "Invalid probability '%s' on line %i in file '%s'.",
 				probabilityString.c_str(), rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_state_transition", error);
+		log_message("UnifiedFile::load_state_transition", error);
 		return true;
 	}
 
@@ -1282,7 +1282,7 @@ bool UnifiedFile::load_state_transition_vector(std::string line)
 	if ((int)list.size() != states->get_num_states()) {
 		sprintf(error, "Invalid number of probabilities given: %i != %i on line %i in file '%s'.",
 				(int)list.size(), states->get_num_states(), rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_state_transition_vector", error);
+		log_message("UnifiedFile::load_state_transition_vector", error);
 		return true;
 	}
 
@@ -1297,14 +1297,14 @@ bool UnifiedFile::load_state_transition_vector(std::string line)
 		} catch (const std::invalid_argument &err) {
 			sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
 					probabilityString.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_state_transition_vector", error);
+			log_message("UnifiedFile::load_state_transition_vector", error);
 			return true;
 		}
 
 		if (probability < 0.0 || probability > 1.0) {
 			sprintf(error, "Invalid probability '%s' on line %i in file '%s'.",
 					probabilityString.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_state_transition_vector", error);
+			log_message("UnifiedFile::load_state_transition_vector", error);
 			return true;
 		}
 
@@ -1330,7 +1330,7 @@ bool UnifiedFile::load_state_transition_matrix(int stateIndex, std::string line)
 	if (stateIndex < 0 || stateIndex >= states->get_num_states()) {
 		sprintf(error, "State index '%i' out of bounds on line %i in file '%s'.",
 				stateIndex, rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_state_transition_matrix", error);
+		log_message("UnifiedFile::load_state_transition_matrix", error);
 		return true;
 	}
 
@@ -1353,7 +1353,7 @@ bool UnifiedFile::load_state_transition_matrix(int stateIndex, std::string line)
 	if ((int)list.size() != states->get_num_states()) {
 		sprintf(error, "Invalid number of probabilities given: '%i != %i' on line %i in file '%s'.",
 				(int)list.size(), states->get_num_states(), rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_state_transition_matrix", error);
+		log_message("UnifiedFile::load_state_transition_matrix", error);
 		return true;
 	}
 
@@ -1368,14 +1368,14 @@ bool UnifiedFile::load_state_transition_matrix(int stateIndex, std::string line)
 		} catch (const std::invalid_argument &err) {
 			sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
 					probabilityString.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_state_transition_matrix", error);
+			log_message("UnifiedFile::load_state_transition_matrix", error);
 			return true;
 		}
 
 		if (probability < 0.0 || probability > 1.0) {
 			sprintf(error, "Invalid probability '%s' on line %i in file '%s'.",
 					probabilityString.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_state_transition_matrix", error);
+			log_message("UnifiedFile::load_state_transition_matrix", error);
 			return true;
 		}
 
@@ -1398,7 +1398,7 @@ int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 	// Ensure a valid number of items.
 	if (items.size() < 2 || items.size() > 5) {
 		sprintf(error, "Incomplete statement on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_observation_transition", error);
+		log_message("UnifiedFile::load_observation_transition", error);
 		return -1;
 	}
 
@@ -1416,7 +1416,7 @@ int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 		} catch (const ActionException &err) {
 			sprintf(error, "Action '%s' has not been defined on line %i in file '%s'.",
 					actionName.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_observation_transition", error);
+			log_message("UnifiedFile::load_observation_transition", error);
 			return -1;
 		}
 	}
@@ -1436,7 +1436,7 @@ int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 		} catch (const StateException &err) {
 			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
 					endStateName.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_observation_transition", error);
+			log_message("UnifiedFile::load_observation_transition", error);
 			return -1;
 		}
 	}
@@ -1457,7 +1457,7 @@ int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 		} catch (const ObservationException &err) {
 			sprintf(error, "Observation '%s' has not been defined on line %i in file '%s'.",
 					observationName.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_observation_transition", error);
+			log_message("UnifiedFile::load_observation_transition", error);
 			return -1;
 		}
 	}
@@ -1470,14 +1470,14 @@ int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 	} catch (const std::invalid_argument &err) {
 		sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
 				probabilityString.c_str(), rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_observation_transition", error);
+		log_message("UnifiedFile::load_observation_transition", error);
 		return -1;
 	}
 
 	if (probability < 0.0 || probability > 1.0) {
 		sprintf(error, "Invalid probability '%s' on line %i in file '%s'.",
 				probabilityString.c_str(), rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_observation_transition", error);
+		log_message("UnifiedFile::load_observation_transition", error);
 		return true;
 	}
 
@@ -1508,7 +1508,7 @@ bool UnifiedFile::load_observation_transition_vector(std::string line)
 	if ((int)list.size() != observations->get_num_observations()) {
 		sprintf(error, "Invalid number of probabilities given: %i != %i on line %i in file '%s'.",
 				(int)list.size(), observations->get_num_observations(), rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_observation_transition_vector", error);
+		log_message("UnifiedFile::load_observation_transition_vector", error);
 		return true;
 	}
 
@@ -1523,14 +1523,14 @@ bool UnifiedFile::load_observation_transition_vector(std::string line)
 		} catch (const std::invalid_argument &err) {
 			sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
 					probabilityString.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_observation_transition_vector", error);
+			log_message("UnifiedFile::load_observation_transition_vector", error);
 			return true;
 		}
 
 		if (probability < 0.0 || probability > 1.0) {
 			sprintf(error, "Invalid probability '%s' on line %i in file '%s'.",
 					probabilityString.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_observation_transition_vector", error);
+			log_message("UnifiedFile::load_observation_transition_vector", error);
 			return true;
 		}
 
@@ -1556,7 +1556,7 @@ bool UnifiedFile::load_observation_transition_matrix(int stateIndex, std::string
 	if (stateIndex < 0 || stateIndex >= states->get_num_states()) {
 		sprintf(error, "State index '%i' out of bounds on line %i in file '%s'.",
 				stateIndex, rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_observation_transition_matrix", error);
+		log_message("UnifiedFile::load_observation_transition_matrix", error);
 		return true;
 	}
 
@@ -1575,7 +1575,7 @@ bool UnifiedFile::load_observation_transition_matrix(int stateIndex, std::string
 	if ((int)list.size() != observations->get_num_observations()) {
 		sprintf(error, "Invalid number of probabilities given: '%i != %i' on line %i in file '%s'.",
 				(int)list.size(), observations->get_num_observations(), rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_observation_transition_matrix", error);
+		log_message("UnifiedFile::load_observation_transition_matrix", error);
 		return true;
 	}
 
@@ -1590,14 +1590,14 @@ bool UnifiedFile::load_observation_transition_matrix(int stateIndex, std::string
 		} catch (const std::invalid_argument &err) {
 			sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
 					probabilityString.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_observation_transition_matrix", error);
+			log_message("UnifiedFile::load_observation_transition_matrix", error);
 			return true;
 		}
 
 		if (probability < 0.0 || probability > 1.0) {
 			sprintf(error, "Invalid probability '%s' on line %i in file '%s'.",
 					probabilityString.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_observation_transition_matrix", error);
+			log_message("UnifiedFile::load_observation_transition_matrix", error);
 			return true;
 		}
 
@@ -1620,7 +1620,7 @@ int UnifiedFile::load_reward(std::vector<std::string> items)
 	// Ensure a valid number of items.
 	if (items.size() < 2 || items.size() > 5) {
 		sprintf(error, "Incomplete statement on line %i in file '%s'.", rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_reward", error);
+		log_message("UnifiedFile::load_reward", error);
 		return -1;
 	}
 
@@ -1638,7 +1638,7 @@ int UnifiedFile::load_reward(std::vector<std::string> items)
 		} catch (const ActionException &err) {
 			sprintf(error, "Action '%s' has not been defined on line %i in file '%s'.",
 					actionName.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_reward", error);
+			log_message("UnifiedFile::load_reward", error);
 			return -1;
 		}
 	}
@@ -1658,7 +1658,7 @@ int UnifiedFile::load_reward(std::vector<std::string> items)
 		} catch (const StateException &err) {
 			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
 					startStateName.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_reward", error);
+			log_message("UnifiedFile::load_reward", error);
 			return -1;
 		}
 	}
@@ -1679,7 +1679,7 @@ int UnifiedFile::load_reward(std::vector<std::string> items)
 		} catch (const StateException &err) {
 			sprintf(error, "State '%s' has not been defined on line %i in file '%s'.",
 					endStateName.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_reward", error);
+			log_message("UnifiedFile::load_reward", error);
 			return -1;
 		}
 	}
@@ -1692,7 +1692,7 @@ int UnifiedFile::load_reward(std::vector<std::string> items)
 	} catch (const std::invalid_argument &err) {
 		sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
 				rewardString.c_str(), rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_reward", error);
+		log_message("UnifiedFile::load_reward", error);
 		return -1;
 	}
 
@@ -1719,7 +1719,7 @@ bool UnifiedFile::load_reward_vector(std::string line)
 	if ((int)list.size() != states->get_num_states()) {
 		sprintf(error, "Invalid number of rewards given: %i != %i on line %i in file '%s'.",
 				(int)list.size(), states->get_num_states(), rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_reward_vector", error);
+		log_message("UnifiedFile::load_reward_vector", error);
 		return true;
 	}
 
@@ -1734,7 +1734,7 @@ bool UnifiedFile::load_reward_vector(std::string line)
 		} catch (const std::invalid_argument &err) {
 			sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
 					rewardString.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_reward_vector", error);
+			log_message("UnifiedFile::load_reward_vector", error);
 			return true;
 		}
 
@@ -1764,14 +1764,14 @@ bool UnifiedFile::load_reward_matrix(int stateIndex, std::string line)
 	if (stateIndex < 0 || stateIndex >= states->get_num_states()) {
 		sprintf(error, "State index '%i' out of bounds on line %i in file '%s'.",
 				stateIndex, rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_reward_matrix", error);
+		log_message("UnifiedFile::load_reward_matrix", error);
 		return true;
 	}
 
 	if ((int)list.size() != states->get_num_states()) {
 		sprintf(error, "Invalid number of rewards given: '%i != %i' on line %i in file '%s'.",
 				(int)list.size(), states->get_num_states(), rows, filename.c_str());
-		log_message(std::cout, "UnifiedFile::load_reward_matrix", error);
+		log_message("UnifiedFile::load_reward_matrix", error);
 		return true;
 	}
 
@@ -1786,7 +1786,7 @@ bool UnifiedFile::load_reward_matrix(int stateIndex, std::string line)
 		} catch (const std::invalid_argument &err) {
 			sprintf(error, "Failed to convert '%s' to a double on line %i in file '%s'.",
 					rewardString.c_str(), rows, filename.c_str());
-			log_message(std::cout, "UnifiedFile::load_reward_matrix", error);
+			log_message("UnifiedFile::load_reward_matrix", error);
 			return true;
 		}
 

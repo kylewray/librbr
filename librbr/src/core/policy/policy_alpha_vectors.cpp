@@ -209,7 +209,7 @@ bool PolicyAlphaVectors::load(std::string filename, const FiniteStates *states, 
 	std::ifstream file(filename);
 	if (!file.is_open()) {
 		sprintf(error, "Failed to open file '%s'.", filename.c_str());
-		log_message(std::cout, "PolicyAlphaVectors::load", error);
+		log_message("PolicyAlphaVectors::load", error);
 		return true;
 	}
 
@@ -241,7 +241,7 @@ bool PolicyAlphaVectors::load(std::string filename, const FiniteStates *states, 
 		if (items.size() < 2) {
 			sprintf(error, "Improper statement (perhaps missing a colon) on line %i in file '%s'.",
 					rows, filename.c_str());
-			log_message(std::cout, "PolicyAlphaVectors::load", error);
+			log_message("PolicyAlphaVectors::load", error);
 			return true;
 		}
 
@@ -253,7 +253,7 @@ bool PolicyAlphaVectors::load(std::string filename, const FiniteStates *states, 
 			} catch (const std::invalid_argument &err) {
 				sprintf(error, "Failed to convert '%s' to an integer on line %i in file '%s'.",
 						items[1].c_str(), rows, filename.c_str());
-				log_message(std::cout, "PolicyAlphaVectors::load", error);
+				log_message("PolicyAlphaVectors::load", error);
 				return true;
 			}
 
@@ -261,7 +261,7 @@ bool PolicyAlphaVectors::load(std::string filename, const FiniteStates *states, 
 			if (h < 1 || h > horizon->get_horizon()) {
 				sprintf(error, "Horizon %s is invalid on line %i in file '%s'.",
 						items[1].c_str(), rows, filename.c_str());
-				log_message(std::cout, "PolicyAlphaVectors::load", error);
+				log_message("PolicyAlphaVectors::load", error);
 				return true;
 			}
 		} else {
@@ -269,7 +269,7 @@ bool PolicyAlphaVectors::load(std::string filename, const FiniteStates *states, 
 			if (items.size() % 2 != 1) {
 				sprintf(error, "Invalid number of defined items on line %i in file '%s'.",
 						rows, filename.c_str());
-				log_message(std::cout, "PolicyAlphaVectors::load", error);
+				log_message("PolicyAlphaVectors::load", error);
 				return true;
 			}
 
@@ -279,7 +279,7 @@ bool PolicyAlphaVectors::load(std::string filename, const FiniteStates *states, 
 			} catch (const ActionException &err) {
 				sprintf(error, "Action %s was not defined on line %i in file '%s'.",
 						items[0].c_str(), rows, filename.c_str());
-				log_message(std::cout, "PolicyAlphaVectors::load", error);
+				log_message("PolicyAlphaVectors::load", error);
 				return true;
 			}
 
@@ -292,7 +292,7 @@ bool PolicyAlphaVectors::load(std::string filename, const FiniteStates *states, 
 				} catch (const StateException &err) {
 					sprintf(error, "State %s was not defined on line %i in file '%s'.",
 							items[i].c_str(), rows, filename.c_str());
-					log_message(std::cout, "PolicyAlphaVectors::load", error);
+					log_message("PolicyAlphaVectors::load", error);
 					return true;
 				}
 
@@ -303,7 +303,7 @@ bool PolicyAlphaVectors::load(std::string filename, const FiniteStates *states, 
 				} catch (const StateException &err) {
 					sprintf(error, "The value '%s' is not a valid number on line %i in file '%s'.",
 							items[i + 1].c_str(), rows, filename.c_str());
-					log_message(std::cout, "PolicyAlphaVectors::load", error);
+					log_message("PolicyAlphaVectors::load", error);
 					return true;
 				}
 
@@ -366,7 +366,7 @@ bool PolicyAlphaVectors::save(std::string filename, const FiniteStates *states) 
 		file << std::endl;
 	} else {
 		sprintf(error, "Failed to save file '%s'. No policy was defined.", filename.c_str());
-		log_message(std::cout, "PolicyAlphaVectors::save", error);
+		log_message("PolicyAlphaVectors::save", error);
 		return true;
 	}
 

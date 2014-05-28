@@ -30,16 +30,17 @@
 #include <string>
 #include <iostream>
 
+#define LOG_STREAM std::cerr
+//#define LOG_STREAM std::cout
 
 /**
- * Log a normal message or error to a stream, e.g., std::cout.
+ * Log a normal message or error to a stream, e.g., std::cerr or std::cout.
  * Note: This is *not* to be used in any classes within "core." It is exclusively for the MDP-like objects
  * and the various utilities provided.
- * @param os	The output stream, e.g., std::cout.
  * @param msg	The message to output along with the error.
  * @param error	The detailed error message.
  */
-void log_message(std::ostream &os, const std::string &classFunctionName, const std::string &message);
+void log_message(const std::string &classFunctionName, const std::string &message);
 
 
 #endif // LOG_H
