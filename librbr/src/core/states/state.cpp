@@ -45,15 +45,14 @@ State::State(const State &other)
 State::~State()
 { }
 
-
 /**
-  * Overload the equals operator to set this state equal to the state provided.
-  * @param other The state to copy.
-  * @return The new version of this state.
-  */
-State &State::operator=(const State &s)
+ * Overload the equals operator to set this state equal to the state provided.
+ * @param other The state to copy.
+ * @return The new version of this state.
+ */
+State &State::operator=(const State &other)
 {
-    return *this;
+
 }
 
 /**

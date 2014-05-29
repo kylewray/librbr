@@ -30,7 +30,7 @@
 #include <string>
 
 /**
- * An abstract state object. 
+ * An abstract state object.
  */
 class State {
 public:
