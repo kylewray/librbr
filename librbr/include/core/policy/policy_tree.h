@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -53,7 +53,7 @@ struct PolicyTreeNode {
 
 	/**
 	 * A constructor for the PolicyTreeNode class which allows the specification of the action.
-	 * @param a The corresponding action at this node.
+	 * @param	a	The corresponding action at this node.
 	 */
 	PolicyTreeNode(const Action *a);
 
@@ -89,15 +89,15 @@ public:
 	/**
 	 * A constructor for a PolicyTree object which specifies the horizon. If the horizon
 	 * is zero, then it will create an empty tree (no nodes).
-	 * @param observations	The finite set of observations.
-	 * @param horizon 		The horizon of the problem.
+	 * @param	observations	The finite set of observations.
+	 * @param	horizon 		The horizon of the problem.
 	 */
 	PolicyTree(const FiniteObservations *observations, unsigned int horizon);
 
 	/**
 	 * A constructor for a MapPolicy object which specifies the horizon.
-	 * @param observations	The finite set of observations.
-	 * @param horizon 		The horizon object from the MDP-like object.
+	 * @param	observations	The finite set of observations.
+	 * @param	horizon 		The horizon object from the MDP-like object.
 	 */
 	PolicyTree(const FiniteObservations *observations, const Horizon *horizon);
 
@@ -108,41 +108,41 @@ public:
 
 	/**
 	 * Set the action given a history of observations.
-	 * @param history			The history of observations.
-	 * @param action			The action to take after this history of observations.
-	 * @throws PolicyException	The policy was not defined for this history.
+	 * @param	history				The history of observations.
+	 * @param	action				The action to take after this history of observations.
+	 * @throw	PolicyException		The policy was not defined for this history.
 	 */
 	void set(const std::vector<const Observation *> &history, const Action *action);
 
 	/**
 	 * Get the action given a history of observations.
-	 * @param history The history of observations.
-	 * @return The action to take given the history of observations provided.
-	 * @throws PolicyException The policy was not defined for this history.
+	 * @param	history				The history of observations.
+	 * @throw	PolicyException		The policy was not defined for this history.
+	 * @return	The action to take given the history of observations provided.
 	 */
 	const Action *get(const std::vector<const Observation *> &history) const;
 
 	/**
 	 * A function which must load a policy file.
-	 * @param filename		The name and path of the file to load.
-	 * @param actions		The actions object which contains the actual action objects to be mapped.
-	 * @param observations	The observations object which contains the actual observation objects to be mapped.
-	 * @param horizon		The horizons object to ensure valid policy creation.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
+	 * @param	filename		The name and path of the file to load.
+	 * @param	actions			The actions object which contains the actual action objects to be mapped.
+	 * @param	observations	The observations object which contains the actual observation objects to be mapped.
+	 * @param	horizon			The horizons object to ensure valid policy creation.
+	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	virtual bool load(std::string filename, const FiniteActions *actions, const FiniteObservations *observations, const Horizon *horizon);
 
 	/**
 	 * A function which must save a policy file.
-	 * @param filename The name and path of the file to save.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
+	 * @param	filename	The name and path of the file to save.
+	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	virtual bool save(std::string filename) const;
 
 	/**
 	 * A function which follows the defined policy, having the current state stored internally,
 	 * and returns the action to select next.
-	 * @throws PolicyException The horizon has already been reached; no more planning has been done.
+	 * @throw	PolicyException		The horizon has already been reached; no more planning has been done.
 	 */
 	virtual const Action *next(const Observation *observation);
 
@@ -154,25 +154,25 @@ public:
 private:
 	/**
 	 * Generate the policy tree recursively.
-	 * @param observations	The finite set of observations (branching factor).
-	 * @param horizon		The remaining horizon value; once zero, recursion terminates.
-	 * @returns The root of this node's subtree.
+	 * @param	observations	The finite set of observations (branching factor).
+	 * @param	horizon			The remaining horizon value; once zero, recursion terminates.
+	 * @return	The root of this node's subtree.
 	 */
 	PolicyTreeNode *generate_tree(const FiniteObservations *observations, unsigned int horizon);
 
 	/**
 	 * Traverse the tree following the history provided.
-	 * @param history The history of observations.
-	 * @return The final node after following the history.
-	 * @throws PolicyException The policy was not defined for this history.
+	 * @param	history				The history of observations.
+	 * @throw	PolicyException		The policy was not defined for this history.
+	 * @return	The final node after following the history.
 	 */
 	PolicyTreeNode *traverse(const std::vector<const Observation *> &history) const;
 
 	/**
 	 * Save the policy tree recursively.
-	 * @param file		The handle to the output file.
-	 * @param node 		The current node.
-	 * @param history	The history of observations so far.
+	 * @param	file		The handle to the output file.
+	 * @param	node 		The current node.
+	 * @param	history		The history of observations so far.
 	 */
 	void save_tree(std::ofstream &file, PolicyTreeNode *node, std::vector<const Observation *> history) const;
 

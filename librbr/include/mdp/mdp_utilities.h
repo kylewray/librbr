@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -39,14 +39,14 @@
 /**
  * Compute the Bellman update/backup for a given state and compute the action which achieves the
  * highest Q(s, a), and store the value and action in the variables provided.
- * @param S 	The finite states.
- * @param A 	The finite actions.
- * @param T 	The finite state transition function.
- * @param R 	The state-action-state rewards.
- * @param h 	The horizon.
- * @param s 	The current state being examined, i.e., V(s).
- * @param V		The current Bellman backup, mapping states to expected rewards. This will be updated.
- * @param aBest The action which produced the maximum V(s) value. This will be updated.
+ * @param	S 		The finite states.
+ * @param	A 		The finite actions.
+ * @param	T 		The finite state transition function.
+ * @param	R 		The state-action-state rewards.
+ * @param	h 		The horizon.
+ * @param	s 		The current state being examined, i.e., V(s).
+ * @param	V		The current Bellman backup, mapping states to expected rewards. This will be updated.
+ * @param	aBest	The action which produced the maximum V(s) value. This will be updated.
  */
 void bellman_update(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
 		const SASRewards *R, const Horizon *h, const State *s,

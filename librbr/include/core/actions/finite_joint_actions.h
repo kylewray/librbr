@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -50,7 +50,7 @@ public:
 	/**
 	 * The default constructor for the FiniteJointActions class which requires that you
 	 * specify the number of factors.
-	 * @param numFactors The number of action factors, minimum of 1.
+	 * @param	numFactors	The number of action factors, minimum of 1.
 	 */
 	FiniteJointActions(int numFactors);
 
@@ -62,18 +62,18 @@ public:
 	/**
 	 * Add a action to the set of available actions in a factor. This does *not* update the
 	 * actions list; please call update() once all factors have been set.
-	 * @param factorIndex 		The index of the factor to add the actions to.
-	 * @param newAction			The new actions to include in the set of available actions.
-	 * @throws ActionException	The index was invalid.
+	 * @param	factorIndex 		The index of the factor to add the actions to.
+	 * @param	newAction			The new actions to include in the set of available actions.
+	 * @throw	ActionException		The index was invalid.
 	 */
 	void add(int factorIndex, const Action *newAction);
 
 	/**
 	 * Remove an action to the set of available actions in a factor. This frees the memory. This does *not*
 	 * update the actions list; please call update() once all factors have been set.
-	 * @param factorIndex 		The index of the factor to add the actions to.
-	 * @param removeAction 		The action to remove from the set of available actions.
-	 * @throws ActionException	The index was invalid, or the action was not found in the actions list.
+	 * @param	factorIndex 		The index of the factor to add the actions to.
+	 * @param	removeAction 		The action to remove from the set of available actions.
+	 * @throw	ActionException		The index was invalid, or the action was not found in the actions list.
 	 */
 	void remove(int factorIndex, const Action *removeAction);
 
@@ -81,9 +81,9 @@ public:
 	 * Set the internal actions list for a factor given another list, performing a deep copy. This resets
 	 * the current list of actions and frees the memory. This does *not* update the states list; please
 	 * call update() once all factors have been set.
-	 * @param factorIndex 		The index of the factor to add the actions to.
-	 * @param newActions 		The vector of new actions to use.
-	 * @throws ActionException	The index was invalid, or newActions was empty.
+	 * @param	factorIndex 		The index of the factor to add the actions to.
+	 * @param	newActions 			The vector of new actions to use.
+	 * @throw	ActionException		The index was invalid, or newActions was empty.
 	 */
 	void set(int factorIndex, const std::vector<const Action *> &newActions);
 
@@ -91,22 +91,23 @@ public:
 	 * Get the action at the corresponding index, given the particular factor. The factor index
 	 * is defined by the agent, and an action's index is defined by the order in which they are
 	 * added and removed.
-	 * @param factorIndex The index of the factor.
-	 * @param actionIndex The index of the action.
-	 * @return The action at the corresponding index.
-	 * @throws ActionException The index was invalid.
+	 * @param	factorIndex 		The index of the factor.
+	 * @param	actionIndex 		The index of the action.
+	 * @throw	ActionException		The index was invalid.
+	 * @return	The action at the corresponding index.
 	 */
 	const Action *get(int factorIndex, int actionIndex) const;
 
 	/**
 	 * Update the internal actions list which holds all permutations of joint actions in an efficient structure.
 	 * Note: This *must* be called after sequences of add(), remove(), and/or set() calls.
-	 * @throws ActionException If a action factor has not been defined.
+	 * @throw	ActionException		If a action factor has not been defined.
 	 */
 	void update();
 
 	/**
 	 * Get the number of factored actions.
+	 * @return	The number of factored actions.
 	 */
 	int get_num_factors();
 
@@ -117,9 +118,9 @@ public:
 
 	/**
 	 * Get the joint action at the corresponding index.
-	 * @param actionIndex The index of the action.
-	 * @return The action at the corresponding index.
-	 * @throws ActionException The index was invalid.
+	 * @param	actionIndex			The index of the action.
+	 * @throws	ActionException		The index was invalid.
+	 * @return 	The action at the corresponding index.
 	 */
 	using FiniteActions::get;
 
@@ -132,8 +133,8 @@ protected:
 private:
 	/**
 	 * A helper function for updating the internal "actions" variable as part of the update() function.
-	 * @param currentJointAction	The current (incomplete) joint action as a vector of actions.
-	 * @param currentFactorIndex	The current factor index.
+	 * @param	currentJointAction		The current (incomplete) joint action as a vector of actions.
+	 * @param	currentFactorIndex		The current factor index.
 	 */
 	void update_step(std::vector<const Action *> currentJointAction, int currentFactorIndex);
 

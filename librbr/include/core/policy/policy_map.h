@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -56,13 +56,13 @@ public:
 
 	/**
 	 * A constructor for a PolicyMap object which specifies the horizon.
-	 * @param horizon The horizon of the problem; 0 represents infinite horizon.
+	 * @param	horizon		The horizon of the problem; 0 represents infinite horizon.
 	 */
 	PolicyMap(unsigned int horizon);
 
 	/**
 	 * A constructor for a PolicyMap object which specifies the horizon.
-	 * @param horizon The horizon object from the MDP-like object.
+	 * @param	horizon		The horizon object from the MDP-like object.
 	 */
 	PolicyMap(const Horizon *horizon);
 
@@ -73,51 +73,51 @@ public:
 
 	/**
 	 * Set the mapping from a state to an action. For finite horizon, it assumes 0 by default.
-	 * @param state		The state to define.
-	 * @param action	The action which should be taken at the state.
+	 * @param	state		The state to define.
+	 * @param	action		The action which should be taken at the state.
 	 */
 	void set(const State *state, const Action *action);
 
 	/**
 	 * Set the mapping from a state to an action, allowing the explicit specification of the horizon.
-	 * @param horizon			The horizon to set.
-	 * @param state				The state to define.
-	 * @param action			The action which should be taken at the state.
-	 * @throws PolicyException	The horizon was invalid.
+	 * @param	horizon				The horizon to set.
+	 * @param	state				The state to define.
+	 * @param	action				The action which should be taken at the state.
+	 * @throw	PolicyException		The horizon was invalid.
 	 */
 	void set(unsigned int horizon, const State *state, const Action *action);
 
 	/**
 	 * Get the action for a given state. For finite horizon, it assumes 0 by default.
-	 * @param state The state to retrieve a mapping.
-	 * @return The action to take at the given state.
-	 * @throws PolicyException The policy was not defined for this state.
+	 * @param	state				The state to retrieve a mapping.
+	 * @throw	PolicyException		The policy was not defined for this state.
+	 * @return	The action to take at the given state.
 	 */
 	const Action *get(const State *state) const;
 
 	/**
 	 * Get the action for a given state, allowing the explicit specification of the horizon.
-	 * @param horizon	The horizon to set.
-	 * @param state		The state to retrieve a mapping.
-	 * @return The action to take at the given state.
-	 * @throws PolicyException The policy was not defined for this state, or horizon was invalid.
+	 * @param	horizon				The horizon to set.
+	 * @param	state				The state to retrieve a mapping.
+	 * @throw	PolicyException		The policy was not defined for this state, or horizon was invalid.
+	 * @return	The action to take at the given state.
 	 */
 	const Action *get(unsigned int horizon, const State *state) const;
 
 	/**
 	 * A function which must load a policy file.
-	 * @param filename	The name and path of the file to load.
-	 * @param states	The states object which contains the actual state objects to be mapped.
-	 * @param actions	The actions object which contains the actual action objects to be mapped.
-	 * @param horizon	The horizons object to ensure valid policy creation.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
+	 * @param	filename	The name and path of the file to load.
+	 * @param	states		The states object which contains the actual state objects to be mapped.
+	 * @param	actions		The actions object which contains the actual action objects to be mapped.
+	 * @param	horizon		The horizons object to ensure valid policy creation.
+	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	virtual bool load(std::string filename, const FiniteStates *states, const FiniteActions *actions, const Horizon *horizon);
 
 	/**
 	 * A function which must save a policy file.
-	 * @param filename The name and path of the file to save.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
+	 * @param	filename	The name and path of the file to save.
+	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	virtual bool save(std::string filename) const;
 

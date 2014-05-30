@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -51,44 +51,44 @@ public:
 
 	/**
 	 * Add an agent to the set of available agents.
-	 * @param newAgent The new agent to include in the set of available agents.
+	 * @param	newAgent	The new agent to include in the set of available agents.
 	 */
 	void add(const Agent *newAgent);
 
 	/**
 	 * Remove an agent to the set of available agents. This frees the memory.
-	 * @param removeAgent 		The agent to remove from the set of available agents.
-	 * @throws AgentException	The agent was not found in the agents list.
+	 * @param	removeAgent 		The agent to remove from the set of available agents.
+	 * @throw	AgentException		The agent was not found in the agents list.
 	 */
 	void remove(const Agent *removeAgent);
 
 	/**
 	 * Set the internal actions list given another list, performing a deep copy. This resets
 	 * the current list of states and frees the memory.
-	 * @param newActions The vector of new actions to use.
+	 * @param	newActions		The vector of new actions to use.
 	 */
 	void set(const std::vector<const Agent *> &newAgents);
 
 	/**
 	 * Get an agent at a particular index. The index is determined by the order in which
 	 * agents were added.
-	 * @param agentIndex The index of the agent.
-	 * @return The agent at the corresponding index.
-	 * @throws AgentException The index was invalid.
+	 * @param	agentIndex		The index of the agent.
+	 * @throw	AgentException The index was invalid.
+	 * @return	The agent at the corresponding index.
 	 */
 	const Agent *get(int agentIndex) const;
 
 	/**
 	 * Return the number of agents.
-	 * @return The number of agents.
+	 * @return	The number of agents.
 	 */
 	virtual int get_num_agents() const;
 
 	/**
 	 * Get a particular agent given the name.
-	 * @param agentName The name of the agent.
-	 * @return The agent with the corresponding name provided.
-	 * @throws AgentException The name was invalid.
+	 * @param	agentName			The name of the agent.
+	 * @throw	AgentException		The name was invalid.
+	 * @return	The agent with the corresponding name provided.
 	 */
 	virtual const Agent *find(std::string agentName) const;
 
@@ -99,13 +99,13 @@ public:
 
 	/**
 	 * To facilitate easy iteration, return a constant beginning of the agents vector.
-	 * @return The iterator which points to a constant beginning of the agents vector.
+	 * @return	The iterator which points to a constant beginning of the agents vector.
 	 */
 	std::vector<const Agent *>::const_iterator begin() const;
 
 	/**
 	 * To facilitate easy iteration, return a constant end of the agents vector.
-	 * @return The iterator which points to a constant end of the agents vector.
+	 * @return	The iterator which points to a constant end of the agents vector.
 	 */
 	std::vector<const Agent *>::const_iterator end() const;
 

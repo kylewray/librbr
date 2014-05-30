@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -52,7 +52,7 @@ public:
 	/**
 	 * The default constructor for the FiniteJointObservations class which requires that you
 	 * specify the number of factors.
-	 * @param numFactors The number of observation factors, minimum of 1.
+	 * @param	numFactors		The number of observation factors, minimum of 1.
 	 */
 	FiniteJointObservations(int numFactors);
 
@@ -64,18 +64,18 @@ public:
 	/**
 	 * Add an observation to the set of available observations in a factor. This does *not* update the
 	 * observations list; please call update() once all factors have been set.
-	 * @param factorIndex 			The index of the factor to add the observation to.
-	 * @param newObservation 		The new observation to include in the set of available observations.
-	 * @throws ObservationException	The index was invalid.
+	 * @param	factorIndex 			The index of the factor to add the observation to.
+	 * @param	newObservation 			The new observation to include in the set of available observations.
+	 * @throw	ObservationException	The index was invalid.
 	 */
 	void add(int factorIndex, const Observation *newObservation);
 
 	/**
 	 * Remove an observation to the set of available observations in a factor. This frees the memory. This
 	 * does *not* update the observations list; please call update() once all factors have been set.
-	 * @param factorIndex 			The index of the factor to add the observations to.
-	 * @param removeObservation 	The observation to remove from the set of available observations.
-	 * @throws ObservationException	The index was invalid, or the observation was not found in the observations list.
+	 * @param	factorIndex 			The index of the factor to add the observations to.
+	 * @param	removeObservation 		The observation to remove from the set of available observations.
+	 * @throw	ObservationException	The index was invalid, or the observation was not found in the observations list.
 	 */
 	void remove(int factorIndex, const Observation *removeObservation);
 
@@ -83,9 +83,9 @@ public:
 	 * Set the internal observations list for a factor given another list, performing a deep copy. This resets
 	 * the current list of observations and frees the memory. This does *not* update the observations list; please
 	 * call update() once all factors have been set.
-	 * @param factorIndex 			The index of the factor to add the observation to.
-	 * @param newObservations 		The vector of new observations to use.
-	 * @throws ObservationException	The index was invalid, or newObservations was empty.
+	 * @param	factorIndex 			The index of the factor to add the observation to.
+	 * @param	newObservations 		The vector of new observations to use.
+	 * @throw	ObservationException	The index was invalid, or newObservations was empty.
 	 */
 	void set(int factorIndex, const std::vector<const Observation *> &newObservations);
 
@@ -93,17 +93,17 @@ public:
 	 * Get the observation at the corresponding index, given the particular factor. The factor index
 	 * is defined by the agent, and an observation's index is defined by the order in which they are
 	 * added and removed.
-	 * @param factorIndex THe index of the factor.
-	 * @param observationIndex The index of the observation.
-	 * @return The observation at the corresponding index.
-	 * @throws ObservationException The index was invalid.
+	 * @param	factorIndex				The index of the factor.
+	 * @param	observationIndex		The index of the observation.
+	 * @throw	ObservationException	The index was invalid.
+	 * @return	The observation at the corresponding index.
 	 */
 	const Observation *get(int factorIndex, int observationIndex) const;
 
 	/**
 	 * Update the internal observations list which holds all permutations of joint observations in an efficient structure.
 	 * Note: This *must* be called after sequences of add(), remove(), and/or set() calls.
-	 * @throws ObservationException If a state factor has not been defined.
+	 * @throw	ObservationException	A state factor has not been defined.
 	 */
 	void update();
 
@@ -119,9 +119,9 @@ public:
 
 	/**
 	 * Get the joint observation at the corresponding index.
-	 * @param observationIndex The index of the observation.
-	 * @return The observation at the corresponding index.
-	 * @throws ObservationException The index was invalid.
+	 * @param	observationIndex		The index of the observation.
+	 * @throw	ObservationException	The index was invalid.
+	 * @return	The observation at the corresponding index.
 	 */
 	using FiniteObservations::get;
 
@@ -134,8 +134,8 @@ protected:
 private:
 	/**
 	 * A helper function for updating the internal "observations" variable as part of the update() function.
-	 * @param currentJointObservation	The current (incomplete) joint observation as a vector of observations.
-	 * @param currentFactorIndex		The current factor index.
+	 * @param	currentJointObservation		The current (incomplete) joint observation as a vector of observations.
+	 * @param	currentFactorIndex			The current factor index.
 	 */
 	void update_step(std::vector<const Observation *> currentJointObservation, int currentFactorIndex);
 

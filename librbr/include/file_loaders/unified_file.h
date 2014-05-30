@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -66,7 +66,7 @@ public:
 
 	/**
 	 * The constructor which enables automatic loading of the specified MDP-like file.
-	 * @param path The filename of the MDP-like file to load.
+	 * @param	path	The filename of the MDP-like file to load.
 	 */
 	UnifiedFile(std::string path);
 
@@ -77,15 +77,15 @@ public:
 
 	/**
 	 * A function which loads any MDP-like file.
-	 * @param path The filename and relative path of the MDP-like file to load.
-	 * @return Returns @code{true} if an error occurred, @code{false} otherwise.
+	 * @param	path	The filename and relative path of the MDP-like file to load.
+	 * @return	Returns @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	bool load(std::string path);
 
 	/**
 	 * A function which saves the information as a MDP-like file.
-	 * @param path The filename and relative path of the MDP-like file to save.
-	 * @return Returns @code{true} if an error occurred, @code{false} otherwise.
+	 * @param	path	The filename and relative path of the MDP-like file to save.
+	 * @return	Returns @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	bool save(std::string path);
 
@@ -97,202 +97,202 @@ public:
 	/**
 	 * Get an MDP version of a loaded file. This releases control of the memory to the
 	 * MDP object, and therefore removes pointers to any loaded file information.
-	 * @return An MDP defined by the file loaded.
-	 * @throws CoreException The MDP was missing a vital component to be defined.
+	 * @throw	CoreException		The MDP was missing a vital component to be defined.
+	 * @return	An MDP defined by the file loaded.
 	 */
 	MDP *get_mdp();
 
 	/**
 	 * Get an POMDP version of a loaded file. This releases control of the memory to the
 	 * MDP object, and therefore removes pointers to any loaded file information.
-	 * @return A POMDP defined by the file loaded.
-	 * @throws CoreException The MDP was missing a vital component to be defined.
+	 * @throw	CoreException		The MDP was missing a vital component to be defined.
+	 * @return	A POMDP defined by the file loaded.
 	 */
 	POMDP *get_pomdp();
 
 	/**
 	 * Get an Dec-MDP version of a loaded file. This releases control of the memory to the
 	 * MDP object, and therefore removes pointers to any loaded file information.
-	 * @return A Dec-MDP defined by the file loaded.
-	 * @throws CoreException The MDP was missing a vital component to be defined.
+	 * @throw	CoreException		The MDP was missing a vital component to be defined.
+	 * @return	A Dec-MDP defined by the file loaded.
 	 */
 	DecMDP *get_dec_mdp();
 
 	/**
 	 * Get an Dec-POMDP version of a loaded file. This releases control of the memory to the
 	 * MDP object, and therefore removes pointers to any loaded file information.
-	 * @return A Dec-POMDP defined by the file loaded.
-	 * @throws CoreException The MDP was missing a vital component to be defined.
+	 * @throw	CoreException		The MDP was missing a vital component to be defined.
+	 * @return	A Dec-POMDP defined by the file loaded.
 	 */
 	DecPOMDP *get_dec_pomdp();
 
 private:
 	/**
 	 * Load the horizon from the file's data.
-	 * @param items	The list of items on the same line.
-	 * @return Return @code{true} if an error occurred, and @code{false} otherwise.
+	 * @param	items		The list of items on the same line.
+	 * @return	Return @code{true} if an error occurred, and @code{false} otherwise.
 	 */
 	bool load_horizon(std::vector<std::string> items);
 
 	/**
 	 * Load the discount factor from the file's data.
-	 * @param items	The list of items on the same line.
-	 * @return Return @code{true} if an error occurred, and @code{false} otherwise.
+	 * @param	items		The list of items on the same line.
+	 * @return	Return @code{true} if an error occurred, and @code{false} otherwise.
 	 */
 	bool load_discount_factor(std::vector<std::string> items);
 
 	/**
 	 * Load the initial state from the file's data.
-	 * @param items	The list of items on the same line.
-	 * @return Return @code{true} if an error occurred, and @code{false} otherwise.
+	 * @param	items		The list of items on the same line.
+	 * @return	Return @code{true} if an error occurred, and @code{false} otherwise.
 	 */
 	bool load_initial_state(std::vector<std::string> items);
 
 	/**
 	 * Load the initial state from the file's data, following the special inclusive structure.
-	 * @param items	The list of items on the same line.
-	 * @return Return @code{true} if an error occurred, and @code{false} otherwise.
+	 * @param	items		The list of items on the same line.
+	 * @return	Return @code{true} if an error occurred, and @code{false} otherwise.
 	 */
 	bool load_initial_state_inclusive(std::vector<std::string> items);
 
 	/**
 	 * Load the initial state from the file's data, following the special exclusive structure.
-	 * @param items	The list of items on the same line.
-	 * @return Return @code{true} if an error occurred, and @code{false} otherwise.
+	 * @param	items		The list of items on the same line.
+	 * @return	Return @code{true} if an error occurred, and @code{false} otherwise.
 	 */
 	bool load_initial_state_exclusive(std::vector<std::string> items);
 
 	/**
 	 * Load the value type (reward or cost) from the file's data.
-	 * @param items	The list of items on the same line.
-	 * @return Return @code{true} if an error occurred, and @code{false} otherwise.
+	 * @param	items		The list of items on the same line.
+	 * @return	Return @code{true} if an error occurred, and @code{false} otherwise.
 	 */
 	bool load_value(std::vector<std::string> items);
 
 	/**
 	 * Load the agents from the file's data.
-	 * @param items	The list of items on the same line.
-	 * @return Return @code{true} if an error occurred, and @code{false} otherwise.
+	 * @param	items		The list of items on the same line.
+	 * @return	Return @code{true} if an error occurred, and @code{false} otherwise.
 	 */
 	bool load_agents(std::vector<std::string> items);
 
 	/**
 	 * Load the states from the file's data.
-	 * @param items	The list of items on the same line.
-	 * @return Return -1 if an error occurred, 0 if successful, and 1 if this begins
-	 * 		loading a sequence of factored states (not necessarily for each agent).
+	 * @param	items		The list of items on the same line.
+	 * @return	Return -1 if an error occurred, 0 if successful, and 1 if this begins
+	 * 			loading a sequence of factored states (not necessarily for each agent).
 	 */
 	int load_states(std::vector<std::string> items);
 
 	/**
 	 * Load the factored states from the file's data.
-	 * @param factorIndex	The index of the factored state.
-	 * @param line			The line string from the file.
-	 * @return Return @code{true} if an error occurred, and @code{false} otherwise.
+	 * @param	factorIndex		The index of the factored state.
+	 * @param	line			The line string from the file.
+	 * @return	Return @code{true} if an error occurred, and @code{false} otherwise.
 	 */
 	bool load_factored_states(int factorIndex, std::string line);
 
 	/**
 	 * Load the actions from the file's data.
-	 * @param items	The list of items on the same line.
-	 * @return Return -1 if an error occurred, 0 if successful, and 1 if this begins
-	 * 		loading a sequence of actions for each agent.
+	 * @param	items		The list of items on the same line.
+	 * @return	Return -1 if an error occurred, 0 if successful, and 1 if this begins
+	 * 			loading a sequence of actions for each agent.
 	 */
 	int load_actions(std::vector<std::string> items);
 
 	/**
 	 * Load the actions of one agent from the file's data.
-	 * @param agentIndex	The index of the agent in the joint action.
-	 * @param line			The line string from the file.
-	 * @return Return -1 if an error occurred, 0 if successful, and 1 if this begins
-	 * 		loading a sequence of actions.
+	 * @param	agentIndex		The index of the agent in the joint action.
+	 * @param	line			The line string from the file.
+	 * @return	Return -1 if an error occurred, 0 if successful, and 1 if this begins
+	 * 			loading a sequence of actions.
 	 */
 	int load_agent_actions(int agentIndex, std::string line);
 
 	/**
 	 * Load the observations from the file's data.
-	 * @param items	The list of items on the same line.
-	 * @return Return -1 if an error occurred, 0 if successful, and 1 if this begins
+	 * @param	items		The list of items on the same line.
+	 * @return	Return -1 if an error occurred, 0 if successful, and 1 if this begins
 	 * 		loading a sequence of observations for each agent.
 	 */
 	int load_observations(std::vector<std::string> items);
 
 	/**
 	 * Load the observations of one agent from the file's data.
-	 * @param agentIndex	The index of the agent in the joint observation.
-	 * @param line			The line string from the file.
-	 * @return Return -1 if an error occurred, 0 if successful, and 1 if this begins
+	 * @param	agentIndex		The index of the agent in the joint observation.
+	 * @param	line			The line string from the file.
+	 * @return	Return -1 if an error occurred, 0 if successful, and 1 if this begins
 	 * 		loading a sequence of actions.
 	 */
 	int load_agent_observations(int agentIndex, std::string line);
 
 	/**
 	 * Load the state transitions from the file's data.
-	 * @param items	The list of items on the same line.
-	 * @return Return -1 if an error occurred, 0 if successful, 1 if this begins
-	 * 		loading a vector of state transitions, 2 if this begins loading a
-	 * 		matrix of state transitions.
+	 * @param	items		The list of items on the same line.
+	 * @return	Return -1 if an error occurred, 0 if successful, 1 if this begins
+	 * 			loading a vector of state transitions, 2 if this begins loading a
+	 * 			matrix of state transitions.
 	 */
 	int load_state_transition(std::vector<std::string> items);
 
 	/**
 	 * Load a state transition vector from the file's data.
-	 * @param line		The line to parse containing a vector of probabilities.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
+	 * @param	line		The line to parse containing a vector of probabilities.
+	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	bool load_state_transition_vector(std::string line);
 
 	/**
 	 * Load a state transition matrix from the file's data.
-	 * @param stateIndex	The current state index for the start state.
-	 * @param line			The line to parse containing a vector of probabilities.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
+	 * @param	stateIndex		The current state index for the start state.
+	 * @param	line			The line to parse containing a vector of probabilities.
+	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	bool load_state_transition_matrix(int stateIndex, std::string line);
 
 	/**
 	 * Load the observation transitions from the file's data.
-	 * @param items	The list of items on the same line.
-	 * @return Return -1 if an error occurred, 0 if successful, and 1 if this begins
-	 * 		loading a matrix of observation transitions.
+	 * @param	items		The list of items on the same line.
+	 * @return	Return -1 if an error occurred, 0 if successful, and 1 if this begins
+	 * 			loading a matrix of observation transitions.
 	 */
 	int load_observation_transition(std::vector<std::string> items);
 
 	/**
 	 * Load a observation transition vector from the file's data.
-	 * @param line		The line to parse containing a vector of probabilities.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
+	 * @param	line		The line to parse containing a vector of probabilities.
+	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	bool load_observation_transition_vector(std::string line);
 
 	/**
 	 * Load a state transition matrix from the file's data.
-	 * @param stateIndex	The current state index for the end state.
-	 * @param line			The line to parse containing a vector of probabilities.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
+	 * @param	stateIndex		The current state index for the end state.
+	 * @param	line			The line to parse containing a vector of probabilities.
+	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	bool load_observation_transition_matrix(int stateIndex, std::string line);
 
 	/**
 	 * Load the rewards from the file's data.
-	 * @param items	The list of items on the same line.
-	 * @return Return -1 if an error occurred, 0 if successful, and 1 if this begins
-	 * 		loading a matrix of rewards.
+	 * @param	items		The list of items on the same line.
+	 * @return	Return -1 if an error occurred, 0 if successful, and 1 if this begins
+	 * 			loading a matrix of rewards.
 	 */
 	int load_reward(std::vector<std::string> items);
 
 	/**
 	 * Load a reward vector from the file's data.
-	 * @param line		The line to parse containing a vector of rewards or costs.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
+	 * @param	line		The line to parse containing a vector of rewards or costs.
+	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	bool load_reward_vector(std::string line);
 
 	/**
 	 * Load a reward matrix from the file's data.
-	 * @param stateIndex	The current state index for the end state.
-	 * @param line			The line to parse containing a vector of rewards or costs.
-	 * @return Return @code{true} if an error occurred, @code{false} otherwise.
+	 * @param	stateIndex		The current state index for the end state.
+	 * @param	line			The line to parse containing a vector of rewards or costs.
+	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
 	bool load_reward_matrix(int stateIndex, std::string line);
 

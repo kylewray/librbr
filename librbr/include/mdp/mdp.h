@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -46,12 +46,12 @@ public:
 
 	/**
 	 * A constructor for the MDP class.
-	 * @param s		The states.
-	 * @param a		The actions.
-	 * @param st	The state transitions, which uses the states and actions parameters.
-	 * @param r		The rewards, which uses the states and actions parameters.
-	 * @param is	The initial state, which uses the states parameter.
-	 * @param h		The horizon.
+	 * @param	s		The states.
+	 * @param	a		The actions.
+	 * @param	st		The state transitions, which uses the states and actions parameters.
+	 * @param	r		The rewards, which uses the states and actions parameters.
+	 * @param	is		The initial state, which uses the states parameter.
+	 * @param	h		The horizon.
 	 */
 	MDP(States *s, Actions *a, StateTransitions *st, Rewards *r, Initial *is, Horizon *h);
 
@@ -62,37 +62,37 @@ public:
 
 	/**
 	 * Get the states object.
-	 * @return The states object.
+	 * @return	The states object.
 	 */
 	const States *get_states() const;
 
 	/**
 	 * Get the actions object.
-	 * @return The actions object.
+	 * @return	The actions object.
 	 */
 	const Actions *get_actions() const;
 
 	/**
 	 * Get the state transitions object.
-	 * @return The state transitions object.
+	 * @return	The state transitions object.
 	 */
 	const StateTransitions *get_state_transitions() const;
 
 	/**
 	 * Get the rewards object.
-	 * @return The rewards object.
+	 * @return	The rewards object.
 	 */
 	const Rewards *get_rewards() const;
 
 	/**
 	 * Get the initial state object.
-	 * @return The initial state object.
+	 * @return	The initial state object.
 	 */
 	const Initial *get_initial_state() const;
 
 	/**
 	 * Get the horizon object.
-	 * @return The horizon object.
+	 * @return	The horizon object.
 	 */
 	const Horizon *get_horizon() const;
 

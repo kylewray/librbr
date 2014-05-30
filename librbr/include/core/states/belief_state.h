@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -43,7 +43,7 @@ public:
 
 	/**
 	 * The copy constructor of the BeliefState object.
-	 * @param other The belief state to copy.
+	 * @param	other	The belief state to copy.
 	 */
 	BeliefState(const BeliefState &other);
 
@@ -54,22 +54,22 @@ public:
 
 	/**
 	 * Set the probability of a state.
-	 * @param state			The state to set a belief over.
-	 * @param probability	The probability of the state.
+	 * @param	state			The state to set a belief over.
+	 * @param	probability		The probability of the state.
 	 */
 	void set(const State *state, double probability);
 
 	/**
 	 * Get the probability of a state.
-	 * @param state The state to get a belief over.
-	 * @return The belief probability of the state.
+	 * @param	state		The state to get a belief over.
+	 * @return	The belief probability of the state.
 	 */
 	double get(const State *state) const;
 
 	/**
 	 * Overload the equals operator to set this belief state equal to the belief state provided.
-	 * @param other The belief state to copy.
-	 * @return The new version of this belief state.
+	 * @param	other		The belief state to copy.
+	 * @return	The new version of this belief state.
 	 */
 	BeliefState &operator=(const BeliefState &other);
 

@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -43,13 +43,13 @@ public:
 
 	/**
 	 * The constructor of the NamedAction object which allows initial specification of the unique name.
-	 * @param initialName The unique name of the state.
+	 * @param	initialName		The unique name of the state.
 	 */
 	NamedAction(std::string initialName);
 
 	/**
 	 * The copy constructor of the NamedAction object. Required by use as a map key.
-	 * @param other The action to copy.
+	 * @param	other		The action to copy.
 	 */
 	NamedAction(const NamedAction &other);
 
@@ -60,32 +60,32 @@ public:
 
 	/**
 	 * Set the name.
-	 * @param newName The new name.
+	 * @param	newName		The new name.
 	 */
 	virtual void set_name(std::string newName);
 
 	/**
 	 * Get the name.
-	 * @return The current name.
+	 * @return	The current name.
 	 */
 	virtual std::string get_name() const;
 
 	/**
 	 * Overload the equals operator to set this action equal to the action provided.
-	 * @param other The action to copy.
-	 * @return The new version of this action.
+	 * @param	other		The action to copy.
+	 * @return	The new version of this action.
 	 */
 	virtual Action &operator=(const Action &other);
 
 	/**
 	 * Returns a string representation of this action.
-	 * @return Returns the string representing this action.
+	 * @return	Returns the string representing this action.
 	 */
 	virtual std::string to_string() const;
 
 	/**
 	 * Returns a hash value used to quickly identify this action in a collection of actions.
-	 * @returns Returns the hash value of this action.
+	 * @return	Returns the hash value of this action.
 	 */
 	virtual unsigned int hash_value() const;
 

@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -41,7 +41,7 @@ public:
 
 	/**
 	 * The copy constructor of the Observation object.
-	 * @param other The observation to copy.
+	 * @param	other		The observation to copy.
 	 */
 	Observation(const Observation &other);
 
@@ -52,34 +52,34 @@ public:
 
 	/**
 	 * Overload the equals operator to set this observation equal to the observation provided.
-	 * @param other The observation to copy.
-	 * @return The new version of this observation.
+	 * @param	other		The observation to copy.
+	 * @return	The new version of this observation.
 	 */
 	virtual Observation &operator=(const Observation &other);
 
 	/**
 	 * Overload the equality comparison operator.
-	 * @param other The observation to compare.
-	 * @return Returns @code{true} if this observation is equal to the other; @code{false} otherwise.
+	 * @param	other		The observation to compare.
+	 * @return	Returns @code{true} if this observation is equal to the other; @code{false} otherwise.
 	 */
 	virtual bool operator==(const Observation &other) const;
 
 	/**
 	 * Overload the less than operator for comparison.
-	 * @param other The observation to compare.
-	 * @return Returns @code{true} if this observation is less than the other; @code{false} otherwise.
+	 * @param	other		The observation to compare.
+	 * @return	Returns @code{true} if this observation is less than the other; @code{false} otherwise.
 	 */
 	virtual bool operator<(const Observation &other) const;
 
 	/**
 	 * Returns a string representation of this observation.
-	 * @return Returns the string representing this observation.
+	 * @return	Returns the string representing this observation.
 	 */
 	virtual std::string to_string() const = 0;
 
 	/**
 	 * Returns a hash value used to quickly identify this observation in a collection of observations.
-	 * @returns Returns the hash value of this observation.
+	 * @return	Returns the hash value of this observation.
 	 */
 	virtual unsigned int hash_value() const = 0;
 

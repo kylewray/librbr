@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -62,28 +62,28 @@ public:
 
 	/**
 	 * Set a observation transition from a particular observation-action-state triple to a probability.
-	 * @param previousAction	The action taken at the previous state which resulted in the current state.
-	 * @param state				The current state.
-	 * @param observation		The next observation to which we assign a probability.
-	 * @param probability		The probability of the observation given we took the action and landed in the state given.
+	 * @param	previousAction	The action taken at the previous state which resulted in the current state.
+	 * @param	state			The current state.
+	 * @param	observation		The next observation to which we assign a probability.
+	 * @param	probability		The probability of the observation given we took the action and landed in the state given.
 	 */
 	void set(const Action *previousAction, const State *state, const Observation *observation, double probability);
 
 	/**
 	 * The probability of a transition following the observation-action-state triple provided.
-	 * @param previousAction	The action taken at the previous state which resulted in the current state.
-	 * @param state				The current state.
-	 * @param observation		The next observation to which we assign a probability.
-	 * @return The probability of the observation given we took the action and landed in the state given.
+	 * @param	previousAction	The action taken at the previous state which resulted in the current state.
+	 * @param	state			The current state.
+	 * @param	observation		The next observation to which we assign a probability.
+	 * @return	The probability of the observation given we took the action and landed in the state given.
 	 */
 	virtual double get(const Action *previousAction, const State *state, const Observation *observation) const;
 
 	/**
 	 * Return a list of the observations available given a previous state and the action taken there.
-	 * @param Z			A finite set of observations.
-	 * @param action	The action taken at the previous state.
-	 * @param state 	The next state after taking the action in the previous state.
-	 * @param result	The list to overwrite and set to be the list of successor states.
+	 * @param	Z			A finite set of observations.
+	 * @param	action		The action taken at the previous state.
+	 * @param	state 		The next state after taking the action in the previous state.
+	 * @param	result		The list to overwrite and set to be the list of successor states.
 	 */
 	void available(const FiniteObservations *Z, const Action *action, const State *nextState,
 			std::vector<const Observation *> &result) const;
@@ -97,11 +97,11 @@ private:
 	/**
 	 * The actual get function which returns a value. This will throw an error if the value is undefined.
 	 * It is used as a helper function for the public get function.
-	 * @param previousAction	The action taken at the previous state which resulted in the current state.
-	 * @param state				The current state.
-	 * @param observation		The next observation to which we assign a probability.
-	 * @return The probability of the observation given we took the action and landed in the state given.
-	 * @throws ObservationTransitionException The observation transition was not defined.
+	 * @param	previousAction					The action taken at the previous state which resulted in the current state.
+	 * @param	state							The current state.
+	 * @param	observation						The next observation to which we assign a probability.
+	 * @throw	ObservationTransitionException 	The observation transition was not defined.
+	 * @return	The probability of the observation given we took the action and landed in the state given.
 	 */
 	virtual double get_value(const Action *previousAction, const State *state, const Observation *observation) const;
 

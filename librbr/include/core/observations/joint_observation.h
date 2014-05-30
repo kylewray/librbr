@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -41,20 +41,20 @@ public:
 	/**
 	 * The constructor of the JointObservation object which allows initial specification of the
 	 * number of joint states.
-	 * @param numJointStates The number of joint states in the tuple.
+	 * @param	numJointStates		The number of joint states in the tuple.
 	 */
 	JointObservation(int numJointObservations);
 
 	/**
 	 * The constructor of the JointObservation object which allows initial specification of the
 	 * actual joint observation tuple (vector).
-	 * @param jointObservation The list of states which define this joint observation.
+	 * @param	jointObservation		The list of states which define this joint observation.
 	 */
 	JointObservation(const std::vector<const Observation *> &jointObservation);
 
 	/**
 	 * The copy constructor of the JointObservation object.
-	 * @param other The observation to copy.
+	 * @param	other		The observation to copy.
 	 */
 	JointObservation(const JointObservation &other);
 
@@ -65,46 +65,46 @@ public:
 
 	/**
 	 * Set the joint observation given a list of observations.
-	 * @param jointObservation The list of observations which define this joint observation.
+	 * @param	jointObservation	The list of observations which define this joint observation.
 	 */
 	virtual void set(const std::vector<const Observation *> &jointObservation);
 
 	/**
 	 * Get the joint observation.
-	 * @return The list of observations.
+	 * @return	The list of observations.
 	 */
 	virtual const std::vector<const Observation *> &get() const;
 
 	/**
 	 * Get a particular observation at a index.
-	 * @param index The index to retrieve the observation.
-	 * @return The observation at the index provided.
-	 * @throws ObservationException The index is not valid.
+	 * @param	index					The index to retrieve the observation.
+	 * @throw	ObservationException	The index is not valid.
+	 * @return	The observation at the index provided.
 	 */
 	virtual const Observation *get(int index) const;
 
 	/**
 	 * Get the number of observations within the joint observation.
-	 * @return The number of observations within the joint observation.
+	 * @return	The number of observations within the joint observation.
 	 */
 	virtual int get_num_observations() const;
 
 	/**
 	 * Overload the equals operator to set this joint observation equal to the observation provided.
-	 * @param other The joint observation to copy.
-	 * @return The new version of this observation.
+	 * @param	other		The joint observation to copy.
+	 * @return	The new version of this observation.
 	 */
 	virtual Observation &operator=(const Observation &other);
 
 	/**
 	 * Returns a string representation of this action.
-	 * @return Returns the string representing this action.
+	 * @return	Returns the string representing this action.
 	 */
 	virtual std::string to_string() const;
 
 	/**
 	 * Returns a hash value used to quickly identify this action in a collection of actions.
-	 * @returns Returns the hash value of this action.
+	 * @return	Returns the hash value of this action.
 	 */
 	virtual unsigned int hash_value() const;
 

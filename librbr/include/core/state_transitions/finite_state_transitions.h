@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -60,29 +60,29 @@ public:
 
 	/**
 	 * Set a state transition from a particular state-action-state triple to a probability.
-	 * @param state			The current state of the system.
-	 * @param action		The action taken at the current state.
-	 * @param nextState		The next state with which we assign the probability.
-	 * @param probability	The probability of going from the state, taking the action, then
-	 * 						moving to the nextState.
+	 * @param	state			The current state of the system.
+	 * @param	action			The action taken at the current state.
+	 * @param	nextState		The next state with which we assign the probability.
+	 * @param	probability		The probability of going from the state, taking the action, then
+	 * 							moving to the nextState.
 	 */
 	void set(const State *state, const Action *action, const State *nextState, double probability);
 
 	/**
 	 * The probability of a transition following the state-action-state triple provided.
-	 * @param state		The current state of the system.
-	 * @param action	The action taken at the current state.
-	 * @param nextState	The next state with which we assign the probability.
-	 * @return The probability of going from the state, taking the action, then moving to the nextState.
+	 * @param	state		The current state of the system.
+	 * @param	action		The action taken at the current state.
+	 * @param	nextState	The next state with which we assign the probability.
+	 * @return	The probability of going from the state, taking the action, then moving to the nextState.
 	 */
 	virtual double get(const State *state, const Action *action, const State *nextState) const;
 
 	/**
 	 * Return a list of the states available given a previous state and the action taken there.
-	 * @param S				The finite set of states.
-	 * @param state			The previous state.
-	 * @param action		The action taken at the previous state.
-	 * @param successors	The list to overwrite and set to be the list of successor states.
+	 * @param	S				The finite set of states.
+	 * @param	state			The previous state.
+	 * @param	action			The action taken at the previous state.
+	 * @param	successors		The list to overwrite and set to be the list of successor states.
 	 */
 	virtual void successors(const FiniteStates *S, const State *state, const Action *action, std::vector<const State *> &result) const;
 
@@ -95,11 +95,11 @@ private:
 	/**
 	 * The actual get function which returns a value. This will throw an error if the value is undefined.
 	 * It is used as a helper function for the public get function.
-	 * @param state		The current state of the system.
-	 * @param action	The action taken at the current state.
-	 * @param nextState	The next state with which we assign the reward.
-	 * @return The probability of going from the state, taking the action, then moving to the nextState.
-	 * @throws StateTransitionException The state transition was not defined.
+	 * @param	state						The current state of the system.
+	 * @param	action						The action taken at the current state.
+	 * @param	nextState					The next state with which we assign the reward.
+	 * @throw	StateTransitionException	The state transition was not defined.
+	 * @return	The probability of going from the state, taking the action, then moving to the nextState.
 	 */
 	virtual double get_value(const State *state, const Action *action, const State *nextState) const;
 

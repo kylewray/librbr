@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -42,13 +42,13 @@ public:
 
 	/**
 	 * The constructor of the Agent object which allows initial specification of the unique name.
-	 * @param initialName The unique name of the state.
+	 * @param	initialName		The unique name of the state.
 	 */
 	Agent(std::string initialName);
 
 	/**
 	 * The copy constructor of the Agent object.
-	 * @param other The agent to copy.
+	 * @param	other		The agent to copy.
 	 */
 	Agent(const Agent &other);
 
@@ -59,46 +59,46 @@ public:
 
 	/**
 	 * Set the name.
-	 * @param newName The new name.
+	 * @param	newName		The new name.
 	 */
 	virtual void set_name(std::string newName);
 
 	/**
 	 * Get the name.
-	 * @return The current name.
+	 * @return	The current name.
 	 */
 	virtual std::string get_name() const;
 
 	/**
 	 * Overload the equals operator to set this agent equal to the agent provided.
-	 * @param other The agent to copy.
-	 * @return The new version of this agent.
+	 * @param	other		The agent to copy.
+	 * @return	The new version of this agent.
 	 */
 	virtual Agent &operator=(const Agent &other);
 
 	/**
 	 * Overload the equality comparison operator.
-	 * @param other The agent to compare.
-	 * @return Returns @code{true} if this agent is equal to the other; @code{false} otherwise.
+	 * @param	other		The agent to compare.
+	 * @return	Returns @code{true} if this agent is equal to the other; @code{false} otherwise.
 	 */
 	virtual bool operator==(const Agent &other) const;
 
 	/**
 	 * Overload the less than operator for comparison.
-	 * @param other The agent to compare.
-	 * @return Returns @code{true} if this agent is less than the other; @code{false} otherwise.
+	 * @param	other		The agent to compare.
+	 * @return	Returns @code{true} if this agent is less than the other; @code{false} otherwise.
 	 */
 	virtual bool operator<(const Agent &other) const;
 
 	/**
 	 * Returns a string representation of this agent.
-	 * @return Returns the string representing this agent.
+	 * @return	Returns the string representing this agent.
 	 */
 	virtual std::string to_string() const;
 
 	/**
 	 * Returns a hash value used to quickly identify this action in a collection of agent.
-	 * @returns Returns the hash value of this agent.
+	 * @return	Returns the hash value of this agent.
 	 */
 	virtual unsigned int hash_value() const;
 

@@ -53,7 +53,7 @@ public:
 
 	/**
 	 * The constructor for the FiniteActions class which allows the specification of an initial set of actions.
-	 * @param actions The initial vector of actions.
+	 * @param	actions	The initial vector of actions.
 	 */
 	FiniteActions(const std::vector<const Action *> &actions);
 
@@ -64,43 +64,43 @@ public:
 
 	/**
 	 * Add an action to the set of available actions.
-	 * @param newAction The new action to include in the set of available actions.
+	 * @param	newAction	The new action to include in the set of available actions.
 	 */
 	void add(const Action *newAction);
 
 	/**
 	 * Remove an action to the set of available actions. This frees the memory.
-	 * @param removeAction 		The action to remove from the set of available actions.
-	 * @throws ActionException	The action was not found in the actions list.
+	 * @param	removeAction 		The action to remove from the set of available actions.
+	 * @throw	ActionException		The action was not found in the actions list.
 	 */
 	void remove(const Action *removeAction);
 
 	/**
 	 * Set the internal actions list given another list, performing a deep copy. This resets
 	 * the current list of states and frees the memory.
-	 * @param newActions The vector of new actions to use.
+	 * @param	newActions	The vector of new actions to use.
 	 */
 	void set(const std::vector<const Action *> &newActions);
 
 	/**
 	 * Get the action at the corresponding index. An action's index is defined by the order
 	 * in which they are added and removed.
-	 * @param actionIndex The index of the action.
-	 * @return The action at the corresponding index.
-	 * @throws ActionException The index was invalid.
+	 * @param	actionIndex			The index of the action.
+	 * @throw	ActionException		The index was invalid.
+	 * @return	The action at the corresponding index.
 	 */
 	const Action *get(int actionIndex) const;
 
 	/**
 	 * Return a list of the actions available given a state.
-	 * @param state The current state.
-	 * @return Return a list of available actions.
+	 * @param	state	The current state.
+	 * @return	Return a list of available actions.
 	 */
 	virtual const std::vector<const Action *> &available(const State *state) const;
 
 	/**
 	 * Return the number of actions.
-	 * @return The number of actions.
+	 * @return	The number of actions.
 	 */
 	virtual int get_num_actions() const;
 
@@ -111,13 +111,13 @@ public:
 
 	/**
 	 * To facilitate easy iteration, return a constant beginning of the actions vector.
-	 * @return The iterator which points to a constant beginning of the actions vector.
+	 * @return	The iterator which points to a constant beginning of the actions vector.
 	 */
 	std::vector<const Action *>::const_iterator begin() const;
 
 	/**
 	 * To facilitate easy iteration, return a constant end of the actions vector.
-	 * @return The iterator which points to a constant end of the actions vector.
+	 * @return	The iterator which points to a constant end of the actions vector.
 	 */
 	std::vector<const Action *>::const_iterator end() const;
 

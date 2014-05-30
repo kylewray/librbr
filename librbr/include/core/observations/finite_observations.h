@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -54,7 +54,7 @@ public:
 
 	/**
 	 * The constructor for the FiniteObservations class which allows the specification of an initial set of observations.
-	 * @param observations The initial vector of observations.
+	 * @param	observations	The initial vector of observations.
 	 */
 	FiniteObservations(const std::vector<const Observation *> &observations);
 
@@ -65,36 +65,36 @@ public:
 
 	/**
 	 * Add a observation to the set of available observations.
-	 * @param newObservation The new observation to include in the set of available states.
+	 * @param	newObservation	The new observation to include in the set of available states.
 	 */
 	void add(const Observation *newObservation);
 
 	/**
 	 * Remove a observation to the set of available observations. This frees the memory.
-	 * @param removeObservation 	The state to remove from the set of available observations.
-	 * @throws ObservationException	The observation was not found in the observations list.
+	 * @param	removeObservation 		The state to remove from the set of available observations.
+	 * @throw	ObservationException	The observation was not found in the observations list.
 	 */
 	void remove(const Observation *removeObservation);
 
 	/**
 	 * Set the internal observations list given another list, performing a deep copy. This resets
 	 * the current list of observations and frees the memory.
-	 * @param newObservations The vector of new observations to use.
+	 * @param	newObservations		The vector of new observations to use.
 	 */
 	void set(const std::vector<const Observation *> &newObservations);
 
 	/**
 	 * Get the observation at the corresponding index. An observation's index is defined by the order
 	 * in which they are added and removed.
-	 * @param observationIndex The index of the observation.
-	 * @return The observation at the corresponding index.
-	 * @throws ObservationException The index was invalid.
+	 * @param	observationIndex		The index of the observation.
+	 * @throw	ObservationException	The index was invalid.
+	 * @return	The observation at the corresponding index.
 	 */
 	const Observation *get(int observationIndex) const;
 
 	/**
 	 * Return the number of observations.
-	 * @return The number of observations.
+	 * @return	The number of observations.
 	 */
 	virtual int get_num_observations() const;
 
@@ -105,13 +105,13 @@ public:
 
 	/**
 	 * To facilitate easy iteration, return a constant beginning of the observations vector.
-	 * @return The iterator which points to a constant beginning of the observations vector.
+	 * @return	The iterator which points to a constant beginning of the observations vector.
 	 */
 	std::vector<const Observation *>::const_iterator begin() const;
 
 	/**
 	 * To facilitate easy iteration, return a constant end of the observations vector.
-	 * @return The iterator which points to a constant end of the observations vector.
+	 * @return	The iterator which points to a constant end of the observations vector.
 	 */
 	std::vector<const Observation *>::const_iterator end() const;
 

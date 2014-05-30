@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -46,13 +46,13 @@ public:
 
 	/**
 	 * A constructor for the PolicyAlphaVector class which specifies the initial action.
-	 * @param action The action to take if this is the maximal alpha vector.
+	 * @param	action		The action to take if this is the maximal alpha vector.
 	 */
 	PolicyAlphaVector(const Action *action);
 
 	/**
 	 * The copy constructor for the PolicyAlphaVector class.
-	 * @param other The other alpha vector to copy.
+	 * @param	other		The other alpha vector to copy.
 	 */
 	PolicyAlphaVector(const PolicyAlphaVector &other);
 
@@ -63,15 +63,15 @@ public:
 
 	/**
 	 * Set the value of a state. Unset alpha values are assumed to be 0.
-	 * @param state	Set the value of this state.
-	 * @param value The alpha value of the state.
+	 * @param	state	Set the value of this state.
+	 * @param	value	The alpha value of the state.
 	 */
 	void set(const State *state, double value);
 
 	/**
 	 * Get the value of a state. Unset alpha values are assumed to be 0.
-	 * @param state Get the value of this state.
-	 * @return The alpha vector's value of the state.
+	 * @param	state		Get the value of this state.
+	 * @return	The alpha vector's value of the state.
 	 */
 	double get(const State *state) const;
 
@@ -82,55 +82,55 @@ public:
 
 	/**
 	 * Get the action to take at this alpha vector.
-	 * @return The action to take if this alpha vector is optimal for a belief state.
+	 * @return	The action to take if this alpha vector is optimal for a belief state.
 	 */
 	const Action *get_action() const;
 
 	/**
 	 * Get the dimension of this alpha vector (which is the number of states).
-	 * @return The dimension of this alpha vector.
+	 * @return	The dimension of this alpha vector.
 	 */
 	int get_dimension() const;
 
 	/**
 	 * Compute the value of the belief state by computing: dot(beta, alpha).
-	 * @param belief The belief state 'beta' vector.
-	 * @return The value of the belief state provided.
+	 * @param	belief		The belief state 'beta' vector.
+	 * @return	The value of the belief state provided.
 	 */
 	double compute_value(const BeliefState *belief) const;
 
 	/**
 	 * Overload the equals operator to set this alpha vector equal to the alpha vector provided.
-	 * @param other The alpha vector to copy.
-	 * @return The new version of this alpha vector.
+	 * @param	other		The alpha vector to copy.
+	 * @return	The new version of this alpha vector.
 	 */
 	PolicyAlphaVector &operator=(const PolicyAlphaVector &other);
 
 	/**
 	 * Overload the plus operator to return the summation of all elements in the vectors.
-	 * @param other The alpha vector to add to this one.
-	 * @return The resultant alpha vector from the sum of this one and the other one provided.
+	 * @param	other		The alpha vector to add to this one.
+	 * @return	The resultant alpha vector from the sum of this one and the other one provided.
 	 */
 	PolicyAlphaVector operator+(const PolicyAlphaVector &other) const;
 
 	/**
 	 * Overload the plus-equals operator to return the summation of all elements in the vectors.
-	 * @param other The alpha vector to add to this one.
-	 * @return The resultant alpha vector from the sum of this one and the other one provided.
+	 * @param	other		The alpha vector to add to this one.
+	 * @return	The resultant alpha vector from the sum of this one and the other one provided.
 	 */
 	PolicyAlphaVector &operator+=(const PolicyAlphaVector &other);
 
 	/**
 	 * Overload the minus operator to return the subtraction of all elements in the vectors.
-	 * @param other The alpha vector to subtract to this one.
-	 * @return The resultant alpha vector from the element-wise subtraction of this one and the other one provided.
+	 * @param	other		The alpha vector to subtract to this one.
+	 * @return	The resultant alpha vector from the element-wise subtraction of this one and the other one provided.
 	 */
 	PolicyAlphaVector operator-(const PolicyAlphaVector &other) const;
 
 	/**
 	 * Overload the minus-equals operator to return the subtraction of all elements in the vectors.
-	 * @param other The alpha vector to subtract to this one.
-	 * @return The resultant alpha vector from the element-wise subtraction of this one and the other one provided.
+	 * @param	other		The alpha vector to subtract to this one.
+	 * @return	The resultant alpha vector from the element-wise subtraction of this one and the other one provided.
 	 */
 	PolicyAlphaVector &operator-=(const PolicyAlphaVector &other);
 
@@ -141,9 +141,9 @@ public:
 
 	/**
 	 * Compute the cross-sum (Minkowski sum) of two alpha vectors. This creates new PolicyAlphaVector in memory.
-	 * @param A The left set of alpha vectors.
-	 * @param B The right set of alpha vectors.
-	 * @return The result from performing the cross-sum on the two sets of alpha vectors.
+	 * @param	A	The left set of alpha vectors.
+	 * @param	B	The right set of alpha vectors.
+	 * @return	The result from performing the cross-sum on the two sets of alpha vectors.
 	 */
 	static std::vector<PolicyAlphaVector *> cross_sum(const std::vector<PolicyAlphaVector *> &A, const std::vector<PolicyAlphaVector *> &B);
 

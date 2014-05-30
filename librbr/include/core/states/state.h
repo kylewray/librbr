@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -41,7 +41,7 @@ public:
 
 	/**
 	 * The copy constructor of the State object.
-	 * @param other The state to copy.
+	 * @param	other	The state to copy.
 	 */
 	State(const State &other);
 
@@ -52,8 +52,8 @@ public:
 
 	/**
 	 * Overload the equals operator to set this state equal to the state provided.
-	 * @param other The state to copy.
-	 * @return The new version of this state.
+	 * @param	other	The state to copy.
+	 * @return	The new version of this state.
 	 */
 	virtual State &operator=(const State &other);
 

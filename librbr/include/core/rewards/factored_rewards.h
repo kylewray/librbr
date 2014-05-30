@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -49,7 +49,7 @@ public:
 	/**
 	 * The constructor for the FactoredRewards class which allows the specification
 	 * of the number of rewards.
-	 * @param numRewards The number of rewards in the multi-rewards vector, minimum of 1.
+	 * @param	numRewards		The number of rewards in the multi-rewards vector, minimum of 1.
 	 */
 	FactoredRewards(int numRewards);
 
@@ -61,30 +61,30 @@ public:
 	/**
 	 * Add a new rewards factor to the vector of available rewards. This relinquishes control of the
 	 * new rewards factor to this object.
-	 * @param newRewardsFactor	The new rewards factor to include in the vector of available rewards.
-	 * @throw RewardException	The new rewards factor was null.
+	 * @param	newRewardsFactor	The new rewards factor to include in the vector of available rewards.
+	 * @throw	RewardException		The new rewards factor was null.
 	 */
 	virtual void add_factor(Rewards *newRewardsFactor);
 
 	/**
 	 * Set the particular rewards element in the multi-rewards vector. This frees memory.
-	 * @param factorIndex 		The index of the factor to add the rewards factor to.
-	 * @param newRewardsFactor	The new rewards factor for this index.
-	 * @throws RewardException	The index was invalid.
+	 * @param	factorIndex 		The index of the factor to add the rewards factor to.
+	 * @param	newRewardsFactor	The new rewards factor for this index.
+	 * @throw	RewardException		The index was invalid.
 	 */
 	virtual void set(int index, Rewards *newRewardsFactor);
 
 	/**
 	 * Get the particular rewards element in the factored rewards vector.
-	 * @param factorIndex The index of the factor to add the rewards factor to.
-	 * @returns The rewards for this index.
-	 * @throws RewardException	The index was invalid.
+	 * @param	factorIndex			The index of the factor to add the rewards factor to.
+	 * @throw	RewardException		The index was invalid.
+	 * @return	The rewards for this index.
 	 */
 	virtual Rewards *get(int index) const;
 
 	/**
 	 * Get the number of rewards, i.e., the dimension of the factored rewards vector.
-	 * @return The number of rewards.
+	 * @return	The number of rewards.
 	 */
 	virtual int get_num_rewards() const;
 

@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -41,7 +41,7 @@ public:
 
 	/**
 	 * The copy constructor of the Action object. Required by use as a map key.
-	 * @param other The action to copy.
+	 * @param	other	The action to copy.
 	 */
 	Action(const Action &other);
 
@@ -52,34 +52,34 @@ public:
 
 	/**
 	 * Overload the equals operator to set this action equal to the action provided.
-	 * @param other The action to copy.
-	 * @return The new version of this action.
+	 * @param	other	The action to copy.
+	 * @return	The new version of this action.
 	 */
 	virtual Action &operator=(const Action &other);
 
 	/**
 	 * Overload the equality comparison operator.
-	 * @param other The action to compare.
-	 * @return Returns @code{true} if this action is equal to the other; @code{false} otherwise.
+	 * @param	other	The action to compare.
+	 * @return	Returns @code{true} if this action is equal to the other; @code{false} otherwise.
 	 */
 	virtual bool operator==(const Action &other) const;
 
 	/**
 	 * Overload the less than operator for comparison.
-	 * @param other The action to compare.
-	 * @return Returns @code{true} if this action is less than the other; @code{false} otherwise.
+	 * @param	other	The action to compare.
+	 * @return	Returns @code{true} if this action is less than the other; @code{false} otherwise.
 	 */
 	virtual bool operator<(const Action &other) const;
 
 	/**
 	 * Returns a string representation of this action.
-	 * @return Returns the string representing this action.
+	 * @return	Returns the string representing this action.
 	 */
 	virtual std::string to_string() const = 0;
 
 	/**
 	 * Returns a hash value used to quickly identify this action in a collection of actions.
-	 * @returns Returns the hash value of this action.
+	 * @return	Returns the hash value of this action.
 	 */
 	virtual unsigned int hash_value() const = 0;
 

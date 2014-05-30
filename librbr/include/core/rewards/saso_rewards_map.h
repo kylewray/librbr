@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -53,35 +53,35 @@ public:
 
 	/**
 	 * Set a state transition from a particular state-action-state-observation quadruple to a probability.
-	 * @param state			The current state of the system.
-	 * @param action		The action taken in the current state.
-	 * @param nextState		The next state with which we assign the reward.
-	 * @param observation	The observation made at the next state.
-	 * @param reward		The reward from the provided state-action-state-observation quadruple.
+	 * @param	state			The current state of the system.
+	 * @param	action			The action taken in the current state.
+	 * @param	nextState		The next state with which we assign the reward.
+	 * @param	observation		The observation made at the next state.
+	 * @param	reward			The reward from the provided state-action-state-observation quadruple.
 	 */
 	virtual void set(const State *state, const Action *action, const State *nextState,
 			const Observation *observation, double reward);
 
 	/**
 	 * The probability of a transition following the state-action-state-observation quadruple provided.
-	 * @param state			The current state of the system.
-	 * @param action		The action taken in the current state.
-	 * @param nextState		The next state with which we assign the reward.
-	 * @param observation	The observation made at the next state.
-	 * @return The reward from taking the given action in the given state.
+	 * @param	state			The current state of the system.
+	 * @param	action			The action taken in the current state.
+	 * @param	nextState		The next state with which we assign the reward.
+	 * @param	observation		The observation made at the next state.
+	 * @return	The reward from taking the given action in the given state.
 	 */
 	virtual double get(const State *state, const Action *action, const State *nextState,
 			const Observation *observation) const;
 
 	/**
 	 * Get the minimal R-value.
-	 * @return The minimal R-value.
+	 * @return	The minimal R-value.
 	 */
 	virtual double get_min() const;
 
 	/**
 	 * Get the maximal R-value.
-	 * @return The maximal R-value.
+	 * @return	The maximal R-value.
 	 */
 	virtual double get_max() const;
 
@@ -94,12 +94,12 @@ private:
 	/**
 	 * The actual get function which returns a value. This will throw an error if the value is undefined.
 	 * It is used as a helper function for the public get function.
-	 * @param state			The current state of the system.
-	 * @param action		The action taken in the current state.
-	 * @param nextState		The next state with which we assign the reward.
-	 * @param observation	The observation made at the next state.
-	 * @return The reward from taking the given action in the given state.
-	 * @throws RewardException The reward was not defined.
+	 * @param	state				The current state of the system.
+	 * @param	action				The action taken in the current state.
+	 * @param	nextState			The next state with which we assign the reward.
+	 * @param	observation			The observation made at the next state.
+	 * @throw	RewardException		The reward was not defined.
+	 * @return	The reward from taking the given action in the given state.
 	 */
 	virtual double get_value(const State *state, const Action *action, const State *nextState,
 			const Observation *observation) const;
@@ -138,5 +138,6 @@ private:
 	double Rmax;
 
 };
+
 
 #endif // SASO_REWARDS_MAP_H

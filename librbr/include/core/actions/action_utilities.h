@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -32,10 +32,10 @@
 
 /**
  * Find a particular action given the name in a set of actions.
- * @param A				The finite set of actions.
- * @param actionName 	The name of the action.
- * @return The action with the corresponding name provided.
- * @throws ActionException The name was invalid, or an action was not a NamedAction.
+ * @param	A					The finite set of actions.
+ * @param	actionName 			The name of the action.
+ * @throw	ActionException		The name was invalid, or an action was not a NamedAction.
+ * @return	The action with the corresponding name provided.
  */
 const Action *find_action(const FiniteActions *A, std::string actionName);
 

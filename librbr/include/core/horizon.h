@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -42,13 +42,13 @@ public:
 
 	/**
 	 * The constructor for the Horizon class which defines a finite horizon.
-	 * @param h The positive horizon to use.
+	 * @param	h	The positive horizon to use.
 	 */
 	Horizon(unsigned int h);
 
 	/**
 	 * The constructor for the Horizon class which defines an infinite horizon.
-	 * @param d The discount factor (gamma) value in [0, 1).
+	 * @param	d	The discount factor (gamma) value in [0, 1).
 	 */
 	Horizon(double d);
 
@@ -59,31 +59,31 @@ public:
 
 	/**
 	 * Return true if the horizon is finite; false if it is infinite.
-	 * @return Return @code{true} if the horizon is infinite; @code{false} otherwise.
+	 * @return	Return @code{true} if the horizon is infinite; @code{false} otherwise.
 	 */
 	bool is_finite() const;
 
 	/**
 	 * Get the horizon.
-	 * @return The horizon.
+	 * @return	The horizon.
 	 */
 	unsigned int get_horizon() const;
 
 	/**
 	 * Return the discount factor gamma.
-	 * @return The discount factor gamma in [0, 1].
+	 * @return	The discount factor gamma in [0, 1].
 	 */
 	double get_discount_factor() const;
 
 	/**
 	 * Set the horizon.
-	 * @param h The non-negative horizon to use. A horizon of 0 means infinite horizon.
+	 * @param	h	The non-negative horizon to use. A horizon of 0 means infinite horizon.
 	 */
 	void set_horizon(unsigned int h);
 
 	/**
 	 * Set the discount factor.
-	 * @param d The discount factor (gamma) value in [0, 1).
+	 * @param	d	The discount factor (gamma) value in [0, 1).
 	 */
 	void set_discount_factor(double d);
 

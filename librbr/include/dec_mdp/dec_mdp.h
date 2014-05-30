@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -49,13 +49,13 @@ public:
 
 	/**
 	 * A constructor for the DecMDP class.
-	 * @param ag	The agents.
-	 * @param s		The states.
-	 * @param a		The actions, which uses the agents parameter.
-	 * @param st	The state transitions, which uses the states and actions parameters.
-	 * @param r		The rewards, which uses the states and actions parameters.
-	 * @param is	The initial state, which uses the states parameter.
-	 * @param h		The horizon.
+	 * @param	ag		The agents.
+	 * @param	s		The states.
+	 * @param	a		The actions, which uses the agents parameter.
+	 * @param	st		The state transitions, which uses the states and actions parameters.
+	 * @param	r		The rewards, which uses the states and actions parameters.
+	 * @param	is		The initial state, which uses the states parameter.
+	 * @param	h		The horizon.
 	 */
 	DecMDP(Agents *ag, States *s, Actions *a, StateTransitions *st, Rewards *r, Initial *is, Horizon *h);
 
@@ -66,7 +66,7 @@ public:
 
 	/**
 	 * Get the agents object.
-	 * @return The agents object.
+	 * @return	The agents object.
 	 */
 	const Agents *get_agents() const;
 
