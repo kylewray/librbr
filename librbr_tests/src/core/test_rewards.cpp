@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -36,10 +36,6 @@
 #include "../../../librbr/include/core/actions/named_action.h"
 #include "../../../librbr/include/core/observations/named_observation.h"
 
-/**
- * Test the reward objects. Output the success or failure for each test.
- * @return The number of successes during execution.
- */
 int test_rewards()
 {
 	int numSuccesses = 0;

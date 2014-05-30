@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -42,73 +42,73 @@
 
 /**
  * Test the agents objects. Output the success or failure for each test.
- * @return The number of successes during execution.
+ * @return	The number of successes during execution.
  */
 int test_agents();
 
 /**
  * Test the states objects. Output the success or failure for each test.
- * @return The number of successes during execution.
+ * @return	The number of successes during execution.
  */
 int test_states();
 
 /**
  * Test the actions objects. Output the success or failure for each test.
- * @return The number of successes during execution.
+ * @return	The number of successes during execution.
  */
 int test_actions();
 
 /**
  * Test the observation objects. Output the success or failure for each test.
- * @return The number of successes during execution.
+ * @return	The number of successes during execution.
  */
 int test_observations();
 
 /**
  * Test the reward objects. Output the success or failure for each test.
- * @return The number of successes during execution.
+ * @return	The number of successes during execution.
  */
 int test_rewards();
 
 /**
  * Test the state transition objects. Output the success or failure for each test.
- * @return The number of successes during execution.
+ * @return	The number of successes during execution.
  */
 int test_state_transitions();
 
 /**
  * Test the observation transition objects. Output the success or failure for each test.
- * @return The number of successes during execution.
+ * @return	The number of successes during execution.
  */
 int test_observation_transitions();
 
 /**
  * Test the policy objects. Output the success or failure for each test.
- * @return The number of successes during execution.
+ * @return	The number of successes during execution.
  */
 int test_policy();
 
 /**
  * Test the UnifiedFile object. Output the success or failure for each test.
- * @return The number of successes during execution.
+ * @return	The number of successes during execution.
  */
 int test_unified_file();
 
 /**
  * Test the utilities objects. Output the success or failure for each test.
- * @return The number of successes during execution.
+ * @return	The number of successes during execution.
  */
 int test_utilities();
 
 /**
  * Test the MDP solvers. Output the success or failure for each test.
- * @return The number of successes during execution.
+ * @return	The number of successes during execution.
  */
 int test_mdp();
 
 /**
  * Test the POMDP solvers. Output the success or failure for each test.
- * @return The number of successes during execution.
+ * @return	The number of successes during execution.
  */
 int test_pomdp();
 
