@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -29,11 +29,6 @@
 
 #include <algorithm>
 
-/**
- * The default constructor for the FiniteJointActions class which requires that you
- * specify the number of factors.
- * @param numFactors The number of action factors.
- */
 FiniteJointActions::FiniteJointActions(int numFactors)
 {
 	if (numFactors < 1) {
@@ -42,21 +37,11 @@ FiniteJointActions::FiniteJointActions(int numFactors)
 	factoredActions.resize(numFactors);
 }
 
-/**
- * The default deconstructor for the FiniteJointActions class.
- */
 FiniteJointActions::~FiniteJointActions()
 {
 	reset();
 }
 
-/**
- * Add a action to the set of available actions in a factor. This does *not* update the
- * actions list; please call update() once all factors have been set.
- * @param factorIndex 		The index of the factor to add the actions to.
- * @param newAction			The new actions to include in the set of available actions.
- * @throws ActionException	The index was invalid.
- */
 void FiniteJointActions::add(int factorIndex, const Action *newAction)
 {
 	if (factorIndex < 0 || factorIndex >= factoredActions.size()) {
@@ -66,13 +51,6 @@ void FiniteJointActions::add(int factorIndex, const Action *newAction)
 	factoredActions[factorIndex].push_back(newAction);
 }
 
-/**
- * Remove an action to the set of available actions in a factor. This frees the memory. This does *not*
- * update the actions list; please call update() once all factors have been set.
- * @param factorIndex 		The index of the factor to add the actions to.
- * @param removeAction 		The action to remove from the set of available actions.
- * @throws ActionException	The index was invalid, or the action was not found in the actions list.
- */
 void FiniteJointActions::remove(int factorIndex, const Action *removeAction)
 {
 	if (factorIndex < 0 || factorIndex >= factoredActions.size()) {
@@ -88,14 +66,6 @@ void FiniteJointActions::remove(int factorIndex, const Action *removeAction)
 	delete removeAction;
 }
 
-/**
- * Set the internal actions list for a factor given another list, performing a deep copy. This resets
- * the current list of actions and frees the memory. This does *not* update the actions list; please
- * call update() once all factors have been set.
- * @param factorIndex 		The index of the factor to add the actions to.
- * @param newActions 		The vector of new actions to use.
- * @throws ActionException	The index was invalid, or newActions was empty.
- */
 void FiniteJointActions::set(int factorIndex, const std::vector<const Action *> &newActions)
 {
 	if (factorIndex < 0 || factorIndex >= factoredActions.size() || newActions.size() == 0) {
@@ -111,15 +81,6 @@ void FiniteJointActions::set(int factorIndex, const std::vector<const Action *> 
 	factoredActions[factorIndex] = newActions;
 }
 
-/**
- * Get the action at the corresponding index, given the particular factor. The factor index
- * is defined by the agent, and an action's index is defined by the order in which they are
- * added and removed.
- * @param factorIndex The index of the factor.
- * @param actionIndex The index of the action.
- * @return The action at the corresponding index.
- * @throws ActionException The index was invalid.
- */
 const Action *FiniteJointActions::get(int factorIndex, int actionIndex) const
 {
 	if (factorIndex < 0 || factorIndex >= factoredActions.size() ||
@@ -130,11 +91,6 @@ const Action *FiniteJointActions::get(int factorIndex, int actionIndex) const
 	return factoredActions[factorIndex][actionIndex];
 }
 
-/**
- * Update the internal actions list which holds all permutations of joint actions in an efficient structure.
- * Note: This *must* be called after sequences of add(), remove(), and/or set() calls.
- * @throws ActionException If a action factor has not been defined.
- */
 void FiniteJointActions::update()
 {
 	// Throw an error if one factor is not defined.
@@ -150,17 +106,11 @@ void FiniteJointActions::update()
 	update_step(create, 0);
 }
 
-/**
- * Get the number of factored actions.
- */
 int FiniteJointActions::get_num_factors()
 {
 	return factoredActions.size();
 }
 
-/**
- * Reset the joint actions, clearing the internal list and freeing the memory.
- */
 void FiniteJointActions::reset()
 {
 	for (std::vector<const Action *> &factor : factoredActions) {
@@ -173,11 +123,6 @@ void FiniteJointActions::reset()
 	actions.clear();
 }
 
-/**
- * A helper function for updating the internal "actions" variable as part of the update() function.
- * @param currentJointAction	The current (incomplete) joint action as a vector of actions.
- * @param currentFactorIndex	The current factor index.
- */
 void FiniteJointActions::update_step(std::vector<const Action *> currentJointAction, int currentFactorIndex)
 {
 	// At the final factor index, we need to create a bunch of joint actions.

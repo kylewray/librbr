@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -25,9 +25,5 @@
 
 #include "../../../include/core/observation_transitions/observation_transitions.h"
 
-/**
- * The deconstructor for the ObservationTransitions class, which ensures that children
- * classes properly deconstruct themselves.
- */
 ObservationTransitions::~ObservationTransitions()
 { }

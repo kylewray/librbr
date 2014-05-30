@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -28,43 +28,24 @@
 
 #include <algorithm>
 
-/**
- * The default constructor for the FiniteStates class.
- */
 FiniteStates::FiniteStates()
 { }
 
-/**
- * The constructor for the FiniteStates class which allows the specification of an initial set of FiniteStates.
- * @param	FiniteStates	The initial vector of FiniteStates.
- */
 FiniteStates::FiniteStates(const std::vector<const State *> &states)
 {
 	set(states);
 }
 
-/**
- * The default deconstructor for the FiniteStates class.
- */
 FiniteStates::~FiniteStates()
 {
 	reset();
 }
 
-/**
- * Add a state to the set of available states.
- * @param	newState	The new state to include in the set of available states.
- */
 void FiniteStates::add(const State *newState)
 {
 	states[newState->hash_value()] = newState;
 }
 
-/**
- * Remove a state to the set of available states. This frees the memory.
- * @param	removeState 		The state to remove from the set of available states.
- * @throw	StateException		The state was not found in the states list.
- */
 void FiniteStates::remove(const State *removeState)
 {
 	// Ensure that the element exists in the hash before removing it.
@@ -77,11 +58,6 @@ void FiniteStates::remove(const State *removeState)
 	delete removeState;
 }
 
-/**
- * Set the internal states list given another list, performing a deep copy. This resets
- * the current list of states and frees the memory.
- * @param	newStates	The vector of new states to use.
- */
 void FiniteStates::set(const std::vector<const State *> &newStates)
 {
 	reset();
@@ -90,18 +66,11 @@ void FiniteStates::set(const std::vector<const State *> &newStates)
 	}
 }
 
-/**
- * Return the number of states.
- * @return	The number of states.
- */
 int FiniteStates::get_num_states() const
 {
 	return states.size();
 }
 
-/**
- * Reset the states, clearing the internal list and freeing the memory.
- */
 void FiniteStates::reset()
 {
 	for (auto state : states) {
@@ -110,37 +79,21 @@ void FiniteStates::reset()
 	states.clear();
 }
 
-/**
- * To facilitate easy iteration, return a constant beginning of the states vector.
- * @return	The iterator which points to a constant beginning of the states vector.
- */
 std::unordered_map<unsigned int, const State *>::const_iterator FiniteStates::begin() const
 {
 	return states.begin();
 }
 
-/**
- * To facilitate easy iteration, return a constant end of the states vector.
- * @return	The iterator which points to a constant end of the states vector.
- */
 std::unordered_map<unsigned int, const State *>::const_iterator FiniteStates::end() const
 {
 	return states.end();
 }
 
-/**
- * Get the state pointer of a state iterator.
- * @param	stateIterator	The state iterator to retrieve the state pointer from.
- */
 const State *resolve(std::unordered_map<unsigned int, const State *>::value_type &stateIterator)
 {
 	return stateIterator.second;
 }
 
-/**
- * Get the hash of a state iterator.
- * @param	stateIterator	The state iterator to retrieve the hash value from.
- */
 unsigned int hash_value(std::unordered_map<unsigned int, const State *>::value_type &stateIterator)
 {
 	return stateIterator.first;

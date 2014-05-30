@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -41,35 +41,19 @@
 #include <vector>
 #include <math.h>
 
-/**
- * The default constructor for the POMDPValueIteration class. Default number of iterations
- * for infinite horizon POMDPs is 1.
- */
 POMDPValueIteration::POMDPValueIteration()
 {
 	set_num_iterations(1);
 }
 
-/**
- * A constructor for the POMDPValueIteration class which allows for the specification
- * of the number of iterations to run for infinite horizon. Default is 1.
- * @param numIterations The number of iterations to run for infinite horizon POMDPs.
- */
 POMDPValueIteration::POMDPValueIteration(unsigned int numIterations)
 {
 	set_num_iterations(numIterations);
 }
 
-/**
- * The deconstructor for the POMDPValueIteration class.
- */
 POMDPValueIteration::~POMDPValueIteration()
 { }
 
-/**
- * Set the number of iterations to run for infinite horizon POMDPs.
- * @param numIterations The number of iterations to run for infinite horizon POMDPs.
- */
 void POMDPValueIteration::set_num_iterations(unsigned int numIterations)
 {
 	iterations = numIterations;
@@ -78,22 +62,11 @@ void POMDPValueIteration::set_num_iterations(unsigned int numIterations)
 	}
 }
 
-/**
- * Get the number of iterations to run for infinite horizon POMDPs.
- * @return The number of iterations to run for infinite horizon POMDPs.
- */
 unsigned int POMDPValueIteration::get_num_iterations()
 {
 	return iterations;
 }
 
-/**
- * Compute the optimal number of iterations to run for infinite horizon POMDPs, given
- * the desired tolerance, requiring knowledge of the reward function.
- * @param pomdp 			The partially observable Markov decision process to use.
- * @param epsilon			The desired tolerance between value functions to check for convergence.
- * @throws RewardException	The POMDP did not have a SASORewards rewards object.
- */
 void POMDPValueIteration::compute_num_iterations(const POMDP *pomdp, double epsilon)
 {
 	// Handle the trivial case.
@@ -119,19 +92,6 @@ void POMDPValueIteration::compute_num_iterations(const POMDP *pomdp, double epsi
 	iterations = (int)((log(epsilon) - log(Rmax - Rmin)) / log(h->get_discount_factor()));
 }
 
-/**
- * Solve the POMDP provided using value iteration.
- * @param pomdp The partially observable Markov decision process to solve.
- * @return Return the optimal policy as a finite state controller (infinite horizon) or tree (finite horizon).
- * @throws CoreException					The POMDP was null.
- * @throws StateException					The POMDP did not have a FiniteStates states object.
- * @throws ActionException					The POMDP did not have a FiniteActions actions object.
- * @throws ObservationException				The POMDP did not have a FiniteObservations observations object.
- * @throws StateTransitionsException		The POMDP did not have a FiniteStateTransitions state transitions object.
- * @throws ObservationTransitionsException	The POMDP did not have a FiniteObservationTransitions observation transitions object.
- * @throws RewardException					The POMDP did not have a SASORewards rewards object.
- * @throws PolicyException					An error occurred computing the policy.
- */
 PolicyAlphaVectors *POMDPValueIteration::solve(const POMDP *pomdp)
 {
 	// Handle the trivial case.
@@ -186,18 +146,6 @@ PolicyAlphaVectors *POMDPValueIteration::solve(const POMDP *pomdp)
 	}
 }
 
-/**
- * Solve a finite horizon POMDP using value iteration.
- * @param S The finite states.
- * @param A The finite actions.
- * @param Z The finite observations.
- * @param T The finite state transition function.
- * @param O The finite observation transition function.
- * @param R The state-action-state-observation rewards.
- * @param h The horizon.
- * @return Return the optimal policy as a collection of alpha vectors.
- * @throws PolicyException An error occurred computing the policy.
- */
 PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
 		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
 		const Horizon *h)
@@ -249,18 +197,6 @@ PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const FiniteStates
 	return policy;
 }
 
-/**
- * Solve an infinite horizon POMDP using value iteration.
- * @param S The finite states.
- * @param A The finite actions.
- * @param Z The finite observations.
- * @param T The finite state transition function.
- * @param O The finite observation transition function.
- * @param R The state-action-state-observation rewards.
- * @param h The horizon.
- * @return Return the optimal policy as a finite state controller.
- * @throws PolicyException An error occurred computing the policy.
- */
 PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
 		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
 		const Horizon *h)

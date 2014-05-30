@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -38,18 +38,11 @@
 #include "../../../include/core/states/state_utilities.h"
 #include "../../../include/core/actions/action_utilities.h"
 
-/**
- * The default constructor for a PolicyMap object. It defaults to a horizon of 1.
- */
 PolicyMap::PolicyMap()
 {
 	policy.resize(1);
 }
 
-/**
- * A constructor for a PolicyMap object which specifies the horizon.
- * @param horizon The horizon of the problem; 0 represents infinite horizon.
- */
 PolicyMap::PolicyMap(unsigned int horizon)
 {
 	if (horizon > 0) {
@@ -59,10 +52,6 @@ PolicyMap::PolicyMap(unsigned int horizon)
 	}
 }
 
-/**
- * A constructor for a PolicyMap object which specifies the horizon.
- * @param horizon The horizon object from the MDP-like object.
- */
 PolicyMap::PolicyMap(const Horizon *horizon)
 {
 	if (horizon->get_horizon() > 0) {
@@ -72,31 +61,14 @@ PolicyMap::PolicyMap(const Horizon *horizon)
 	}
 }
 
-/**
- * A virtual deconstructor to prevent errors upon the deletion of a child object.
- */
 PolicyMap::~PolicyMap()
 { }
 
-/**
- * Set the mapping from a state to an action. For finite horizon, it assumes 0 by default.
- * @param state		The state to define.
- * @param action	The action which should be taken at the state.
- */
 void PolicyMap::set(const State *state, const Action *action)
 {
 	set(0, state, action);
-
-	//policy[0][state] = action;
 }
 
-/**
- * Set the mapping from a state to an action, allowing the explicit specification of the horizon.
- * @param horizon			The horizon to set.
- * @param state				The state to define.
- * @param action			The action which should be taken at the state.
- * @throws PolicyException	The horizon was invalid.
- */
 void PolicyMap::set(unsigned int horizon, const State *state, const Action *action)
 {
 	if (horizon >= policy.size()) {
@@ -106,33 +78,11 @@ void PolicyMap::set(unsigned int horizon, const State *state, const Action *acti
 	policy[horizon][state] = action;
 }
 
-/**
- * Get the action for a given state. For finite horizon, it assumes 0 by default.
- * @param state The state to retrieve a mapping.
- * @return The action to take at the given state.
- * @throws PolicyException The policy was not defined for this state.
- */
 const Action *PolicyMap::get(const State *state) const
 {
 	return get(0, state);
-
-	/*
-	std::map<const State *, const Action *>::const_iterator result = policy[0].find(state);
-	if (result == policy[0].end()) {
-		throw PolicyException();
-	}
-
-	return result->second;
-	*/
 }
 
-/**
- * Get the action for a given state, allowing the explicit specification of the horizon.
- * @param horizon	The horizon to set.
- * @param state		The state to retrieve a mapping.
- * @return The action to take at the given state.
- * @throws PolicyException The policy was not defined for this state, or horizon was invalid.
- */
 const Action *PolicyMap::get(unsigned int horizon, const State *state) const
 {
 	if (horizon >= policy.size()) {
@@ -147,14 +97,6 @@ const Action *PolicyMap::get(unsigned int horizon, const State *state) const
 	return result->second;
 }
 
-/**
- * A function which must load a policy file.
- * @param filename	The name and path of the file to load.
- * @param states	The states object which contains the actual state objects to be mapped.
- * @param actions	The actions object which contains the actual action objects to be mapped.
- * @param horizon	The horizons object to ensure valid policy creation.
- * @return Return @code{true} if an error occurred, @code{false} otherwise.
- */
 bool PolicyMap::load(std::string filename, const FiniteStates *states, const FiniteActions *actions, const Horizon *horizon)
 {
 	reset();
@@ -252,11 +194,6 @@ bool PolicyMap::load(std::string filename, const FiniteStates *states, const Fin
 	return false;
 }
 
-/**
- * A function which must save a policy file.
- * @param filename The name and path of the file to save.
- * @return Return @code{true} if an error occurred, @code{false} otherwise.
- */
 bool PolicyMap::save(std::string filename) const
 {
 	std::ofstream file(filename);
@@ -294,9 +231,6 @@ bool PolicyMap::save(std::string filename) const
 	return false;
 }
 
-/**
- * Reset the policy mapping.
- */
 void PolicyMap::reset()
 {
 	policy.clear();

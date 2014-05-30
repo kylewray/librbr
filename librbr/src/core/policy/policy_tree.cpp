@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -37,27 +37,16 @@
 #include "../../../include/core/actions/action_utilities.h"
 #include "../../../include/core/observations/observation_utilities.h"
 
-/**
- * The default constructor for the PolicyTreeNode class. It defaults to a null action.
- */
 PolicyTreeNode::PolicyTreeNode()
 {
 	action = nullptr;
 }
 
-/**
- * A constructor for the PolicyTreeNode class which allows the specification of the action.
- * @param a The corresponding action at this node.
- */
 PolicyTreeNode::PolicyTreeNode(const Action *a)
 {
 	action = a;
 }
 
-/**
- * The default constructor for a PolicyTree object. It defaults to a horizon of 0, which
- * is a single action.
- */
 PolicyTree::PolicyTree()
 {
 	nodes.push_back(new PolicyTreeNode());
@@ -65,23 +54,12 @@ PolicyTree::PolicyTree()
 	current = nullptr;
 }
 
-/**
- * A constructor for a PolicyTree object which specifies the horizon. If the horizon
- * is zero, then it will create an empty tree (no nodes).
- * @param observations	The finite set of observations.
- * @param horizon 		The horizon of the problem.
- */
 PolicyTree::PolicyTree(const FiniteObservations *observations, unsigned int horizon)
 {
 	root = generate_tree(observations, horizon);
 	current = root;
 }
 
-/**
- * A constructor for a MapPolicy object which specifies the horizon.
- * @param observations	The finite set of observations.
- * @param horizon 		The horizon object from the MDP-like object.
- */
 PolicyTree::PolicyTree(const FiniteObservations *observations, const Horizon *horizon)
 {
 	if (horizon->is_finite()) {
@@ -92,20 +70,11 @@ PolicyTree::PolicyTree(const FiniteObservations *observations, const Horizon *ho
 	current = root;
 }
 
-/**
- * A virtual deconstructor to prevent errors upon the deletion of a child object.
- */
 PolicyTree::~PolicyTree()
 {
 	reset();
 }
 
-/**
- * Set the action given a history of observations.
- * @param history			The history of observations.
- * @param action			The action to take after this history of observations.
- * @throws PolicyException	The policy was not defined for this history.
- */
 void PolicyTree::set(const std::vector<const Observation *> &history, const Action *action)
 {
 	PolicyTreeNode *node = nullptr;
@@ -123,12 +92,6 @@ void PolicyTree::set(const std::vector<const Observation *> &history, const Acti
 	node->action = action;
 }
 
-/**
- * Get the action given a history of observations.
- * @param history The history of observations.
- * @return The action to take given the history of observations provided.
- * @throws PolicyException The policy was not defined for this history.
- */
 const Action *PolicyTree::get(const std::vector<const Observation *> &history) const
 {
 	PolicyTreeNode *node = nullptr;
@@ -146,14 +109,6 @@ const Action *PolicyTree::get(const std::vector<const Observation *> &history) c
 	return node->action;
 }
 
-/**
- * A function which must load a policy file.
- * @param filename		The name and path of the file to load.
- * @param actions		The actions object which contains the actual action objects to be mapped.
- * @param observations	The observations object which contains the actual observation objects to be mapped.
- * @param horizon		The horizons object to ensure valid policy creation.
- * @return Return @code{true} if an error occurred, @code{false} otherwise.
- */
 bool PolicyTree::load(std::string filename, const FiniteActions *actions, const FiniteObservations *observations, const Horizon *horizon)
 {
 	// Reset the current tree, cleaning the memory, and then generate the tree's data.
@@ -237,11 +192,6 @@ bool PolicyTree::load(std::string filename, const FiniteActions *actions, const 
 	return false;
 }
 
-/**
- * A function which must save a policy file.
- * @param filename The name and path of the file to save.
- * @return Return @code{true} if an error occurred, @code{false} otherwise.
- */
 bool PolicyTree::save(std::string filename) const
 {
 	char error[1024];
@@ -262,11 +212,6 @@ bool PolicyTree::save(std::string filename) const
 	return false;
 }
 
-/**
- * A function which follows the defined policy, having the current state stored internally,
- * and returns the action to select next.
- * @throws PolicyException The horizon has already been reached; no more planning has been done.
- */
 const Action *PolicyTree::next(const Observation *observation)
 {
 	const Action *action = current->action;
@@ -274,9 +219,6 @@ const Action *PolicyTree::next(const Observation *observation)
 	return action;
 }
 
-/**
- * Reset the policy, clearing the entire tree.
- */
 void PolicyTree::reset()
 {
 	for (PolicyTreeNode *node : nodes) {
@@ -287,12 +229,6 @@ void PolicyTree::reset()
 	current = nullptr;
 }
 
-/**
- * Generate the policy tree recursively.
- * @param observations	The finite set of observations (branching factor).
- * @param horizon		The remaining horizon value; once zero, recursion terminates.
- * @returns The root of this node's subtree.
- */
 PolicyTreeNode *PolicyTree::generate_tree(const FiniteObservations *observations, unsigned int horizon)
 {
 	// Create the new node regardless.
@@ -312,12 +248,6 @@ PolicyTreeNode *PolicyTree::generate_tree(const FiniteObservations *observations
 	return node;
 }
 
-/**
- * Traverse the tree following the history provided.
- * @param history The history of observations.
- * @return The final node after following the history.
- * @throws PolicyException The policy was not defined for this history.
- */
 PolicyTreeNode *PolicyTree::traverse(const std::vector<const Observation *> &history) const
 {
 	// Traverse the policy tree, following the history path, until the node is reached.
@@ -336,12 +266,6 @@ PolicyTreeNode *PolicyTree::traverse(const std::vector<const Observation *> &his
 	return node;
 }
 
-/**
- * Save the policy tree recursively.
- * @param file		The handle to the output file.
- * @param node 		The current node.
- * @param history	The history of observations so far.
- */
 void PolicyTree::save_tree(std::ofstream &file, PolicyTreeNode *node, std::vector<const Observation *> history) const
 {
 	if (node == nullptr) {

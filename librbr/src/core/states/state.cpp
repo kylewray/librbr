@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -25,51 +25,27 @@
 
 #include "../../../include/core/states/state.h"
 
-/**
- * The default constructor of the State object.
- */
 State::State()
 { }
 
-/**
- * The copy constructor of the State object.
- */
 State::State(const State &other)
 {
     *this = other;
 }
 
-/**
- * The default deconstructor of the State object.
- */
 State::~State()
 { }
 
-/**
- * Overload the equals operator to set this state equal to the state provided.
- * @param other The state to copy.
- * @return The new version of this state.
- */
 State &State::operator=(const State &other)
 {
 	return *this;
 }
 
-/**
- * Overload the equality comparison operator.
- * @param other The factored state to compare.
- * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
- */
 bool State::operator==(const State &other) const
 {
 	return hash_value() == other.hash_value();
 }
 
-/**
- * Overload the less than operator for comparison.
- * @param other The factored state to compare.
- * @return Returns @code{true} if this state is less than the other; @code{false} otherwise.
- */
 bool State::operator<(const State &other) const
 {
 	return hash_value() < other.hash_value();

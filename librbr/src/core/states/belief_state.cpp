@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -25,44 +25,24 @@
 
 #include "../../../include/core/states/belief_state.h"
 
-/**
- * The default constructor of the BeliefState object.
- */
 BeliefState::BeliefState()
 { }
 
-/**
- * The copy constructor of the BeliefState object.
- * @param other The belief state to copy.
- */
 BeliefState::BeliefState(const BeliefState &other)
 {
 	*this = other;
 }
 
-/**
- * The default deconstructor of the BeliefState object.
- */
 BeliefState::~BeliefState()
 {
 	reset();
 }
 
-/**
- * Set the probability of a state.
- * @param state			The state to set a belief over.
- * @param probability	The probability of the state.
- */
 void BeliefState::set(const State *state, double probability)
 {
 	belief[state] = probability;
 }
 
-/**
- * Get the probability of a state.
- * @param state The state to get a belief over.
- * @return The belief probability of the state.
- */
 double BeliefState::get(const State *state) const
 {
 	std::map<const State *, double>::const_iterator result = belief.find(state);
@@ -73,20 +53,12 @@ double BeliefState::get(const State *state) const
 	}
 }
 
-/**
- * Overload the equals operator to set this belief state equal to the belief state provided.
- * @param other The belief state to copy.
- * @return The new version of this belief state.
- */
 BeliefState &BeliefState::operator=(const BeliefState &other)
 {
 	belief = other.belief;
 	return *this;
 }
 
-/**
- * Reset the belief state.
- */
 void BeliefState::reset()
 {
 	belief.clear();

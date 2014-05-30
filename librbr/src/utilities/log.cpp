@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -25,13 +25,6 @@
 
 #include "../../include/utilities/log.h"
 
-/**
- * Log a normal message or error to a stream, e.g., std::cout.
- * Note: This is *not* to be used in any classes within "core." It is exclusively for the MDP-like objects
- * and the various utilities provided.
- * @param msg	The message to output along with the error.
- * @param error	The detailed error message.
- */
 void log_message(const std::string &classFunctionName, const std::string &message)
 {
 	LOG_STREAM << "Error[" << classFunctionName << "]: " << message << std::endl;

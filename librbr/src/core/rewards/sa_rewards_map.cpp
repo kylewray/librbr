@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -29,9 +29,6 @@
 #include "../../../include/core/states/named_state.h"
 #include "../../../include/core/actions/named_action.h"
 
-/**
- * The default constructor for the SARewardsMap class.
- */
 SARewardsMap::SARewardsMap()
 {
 	stateWildcard = new NamedState("*");
@@ -40,9 +37,6 @@ SARewardsMap::SARewardsMap()
 	Rmax = std::numeric_limits<double>::lowest();
 }
 
-/**
- * The default deconstructor for the SARewardsMap class.
- */
 SARewardsMap::~SARewardsMap()
 {
 	reset();
@@ -51,12 +45,6 @@ SARewardsMap::~SARewardsMap()
 	delete actionWildcard;
 }
 
-/**
- * Set a state transition from a particular state-action-state triple to a probability.
- * @param state		The current state of the system.
- * @param action	The action taken in the current state.
- * @param reward	The reward from the provided state-action-state triple.
- */
 void SARewardsMap::set(const State *state, const Action *action, double reward)
 {
 	if (state == nullptr) {
@@ -76,38 +64,17 @@ void SARewardsMap::set(const State *state, const Action *action, double reward)
 	}
 }
 
-/**
- * Set a state transition from a particular state-action-state triple to a probability.
- * @param state		The current state of the system.
- * @param action	The action taken in the current state.
- * @param nextState	The next state with which we assign the reward.
- * @param reward	The reward from the provided state-action-state triple.
- */
 void SARewardsMap::set(const State *state, const Action *action, const State *nextState, double reward)
 {
 	set(state, action, reward);
 }
 
-/**
- * Set a state transition from a particular state-action-state-observation quadruple to a probability.
- * @param state			The current state of the system.
- * @param action		The action taken in the current state.
- * @param nextState		The next state with which we assign the reward.
- * @param observation	The observation made at the next state.
- * @param reward		The reward from the provided state-action-state-observation quadruple.
- */
 void SARewardsMap::set(const State *state, const Action *action, const State *nextState,
 		const Observation *observation, double reward)
 {
 	set(state, action, reward);
 }
 
-/**
- * The probability of a transition following the state-action-state triple provided.
- * @param state		The current state of the system.
- * @param action	The action taken at the current state.
- * @return The reward from taking the given action in the given state.
- */
 double SARewardsMap::get(const State *state, const Action *action) const
 {
 	// Iterate over all possible configurations of wildcards in the get statement.
@@ -133,35 +100,17 @@ double SARewardsMap::get(const State *state, const Action *action) const
 	return 0.0;
 }
 
-/**
- * The probability of a transition following the state-action-state triple provided.
- * @param state		The current state of the system.
- * @param action	The action taken at the current state.
- * @param nextState	The next state with which we assign the reward.
- * @return The reward from taking the given action in the given state.
- */
 double SARewardsMap::get(const State *state, const Action *action, const State *nextState) const
 {
 	return get(state, action);
 }
 
-/**
- * The probability of a transition following the state-action-state-observation quadruple provided.
- * @param state			The current state of the system.
- * @param action		The action taken in the current state.
- * @param nextState		The next state with which we assign the reward.
- * @param observation	The observation made at the next state.
- * @return The reward from taking the given action in the given state.
- */
 double SARewardsMap::get(const State *state, const Action *action, const State *nextState,
 		const Observation *observation) const
 {
 	return get(state, action);
 }
 
-/**
- * Reset the rewards, clearing the internal mapping.
- */
 void SARewardsMap::reset()
 {
 	rewards.clear();
@@ -169,14 +118,6 @@ void SARewardsMap::reset()
 	Rmax = std::numeric_limits<double>::lowest();
 }
 
-/**
- * The actual get function which returns a value. This will throw an error if the value is undefined.
- * It is used as a helper function for the public get function.
- * @param state		The current state of the system.
- * @param action	The action taken at the current state.
- * @return The reward from taking the given action in the given state.
- * @throws RewardException The reward was not defined.
- */
 double SARewardsMap::get_value(const State *state, const Action *action) const
 {
 	std::unordered_map<const State *,
@@ -194,19 +135,11 @@ double SARewardsMap::get_value(const State *state, const Action *action) const
 	return beta->second;
 }
 
-/**
- * Get the minimal R-value.
- * @return The minimal R-value.
- */
 double SARewardsMap::get_min() const
 {
 	return Rmin;
 }
 
-/**
- * Get the maximal R-value.
- * @return The maximal R-value.
- */
 double SARewardsMap::get_max() const
 {
 	return Rmax;

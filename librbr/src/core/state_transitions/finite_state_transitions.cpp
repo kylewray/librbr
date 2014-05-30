@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -29,18 +29,12 @@
 #include "../../../include/core/states/named_state.h"
 #include "../../../include/core/actions/named_action.h"
 
-/**
- * The default constructor for the FiniteStateTransitions class.
- */
 FiniteStateTransitions::FiniteStateTransitions()
 {
 	stateWildcard = new NamedState("*");
 	actionWildcard = new NamedAction("*");
 }
 
-/**
- * The default deconstructor for the FiniteStateTransitions class.
- */
 FiniteStateTransitions::~FiniteStateTransitions()
 {
 	reset();
@@ -49,14 +43,6 @@ FiniteStateTransitions::~FiniteStateTransitions()
 	delete actionWildcard;
 }
 
-/**
- * Set a state transition from a particular state-action-state triple to a probability.
- * @param state			The current state of the system.
- * @param action		The action taken at the current state.
- * @param nextState		The next state with which we assign the probability.
- * @param probability	The probability of going from the state, taking the action, then
- * 						moving to the nextState.
- */
 void FiniteStateTransitions::set(const State *state, const Action *action, const State *nextState, double probability)
 {
 	if (state == nullptr) {
@@ -72,13 +58,6 @@ void FiniteStateTransitions::set(const State *state, const Action *action, const
 	stateTransitions[state][action][nextState] = std::max(0.0, std::min(1.0, probability));
 }
 
-/**
- * The probability of a transition following the state-action-state triple provided.
- * @param state		The current state of the system.
- * @param action	The action taken at the current state.
- * @param nextState	The next state with which we assign the probability.
- * @return The probability of going from the state, taking the action, then moving to the nextState.
- */
 double FiniteStateTransitions::get(const State *state, const Action *action, const State *nextState) const
 {
 	// Iterate over all possible configurations of wildcards in the get statement.
@@ -109,13 +88,6 @@ double FiniteStateTransitions::get(const State *state, const Action *action, con
 	return 0.0;
 }
 
-/**
- * Return a list of the states available given a previous state and the action taken there.
- * @param S			The finite set of states.
- * @param state		The previous state.
- * @param action	The action taken at the previous state.
- * @param result	The list to overwrite and set to be the list of successor states.
- */
 void FiniteStateTransitions::successors(const FiniteStates *S, const State *state,
 		const Action *action, std::vector<const State *> &result) const
 {
@@ -128,23 +100,11 @@ void FiniteStateTransitions::successors(const FiniteStates *S, const State *stat
 	}
 }
 
-/**
- * Reset the state transitions, clearing the internal mapping.
- */
 void FiniteStateTransitions::reset()
 {
 	stateTransitions.clear();
 }
 
-/**
- * The actual get function which returns a value. This will throw an error if the value is undefined.
- * It is used as a helper function for the public get function.
- * @param state		The current state of the system.
- * @param action	The action taken at the current state.
- * @param nextState	The next state with which we assign the reward.
- * @return The probability of going from the state, taking the action, then moving to the nextState.
- * @throws StateTransitionException The state transition was not defined.
- */
 double FiniteStateTransitions::get_value(const State *state, const Action *action, const State *nextState) const
 {
 	std::unordered_map<const State *,

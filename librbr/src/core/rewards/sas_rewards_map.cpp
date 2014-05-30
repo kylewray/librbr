@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -29,9 +29,6 @@
 #include "../../../include/core/states/named_state.h"
 #include "../../../include/core/actions/named_action.h"
 
-/**
- * The default constructor for the SASRewardsMap class.
- */
 SASRewardsMap::SASRewardsMap()
 {
 	stateWildcard = new NamedState("*");
@@ -40,9 +37,6 @@ SASRewardsMap::SASRewardsMap()
 	Rmax = std::numeric_limits<double>::lowest();
 }
 
-/**
- * The default deconstructor for the SASRewardsMap class.
- */
 SASRewardsMap::~SASRewardsMap()
 {
 	reset();
@@ -51,13 +45,6 @@ SASRewardsMap::~SASRewardsMap()
 	delete actionWildcard;
 }
 
-/**
- * Set a state transition from a particular state-action-state triple to a probability.
- * @param state		The current state of the system.
- * @param action	The action taken in the current state.
- * @param nextState	The next state with which we assign the reward.
- * @param reward	The reward from the provided state-action-state triple.
- */
 void SASRewardsMap::set(const State *state, const Action *action, const State *nextState, double reward)
 {
 	if (state == nullptr) {
@@ -80,27 +67,12 @@ void SASRewardsMap::set(const State *state, const Action *action, const State *n
 	}
 }
 
-/**
- * Set a state transition from a particular state-action-state-observation quadruple to a probability.
- * @param state			The current state of the system.
- * @param action		The action taken in the current state.
- * @param nextState		The next state with which we assign the reward.
- * @param observation	The observation made at the next state.
- * @param reward		The reward from the provided state-action-state-observation quadruple.
- */
 void SASRewardsMap::set(const State *state, const Action *action, const State *nextState,
 		const Observation *observation, double reward)
 {
 	set(state, action, nextState, reward);
 }
 
-/**
- * The probability of a transition following the state-action-state triple provided.
- * @param state		The current state of the system.
- * @param action	The action taken at the current state.
- * @param nextState	The next state with which we assign the reward.
- * @return The reward from taking the given action in the given state.
- */
 double SASRewardsMap::get(const State *state, const Action *action, const State *nextState) const
 {
 	// Iterate over all possible configurations of wildcards in the get statement.
@@ -131,23 +103,12 @@ double SASRewardsMap::get(const State *state, const Action *action, const State 
 	return 0.0;
 }
 
-/**
- * The probability of a transition following the state-action-state-observation quadruple provided.
- * @param state			The current state of the system.
- * @param action		The action taken in the current state.
- * @param nextState		The next state with which we assign the reward.
- * @param observation	The observation made at the next state.
- * @return The reward from taking the given action in the given state.
- */
 double SASRewardsMap::get(const State *state, const Action *action, const State *nextState,
 		const Observation *observation) const
 {
 	return get(state, action, nextState);
 }
 
-/**
- * Reset the rewards, clearing the internal mapping.
- */
 void SASRewardsMap::reset()
 {
 	rewards.clear();
@@ -155,15 +116,6 @@ void SASRewardsMap::reset()
 	Rmax = std::numeric_limits<double>::lowest();
 }
 
-/**
- * The actual get function which returns a value. This will throw an error if the value is undefined.
- * It is used as a helper function for the public get function.
- * @param state		The current state of the system.
- * @param action	The action taken at the current state.
- * @param nextState	The next state with which we assign the reward.
- * @return The reward from taking the given action in the given state.
- * @throws RewardException The reward was not defined.
- */
 double SASRewardsMap::get_value(const State *state, const Action *action, const State *nextState) const
 {
 	std::unordered_map<const State *,
@@ -187,19 +139,11 @@ double SASRewardsMap::get_value(const State *state, const Action *action, const 
 	return gamma->second;
 }
 
-/**
- * Get the minimal R-value.
- * @return The minimal R-value.
- */
 double SASRewardsMap::get_min() const
 {
 	return Rmin;
 }
 
-/**
- * Get the maximal R-value.
- * @return The maximal R-value.
- */
 double SASRewardsMap::get_max() const
 {
 	return Rmax;

@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -25,35 +25,17 @@
 
 #include "../../include/dec_pomdp/dec_pomdp.h"
 
-/**
- * The default constructor for the DecPOMDP class.
- */
 DecPOMDP::DecPOMDP() : POMDP()
 {
 	agents = nullptr;
 }
 
-/**
- * A constructor for the DecPOMDP class.
- * @param ag	The agents.
- * @param s		The states.
- * @param a		The actions.
- * @param o		The observations.
- * @param st	The state transitions, which uses the states and actions parameters.
- * @param ot	The observation transitions, which uses the states, actions, and observations parameters.
- * @param r		The rewards, which uses the states and actions parameters.
- * @param is	The initial state, which uses the states parameter.
- * @param h		The horizon.
- */
 DecPOMDP::DecPOMDP(Agents *ag, States *s, Actions *a, Observations *o, StateTransitions *st, ObservationTransitions *ot,
 		Rewards *r, Initial *is, Horizon *h) : POMDP(s, a, o, st, ot, r, is, h)
 {
 	agents = ag;
 }
 
-/**
- * The deconstructor for the DecPOMDP class.
- */
 DecPOMDP::~DecPOMDP()
 {
 	if (agents == nullptr) {
@@ -61,10 +43,6 @@ DecPOMDP::~DecPOMDP()
 	}
 }
 
-/**
- * Get the agents object.
- * @return The agents object.
- */
 const Agents *DecPOMDP::get_agents() const
 {
 	return agents;

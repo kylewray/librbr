@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -25,52 +25,27 @@
 
 #include "../../../include/core/observations/observation.h"
 
-/**
- * The default constructor of the Observation object.
- */
 Observation::Observation()
 { }
 
-/**
- * The copy constructor of the Observation object.
- * @param other The observation to copy.
- */
 Observation::Observation(const Observation &other)
 {
 	*this = other;
 }
 
-/**
- * The default deconstructor of the Observation object.
- */
 Observation::~Observation()
 { }
 
-/**
- * Overload the equals operator to set this observation equal to the observation provided.
- * @param other The observation to copy.
- * @return The new version of this observation.
- */
 Observation &Observation::operator=(const Observation &other)
 {
 	return *this;
 }
 
-/**
- * Overload the equality comparison operator.
- * @param other The observation to compare.
- * @return Returns @code{true} if this observation is equal to the other; @code{false} otherwise.
- */
 bool Observation::operator==(const Observation &other) const
 {
     return hash_value() == other.hash_value();
 }
 
-/**
- * Overload the less than operator for comparison.
- * @param other The observation to compare.
- * @return Returns @code{true} if this observation is less than the other; @code{false} otherwise.
- */
 bool Observation::operator<(const Observation &other) const
 {
 	return hash_value() < other.hash_value();

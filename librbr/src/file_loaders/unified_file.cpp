@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -48,9 +48,6 @@
 #include "../../include/core/observations/named_observation.h"
 #include "../../include/core/observations/observation_utilities.h"
 
-/**
- * The default constructor for a unified file.
- */
 UnifiedFile::UnifiedFile()
 {
 	agents = nullptr;
@@ -72,26 +69,14 @@ UnifiedFile::UnifiedFile()
 	loadingObservation = nullptr;
 }
 
-/**
- * The constructor which enables automatic loading of the specified MDP-like file.
- * @param path The filename of the MDP-like file to load.
- */
 UnifiedFile::UnifiedFile(std::string path)
 {
 	load(path);
 }
 
-/**
- * The deconstructor for a unified file which cleans up the memory.
- */
 UnifiedFile::~UnifiedFile()
 { }
 
-/**
- * A function which loads any MDP-like file.
- * @param path The filename and relative path of the MDP-like file to load.
- * @return Returns @code{true} if an error occurred, @code{false} otherwise.
- */
 bool UnifiedFile::load(std::string path)
 {
 	reset();
@@ -306,19 +291,11 @@ bool UnifiedFile::load(std::string path)
 	return false;
 }
 
-/**
- * A function which saves the information as a MDP-like file.
- * @param path The filename and relative path of the MDP-like file to save.
- * @return Returns @code{true} if an error occurred, @code{false} otherwise.
- */
 bool UnifiedFile::save(std::string path)
 {
 	return false;
 }
 
-/**
- * Reset the internal objects in the unified file.
- */
 void UnifiedFile::reset()
 {
 	if (agents != nullptr) {
@@ -379,11 +356,6 @@ void UnifiedFile::reset()
 	orderedObservations.clear();
 }
 
-/**
- * Load the horizon object from the file's data.
- * @param items	The list of items on the same line.
- * @return Return @code{true} if an error occurred, and @code{false} otherwise.
- */
 bool UnifiedFile::load_horizon(std::vector<std::string> items)
 {
 	// Raise an error if the item is not defined.
@@ -430,11 +402,6 @@ bool UnifiedFile::load_horizon(std::vector<std::string> items)
 	return false;
 }
 
-/**
- * Load the discount factor from the file's data.
- * @param items	The list of items on the same line.
- * @return Return @code{true} if an error occurred, and @code{false} otherwise.
- */
 bool UnifiedFile::load_discount_factor(std::vector<std::string> items)
 {
 	// Raise an error if the item is not defined.
@@ -474,11 +441,6 @@ bool UnifiedFile::load_discount_factor(std::vector<std::string> items)
 	return false;
 }
 
-/**
- * Load the initial state from the file's data.
- * @param items	The list of items on the same line.
- * @return Return @code{true} if an error occurred, and @code{false} otherwise.
- */
 bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 {
 	// Ensure states are defined, otherwise you cannot specify an initial distribution over states.
@@ -555,11 +517,6 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 	return false;
 }
 
-/**
- * Load the initial state from the file's data, following the special inclusive structure.
- * @param items	The list of items on the same line.
- * @return Return @code{true} if an error occurred, and @code{false} otherwise.
- */
 bool UnifiedFile::load_initial_state_inclusive(std::vector<std::string> items)
 {
 	// Ensure states are defined, otherwise you cannot specify an initial distribution over states.
@@ -610,11 +567,6 @@ bool UnifiedFile::load_initial_state_inclusive(std::vector<std::string> items)
 	return false;
 }
 
-/**
- * Load the initial state from the file's data, following the special exclusive structure.
- * @param items	The list of items on the same line.
- * @return Return @code{true} if an error occurred, and @code{false} otherwise.
- */
 bool UnifiedFile::load_initial_state_exclusive(std::vector<std::string> items)
 {
 	// Ensure states are defined, otherwise you cannot specify an initial distribution over states.
@@ -676,11 +628,6 @@ bool UnifiedFile::load_initial_state_exclusive(std::vector<std::string> items)
 	return false;
 }
 
-/**
- * Load the value type (reward or cost) from the file's data.
- * @param items	The list of items on the same line.
- * @return Return @code{true} if an error occurred, and @code{false} otherwise.
- */
 bool UnifiedFile::load_value(std::vector<std::string> items)
 {
 	// Raise an error if the item is not defined.
@@ -706,11 +653,6 @@ bool UnifiedFile::load_value(std::vector<std::string> items)
 	return false;
 }
 
-/**
- * Load the agents from the file's data.
- * @param items	The list of items on the same line.
- * @return Return @code{true} if an error occurred, and @code{false} otherwise.
- */
 bool UnifiedFile::load_agents(std::vector<std::string> items)
 {
 	// Raise an error if the item is not defined.
@@ -764,12 +706,6 @@ bool UnifiedFile::load_agents(std::vector<std::string> items)
 	return false;
 }
 
-/**
- * Load the states from the file's data.
- * @param items	The list of items on the same line.
- * @return Return -1 if an error occurred, 0 if successful, and 1 if this begins
- * 		loading a sequence of factored states (not necessarily for each agent).
- */
 int UnifiedFile::load_states(std::vector<std::string> items)
 {
 	// If the item is not defined, then it must be a sequence of factored states.
@@ -826,12 +762,6 @@ int UnifiedFile::load_states(std::vector<std::string> items)
 	return 0;
 }
 
-/**
- * Load the factored states from the file's data.
- * @param factorIndex	The index of the factored state.
- * @param line			The line string from the file.
- * @return Return @code{true} if an error occurred, and @code{false} otherwise.
- */
 bool UnifiedFile::load_factored_states(int factorIndex, std::string line)
 {
 	// Handle an invalid factor index and undefined states variable.
@@ -904,12 +834,6 @@ bool UnifiedFile::load_factored_states(int factorIndex, std::string line)
 	return 0;
 }
 
-/**
- * Load the actions from the file's data.
- * @param items	The list of items on the same line.
- * @return Return -1 if an error occurred, 0 if successful, and 1 if this begins
- * 		loading a sequence of actions for each agent.
- */
 int UnifiedFile::load_actions(std::vector<std::string> items)
 {
 	// If agents have been defined, then this was successful (so far) and we must load actions
@@ -970,13 +894,6 @@ int UnifiedFile::load_actions(std::vector<std::string> items)
 	return 0;
 }
 
-/**
- * Load the actions of one agent from the file's data.
- * @param agentIndex	The index of the agent in the joint action.
- * @param line			The line string from the file.
- * @return Return -1 if an error occurred, 0 if successful, and 1 if this begins
- * 		loading a sequence of actions.
- */
 int UnifiedFile::load_agent_actions(int agentIndex, std::string line)
 {
 	// Handle an invalid agent index and undefined agents variable.
@@ -1042,12 +959,6 @@ int UnifiedFile::load_agent_actions(int agentIndex, std::string line)
 	return 0;
 }
 
-/**
- * Load the observations from the file's data.
- * @param items	The list of items on the same line.
- * @return Return -1 if an error occurred, 0 if successful, and 1 if this begins
- * 		loading a sequence of observations for each agent.
- */
 int UnifiedFile::load_observations(std::vector<std::string> items)
 {
 	// If agents have been defined, then this was successful (so far) and we must load observations
@@ -1108,13 +1019,6 @@ int UnifiedFile::load_observations(std::vector<std::string> items)
 	return 0;
 }
 
-/**
- * Load the observations of one agent from the file's data.
- * @param agentIndex	The index of the agent in the joint observation.
- * @param line			The line string from the file.
- * @return Return -1 if an error occurred, 0 if successful, and 1 if this begins
- * 		loading a sequence of actions.
- */
 int UnifiedFile::load_agent_observations(int agentIndex, std::string line)
 {
 	// Handle an invalid agent index and undefined agents variable.
@@ -1180,13 +1084,6 @@ int UnifiedFile::load_agent_observations(int agentIndex, std::string line)
 	return 0;
 }
 
-/**
- * Load the state transitions from the file's data.
- * @param items	The list of items on the same line.
- * @return Return -1 if an error occurred, 0 if successful, 1 if this begins
- * 		loading a vector of state transitions, 2 if this begins loading a
- * 		matrix of state transitions.
- */
 int UnifiedFile::load_state_transition(std::vector<std::string> items)
 {
 	// Ensure a valid number of items.
@@ -1280,11 +1177,6 @@ int UnifiedFile::load_state_transition(std::vector<std::string> items)
 	return 0;
 }
 
-/**
- * Load a state transition vector from the file's data.
- * @param line		The line to parse containing a vector of probabilities.
- * @return Return @code{true} if an error occurred, @code{false} otherwise.
- */
 bool UnifiedFile::load_state_transition_vector(std::string line)
 {
 	// Split the line into a list of (hopefully) probabilities equal to the number of states.
@@ -1336,12 +1228,6 @@ bool UnifiedFile::load_state_transition_vector(std::string line)
 	return false;
 }
 
-/**
- * Load a state transition matrix from the file's data.
- * @param stateIndex	The current state index for the start state.
- * @param line			The line to parse containing a vector of probabilities.
- * @return Return @code{true} if an error occurred, @code{false} otherwise.
- */
 bool UnifiedFile::load_state_transition_matrix(int stateIndex, std::string line)
 {
 	// Split the line into a list of (hopefully) probabilities equal to the number of states.
@@ -1407,12 +1293,6 @@ bool UnifiedFile::load_state_transition_matrix(int stateIndex, std::string line)
 	return false;
 }
 
-/**
- * Load the observation transitions from the file's data.
- * @param items	The list of items on the same line.
- * @return Return -1 if an error occurred, 0 if successful, and 1 if this begins
- * 		loading a matrix of observation transitions.
- */
 int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 {
 	// Ensure a valid number of items.
@@ -1506,11 +1386,6 @@ int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 	return 0;
 }
 
-/**
- * Load a observation transition vector from the file's data.
- * @param line		The line to parse containing a vector of probabilities.
- * @return Return @code{true} if an error occurred, @code{false} otherwise.
- */
 bool UnifiedFile::load_observation_transition_vector(std::string line)
 {
 	// Split the line into a list of (hopefully) probabilities equal to the number of observations.
@@ -1562,12 +1437,6 @@ bool UnifiedFile::load_observation_transition_vector(std::string line)
 	return false;
 }
 
-/**
- * Load a state transition matrix from the file's data.
- * @param stateIndex	The current state index for the end state.
- * @param line			The line to parse containing a vector of probabilities.
- * @return Return @code{true} if an error occurred, @code{false} otherwise.
- */
 bool UnifiedFile::load_observation_transition_matrix(int stateIndex, std::string line)
 {
 	// Split the line into a list of (hopefully) probabilities equal to the number of observations.
@@ -1629,12 +1498,6 @@ bool UnifiedFile::load_observation_transition_matrix(int stateIndex, std::string
 	return false;
 }
 
-/**
- * Load the rewards from the file's data.
- * @param items	The list of items on the same line.
- * @return Return -1 if an error occurred, 0 if successful, and 1 if this begins
- * 		loading a matrix of rewards.
- */
 int UnifiedFile::load_reward(std::vector<std::string> items)
 {
 	// Ensure a valid number of items.
@@ -1726,11 +1589,6 @@ int UnifiedFile::load_reward(std::vector<std::string> items)
 	return 0;
 }
 
-/**
- * Load a reward vector from the file's data.
- * @param line		The line to parse containing a vector of rewards or costs.
- * @return Return @code{true} if an error occurred, @code{false} otherwise.
- */
 bool UnifiedFile::load_reward_vector(std::string line)
 {
 	// Split the line into a list of (hopefully) rewards equal to the number of states.
@@ -1770,12 +1628,6 @@ bool UnifiedFile::load_reward_vector(std::string line)
 	return false;
 }
 
-/**
- * Load a reward matrix from the file's data.
- * @param stateIndex	The current state index for the end state.
- * @param line			The line to parse containing a vector of rewards or costs.
- * @return Return @code{true} if an error occurred, @code{false} otherwise.
- */
 bool UnifiedFile::load_reward_matrix(int stateIndex, std::string line)
 {
 	// Split the line into a list of (hopefully) rewards equal to the number of states.
@@ -1822,9 +1674,6 @@ bool UnifiedFile::load_reward_matrix(int stateIndex, std::string line)
 	return false;
 }
 
-/**
- * Release control over the memory of the variables.
- */
 void UnifiedFile::release()
 {
 	agents = nullptr;
@@ -1838,12 +1687,6 @@ void UnifiedFile::release()
 	horizon = nullptr;
 }
 
-/**
- * Get an MDP version of a loaded file. This releases control of the memory to the
- * MDP object, and therefore removes pointers to any loaded file information.
- * @return An MDP defined by the file loaded.
- * @throws CoreException The MDP was missing a vital component to be defined.
- */
 MDP *UnifiedFile::get_mdp()
 {
 	if (states == nullptr || actions == nullptr || stateTransitions == nullptr || rewards == nullptr ||
@@ -1856,14 +1699,6 @@ MDP *UnifiedFile::get_mdp()
 	return mdp;
 }
 
-#include <iostream>
-
-/**
- * Get an POMDP version of a loaded file. This releases control of the memory to the
- * MDP object, and therefore removes pointers to any loaded file information.
- * @return An POMDP defined by the file loaded.
- * @throws CoreException The MDP was missing a vital component to be defined.
- */
 POMDP *UnifiedFile::get_pomdp()
 {
 	if (states == nullptr || actions == nullptr || observations == nullptr || stateTransitions == nullptr ||
@@ -1878,12 +1713,6 @@ POMDP *UnifiedFile::get_pomdp()
 	return pomdp;
 }
 
-/**
- * Get an Dec-MDP version of a loaded file. This releases control of the memory to the
- * MDP object, and therefore removes pointers to any loaded file information.
- * @return An Dec-MDP defined by the file loaded.
- * @throws CoreException The MDP was missing a vital component to be defined.
- */
 DecMDP *UnifiedFile::get_dec_mdp()
 {
 	if (agents == nullptr || states == nullptr || actions == nullptr || stateTransitions == nullptr ||
@@ -1896,12 +1725,6 @@ DecMDP *UnifiedFile::get_dec_mdp()
 	return decmdp;
 }
 
-/**
- * Get an Dec-POMDP version of a loaded file. This releases control of the memory to the
- * MDP object, and therefore removes pointers to any loaded file information.
- * @return An Dec-POMDP defined by the file loaded.
- * @throws CoreException The MDP was missing a vital component to be defined.
- */
 DecPOMDP *UnifiedFile::get_dec_pomdp()
 {
 	if (agents == nullptr || states == nullptr || actions == nullptr || observations == nullptr ||

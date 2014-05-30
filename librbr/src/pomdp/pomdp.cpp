@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -25,26 +25,12 @@
 
 #include "../../include/pomdp/pomdp.h"
 
-/**
- * The default constructor for the POMDP class.
- */
 POMDP::POMDP() : MDP()
 {
 	observations = nullptr;
 	observationTransitions = nullptr;
 }
 
-/**
- * A constructor for the POMDP class.
- * @param states					The states.
- * @param actions					The actions.
- * @param observations				The observations.
- * @param stateTransitions			The state transitions, which uses the states and actions parameters.
- * @param observationTransitions	The observation transitions, which uses the states, actions, and observations parameters.
- * @param rewards					The rewards, which uses the states and actions parameters.
- * @param initialState				The initial state, which uses the states parameter.
- * @param horizon					The horizon.
- */
 POMDP::POMDP(States *s, Actions *a, Observations *o, StateTransitions *st, ObservationTransitions *ot,
 		Rewards *r, Initial *is, Horizon *h) : MDP(s, a, st, r, is, h)
 {
@@ -52,9 +38,6 @@ POMDP::POMDP(States *s, Actions *a, Observations *o, StateTransitions *st, Obser
 	observationTransitions = ot;
 }
 
-/**
- * A deconstructor for the POMDP class.
- */
 POMDP::~POMDP()
 {
 	if (observations != nullptr) {
@@ -65,19 +48,11 @@ POMDP::~POMDP()
 	}
 }
 
-/**
- * Get the observations object.
- * @return The observations object.
- */
 const Observations *POMDP::get_observations() const
 {
 	return observations;
 }
 
-/**
- * Get the observation transitions object.
- * @return The observation transitions object.
- */
 const ObservationTransitions *POMDP::get_observation_transitions() const
 {
 	return observationTransitions;

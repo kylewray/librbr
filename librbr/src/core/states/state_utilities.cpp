@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -29,13 +29,6 @@
 #include "../../../include/core/states/named_state.h"
 #include "../../../include/core/states/factored_state.h"
 
-/**
- * Find a particular state given the name in a set of states.
- * @param S			The finite set of states.
- * @param stateName The name of the state.
- * @return The state with the corresponding name provided.
- * @throws StateException The name was invalid, or a state was not a NamedState.
- */
 const State *find_state(const FiniteStates *S, std::string stateName)
 {
 	for (auto stateIterator : *S) {
@@ -73,5 +66,6 @@ const State *find_state(const FiniteStates *S, std::string stateName)
 			}
 	    }
 	}
+
 	throw StateException();
 }

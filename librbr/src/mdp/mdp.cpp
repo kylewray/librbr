@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -25,9 +25,6 @@
 
 #include "../../include/mdp/mdp.h"
 
-/**
- * The default constructor for the MDP class.
- */
 MDP::MDP()
 {
 	states = nullptr;
@@ -38,15 +35,6 @@ MDP::MDP()
 	horizon = nullptr;
 }
 
-/**
- * A constructor for the MDP class.
- * @param s		The states.
- * @param a		The actions.
- * @param st	The state transitions, which uses the states and actions parameters.
- * @param r		The rewards, which uses the states and actions parameters.
- * @param is	The initial state, which uses the states parameter.
- * @param h		The horizon.
- */
 MDP::MDP(States *s, Actions *a, StateTransitions *st, Rewards *r, Initial *is, Horizon *h)
 {
 	states = s;
@@ -57,9 +45,6 @@ MDP::MDP(States *s, Actions *a, StateTransitions *st, Rewards *r, Initial *is, H
 	horizon = h;
 }
 
-/**
- * A deconstructor for the MDP class. This frees the memory of all MDP variables.
- */
 MDP::~MDP()
 {
 	if (states != nullptr) {
@@ -82,55 +67,31 @@ MDP::~MDP()
 	}
 }
 
-/**
- * Get the states object.
- * @return The states object.
- */
 const States *MDP::get_states() const
 {
 	return states;
 }
 
-/**
- * Get the actions object.
- * @return The actions object.
- */
 const Actions *MDP::get_actions() const
 {
 	return actions;
 }
 
-/**
- * Get the state transitions object.
- * @return The state transitions object.
- */
 const StateTransitions *MDP::get_state_transitions() const
 {
 	return stateTransitions;
 }
 
-/**
- * Get the rewards object.
- * @return The rewards object.
- */
 const Rewards *MDP::get_rewards() const
 {
 	return rewards;
 }
 
-/**
- * Get the initial state object.
- * @return The initial state object.
- */
 const Initial *MDP::get_initial_state() const
 {
 	return initialState;
 }
 
-/**
- * Get the horizon object.
- * @return The horizon object.
- */
 const Horizon *MDP::get_horizon() const
 {
 	return horizon;

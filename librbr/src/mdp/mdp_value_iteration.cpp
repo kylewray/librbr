@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -35,40 +35,19 @@
 #include <unordered_map>
 #include <math.h>
 
-/**
- * The default constructor for the MDPValueIteration class.
- */
 MDPValueIteration::MDPValueIteration()
 {
 	epsilon = 0.001;
 }
 
-/**
- * A constructor for the MDPValueIteration class which allows for the specification
- * of the convergence criterion.
- * @param tolerance The tolerance which determines convergence of value iteration.
- */
 MDPValueIteration::MDPValueIteration(double tolerance)
 {
 	epsilon = tolerance;
 }
 
-/**
- * The deconstructor for the MDPValueIteration class.
- */
 MDPValueIteration::~MDPValueIteration()
 { }
 
-/**
- * Solve the MDP provided using value iteration.
- * @param mdp The Markov decision process to solve.
- * @return Return the optimal policy.
- * @throws StateException				The MDP did not have a FiniteStates states object.
- * @throws ActionException				The MDP did not have a FiniteActions actions object.
- * @throws StateTransitionsException	The MDP did not have a FiniteStateTransitions state transitions object.
- * @throws RewardException				The MDP did not have a SASRewards rewards object.
- * @throws PolicyException				An error occurred computing the policy.
- */
 PolicyMap *MDPValueIteration::solve(const MDP *mdp)
 {
 	// Handle the trivial case.
@@ -110,16 +89,6 @@ PolicyMap *MDPValueIteration::solve(const MDP *mdp)
 	}
 }
 
-/**
- * Solve a finite horizon MDP using value iteration.
- * @param S The finite states.
- * @param A The finite actions.
- * @param T The finite state transition function.
- * @param R The state-action-state rewards.
- * @param h The horizon.
- * @return Return the optimal policy.
- * @throws PolicyException An error occurred computing the policy.
- */
 PolicyMap *MDPValueIteration::solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
 		const SASRewards *R, const Horizon *h)
 {
@@ -146,16 +115,6 @@ PolicyMap *MDPValueIteration::solve_finite_horizon(const FiniteStates *S, const 
 	return policy;
 }
 
-/**
- * Solve an infinite horizon MDP using value iteration.
- * @param S The finite states.
- * @param A The finite actions.
- * @param T The finite state transition function.
- * @param R The state-action-state rewards.
- * @param h The horizon.
- * @return Return the optimal policy.
- * @throws PolicyException An error occurred computing the policy.
- */
 PolicyMap *MDPValueIteration::solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
 		const SASRewards *R, const Horizon *h)
 {

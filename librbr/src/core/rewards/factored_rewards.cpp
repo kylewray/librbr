@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -28,17 +28,9 @@
 
 #include <limits>
 
-/**
- * The default constructor for the FactoredRewards class.
- */
 FactoredRewards::FactoredRewards()
 { }
 
-/**
- * The constructor for the FactoredRewards class which allows the specification
- * of the number of rewards.
- * @param numRewards The number of rewards in the multi-rewards vector, minimum of 1.
- */
 FactoredRewards::FactoredRewards(int numRewards)
 {
 	if (numRewards < 1) {
@@ -51,20 +43,11 @@ FactoredRewards::FactoredRewards(int numRewards)
 	}
 }
 
-/**
- * The default deconstructor for the MultiRewards class.
- */
 FactoredRewards::~FactoredRewards()
 {
 	reset();
 }
 
-/**
- * Add a new rewards factor to the vector of available rewards. This relinquishes control of the
- * new rewards factor to this object.
- * @param newRewardsFactor	The new rewards factor to include in the vector of available rewards.
- * @throw RewardException	The new rewards factor was null.
- */
 void FactoredRewards::add_factor(Rewards *newRewardsFactor)
 {
 	if (newRewardsFactor == nullptr) {
@@ -73,12 +56,6 @@ void FactoredRewards::add_factor(Rewards *newRewardsFactor)
 	rewards.push_back(newRewardsFactor);
 }
 
-/**
- * Set the particular rewards element in the multi-rewards vector. This frees memory.
- * @param factorIndex		The index of the factor to add the states to.
- * @param newRewardsFactor	The new rewards factor for this index.
- * @throws RewardException	The index was invalid.
- */
 void FactoredRewards::set(int factorIndex, Rewards *newRewardsFactor)
 {
 	if (factorIndex < 0 || factorIndex >= rewards.size()) {
@@ -91,12 +68,6 @@ void FactoredRewards::set(int factorIndex, Rewards *newRewardsFactor)
 	rewards[factorIndex] = newRewardsFactor;
 }
 
-/**
- * Get the particular rewards element in the factored rewards vector.
- * @param factorIndex The index of the factor to add the rewards factor to.
- * @returns The rewards for this index.
- * @throws RewardException	The index was invalid.
- */
 Rewards *FactoredRewards::get(int factorIndex) const
 {
 	if (factorIndex < 0 || factorIndex >= rewards.size()) {
@@ -106,18 +77,11 @@ Rewards *FactoredRewards::get(int factorIndex) const
 	return rewards[factorIndex];
 }
 
-/**
- * Get the number of rewards, i.e., the dimension of the multi-rewards vector.
- * @return The number of rewards.
- */
 int FactoredRewards::get_num_rewards() const
 {
 	return rewards.size();
 }
 
-/**
- * Reset the rewards, freeing all the memory allocated by each object in the vector.
- */
 void FactoredRewards::reset()
 {
 	for (Rewards *r : rewards) {

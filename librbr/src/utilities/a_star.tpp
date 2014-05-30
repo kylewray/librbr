@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -31,13 +31,6 @@
 #include <algorithm>
 #include <map>
 
-/**
- * The default constructor for the AStar class. It requires the specification of all
- * relevant variables.
- * @param heuristic		The heuristic function estimating the distance from a node to the goal.
- * @param cost			The cost from the immediate transition from one node to another.
- * @param successors	Generate the list of successors nodes.
- */
 template <typename T>
 AStar<T>::AStar(double (*heuristic)(T node, T goal), double (*cost)(T n1, T n2), std::vector<T> (*successors)(T node))
 {
@@ -47,19 +40,10 @@ AStar<T>::AStar(double (*heuristic)(T node, T goal), double (*cost)(T n1, T n2),
 	numNodesExpanded = 0;
 }
 
-/**
- * The deconstructor for the AStar class.
- */
 template <typename T>
 AStar<T>::~AStar()
 { }
 
-/**
- * Solve the search problem given a starting node.
- * @param start				The initial node.
- * @param goal				The goal node.
- * @throws UtilityException	Either there is no path from the start to goal, or path reconstruction failed.
- */
 template <typename T>
 void AStar<T>::solve(T start, T goal)
 {
@@ -147,33 +131,18 @@ void AStar<T>::solve(T start, T goal)
 	throw UtilityException();
 }
 
-/**
- * Get the solution path which was computed from the last call of solve.
- * @return The solution path from the start node to the goal node.
- */
 template <typename T>
 const std::vector<T> &AStar<T>::get_path()
 {
 	return path;
 }
 
-/**
- * Get the number of nodes expanded from the last call of solve.
- * @return The number of nodes expanded.
- */
 template <typename T>
 int AStar<T>::get_num_nodes_expanded()
 {
 	return numNodesExpanded;
 }
 
-/**
- * Reconstruct the path given a collection of maps nodes to parents and store it internally.
- * @param start				The initial node.
- * @param goal				The goal node.
- * @param trace				The trace of all expanded nodes to their parents.
- * @throws UtilityException	The trace of the route was corrupt.
- */
 template <typename T>
 void AStar<T>::reconstruct_path(T start, T goal, std::map<T, T> &trace)
 {

@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -29,13 +29,6 @@
 #include "../../../include/core/observations/named_observation.h"
 #include "../../../include/core/observations/joint_observation.h"
 
-/**
- * Get a particular observation given the name.
- * @param Z					The finite set of observations.
- * @param observationName 	The name of the observation.
- * @return The observation with the corresponding name provided.
- * @throws ObservationException The name was invalid.
- */
 const Observation *find_observation(const FiniteObservations *Z, std::string observationName)
 {
 	for (const Observation *observation : *Z) {
@@ -71,5 +64,6 @@ const Observation *find_observation(const FiniteObservations *Z, std::string obs
 			}
 	    }
 	}
+
 	throw ObservationException();
 }

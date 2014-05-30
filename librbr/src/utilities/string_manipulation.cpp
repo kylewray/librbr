@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -27,10 +27,6 @@
 
 #include <algorithm>
 
-/**
- * Trim the left and right sides of a string, removing the whitespace.
- * @param item The string to trim.
- */
 void trim_whitespace(std::string &item)
 {
 	// Trim from the left side.
@@ -52,23 +48,11 @@ void trim_whitespace(std::string &item)
 	item = item.substr(left, right - left);
 }
 
-/**
- * Remove all white space from a string.
- * @param item The string to remove white space from.
- * @return The resulting item without any white spaces.
- */
 void remove_whitespace(std::string &item)
 {
 	item.erase(std::remove(item.begin(), item.end(), ' '), item.end());
 }
 
-/**
- * Split a string delimited by spaces ' ' into a vector of strings. If this
- * string happens to represent joint actions, joint observations, or
- * factored states, then it will split on spaces surrounding '<...>' instead.
- * @param item The string to split which is delimited by spaces ' '.
- * @return The resulting vector of items.
- */
 std::vector<std::string> split_string_by_space(std::string item)
 {
 	std::istringstream ssItem(item);
@@ -98,12 +82,6 @@ std::vector<std::string> split_string_by_space(std::string item)
 	return list;
 }
 
-/**
- * Split a string delimited by colons ':' into a vector of strings. This
- * trims whitespace around each element.
- * @param item The string to split which is delimited by colons ':'.
- * @return The resulting vector of items.
- */
 std::vector<std::string> split_string_by_colon(std::string item)
 {
 	// Split the key and value of the line, and trim the white spaces.

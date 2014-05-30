@@ -2,7 +2,7 @@
  *  The MIT License (MIT)
  *
  *  Copyright (c) 2014 Kyle Wray
- *  Copyright (c) 2013 Kyle Wray and Luis Pineda
+ *  Copyright (c) 2013-2014 Kyle Wray and Luis Pineda
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -25,33 +25,17 @@
 
 #include "../../include/dec_mdp/dec_mdp.h"
 
-/**
- * The default constructor for the DecMDP class.
- */
 DecMDP::DecMDP() : MDP()
 {
 	agents = nullptr;
 }
 
-/**
- * A constructor for the DecMDP class.
- * @param ag	The agents.
- * @param s		The states.
- * @param a		The actions, which uses the agents parameter.
- * @param st	The state transitions, which uses the states and actions parameters.
- * @param r		The rewards, which uses the states and actions parameters.
- * @param is	The initial state, which uses the states parameter.
- * @param h		The horizon.
- */
 DecMDP::DecMDP(Agents *ag, States *s, Actions *a, StateTransitions *st, Rewards *r,
 		Initial *is, Horizon *h) : MDP(s, a, st, r, is, h)
 {
 	agents = ag;
 }
 
-/**
- * A deconstructor for the DecMDP class.
- */
 DecMDP::~DecMDP()
 {
 	if (agents != nullptr) {
@@ -59,10 +43,6 @@ DecMDP::~DecMDP()
 	}
 }
 
-/**
- * Get the agents object.
- * @return The agents object.
- */
 const Agents *DecMDP::get_agents() const
 {
 	return agents;
