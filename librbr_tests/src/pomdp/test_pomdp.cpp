@@ -34,6 +34,7 @@
 #include "../../../librbr/include/pomdp/pomdp_pbvi.h"
 
 #include "../../../librbr/include/core/states/belief_state.h"
+#include "../../../librbr/include/core/states/finite_states.h"
 
 #include "../../../librbr/include/core/core_exception.h"
 #include "../../../librbr/include/core/states/state_exception.h"
@@ -106,30 +107,34 @@ int test_pomdp()
 
 	try {
 		const FiniteStates *states = (const FiniteStates *)pomdp->get_states();
+		std::vector<const State *> orderedStates;
+		for (auto s : *states) {
+			orderedStates.push_back(resolve(s));
+		}
 
 		BeliefState *b = new BeliefState();
-		b->set(states->get(0), 1.0);
-		b->set(states->get(1), 0.0);
+		b->set(orderedStates[0], 1.0);
+		b->set(orderedStates[0], 0.0);
 		pbvi.add_initial_belief_state(b);
 
 		b = new BeliefState();
-		b->set(states->get(0), 0.0);
-		b->set(states->get(1), 1.0);
+		b->set(orderedStates[0], 0.0);
+		b->set(orderedStates[1], 1.0);
 		pbvi.add_initial_belief_state(b);
 
 		b = new BeliefState();
-		b->set(states->get(0), 0.25);
-		b->set(states->get(1), 0.75);
+		b->set(orderedStates[0], 0.25);
+		b->set(orderedStates[1], 0.75);
 		pbvi.add_initial_belief_state(b);
 
 		b = new BeliefState();
-		b->set(states->get(0), 0.75);
-		b->set(states->get(1), 0.25);
+		b->set(orderedStates[0], 0.75);
+		b->set(orderedStates[1], 0.25);
 		pbvi.add_initial_belief_state(b);
 
 		b = new BeliefState();
-		b->set(states->get(0), 0.5);
-		b->set(states->get(1), 0.5);
+		b->set(orderedStates[0], 0.5);
+		b->set(orderedStates[1], 0.5);
 		pbvi.add_initial_belief_state(b);
 
 		policyAlphaVectors = pbvi.solve(pomdp);
@@ -219,30 +224,34 @@ int test_pomdp()
 
 	try {
 		const FiniteStates *states = (const FiniteStates *)pomdp->get_states();
+		std::vector<const State *> orderedStates;
+		for (auto s : *states) {
+			orderedStates.push_back(resolve(s));
+		}
 
 		BeliefState *b = new BeliefState();
-		b->set(states->get(0), 1.0);
-		b->set(states->get(1), 0.0);
+		b->set(orderedStates[0], 1.0);
+		b->set(orderedStates[0], 0.0);
 		pbvi.add_initial_belief_state(b);
 
 		b = new BeliefState();
-		b->set(states->get(0), 0.0);
-		b->set(states->get(1), 1.0);
+		b->set(orderedStates[0], 0.0);
+		b->set(orderedStates[1], 1.0);
 		pbvi.add_initial_belief_state(b);
 
 		b = new BeliefState();
-		b->set(states->get(0), 0.25);
-		b->set(states->get(1), 0.75);
+		b->set(orderedStates[0], 0.25);
+		b->set(orderedStates[1], 0.75);
 		pbvi.add_initial_belief_state(b);
 
 		b = new BeliefState();
-		b->set(states->get(0), 0.75);
-		b->set(states->get(1), 0.25);
+		b->set(orderedStates[0], 0.75);
+		b->set(orderedStates[1], 0.25);
 		pbvi.add_initial_belief_state(b);
 
 		b = new BeliefState();
-		b->set(states->get(0), 0.5);
-		b->set(states->get(1), 0.5);
+		b->set(orderedStates[0], 0.5);
+		b->set(orderedStates[1], 0.5);
 		pbvi.add_initial_belief_state(b);
 
 		policyAlphaVectors = pbvi.solve(pomdp);

@@ -367,19 +367,34 @@ private:
 	char error[1024];
 
 	/**
-	 * A helper action variable for loading vectors or matrices.
-	 */
-	const Action *loadingAction;
-
-	/**
 	 * A helper state variable for loading vectors or matrices.
 	 */
 	const State *loadingState;
 
 	/**
+	 * A helper action variable for loading vectors or matrices.
+	 */
+	const Action *loadingAction;
+
+	/**
 	 * A helper observation variable for loading vectors or matrices.
 	 */
 	const Observation *loadingObservation;
+
+	/**
+	 * An ordered list of states for use in loading vectors or matrices.
+	 */
+	std::vector<const State *> orderedStates;
+
+	/**
+	 * An ordered list of actions for use in loading vectors or matrices.
+	 */
+	std::vector<const Action *> orderedActions;
+
+	/**
+	 * An ordered list of observations for use in loading vectors or matrices.
+	 */
+	std::vector<const Observation *> orderedObservations;
 
 };
 

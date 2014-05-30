@@ -176,6 +176,7 @@ void FiniteFactoredStates::update()
 
 /**
  * Get the number of factored states.
+ * @return The number of factors.
  */
 int FiniteFactoredStates::get_num_factors()
 {
@@ -212,7 +213,8 @@ void FiniteFactoredStates::update_step(std::vector<const State *> currentFactore
 		// If this is the final index, then create a factored state object and append it to the list of states.
 		// Otherwise, recurse to the next index, using the new currentFactoredState object.
 		if (currentFactorIndex == factoredStates.size() - 1) {
-			states.push_back(new FactoredState(currentFactoredState));
+			const FactoredState *newState = new FactoredState(currentFactoredState);
+			states[newState->hash_value()] = newState;
 		} else {
 			update_step(currentFactoredState, currentFactorIndex + 1);
 		}

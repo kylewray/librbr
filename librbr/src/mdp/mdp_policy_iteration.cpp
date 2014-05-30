@@ -131,8 +131,8 @@ PolicyMap *MDPPolicyIteration::solve_exact(const FiniteStates *S, const FiniteAc
 		const SASRewards *R, const Horizon *h)
 {
 	PolicyMap *policy = new PolicyMap(h);
-	for (const State *s : *S) {
-		policy->set(s, A->get(0));
+	for (auto s : *S) {
+		policy->set(resolve(s), A->get(0));
 	}
 
 	// Create the M matrix with each cell M(i, j) denoting the i-th starting state s_i and
@@ -150,9 +150,13 @@ PolicyMap *MDPPolicyIteration::solve_exact(const FiniteStates *S, const FiniteAc
 
 		// Update the matrix M with the new policy changes.
 		unsigned int i = 0;
-		for (const State *si : *S) {
+		for (auto stateI : *S) {
+			const State *si = resolve(stateI);
+
 			unsigned int j = 0;
-			for (const State *sj : *S) {
+			for (auto stateJ : *S) {
+				const State *sj = resolve(stateJ);
+
 				M(i, j) = h->get_discount_factor() * T->get(si, policy->get(si), sj);
 
 				// Handle the special case for the diagonal, which will be one less since we subtracted
@@ -162,16 +166,21 @@ PolicyMap *MDPPolicyIteration::solve_exact(const FiniteStates *S, const FiniteAc
 				}
 				j++;
 			}
+
 			i++;
 		}
 
 		// Update the vector b with the new policy changes.
 		i = 0;
-		for (const State *si : *S) {
+		for (auto stateI : *S) {
+			const State *si = resolve(stateI);
+
 			b(i) = 0.0;
-			for (const State *sj : *S) {
+			for (auto stateJ : *S) {
+				const State *sj = resolve(stateJ);
 				b(i) -= T->get(si, policy->get(si), sj) * R->get(si, policy->get(si), sj);
 			}
+
 			i++;
 		}
 
@@ -182,15 +191,17 @@ PolicyMap *MDPPolicyIteration::solve_exact(const FiniteStates *S, const FiniteAc
 		// Store updates in V.
 		std::unordered_map<const State *, double> V;
 		i = 0;
-		for (const State *s : *S) {
-			V[s] = x(i);
+		for (auto s : *S) {
+			V[resolve(s)] = x(i);
 			i++;
 		}
 
 		// Compute the action which maximizes the expected reward. During the computation, check if any
 		// policy changes occur.
 		i = 0;
-		for (const State *s : *S) {
+		for (auto state : *S) {
+			const State *s = resolve(state);
+
 			// Perform the Bellman update, but we only care about aBest = argmax Q(s, a).
 			const Action *aBest = nullptr;
 			bellman_update(S, A, T, R, h, s, V, aBest);
@@ -235,7 +246,9 @@ PolicyMap *MDPPolicyIteration::solve_modified(const FiniteStates *S, const Finit
 		// Continue to iterate a number of times equal to the constant k specified at initialization.
 		for (int k = 0; k < modifiedK; k++) {
 			// For all the states, compute V(s).
-			for (const State *s : *S) {
+			for (auto state : *S) {
+				const State *s = resolve(state);
+
 				const Action *aBest = nullptr;
 
 				// Perform the Bellman update, which modifies V and aBest such that V(s) = max Q(s, a)

@@ -345,7 +345,8 @@ bool PolicyAlphaVectors::save(std::string filename, const FiniteStates *states) 
 
 			for (PolicyAlphaVector *alpha : alphaVectorSet) {
 				file << alpha->get_action()->to_string();
-				for (const State *state : *states) {
+				for (auto s : *states) {
+					const State *state = resolve(s);
 					file << " : " << state->to_string() << " : " << alpha->get(state);
 				}
 				file << std::endl;
@@ -357,7 +358,8 @@ bool PolicyAlphaVectors::save(std::string filename, const FiniteStates *states) 
 	} else if (alphaVectors.size() == 1) {
 		for (PolicyAlphaVector *alpha : alphaVectors[0]) {
 			file << alpha->get_action()->to_string();
-			for (const State *state : *states) {
+			for (auto s : *states) {
+				const State *state = resolve(s);
 				file << " : " << state->to_string() << " : " << alpha->get(state);
 			}
 			file << std::endl;
@@ -417,9 +419,9 @@ void PolicyAlphaVectors::prune_dominated(const FiniteStates *S, std::vector<Poli
 		// This is the constant vector c, defined to be the particular alpha vector in this iteration.
 		double *objective = new double[numCols];
 		int i = 0;
-		for (const State *state : *S) {
+		for (auto state : *S) {
 			// Note: Negative since CLP minimizes the objective function.
-			objective[i] = -(*iter)->get(state);
+			objective[i] = -(*iter)->get(resolve(state));
 			i++;
 		}
 
@@ -461,7 +463,8 @@ void PolicyAlphaVectors::prune_dominated(const FiniteStates *S, std::vector<Poli
 			// Set the row of the constraint matrix.
 			CoinPackedVector otherRow;
 			int j = 0;
-			for (const State *state : *S) {
+			for (auto s : *S) {
+				const State *state = resolve(s);
 				otherRow.insert(j, (*iterA)->get(state) - (*iter)->get(state));
 				j++;
 			}

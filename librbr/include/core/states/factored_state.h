@@ -110,8 +110,9 @@ public:
 
 protected:
 	/**
-	 * The factored state is defined as a tuple of states. To remain general, this is a vector, but
-	 * should remain a fixed size. This class does *not* manage the memory of these state objects.
+	 * The factored state is defined as a *tuple of states*, i.e., a specific factored state. To
+	 * remain general, this is a vector, but should remain a fixed size. This class does *not*
+	 * manage the memory of these state objects.
 	 */
 	std::vector<const State *> states;
 

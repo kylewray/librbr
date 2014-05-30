@@ -54,9 +54,23 @@ int test_states()
 	finiteStates->add(s2);
 	finiteStates->add(s3);
 
+	bool s1Found = false;
+	bool s2Found = false;
+	bool s3Found = false;
+
 	try {
-		if (finiteStates->get_num_states() == 3 && finiteStates->get(0) == s1 &&
-				finiteStates->get(1) == s2 && finiteStates->get(2) == s3) {
+		for (auto s : *finiteStates) {
+			const State *state = resolve(s);
+			if (state == s1) {
+				s1Found = true;
+			} else if (state == s2) {
+				s2Found = true;
+			} else if (state == s3) {
+				s3Found = true;
+			}
+		}
+
+		if (finiteStates->get_num_states() == 3 && s1Found && s2Found && s3Found) {
 			std::cout << " Success." << std::endl;
 			numSuccesses++;
 		} else {
@@ -77,8 +91,23 @@ int test_states()
 	}
 
 	std::cout << "States: Test 'FiniteStates::remove' (Check Result)... ";
-	if (finiteStates->get_num_states() == 2 && finiteStates->get(0) == s1 &&
-			finiteStates->get(1) == s3) {
+
+	s1Found = false;
+	s2Found = false;
+	s3Found = false;
+
+	for (auto s : *finiteStates) {
+		const State *state = resolve(s);
+		if (state == s1) {
+			s1Found = true;
+		} else if (state == s2) {
+			s2Found = true;
+		} else if (state == s3) {
+			s3Found = true;
+		}
+	}
+
+	if (finiteStates->get_num_states() == 2 && s1Found && !s2Found && s3Found) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -99,8 +128,23 @@ int test_states()
 	}
 
 	std::cout << "States: Test 'FiniteStates::add' and 'FiniteStates::remove' (Check Result)... ";
-	if (finiteStates->get_num_states() == 3 && finiteStates->get(0) == s3 &&
-			finiteStates->get(1) == s2 && finiteStates->get(2) == s1) {
+
+	s1Found = false;
+	s2Found = false;
+	s3Found = false;
+
+	for (auto s : *finiteStates) {
+		const State *state = resolve(s);
+		if (state == s1) {
+			s1Found = true;
+		} else if (state == s2) {
+			s2Found = true;
+		} else if (state == s3) {
+			s3Found = true;
+		}
+	}
+
+	if (finiteStates->get_num_states() == 3 && s1Found && s2Found && s3Found) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -132,8 +176,22 @@ int test_states()
 	s2 = s2New;
 	s3 = new NamedState("s3");
 
-	if (finiteStates->get_num_states() == 2 && finiteStates->get(0) == s1 &&
-			finiteStates->get(1) == s2) {
+	s1Found = false;
+	s2Found = false;
+	s3Found = false;
+
+	for (auto s : *finiteStates) {
+		const State *state = resolve(s);
+		if (state == s1) {
+			s1Found = true;
+		} else if (state == s2) {
+			s2Found = true;
+		} else if (state == s3) {
+			s3Found = true;
+		}
+	}
+
+	if (finiteStates->get_num_states() == 2 && s1Found && s2Found && !s3Found) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -182,17 +240,33 @@ int test_states()
 		std::cout << " Failure." << std::endl;
 	}
 
-	FactoredState *s13 = nullptr;
-	FactoredState *s14 = nullptr;
-	FactoredState *s23 = nullptr;
-	FactoredState *s24 = nullptr;
-
 	std::cout << "States: Test 'FiniteFactoredStates::get'... ";
+
+	bool s13Found = false;
+	bool s14Found = false;
+	bool s23Found = false;
+	bool s24Found = false;
+
 	try {
-		s13 = (FactoredState *)finiteFactoredStates->get(0);
-		s14 = (FactoredState *)finiteFactoredStates->get(1);
-		s23 = (FactoredState *)finiteFactoredStates->get(2);
-		s24 = (FactoredState *)finiteFactoredStates->get(3);
+		for (auto s : *finiteFactoredStates) {
+
+			const State *state = resolve(s);
+			const FactoredState *fs = static_cast<const FactoredState *>(state);
+			if (fs == nullptr) {
+				throw StateException();
+			}
+
+			if (fs->get(0) == s1 && fs->get(1) == s3) {
+				s13Found = true;
+			} else if (fs->get(0) == s1 && fs->get(1) == s4) {
+				s14Found = true;
+			} else if (fs->get(0) == s2 && fs->get(1) == s3) {
+				s23Found = true;
+			} else if (fs->get(0) == s2 && fs->get(1) == s4) {
+				s24Found = true;
+			}
+		}
+
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} catch (const StateException &err) {
@@ -206,14 +280,7 @@ int test_states()
 				finiteFactoredStates->get(0, 1) == s2 &&
 				finiteFactoredStates->get(1, 0) == s3 &&
 				finiteFactoredStates->get(1, 1) == s4 &&
-				s13->get(0) == s1 &&
-				s13->get(1) == s3 &&
-				s14->get(0) == s1 &&
-				s14->get(1) == s4 &&
-				s23->get(0) == s2 &&
-				s23->get(1) == s3 &&
-				s24->get(0) == s2 &&
-				s24->get(1) == s4) {
+				s13Found && s14Found && s23Found && s24Found) {
 			std::cout << " Success." << std::endl;
 			numSuccesses++;
 		} else {

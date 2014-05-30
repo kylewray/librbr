@@ -36,7 +36,7 @@ FiniteStates::FiniteStates()
 
 /**
  * The constructor for the FiniteStates class which allows the specification of an initial set of FiniteStates.
- * @param FiniteStates The initial vector of FiniteStates.
+ * @param	FiniteStates	The initial vector of FiniteStates.
  */
 FiniteStates::FiniteStates(const std::vector<const State *> &states)
 {
@@ -53,58 +53,46 @@ FiniteStates::~FiniteStates()
 
 /**
  * Add a state to the set of available states.
- * @param newState The new state to include in the set of available states.
+ * @param	newState	The new state to include in the set of available states.
  */
 void FiniteStates::add(const State *newState)
 {
-	states.push_back(newState);
+	states[newState->hash_value()] = newState;
 }
 
 /**
  * Remove a state to the set of available states. This frees the memory.
- * @param removeState 		The state to remove from the set of available states.
- * @throws StateException	The state was not found in the states list.
+ * @param	removeState 		The state to remove from the set of available states.
+ * @throw	StateException		The state was not found in the states list.
  */
 void FiniteStates::remove(const State *removeState)
 {
-	if (std::find(states.begin(), states.end(), removeState) == states.end()) {
+	// Ensure that the element exists in the hash before removing it.
+	std::unordered_map<unsigned int, const State *>::const_iterator result = states.find(removeState->hash_value());
+	if (result == states.end()) {
 		throw StateException();
 	}
 
-	states.erase(std::remove(states.begin(), states.end(), removeState), states.end());
+	states.erase(removeState->hash_value());
 	delete removeState;
 }
 
 /**
  * Set the internal states list given another list, performing a deep copy. This resets
  * the current list of states and frees the memory.
- * @param newStates The vector of new states to use.
+ * @param	newStates	The vector of new states to use.
  */
 void FiniteStates::set(const std::vector<const State *> &newStates)
 {
 	reset();
-	states = newStates;
-}
-
-/**
- * Get the state at the corresponding index. A state's index is defined by the order
- * in which they are added and removed.
- * @param stateIndex The index of the state.
- * @return The state at the corresponding index.
- * @throws StateException The index was invalid.
- */
-const State *FiniteStates::get(int stateIndex) const
-{
-	if (stateIndex < 0 || stateIndex >= states.size()) {
-		throw StateException();
+	for (const State *state : newStates) {
+		states[state->hash_value()] = state;
 	}
-
-	return states[stateIndex];
 }
 
 /**
  * Return the number of states.
- * @return The number of states.
+ * @return	The number of states.
  */
 int FiniteStates::get_num_states() const
 {
@@ -116,26 +104,44 @@ int FiniteStates::get_num_states() const
  */
 void FiniteStates::reset()
 {
-	for (const State *state : states) {
-		delete state;
+	for (auto state : states) {
+		delete state.second;
 	}
 	states.clear();
 }
 
 /**
  * To facilitate easy iteration, return a constant beginning of the states vector.
- * @return The iterator which points to a constant beginning of the states vector.
+ * @return	The iterator which points to a constant beginning of the states vector.
  */
-std::vector<const State *>::const_iterator FiniteStates::begin() const
+std::unordered_map<unsigned int, const State *>::const_iterator FiniteStates::begin() const
 {
 	return states.begin();
 }
 
 /**
  * To facilitate easy iteration, return a constant end of the states vector.
- * @return The iterator which points to a constant end of the states vector.
+ * @return	The iterator which points to a constant end of the states vector.
  */
-std::vector<const State *>::const_iterator FiniteStates::end() const
+std::unordered_map<unsigned int, const State *>::const_iterator FiniteStates::end() const
 {
 	return states.end();
+}
+
+/**
+ * Get the state pointer of a state iterator.
+ * @param	stateIterator	The state iterator to retrieve the state pointer from.
+ */
+const State *resolve(std::unordered_map<unsigned int, const State *>::value_type &stateIterator)
+{
+	return stateIterator.second;
+}
+
+/**
+ * Get the hash of a state iterator.
+ * @param	stateIterator	The state iterator to retrieve the hash value from.
+ */
+unsigned int hash_value(std::unordered_map<unsigned int, const State *>::value_type &stateIterator)
+{
+	return stateIterator.first;
 }

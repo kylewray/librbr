@@ -38,7 +38,9 @@
  */
 const State *find_state(const FiniteStates *S, std::string stateName)
 {
-	for (const State *state : *S) {
+	for (auto stateIterator : *S) {
+		const State *state = resolve(stateIterator);
+
 		// Try to cast the state as a NamedState. If it fails, it may still be a factored state.
 	    const NamedState *s = dynamic_cast<const NamedState *>(state);
 	    if (s == nullptr) {

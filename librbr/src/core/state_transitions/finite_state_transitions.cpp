@@ -120,7 +120,8 @@ void FiniteStateTransitions::successors(const FiniteStates *S, const State *stat
 		const Action *action, std::vector<const State *> &result) const
 {
 	result.clear();
-	for (const State *nextState : *S) {
+	for (auto sp : *S) {
+		const State *nextState = resolve(sp);
 		if (get(state, action, nextState) > 0.0) {
 			result.push_back(nextState);
 		}

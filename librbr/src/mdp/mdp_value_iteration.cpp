@@ -132,7 +132,8 @@ PolicyMap *MDPValueIteration::solve_finite_horizon(const FiniteStates *S, const 
 	// Continue to iterate until the maximum difference between two V[s]'s is less than the tolerance.
 	for (int t = h->get_horizon() - 1; t >= 0; t--){
 		// For all the states, compute V(s).
-		for (const State *s : *S) {
+		for (auto state : *S) {
+			const State *s = resolve(state);
 			const Action *aBest = nullptr;
 
 			bellman_update(S, A, T, R, h, s, V, aBest);
@@ -172,7 +173,8 @@ PolicyMap *MDPValueIteration::solve_infinite_horizon(const FiniteStates *S, cons
 		delta = 0.0;
 
 		// For all the states, compute V(s).
-		for (const State *s : *S) {
+		for (auto state : *S) {
+			const State *s = resolve(state);
 			const Action *aBest = nullptr;
 			double Vs = V[s];
 

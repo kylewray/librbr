@@ -59,27 +59,27 @@ public:
 
 	/**
 	 * Overload the equality comparison operator.
-	 * @param other The state to compare.
-	 * @return Returns @code{true} if this state is equal to the other; @code{false} otherwise.
+	 * @param	other	The state to compare.
+	 * @return	Returns @code{true} if this state is equal to the other; @code{false} otherwise.
 	 */
 	virtual bool operator==(const State &other) const;
 
 	/**
 	 * Overload the less than operator for comparison.
-	 * @param other The state to compare.
-	 * @return Returns @code{true} if this state is less than the other; @code{false} otherwise.
+	 * @param	other	The state to compare.
+	 * @return	Returns @code{true} if this state is less than the other; @code{false} otherwise.
 	 */
 	virtual bool operator<(const State &other) const;
 
 	/**
 	 * Returns a string representation of this state.
-	 * @return Returns the string representing this state.
+	 * @return	Returns the string representing this state.
 	 */
 	virtual std::string to_string() const = 0;
 
 	/**
 	 * Returns a hash value used to quickly identify this state in a collection of states.
-	 * @returns Returns the hash value of this state.
+	 * @return	Returns the hash value of this state.
 	 */
 	virtual unsigned int hash_value() const = 0;
 

@@ -42,10 +42,14 @@ PolicyAlphaVector *create_gamma_a_star(const FiniteStates *S, const FiniteAction
 {
 	PolicyAlphaVector *alpha = new PolicyAlphaVector(action);
 
-	for (const State *state : *S) {
+	for (auto s : *S) {
+		const State *state = resolve(s);
+
 		// Compute the immediate state-action-state-observation reward.
 		double immediateReward = 0.0;
-		for (const State *nextState : *S) {
+		for (auto sp : *S) {
+			const State *nextState = resolve(sp);
+
 			double innerImmediateReward = 0.0;
 			for (const Observation *observation : *Z) {
 				innerImmediateReward += O->get(action, nextState, observation) * R->get(state, action, nextState, observation);
@@ -75,10 +79,12 @@ BeliefState *belief_state_update(const FiniteStates *S, const FiniteStateTransit
 
 	// First, compute all of the numerators and the denominator independently.
 	double N = 0.0;
-	for (const State *nextState : *S) {
-		double b = 0.0;
+	for (auto sp : *S) {
+		const State *nextState = resolve(sp);
 
-		for (const State *state : *S) {
+		double b = 0.0;
+		for (auto s : *S) {
+			const State *state = resolve(s);
 			b += T->get(state, action, nextState) * belief->get(state);
 		}
 		b *= O->get(action, nextState, observation);
@@ -88,7 +94,8 @@ BeliefState *belief_state_update(const FiniteStates *S, const FiniteStateTransit
 	}
 
 	// Normalize by the denominator.
-	for (const State *nextState : *S) {
+	for (auto sp : *S) {
+		const State *nextState = resolve(sp);
 		nextBelief->set(nextState, nextBelief->get(nextState) / N);
 	}
 
@@ -133,11 +140,13 @@ std::vector<PolicyAlphaVector *> bellman_update_cross_sum(const FiniteStates *S,
 			PolicyAlphaVector *newAlpha = new PolicyAlphaVector();
 
 			// For each of the columns in the alpha vector.
-			for (const State *state : *S) {
-				double value = 0.0;
+			for (auto s : *S) {
+				const State *state = resolve(s);
 
 				// Compute the value of an element of the alpha vector.
-				for (const State *nextState : *S) {
+				double value = 0.0;
+				for (auto sp : *S) {
+					const State *nextState = resolve(sp);
 					value += T->get(state, action, nextState) * O->get(action, nextState, observation) * alphaGamma->get(nextState);
 				}
 				value *= h->get_discount_factor();
@@ -213,11 +222,13 @@ PolicyAlphaVector *bellman_update_belief_state(const FiniteStates *S, const Fini
 			PolicyAlphaVector *newAlpha = new PolicyAlphaVector();
 
 			// For each of the columns in the alpha vector.
-			for (const State *state : *S) {
-				double value = 0.0;
+			for (auto s : *S) {
+				const State *state = resolve(s);
 
 				// Compute the value of an element of the alpha vector.
-				for (const State *nextState : *S) {
+				double value = 0.0;
+				for (auto sp : *S) {
+					const State *nextState = resolve(sp);
 					value += T->get(state, action, nextState) * O->get(action, nextState, observation) * alphaGamma->get(nextState);
 				}
 				value *= h->get_discount_factor();

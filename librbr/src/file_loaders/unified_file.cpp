@@ -369,6 +369,14 @@ void UnifiedFile::reset()
 	rewardValue = true;
 	rows = 1;
 	filename = "";
+
+	loadingState = nullptr;
+	loadingAction = nullptr;
+	loadingObservation = nullptr;
+
+	orderedStates.clear();
+	orderedActions.clear();
+	orderedObservations.clear();
 }
 
 /**
@@ -499,8 +507,8 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 	// Either this is a single state, uniform, or number of states.
 	if (list[0].compare("uniform") == 0) {
 		double probability = 1.0 / (double)states->get_num_states();
-		for (const State *state : *states) {
-			initialState->set_initial_belief(state, probability);
+		for (auto state : *states) {
+			initialState->set_initial_belief(resolve(state), probability);
 		}
 	} else if (list.size() == 1) {
 		const State *state = nullptr;
@@ -539,7 +547,7 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 				return true;
 			}
 
-			initialState->set_initial_belief(states->get(stateIndex), p);
+			initialState->set_initial_belief(orderedStates[stateIndex], p);
 			stateIndex++;
 		}
 	}
@@ -658,7 +666,8 @@ bool UnifiedFile::load_initial_state_exclusive(std::vector<std::string> items)
 	}
 
 	// The remaining states must be defined with a uniform belief.
-	for (const State *state : *states) {
+	for (auto s : *states) {
+		const State *state = resolve(s);
 		if (std::find(subset.begin(), subset.end(), state) == subset.end()) {
 			initialState->set_initial_belief(state, probability);
 		}
@@ -801,12 +810,16 @@ int UnifiedFile::load_states(std::vector<std::string> items)
 		char stateName[16];
 		for (int i = 0; i < n; i++) {
 			sprintf(stateName, "%i", i);
-			states->add(new NamedState(stateName));
+			const State *newState = new NamedState(stateName);
+			states->add(newState);
+			orderedStates.push_back(newState);
 		}
 	} else {
 		// This must be a full list of unique state names.
 		for (std::string stateName : list) {
-			states->add(new NamedState(stateName));
+			const State *newState = new NamedState(stateName);
+			states->add(newState);
+			orderedStates.push_back(newState);
 		}
 	}
 
@@ -880,6 +893,13 @@ bool UnifiedFile::load_factored_states(int factorIndex, std::string line)
 		((FiniteFactoredStates *)states)->set(factorIndex, newStates);
 	}
 	((FiniteFactoredStates *)states)->update();
+
+	// After the update, the internal states have been reset, so we need to remake
+	// the ordered list of states.
+	orderedStates.clear();
+	for (auto s : *states) {
+		orderedStates.push_back(resolve(s));
+	}
 
 	return 0;
 }
@@ -1274,7 +1294,7 @@ bool UnifiedFile::load_state_transition_vector(std::string line)
 	if (list[0].compare("uniform") == 0) {
 		double probability = 1.0 / (double)states->get_num_states();
 		for (int i = 0; i < states->get_num_states(); i++) {
-			stateTransitions->set(loadingState, loadingAction, states->get(i), probability);
+			stateTransitions->set(loadingState, loadingAction, orderedStates[i], probability);
 		}
 		return false;
 	}
@@ -1308,7 +1328,7 @@ bool UnifiedFile::load_state_transition_vector(std::string line)
 			return true;
 		}
 
-		stateTransitions->set(loadingState, loadingAction, states->get(counter), probability);
+		stateTransitions->set(loadingState, loadingAction, orderedStates[counter], probability);
 
 		counter++;
 	}
@@ -1339,13 +1359,13 @@ bool UnifiedFile::load_state_transition_matrix(int stateIndex, std::string line)
 		double probability = 1.0 / (double)states->get_num_states();
 		for (int i = 0; i < states->get_num_states(); i++) {
 			for (int j = 0; j < states->get_num_states(); j++) {
-				stateTransitions->set(states->get(i), loadingAction, states->get(j), probability);
+				stateTransitions->set(orderedStates[i], loadingAction, orderedStates[j], probability);
 			}
 		}
 		return false;
 	} else if (list[0].compare("identity") == 0) {
 		for (int i = 0; i < states->get_num_states(); i++) {
-			stateTransitions->set(states->get(i), loadingAction, states->get(i), 1.0);
+			stateTransitions->set(orderedStates[i], loadingAction, orderedStates[i], 1.0);
 		}
 		return false;
 	}
@@ -1379,7 +1399,7 @@ bool UnifiedFile::load_state_transition_matrix(int stateIndex, std::string line)
 			return true;
 		}
 
-		stateTransitions->set(states->get(stateIndex), loadingAction, states->get(counter), probability);
+		stateTransitions->set(orderedStates[stateIndex], loadingAction, orderedStates[counter], probability);
 
 		counter++;
 	}
@@ -1566,7 +1586,7 @@ bool UnifiedFile::load_observation_transition_matrix(int stateIndex, std::string
 		double probability = 1.0 / (double)observations->get_num_observations();
 		for (int i = 0; i < states->get_num_states(); i++) {
 			for (int j = 0; j < observations->get_num_observations(); j++) {
-				observationTransitions->set(loadingAction, states->get(i), observations->get(j), probability);
+				observationTransitions->set(loadingAction, orderedStates[i], observations->get(j), probability);
 			}
 		}
 		return false;
@@ -1601,7 +1621,7 @@ bool UnifiedFile::load_observation_transition_matrix(int stateIndex, std::string
 			return true;
 		}
 
-		observationTransitions->set(loadingAction, states->get(stateIndex), observations->get(counter), probability);
+		observationTransitions->set(loadingAction, orderedStates[stateIndex], observations->get(counter), probability);
 
 		counter++;
 	}
@@ -1739,9 +1759,9 @@ bool UnifiedFile::load_reward_vector(std::string line)
 		}
 
 		if (rewardValue) {
-			rewards->set(states->get(counter), loadingAction, loadingState, reward);
+			rewards->set(orderedStates[counter], loadingAction, loadingState, reward);
 		} else {
-			rewards->set(states->get(counter), loadingAction, loadingState, -reward);
+			rewards->set(orderedStates[counter], loadingAction, loadingState, -reward);
 		}
 
 		counter++;
@@ -1791,9 +1811,9 @@ bool UnifiedFile::load_reward_matrix(int stateIndex, std::string line)
 		}
 
 		if (rewardValue) {
-			rewards->set(states->get(stateIndex), loadingAction, states->get(counter), reward);
+			rewards->set(orderedStates[stateIndex], loadingAction, orderedStates[counter], reward);
 		} else {
-			rewards->set(states->get(stateIndex), loadingAction, states->get(counter), -reward);
+			rewards->set(orderedStates[stateIndex], loadingAction, orderedStates[counter], -reward);
 		}
 
 		counter++;

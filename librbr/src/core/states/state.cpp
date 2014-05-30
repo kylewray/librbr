@@ -52,7 +52,7 @@ State::~State()
  */
 State &State::operator=(const State &other)
 {
-
+	return *this;
 }
 
 /**

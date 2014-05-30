@@ -27,6 +27,7 @@
 #define FINITE_STATES_H
 
 
+#include <unordered_map>
 #include <vector>
 
 #include "state.h"
@@ -52,7 +53,7 @@ public:
 
 	/**
 	 * The constructor for the FiniteStates class which allows the specification of an initial set of states.
-	 * @param states The initial vector of states.
+	 * @param	states	The initial vector of states.
 	 */
 	FiniteStates(const std::vector<const State *> &states);
 
@@ -63,38 +64,29 @@ public:
 
 	/**
 	 * Add a state to the set of available states.
-	 * @param newState The new state to include in the set of available states.
+	 * @param	newState	The new state to include in the set of available states.
 	 */
 	void add(const State *newState);
 
 	/**
 	 * Remove a state to the set of available states. This frees the memory.
-	 * @param removeState 		The state to remove from the set of available states.
-	 * @throws StateException	The state was not found in the states list.
+	 * @param	removeState 		The state to remove from the set of available states.
+	 * @throw	StateException		The state was not found in the states list.
 	 */
 	void remove(const State *removeState);
 
 	/**
 	 * Set the internal states list given another list, performing a deep copy. This resets
 	 * the current list of states and frees the memory.
-	 * @param newStates The vector of new states to use.
+	 * @param	newStates	The vector of new states to use.
 	 */
 	void set(const std::vector<const State *> &newStates);
 
 	/**
-	 * Get the state at the corresponding index. A state's index is defined by the order
-	 * in which they are added and removed.
-	 * @param stateIndex The index of the state.
-	 * @return The state at the corresponding index.
-	 * @throws StateException The index was invalid.
-	 */
-	const State *get(int stateIndex) const;
-
-	/**
 	 * Return the number of states.
-	 * @return The number of states.
+	 * @return	The number of states.
 	 */
-	virtual int get_num_states() const;
+	int get_num_states() const;
 
 	/**
 	 * Reset the states, clearing the internal list and freeing the memory.
@@ -103,23 +95,35 @@ public:
 
 	/**
 	 * To facilitate easy iteration, return a constant beginning of the states vector.
-	 * @return The iterator which points to a constant beginning of the states vector.
+	 * @return	The iterator which points to a constant beginning of the states vector.
 	 */
-	std::vector<const State *>::const_iterator begin() const;
+	std::unordered_map<unsigned int, const State *>::const_iterator begin() const;
 
 	/**
 	 * To facilitate easy iteration, return a constant end of the states vector.
-	 * @return The iterator which points to a constant end of the states vector.
+	 * @return	The iterator which points to a constant end of the states vector.
 	 */
-	std::vector<const State *>::const_iterator end() const;
+	std::unordered_map<unsigned int, const State *>::const_iterator end() const;
 
 protected:
 	/**
-	 * The list of all available states.
+	 * The mapping of state hash values to states. This is the main container of states.
 	 */
-	std::vector<const State *> states;
+	std::unordered_map<unsigned int, const State *> states;
 
 };
+
+/**
+ * Get the state pointer of a state iterator.
+ * @param	stateIterator	The state iterator to retrieve the state pointer from.
+ */
+const State *resolve(std::unordered_map<unsigned int, const State *>::value_type &stateIterator);
+
+/**
+ * Get the hash of a state iterator.
+ * @param	stateIterator	The state iterator to retrieve the hash value from.
+ */
+unsigned int hash_value(std::unordered_map<unsigned int, const State *>::value_type &stateIterator);
 
 
 #endif // FINITE_STATES_H

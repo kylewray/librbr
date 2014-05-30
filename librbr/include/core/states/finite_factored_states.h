@@ -120,6 +120,7 @@ public:
 
 	/**
 	 * Get the number of factored states.
+	 * @return The number of factors.
 	 */
 	int get_num_factors();
 
@@ -127,14 +128,6 @@ public:
 	 * Reset the factored states, clearing the internal list and freeing the memory.
 	 */
 	virtual void reset();
-
-	/**
-	 * Get the factored state at the corresponding index.
-	 * @param stateIndex The index of the state.
-	 * @return The state at the corresponding index.
-	 * @throws StateException The index was invalid.
-	 */
-	using FiniteStates::get;
 
 protected:
 	/**

@@ -337,8 +337,8 @@ PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(const FiniteStates *S, const
 	// Initialize the first set Gamma to be a set of zero alpha vectors.
 	for (int i = 0; i < B.size(); i++) {
 		PolicyAlphaVector *zeroAlphaVector = new PolicyAlphaVector();
-		for (const State *s : *S) {
-			zeroAlphaVector->set(s, 0.0);
+		for (auto s : *S) {
+			zeroAlphaVector->set(resolve(s), 0.0);
 		}
 		gamma[!current].push_back(zeroAlphaVector);
 	}
@@ -466,8 +466,8 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(const FiniteStates *S, con
 	// Initialize the first set Gamma to be a set of zero alpha vectors.
 	for (int i = 0; i < B.size(); i++) {
 		PolicyAlphaVector *zeroAlphaVector = new PolicyAlphaVector();
-		for (const State *s : *S) {
-			zeroAlphaVector->set(s, 0.0);
+		for (auto s : *S) {
+			zeroAlphaVector->set(resolve(s), 0.0);
 		}
 		gamma[!current].push_back(zeroAlphaVector);
 	}
@@ -579,13 +579,13 @@ void POMDPPBVI::expand_random_belief_selection(const FiniteStates *S)
 
 		int i = 0;
 		double sum = 0.0;
-		for (const State *s : *S) {
+		for (auto s : *S) {
 			if (i + 1 < S->get_num_states()) {
 				double val = bTmp[i + 1] - bTmp[i];
 				sum += val;
-				bNew->set(s, val);
+				bNew->set(resolve(s), val);
 			} else {
-				bNew->set(s, 1.0 - sum);
+				bNew->set(resolve(s), 1.0 - sum);
 			}
 			i++;
 		}
@@ -620,10 +620,10 @@ void POMDPPBVI::expand_stochastic_simulation_random_actions(const FiniteStates *
 		double rnd = (double)rand() / (double)RAND_MAX;
 		double sum = 0.0f;
 
-		for (const State *s : *S) {
-			sum += b->get(s);
+		for (auto s : *S) {
+			sum += b->get(resolve(s));
 			if (sum >= rnd) {
-				state = s;
+				state = resolve(s);
 				break;
 			}
 		}
@@ -648,10 +648,10 @@ void POMDPPBVI::expand_stochastic_simulation_random_actions(const FiniteStates *
 		rnd = (double)rand() / (double)RAND_MAX;
 		sum = 0.0f;
 
-		for (const State *s : *S) {
-			sum += T->get(state, action, s);
+		for (auto s : *S) {
+			sum += T->get(state, action, resolve(s));
 			if (sum >= rnd) {
-				nextState = s;
+				nextState = resolve(s);
 				break;
 			}
 		}
@@ -703,10 +703,10 @@ void POMDPPBVI::expand_stochastic_simulation_greedy_action(const FiniteStates *S
 		double rnd = (double)rand() / (double)RAND_MAX;
 		double sum = 0.0f;
 
-		for (const State *s : *S) {
-			sum += b->get(s);
+		for (auto s : *S) {
+			sum += b->get(resolve(s));
 			if (sum >= rnd) {
-				state = s;
+				state = resolve(s);
 				break;
 			}
 		}
@@ -746,10 +746,10 @@ void POMDPPBVI::expand_stochastic_simulation_greedy_action(const FiniteStates *S
 		rnd = (double)rand() / (double)RAND_MAX;
 		sum = 0.0f;
 
-		for (const State *s : *S) {
-			sum += T->get(state, action, s);
+		for (auto s : *S) {
+			sum += T->get(state, action, resolve(s));
 			if (sum >= rnd) {
-				nextState = s;
+				nextState = resolve(s);
 				break;
 			}
 		}
@@ -803,10 +803,10 @@ void POMDPPBVI::expand_stochastic_simulation_exploratory_action(const FiniteStat
 			double rnd = (double)rand() / (double)RAND_MAX;
 			double sum = 0.0f;
 
-			for (const State *s : *S) {
-				sum += b->get(s);
+			for (auto s : *S) {
+				sum += b->get(resolve(s));
 				if (sum >= rnd) {
-					state = s;
+					state = resolve(s);
 					break;
 				}
 			}
@@ -817,10 +817,10 @@ void POMDPPBVI::expand_stochastic_simulation_exploratory_action(const FiniteStat
 			rnd = (double)rand() / (double)RAND_MAX;
 			sum = 0.0f;
 
-			for (const State *s : *S) {
-				sum += T->get(state, action, s);
+			for (auto s : *S) {
+				sum += T->get(state, action, resolve(s));
 				if (sum >= rnd) {
-					nextState = s;
+					nextState = resolve(s);
 					break;
 				}
 			}
@@ -847,8 +847,8 @@ void POMDPPBVI::expand_stochastic_simulation_exploratory_action(const FiniteStat
 			double baMin = std::numeric_limits<double>::lowest() * -1.0;
 			for (const BeliefState *bp : B) {
 				sum = 0.0;
-				for (const State *s : *S) {
-					sum += std::fabs(ba->get(s) - bp->get(s));
+				for (auto s : *S) {
+					sum += std::fabs(ba->get(resolve(s)) - bp->get(resolve(s)));
 				}
 				if (sum < baMin) {
 					baMin = sum;
@@ -856,8 +856,8 @@ void POMDPPBVI::expand_stochastic_simulation_exploratory_action(const FiniteStat
 			}
 			for (const BeliefState *bp : Bnew) {
 				sum = 0.0;
-				for (const State *s : *S) {
-					sum += std::fabs(ba->get(s) - bp->get(s));
+				for (auto s : *S) {
+					sum += std::fabs(ba->get(resolve(s)) - bp->get(resolve(s)));
 				}
 				if (sum < baMin) {
 					baMin = sum;
