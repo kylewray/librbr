@@ -241,8 +241,8 @@ PolicyTreeNode *PolicyTree::generate_tree(const FiniteObservations *observations
 	}
 
 	// Otherwise, just generate the subtree normally and return.
-	for (const Observation *o : *observations) {
-		node->next[o] = generate_tree(observations, horizon - 1);
+	for (auto z : *observations) {
+		node->next[resolve(z)] = generate_tree(observations, horizon - 1);
 	}
 
 	return node;

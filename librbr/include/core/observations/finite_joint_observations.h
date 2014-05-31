@@ -117,14 +117,6 @@ public:
 	 */
 	virtual void reset();
 
-	/**
-	 * Get the joint observation at the corresponding index.
-	 * @param	observationIndex		The index of the observation.
-	 * @throw	ObservationException	The index was invalid.
-	 * @return	The observation at the corresponding index.
-	 */
-	using FiniteObservations::get;
-
 protected:
 	/**
 	 * The list of all available observations for each observation factor.

@@ -31,7 +31,9 @@
 
 const Observation *find_observation(const FiniteObservations *Z, std::string observationName)
 {
-	for (const Observation *observation : *Z) {
+	for (auto z : *Z) {
+		const Observation *observation = resolve(z);
+
 		// Try to cast the observation as a NamedObservation. If it fails, it may still be a joint observation.
 	    const NamedObservation *o = dynamic_cast<const NamedObservation *>(observation);
 	    if (o == nullptr) {

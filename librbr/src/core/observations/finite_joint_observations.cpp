@@ -134,7 +134,8 @@ void FiniteJointObservations::update_step(std::vector<const Observation *> curre
 		// If this is the final index, then create a joint observation object and append it to the list of observations.
 		// Otherwise, recurse to the next index, using the new currentJointObservation object.
 		if (currentFactorIndex == factoredObservations.size() - 1) {
-			observations.push_back(new JointObservation(currentJointObservation));
+			const JointObservation *newObservation = new JointObservation(currentJointObservation);
+			observations[newObservation->hash_value()] = newObservation;
 		} else {
 			update_step(currentJointObservation, currentFactorIndex + 1);
 		}

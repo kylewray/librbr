@@ -27,6 +27,7 @@
 #define FINITE_OBSERVATIONS_H
 
 
+#include <unordered_map>
 #include <vector>
 
 #include "observation.h"
@@ -84,15 +85,6 @@ public:
 	void set(const std::vector<const Observation *> &newObservations);
 
 	/**
-	 * Get the observation at the corresponding index. An observation's index is defined by the order
-	 * in which they are added and removed.
-	 * @param	observationIndex		The index of the observation.
-	 * @throw	ObservationException	The index was invalid.
-	 * @return	The observation at the corresponding index.
-	 */
-	const Observation *get(int observationIndex) const;
-
-	/**
 	 * Return the number of observations.
 	 * @return	The number of observations.
 	 */
@@ -107,21 +99,34 @@ public:
 	 * To facilitate easy iteration, return a constant beginning of the observations vector.
 	 * @return	The iterator which points to a constant beginning of the observations vector.
 	 */
-	std::vector<const Observation *>::const_iterator begin() const;
+	std::unordered_map<unsigned int, const Observation *>::const_iterator begin() const;
 
 	/**
 	 * To facilitate easy iteration, return a constant end of the observations vector.
 	 * @return	The iterator which points to a constant end of the observations vector.
 	 */
-	std::vector<const Observation *>::const_iterator end() const;
+	std::unordered_map<unsigned int, const Observation *>::const_iterator end() const;
 
 protected:
 	/**
-	 * The list of all available observations.
+	 * The mapping of observation hash values to observations. This is the main
+	 * container of observations.
 	 */
-	std::vector<const Observation *> observations;
+	std::unordered_map<unsigned int, const Observation *> observations;
 
 };
+
+/**
+ * Get the observation pointer of a observation iterator.
+ * @param	observationIterator		The observation iterator to retrieve the observation pointer from.
+ */
+const Observation *resolve(std::unordered_map<unsigned int, const Observation *>::value_type &observationIterator);
+
+/**
+ * Get the hash of a observation iterator.
+ * @param	observationIterator		The observation iterator to retrieve the hash value from.
+ */
+unsigned int hash_value(std::unordered_map<unsigned int, const Observation *>::value_type &observationIterator);
 
 
 #endif // FINITE_OBSERVATIONS_H

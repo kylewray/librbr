@@ -40,7 +40,8 @@ PolicyAlphaVector *create_gamma_a_star(const FiniteStates *S, const FiniteAction
 			const State *nextState = resolve(sp);
 
 			double innerImmediateReward = 0.0;
-			for (const Observation *observation : *Z) {
+			for (auto z : *Z) {
+				const Observation *observation = resolve(z);
 				innerImmediateReward += O->get(action, nextState, observation) * R->get(state, action, nextState, observation);
 			}
 			immediateReward += T->get(state, action, nextState) * innerImmediateReward;
@@ -93,7 +94,9 @@ std::vector<PolicyAlphaVector *> bellman_update_cross_sum(const FiniteStates *S,
 	}
 
 	// Iteratively compute and apply the cross-sum of the gamma.
-	for (const Observation *observation : *Z) {
+	for (auto z : *Z) {
+		const Observation *observation = resolve(z);
+
 		// Compute the set Gamma_{a, omega}.
 		std::vector<PolicyAlphaVector *> gammaAOmega;
 
@@ -159,7 +162,9 @@ PolicyAlphaVector *bellman_update_belief_state(const FiniteStates *S, const Fini
 
 	// Add to its value for each state following a summation, instead of the cross-sum. This operation iterates over the
 	// possible observations and selects the optimal policy for that subtree given the current set of alpha vectors in gamma.
-	for (const Observation *observation : *Z) {
+	for (auto z : *Z) {
+		const Observation *observation = resolve(z);
+
 		// The argmax of alpha dot beta given the belief point, action, and observation.
 		PolicyAlphaVector *maxAlphaBAOmega = nullptr;
 		double maxAlphaDotBeta = 0.0;

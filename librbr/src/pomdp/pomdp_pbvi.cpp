@@ -546,7 +546,9 @@ void POMDPPBVI::expand_stochastic_simulation_random_actions(const FiniteStates *
 		rnd = (double)rand() / (double)RAND_MAX;
 		sum = 0.0f;
 
-		for (const Observation *z : *Z) {
+		for (auto obs : *Z) {
+			const Observation *z = resolve(obs);
+
 			sum += O->get(action, nextState, z);
 			if (sum >= rnd) {
 				observation = z;
@@ -631,7 +633,9 @@ void POMDPPBVI::expand_stochastic_simulation_greedy_action(const FiniteStates *S
 		rnd = (double)rand() / (double)RAND_MAX;
 		sum = 0.0f;
 
-		for (const Observation *z : *Z) {
+		for (auto obs : *Z) {
+			const Observation *z = resolve(obs);
+
 			sum += O->get(action, nextState, z);
 			if (sum >= rnd) {
 				observation = z;
@@ -693,7 +697,9 @@ void POMDPPBVI::expand_stochastic_simulation_exploratory_action(const FiniteStat
 			rnd = (double)rand() / (double)RAND_MAX;
 			sum = 0.0f;
 
-			for (const Observation *z : *Z) {
+			for (auto obs : *Z) {
+				const Observation *z = resolve(obs);
+
 				sum += O->get(action, nextState, z);
 				if (sum >= rnd) {
 					observation = z;

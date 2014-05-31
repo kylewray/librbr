@@ -50,9 +50,23 @@ int test_observations()
 	finiteObservations->add(o2);
 	finiteObservations->add(o3);
 
+	bool o1Found = false;
+	bool o2Found = false;
+	bool o3Found = false;
+
 	try {
-		if (finiteObservations->get_num_observations() == 3 && finiteObservations->get(0) == o1 &&
-				finiteObservations->get(1) == o2 && finiteObservations->get(2) == o3) {
+		for (auto o : *finiteObservations) {
+			const Observation *observation = resolve(o);
+			if (observation == o1) {
+				o1Found = true;
+			} else if (observation == o2) {
+				o2Found = true;
+			} else if (observation == o3) {
+				o3Found = true;
+			}
+		}
+
+		if (finiteObservations->get_num_observations() == 3 && o1Found && o2Found && o3Found) {
 			std::cout << " Success." << std::endl;
 			numSuccesses++;
 		} else {
@@ -73,8 +87,23 @@ int test_observations()
 	}
 
 	std::cout << "Observations: Test 'FiniteObservations::remove' (Check Result)... ";
-	if (finiteObservations->get_num_observations() == 2 && finiteObservations->get(0) == o1 &&
-			finiteObservations->get(1) == o3) {
+
+	o1Found = false;
+	o2Found = false;
+	o3Found = false;
+
+	for (auto o : *finiteObservations) {
+		const Observation *observation = resolve(o);
+		if (observation == o1) {
+			o1Found = true;
+		} else if (observation == o2) {
+			o2Found = true;
+		} else if (observation == o3) {
+			o3Found = true;
+		}
+	}
+
+	if (finiteObservations->get_num_observations() == 2 && o1Found && !o2Found && o3Found) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -95,8 +124,23 @@ int test_observations()
 	}
 
 	std::cout << "Observations: Test 'FiniteObservations::add' and 'FiniteObservations::remove' (Check Result)... ";
-	if (finiteObservations->get_num_observations() == 3 && finiteObservations->get(0) == o3 &&
-			finiteObservations->get(1) == o2 && finiteObservations->get(2) == o1) {
+
+	o1Found = false;
+	o2Found = false;
+	o3Found = false;
+
+	for (auto o : *finiteObservations) {
+		const Observation *observation = resolve(o);
+		if (observation == o1) {
+			o1Found = true;
+		} else if (observation == o2) {
+			o2Found = true;
+		} else if (observation == o3) {
+			o3Found = true;
+		}
+	}
+
+	if (finiteObservations->get_num_observations() == 3 && o1Found && o2Found && o3Found) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -131,8 +175,22 @@ int test_observations()
 	o2 = o2New;
 	o3 = new NamedObservation("o3");
 
-	if (finiteObservations->get_num_observations() == 2 && finiteObservations->get(0) == o1 &&
-			finiteObservations->get(1) == o2) {
+	o1Found = false;
+	o2Found = false;
+	o3Found = false;
+
+	for (auto o : *finiteObservations) {
+		const Observation *observation = resolve(o);
+		if (observation == o1) {
+			o1Found = true;
+		} else if (observation == o2) {
+			o2Found = true;
+		} else if (observation == o3) {
+			o3Found = true;
+		}
+	}
+
+	if (finiteObservations->get_num_observations() == 2 && o1Found && o2Found && !o3Found) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -182,17 +240,32 @@ int test_observations()
 		std::cout << " Failure." << std::endl;
 	}
 
-	JointObservation *o13 = nullptr;
-	JointObservation *o14 = nullptr;
-	JointObservation *o23 = nullptr;
-	JointObservation *o24 = nullptr;
-
 	std::cout << "Observations: Test 'FiniteJointObservations::get'... ";
+
+	bool o13Found = false;
+	bool o14Found = false;
+	bool o23Found = false;
+	bool o24Found = false;
+
 	try {
-		o13 = (JointObservation *)finiteJointObservations->get(0);
-		o14 = (JointObservation *)finiteJointObservations->get(1);
-		o23 = (JointObservation *)finiteJointObservations->get(2);
-		o24 = (JointObservation *)finiteJointObservations->get(3);
+		for (auto o : *finiteJointObservations) {
+			const Observation *observation = resolve(o);
+			const JointObservation *jo = static_cast<const JointObservation *>(observation);
+			if (jo == nullptr) {
+				throw ObservationException();
+			}
+
+			if (jo->get(0) == o1 && jo->get(1) == o3) {
+				o13Found = true;
+			} else if (jo->get(0) == o1 && jo->get(1) == o4) {
+				o14Found = true;
+			} else if (jo->get(0) == o2 && jo->get(1) == o3) {
+				o23Found = true;
+			} else if (jo->get(0) == o2 && jo->get(1) == o4) {
+				o24Found = true;
+			}
+		}
+
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} catch (const ObservationException &err) {
@@ -206,14 +279,7 @@ int test_observations()
 				finiteJointObservations->get(0, 1) == o2 &&
 				finiteJointObservations->get(1, 0) == o3 &&
 				finiteJointObservations->get(1, 1) == o4 &&
-				o13->get(0) == o1 &&
-				o13->get(1) == o3 &&
-				o14->get(0) == o1 &&
-				o14->get(1) == o4 &&
-				o23->get(0) == o2 &&
-				o23->get(1) == o3 &&
-				o24->get(0) == o2 &&
-				o24->get(1) == o4) {
+				o13Found && o14Found && o23Found && o24Found) {
 			std::cout << " Success." << std::endl;
 			numSuccesses++;
 		} else {

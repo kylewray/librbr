@@ -387,11 +387,6 @@ private:
 	std::vector<const State *> orderedStates;
 
 	/**
-	 * An ordered list of actions for use in loading vectors or matrices.
-	 */
-	std::vector<const Action *> orderedActions;
-
-	/**
 	 * An ordered list of observations for use in loading vectors or matrices.
 	 */
 	std::vector<const Observation *> orderedObservations;

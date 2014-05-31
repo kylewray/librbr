@@ -43,32 +43,27 @@ FiniteObservations::~FiniteObservations()
 
 void FiniteObservations::add(const Observation *newObservation)
 {
-	observations.push_back(newObservation);
+	observations[newObservation->hash_value()] = newObservation;
 }
 
 void FiniteObservations::remove(const Observation *removeObservation)
 {
-	if (std::find(observations.begin(), observations.end(), removeObservation) == observations.end()) {
+	// Ensure that the element exists in the hash before removing it.
+	std::unordered_map<unsigned int, const Observation *>::const_iterator result = observations.find(removeObservation->hash_value());
+	if (result == observations.end()) {
 		throw ObservationException();
 	}
 
-	observations.erase(std::remove(observations.begin(), observations.end(), removeObservation), observations.end());
+	observations.erase(removeObservation->hash_value());
 	delete removeObservation;
 }
 
 void FiniteObservations::set(const std::vector<const Observation *> &newObservations)
 {
 	reset();
-	observations = newObservations;
-}
-
-const Observation *FiniteObservations::get(int observationIndex) const
-{
-	if (observationIndex < 0 || observationIndex >= observations.size()) {
-		throw ObservationException();
+	for (const Observation *observation : newObservations) {
+		observations[observation->hash_value()] = observation;
 	}
-
-	return observations[observationIndex];
 }
 
 int FiniteObservations::get_num_observations() const
@@ -78,18 +73,28 @@ int FiniteObservations::get_num_observations() const
 
 void FiniteObservations::reset()
 {
-	for (const Observation *observation : observations) {
-		delete observation;
+	for (auto observation : observations) {
+		delete resolve(observation);
 	}
 	observations.clear();
 }
 
-std::vector<const Observation *>::const_iterator FiniteObservations::begin() const
+std::unordered_map<unsigned int, const Observation *>::const_iterator FiniteObservations::begin() const
 {
 	return observations.begin();
 }
 
-std::vector<const Observation *>::const_iterator FiniteObservations::end() const
+std::unordered_map<unsigned int, const Observation *>::const_iterator FiniteObservations::end() const
 {
 	return observations.end();
+}
+
+const Observation *resolve(std::unordered_map<unsigned int, const Observation *>::value_type &observationIterator)
+{
+	return observationIterator.second;
+}
+
+unsigned int hash_value(std::unordered_map<unsigned int, const Observation *>::value_type &observationIterator)
+{
+	return observationIterator.first;
 }

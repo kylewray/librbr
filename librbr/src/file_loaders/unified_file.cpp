@@ -352,7 +352,6 @@ void UnifiedFile::reset()
 	loadingObservation = nullptr;
 
 	orderedStates.clear();
-	orderedActions.clear();
 	orderedObservations.clear();
 }
 
@@ -1007,12 +1006,16 @@ int UnifiedFile::load_observations(std::vector<std::string> items)
 		char observationName[16];
 		for (int i = 0; i < n; i++) {
 			sprintf(observationName, "%i", i);
-			observations->add(new NamedObservation(observationName));
+			const Observation *newObservation = new NamedObservation(observationName);
+			observations->add(newObservation);
+			orderedObservations.push_back(newObservation);
 		}
 	} else {
 		// This must be a full list of unique observation names.
 		for (std::string observationName : list) {
-			observations->add(new NamedObservation(observationName));
+			const Observation *newObservation = new NamedObservation(observationName);
+			observations->add(newObservation);
+			orderedObservations.push_back(newObservation);
 		}
 	}
 
@@ -1080,6 +1083,13 @@ int UnifiedFile::load_agent_observations(int agentIndex, std::string line)
 	try {
 		((FiniteJointObservations *)observations)->update();
 	} catch (const ObservationException &error) { }
+
+	// After the update, the internal observations have been reset, so we need to remake
+	// the ordered list of observations.
+	orderedObservations.clear();
+	for (auto z : *observations) {
+		orderedObservations.push_back(resolve(z));
+	}
 
 	return 0;
 }
@@ -1395,7 +1405,7 @@ bool UnifiedFile::load_observation_transition_vector(std::string line)
 	if (list[0].compare("uniform") == 0) {
 		double probability = 1.0 / (double)observations->get_num_observations();
 		for (int i = 0; i < observations->get_num_observations(); i++) {
-			observationTransitions->set(loadingAction, loadingState, observations->get(i), probability);
+			observationTransitions->set(loadingAction, loadingState, orderedObservations[i], probability);
 		}
 		return false;
 	}
@@ -1429,7 +1439,7 @@ bool UnifiedFile::load_observation_transition_vector(std::string line)
 			return true;
 		}
 
-		observationTransitions->set(loadingAction, loadingState, observations->get(counter), probability);
+		observationTransitions->set(loadingAction, loadingState, orderedObservations[counter], probability);
 
 		counter++;
 	}
@@ -1455,7 +1465,7 @@ bool UnifiedFile::load_observation_transition_matrix(int stateIndex, std::string
 		double probability = 1.0 / (double)observations->get_num_observations();
 		for (int i = 0; i < states->get_num_states(); i++) {
 			for (int j = 0; j < observations->get_num_observations(); j++) {
-				observationTransitions->set(loadingAction, orderedStates[i], observations->get(j), probability);
+				observationTransitions->set(loadingAction, orderedStates[i], orderedObservations[j], probability);
 			}
 		}
 		return false;
@@ -1490,7 +1500,7 @@ bool UnifiedFile::load_observation_transition_matrix(int stateIndex, std::string
 			return true;
 		}
 
-		observationTransitions->set(loadingAction, orderedStates[stateIndex], observations->get(counter), probability);
+		observationTransitions->set(loadingAction, orderedStates[stateIndex], orderedObservations[counter], probability);
 
 		counter++;
 	}

@@ -97,7 +97,8 @@ void FiniteObservationTransitions::available(const FiniteObservations *Z, const 
 		const State *nextState, std::vector<const Observation *> &result) const
 {
 	result.clear();
-	for (const Observation *observation : *Z) {
+	for (auto z : *Z) {
+		const Observation *observation = resolve(z);
 		if (get(action, nextState, observation) > 0.0) {
 			result.push_back(observation);
 		}
