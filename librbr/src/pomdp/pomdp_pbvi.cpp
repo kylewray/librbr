@@ -226,7 +226,8 @@ PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(const FiniteStates *S, const
 
 	// Before anything, cache Gamma_{a, *} for all actions. This is used in every cross-sum computation.
 	std::map<const Action *, std::vector<PolicyAlphaVector *> > gammaAStar;
-	for (const Action *action : *A) {
+	for (auto a : *A) {
+		const Action *action = resolve(a);
 		gammaAStar[action].push_back(create_gamma_a_star(S, A, Z, T, O, R, action));
 	}
 
@@ -259,7 +260,9 @@ PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(const FiniteStates *S, const
 				double maxAlphaDotBeta = 0.0;
 
 				// Compute the optimal alpha vector for this belief state.
-				for (const Action *action : *A) {
+				for (auto a : *A) {
+					const Action *action = resolve(a);
+
 					PolicyAlphaVector *alphaBA = bellman_update_belief_state(S, A, Z, T, O, R, h,
 							gammaAStar[action], gamma[!current], action, belief);
 
@@ -323,7 +326,8 @@ PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(const FiniteStates *S, const
 	}
 
 	// Free the memory of Gamma_{a, *}.
-	for (const Action *action : *A) {
+	for (auto a : *A) {
+		const Action *action = resolve(a);
 		for (PolicyAlphaVector *alphaVector : gammaAStar[action]) {
 			delete alphaVector;
 		}
@@ -343,7 +347,8 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(const FiniteStates *S, con
 
 	// Before anything, cache Gamma_{a, *} for all actions. This is used in every cross-sum computation.
 	std::map<const Action *, std::vector<PolicyAlphaVector *> > gammaAStar;
-	for (const Action *action : *A) {
+	for (auto a : *A) {
+		const Action *action = resolve(a);
 		gammaAStar[action].push_back(create_gamma_a_star(S, A, Z, T, O, R, action));
 	}
 
@@ -376,7 +381,9 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(const FiniteStates *S, con
 				double maxAlphaDotBeta = 0.0;
 
 				// Compute the optimal alpha vector for this belief state.
-				for (const Action *action : *A) {
+				for (auto a : *A) {
+					const Action *action = resolve(a);
+
 					PolicyAlphaVector *alphaBA = bellman_update_belief_state(S, A, Z, T, O, R, h,
 							gammaAStar[action], gamma[!current], action, belief);
 
@@ -438,7 +445,8 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(const FiniteStates *S, con
 	policy->set(gamma[!current]);
 
 	// Free the memory of Gamma_{a, *}.
-	for (const Action *action : *A) {
+	for (auto a : *A) {
+		const Action *action = resolve(a);
 		for (PolicyAlphaVector *alphaVector : gammaAStar[action]) {
 			delete alphaVector;
 		}
@@ -510,10 +518,10 @@ void POMDPPBVI::expand_stochastic_simulation_random_actions(const FiniteStates *
 		rnd = (double)((int)rand() % A->get_num_actions());
 		sum = 0.0;
 
-		for (const Action *a : *A) {
+		for (auto a : *A) {
 			sum += 1.0;
 			if (sum >= rnd) {
-				action = a;
+				action = resolve(a);
 				break;
 			}
 		}
@@ -584,10 +592,10 @@ void POMDPPBVI::expand_stochastic_simulation_greedy_action(const FiniteStates *S
 			rnd = (double)((int)rand() % A->get_num_actions());
 			sum = 0.0;
 
-			for (const Action *a : *A) {
+			for (auto a : *A) {
 				sum += 1.0;
 				if (sum >= rnd) {
-					action = a;
+					action = resolve(a);
 					break;
 				}
 			}
@@ -648,7 +656,9 @@ void POMDPPBVI::expand_stochastic_simulation_exploratory_action(const FiniteStat
 		double bVal = std::numeric_limits<double>::lowest();
 
 		// For each action, we will randomly generate a belief.
-		for (const Action *action : *A) {
+		for (auto a : *A) {
+			const Action *action = resolve(a);
+
 			// Randomly select the state following Multinomial(b).
 			const State *state = nullptr;
 

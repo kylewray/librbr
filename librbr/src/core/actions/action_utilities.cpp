@@ -31,7 +31,9 @@
 
 const Action *find_action(const FiniteActions *A, std::string actionName)
 {
-	for (const Action *action : *A) {
+	for (auto act : *A) {
+		const Action *action = resolve(act);
+
 		// Try to cast the action as a NamedAction. If it fails, it may still be a joint action.
 	    const NamedAction *a = dynamic_cast<const NamedAction *>(action);
 	    if (a == nullptr) {

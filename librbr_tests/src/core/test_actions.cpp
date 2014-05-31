@@ -38,9 +38,9 @@ int test_actions()
 {
 	int numSuccesses = 0;
 
-	NamedAction *a1 = new NamedAction("a1");
-	NamedAction *a2 = new NamedAction("a2");
-	NamedAction *a3 = new NamedAction("a3");
+	Action *a1 = new NamedAction("a1");
+	Action *a2 = new NamedAction("a2");
+	Action *a3 = new NamedAction("a3");
 
 	FiniteActions *finiteActions = new FiniteActions();
 
@@ -50,9 +50,23 @@ int test_actions()
 	finiteActions->add(a2);
 	finiteActions->add(a3);
 
+	bool a1Found = false;
+	bool a2Found = false;
+	bool a3Found = false;
+
 	try {
-		if (finiteActions->get_num_actions() == 3 && finiteActions->get(0) == a1 &&
-				finiteActions->get(1) == a2 && finiteActions->get(2) == a3) {
+		for (auto a : *finiteActions) {
+			const Action *action = resolve(a);
+			if (action == a1) {
+				a1Found = true;
+			} else if (action == a2) {
+				a2Found = true;
+			} else if (action == a3) {
+				a3Found = true;
+			}
+		}
+
+		if (finiteActions->get_num_actions() == 3 && a1Found && a2Found && a3Found) {
 			std::cout << " Success." << std::endl;
 			numSuccesses++;
 		} else {
@@ -73,8 +87,23 @@ int test_actions()
 	}
 
 	std::cout << "Actions: Test 'FiniteActions::remove' (Check Result)... ";
-	if (finiteActions->get_num_actions() == 2 && finiteActions->get(0) == a1 &&
-			finiteActions->get(1) == a3) {
+
+	a1Found = false;
+	a2Found = false;
+	a3Found = false;
+
+	for (auto a : *finiteActions) {
+		const Action *action = resolve(a);
+		if (action == a1) {
+			a1Found = true;
+		} else if (action == a2) {
+			a2Found = true;
+		} else if (action == a3) {
+			a3Found = true;
+		}
+	}
+
+	if (finiteActions->get_num_actions() == 2 && a1Found && !a2Found && a3Found) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -95,8 +124,23 @@ int test_actions()
 	}
 
 	std::cout << "Actions: Test 'FiniteActions::add' and 'FiniteActions::remove' (Check Result)... ";
-	if (finiteActions->get_num_actions() == 3 && finiteActions->get(0) == a3 &&
-			finiteActions->get(1) == a2 && finiteActions->get(2) == a1) {
+
+	a1Found = false;
+	a2Found = false;
+	a3Found = false;
+
+	for (auto a : *finiteActions) {
+		const Action *action = resolve(a);
+		if (action == a1) {
+			a1Found = true;
+		} else if (action == a2) {
+			a2Found = true;
+		} else if (action == a3) {
+			a3Found = true;
+		}
+	}
+
+	if (finiteActions->get_num_actions() == 3 && a1Found && a2Found && a3Found) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -119,8 +163,8 @@ int test_actions()
 
 	std::cout << "Actions: Test 'FiniteActions::set'... ";
 
-	NamedAction *a1New = new NamedAction("a1");
-	NamedAction *a2New = new NamedAction("a2");
+	Action *a1New = new NamedAction("a1");
+	Action *a2New = new NamedAction("a2");
 
 	std::vector<const Action *> testActionsList;
 	testActionsList.push_back(a1New);
@@ -131,8 +175,22 @@ int test_actions()
 	a2 = a2New;
 	a3 = new NamedAction("a3");
 
-	if (finiteActions->get_num_actions() == 2 && finiteActions->get(0) == a1 &&
-			finiteActions->get(1) == a2) {
+	a1Found = false;
+	a2Found = false;
+	a3Found = false;
+
+	for (auto a : *finiteActions) {
+		const Action *action = resolve(a);
+		if (action == a1) {
+			a1Found = true;
+		} else if (action == a2) {
+			a2Found = true;
+		} else if (action == a3) {
+			a3Found = true;
+		}
+	}
+
+	if (finiteActions->get_num_actions() == 2 && a1Found && a2Found && !a3Found) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -143,7 +201,7 @@ int test_actions()
 
 	std::cout << "Actions: Test 'FiniteActions::find'... ";
 	try {
-		testFindAction = find_action(finiteActions, a1->get_name());
+		testFindAction = find_action(finiteActions, ((const NamedAction *)a1)->get_name());
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} catch (const ActionException &err) {
@@ -152,7 +210,7 @@ int test_actions()
 
 	std::cout << "Actions: Test 'FiniteActions::find' (Expecting Error)... ";
 	try {
-		testFindAction = find_action(finiteActions, a3->get_name());
+		testFindAction = find_action(finiteActions, ((const NamedAction *)a3)->get_name());
 		std::cout << " Failure." << std::endl;
 	} catch (const ActionException &err) {
 		std::cout << " Success." << std::endl;
@@ -182,17 +240,32 @@ int test_actions()
 		std::cout << " Failure." << std::endl;
 	}
 
-	JointAction *a13 = nullptr;
-	JointAction *a14 = nullptr;
-	JointAction *a23 = nullptr;
-	JointAction *a24 = nullptr;
-
 	std::cout << "Actions: Test 'FiniteJointActions::get'... ";
+
+	bool a13Found = false;
+	bool a14Found = false;
+	bool a23Found = false;
+	bool a24Found = false;
+
 	try {
-		a13 = (JointAction *)finiteJointActions->get(0);
-		a14 = (JointAction *)finiteJointActions->get(1);
-		a23 = (JointAction *)finiteJointActions->get(2);
-		a24 = (JointAction *)finiteJointActions->get(3);
+		for (auto a : *finiteJointActions) {
+			const Action *action = resolve(a);
+			const JointAction *ja = static_cast<const JointAction *>(action);
+			if (ja == nullptr) {
+				throw ActionException();
+			}
+
+			if (ja->get(0) == a1 && ja->get(1) == a3) {
+				a13Found = true;
+			} else if (ja->get(0) == a1 && ja->get(1) == a4) {
+				a14Found = true;
+			} else if (ja->get(0) == a2 && ja->get(1) == a3) {
+				a23Found = true;
+			} else if (ja->get(0) == a2 && ja->get(1) == a4) {
+				a24Found = true;
+			}
+		}
+
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} catch (const ActionException &err) {
@@ -206,14 +279,7 @@ int test_actions()
 				finiteJointActions->get(0, 1) == a2 &&
 				finiteJointActions->get(1, 0) == a3 &&
 				finiteJointActions->get(1, 1) == a4 &&
-				a13->get(0) == a1 &&
-				a13->get(1) == a3 &&
-				a14->get(0) == a1 &&
-				a14->get(1) == a4 &&
-				a23->get(0) == a2 &&
-				a23->get(1) == a3 &&
-				a24->get(0) == a2 &&
-				a24->get(1) == a4) {
+				a13Found && a14Found && a23Found && a24Found) {
 			std::cout << " Success." << std::endl;
 			numSuccesses++;
 		} else {

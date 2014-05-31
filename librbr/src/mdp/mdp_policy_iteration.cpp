@@ -100,7 +100,7 @@ PolicyMap *MDPPolicyIteration::solve_exact(const FiniteStates *S, const FiniteAc
 {
 	PolicyMap *policy = new PolicyMap(h);
 	for (auto s : *S) {
-		policy->set(resolve(s), A->get(0));
+		policy->set(resolve(s), A->begin()->second);
 	}
 
 	// Create the M matrix with each cell M(i, j) denoting the i-th starting state s_i and

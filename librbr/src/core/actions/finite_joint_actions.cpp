@@ -133,7 +133,8 @@ void FiniteJointActions::update_step(std::vector<const Action *> currentJointAct
 		// If this is the final index, then create a joint action object and append it to the list of actions.
 		// Otherwise, recurse to the next index, using the new currentJointAction object.
 		if (currentFactorIndex == factoredActions.size() - 1) {
-			actions.push_back(new JointAction(currentJointAction));
+			const JointAction *newAction = new JointAction(currentJointAction);
+			actions[newAction->hash_value()] = newAction;
 		} else {
 			update_step(currentJointAction, currentFactorIndex + 1);
 		}

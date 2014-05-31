@@ -116,14 +116,6 @@ public:
 	 */
 	virtual void reset();
 
-	/**
-	 * Get the joint action at the corresponding index.
-	 * @param	actionIndex			The index of the action.
-	 * @throws	ActionException		The index was invalid.
-	 * @return 	The action at the corresponding index.
-	 */
-	using FiniteActions::get;
-
 protected:
 	/**
 	 * The list of all available actions for each action factor.

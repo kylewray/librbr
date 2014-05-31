@@ -74,7 +74,7 @@ int FiniteStates::get_num_states() const
 void FiniteStates::reset()
 {
 	for (auto state : states) {
-		delete state.second;
+		delete resolve(state);
 	}
 	states.clear();
 }

@@ -43,35 +43,29 @@ FiniteActions::~FiniteActions()
 
 void FiniteActions::add(const Action *newAction)
 {
-	actions.push_back(newAction);
+	actions[newAction->hash_value()] = newAction;
 }
 
 void FiniteActions::remove(const Action *removeAction)
 {
-	if (std::find(actions.begin(), actions.end(), removeAction) == actions.end()) {
+	std::unordered_map<unsigned int, const Action *>::const_iterator result = actions.find(removeAction->hash_value());
+	if (result == actions.end()) {
 		throw ActionException();
 	}
 
-	actions.erase(std::remove(actions.begin(), actions.end(), removeAction), actions.end());
+	actions.erase(removeAction->hash_value());
 	delete removeAction;
 }
 
 void FiniteActions::set(const std::vector<const Action *> &newActions)
 {
 	reset();
-	actions = newActions;
-}
-
-const Action *FiniteActions::get(int actionIndex) const
-{
-	if (actionIndex < 0 || actionIndex >= actions.size()) {
-		throw ActionException();
+	for (const Action *action : newActions) {
+		actions[action->hash_value()] = action;
 	}
-
-	return actions[actionIndex];
 }
 
-const std::vector<const Action *> &FiniteActions::available(const State *state) const
+std::unordered_map<unsigned int, const Action *> FiniteActions::available(const State *state) const
 {
 	return actions;
 }
@@ -83,18 +77,28 @@ int FiniteActions::get_num_actions() const
 
 void FiniteActions::reset()
 {
-	for (const Action *action : actions) {
-		delete action;
+	for (auto action : actions) {
+		delete resolve(action);
 	}
 	actions.clear();
 }
 
-std::vector<const Action *>::const_iterator FiniteActions::begin() const
+std::unordered_map<unsigned int, const Action *>::const_iterator FiniteActions::begin() const
 {
 	return actions.begin();
 }
 
-std::vector<const Action *>::const_iterator FiniteActions::end() const
+std::unordered_map<unsigned int, const Action *>::const_iterator FiniteActions::end() const
 {
 	return actions.end();
+}
+
+const Action *resolve(std::unordered_map<unsigned int, const Action *>::value_type &actionIterator)
+{
+	return actionIterator.second;
+}
+
+unsigned int hash_value(std::unordered_map<unsigned int, const Action *>::value_type &actionIterator)
+{
+	return actionIterator.first;
 }

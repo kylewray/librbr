@@ -155,7 +155,8 @@ PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const FiniteStates
 
 	// Before anything, cache Gamma_{a, *} for all actions. This is used in every cross-sum computation.
 	std::map<const Action *, std::vector<PolicyAlphaVector *> > gammaAStar;
-	for (const Action *action : *A) {
+	for (auto a : *A) {
+		const Action *action = resolve(a);
 		gammaAStar[action].push_back(create_gamma_a_star(S, A, Z, T, O, R, action));
 	}
 
@@ -166,7 +167,8 @@ PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const FiniteStates
 	// Continue to iterate until the horizon has been reached.
 	for (int t = 0; t < h->get_horizon(); t++) {
 		// Compute the new set of alpha vectors, gamma.
-		for (const Action *action : *A) {
+		for (auto a : *A) {
+			const Action *action = resolve(a);
 			std::vector<PolicyAlphaVector *> alphaVector = bellman_update_cross_sum(S, A, Z, T, O, R, h,
 					gammaAStar[action], gamma[!current], action);
 			gamma[current].insert(gamma[current].end(), alphaVector.begin(), alphaVector.end());
@@ -186,7 +188,8 @@ PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const FiniteStates
 	}
 
 	// Free the memory of Gamma_{a, *}.
-	for (const Action *action : *A) {
+	for (auto a : *A) {
+		const Action *action = resolve(a);
 		for (PolicyAlphaVector *alphaVector : gammaAStar[action]) {
 			delete alphaVector;
 		}
@@ -206,7 +209,8 @@ PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(const FiniteStat
 
 	// Before anything, cache Gamma_{a, *} for all actions. This is used in every cross-sum computation.
 	std::map<const Action *, std::vector<PolicyAlphaVector *> > gammaAStar;
-	for (const Action *action : *A) {
+	for (auto a : *A) {
+		const Action *action = resolve(a);
 		gammaAStar[action].push_back(create_gamma_a_star(S, A, Z, T, O, R, action));
 	}
 
@@ -217,7 +221,8 @@ PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(const FiniteStat
 	// Continue to iterate until the number of iterations has been reached.
 	for (int t = 0; t < iterations; t++) {
 		// Compute the new set of alpha vectors, gamma.
-		for (const Action *action : *A) {
+		for (auto a : *A) {
+			const Action *action = resolve(a);
 			std::vector<PolicyAlphaVector *> alphaVector = bellman_update_cross_sum(S, A, Z, T, O, R, h,
 					gammaAStar[action], gamma[!current], action);
 			gamma[current].insert(gamma[current].end(), alphaVector.begin(), alphaVector.end());
@@ -237,7 +242,8 @@ PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(const FiniteStat
 	}
 
 	// Free the memory of Gamma_{a, *}.
-	for (const Action *action : *A) {
+	for (auto a : *A) {
+		const Action *action = resolve(a);
 		for (PolicyAlphaVector *alphaVector : gammaAStar[action]) {
 			delete alphaVector;
 		}

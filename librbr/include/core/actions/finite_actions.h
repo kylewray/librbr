@@ -27,6 +27,7 @@
 #define FINITE_ACTIONS_H
 
 
+#include <unordered_map>
 #include <vector>
 
 #include "action.h"
@@ -83,20 +84,11 @@ public:
 	void set(const std::vector<const Action *> &newActions);
 
 	/**
-	 * Get the action at the corresponding index. An action's index is defined by the order
-	 * in which they are added and removed.
-	 * @param	actionIndex			The index of the action.
-	 * @throw	ActionException		The index was invalid.
-	 * @return	The action at the corresponding index.
-	 */
-	const Action *get(int actionIndex) const;
-
-	/**
 	 * Return a list of the actions available given a state.
 	 * @param	state	The current state.
 	 * @return	Return a list of available actions.
 	 */
-	virtual const std::vector<const Action *> &available(const State *state) const;
+	virtual std::unordered_map<unsigned int, const Action *> available(const State *state) const;
 
 	/**
 	 * Return the number of actions.
@@ -113,21 +105,34 @@ public:
 	 * To facilitate easy iteration, return a constant beginning of the actions vector.
 	 * @return	The iterator which points to a constant beginning of the actions vector.
 	 */
-	std::vector<const Action *>::const_iterator begin() const;
+	std::unordered_map<unsigned int, const Action *>::const_iterator begin() const;
 
 	/**
 	 * To facilitate easy iteration, return a constant end of the actions vector.
 	 * @return	The iterator which points to a constant end of the actions vector.
 	 */
-	std::vector<const Action *>::const_iterator end() const;
+	std::unordered_map<unsigned int, const Action *>::const_iterator end() const;
 
 protected:
 	/**
-	 * The list of all available actions.
+	 * The mapping of actions hash values to states. This is the main container of states.
 	 */
-	std::vector<const Action *> actions;
+	std::unordered_map<unsigned int, const Action *> actions;
 
 };
+
+/**
+ * Get the action pointer of an action iterator.
+ * @param	actionIterator	The action iterator to retrieve the action pointer from.
+ */
+const Action *resolve(std::unordered_map<unsigned int, const Action *>::value_type &actionIterator);
+
+/**
+ * Get the hash of an action iterator.
+ * @param	actionIterator	The action iterator to retrieve the hash value from.
+ */
+unsigned int hash_value(std::unordered_map<unsigned int, const Action *>::value_type &actionIterator);
+
 
 
 #endif // FINITE_ACTIONS_H

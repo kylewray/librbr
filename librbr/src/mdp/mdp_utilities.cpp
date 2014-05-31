@@ -34,7 +34,9 @@ void bellman_update(const FiniteStates *S, const FiniteActions *A, const FiniteS
 	double maxQsa = std::numeric_limits<double>::lowest();
 
 	// For all the actions, compute max Q(s, a), and argmax Q(s, a), both over the set of available actions.
-	for (const Action *a : A->available(s)) {
+	for (auto action : A->available(s)) {
+		const Action *a = resolve(action);
+
 		// Compute the Q(s, a) estimate.
 		double Qsa = 0.0;
 

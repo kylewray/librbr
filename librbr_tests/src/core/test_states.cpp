@@ -198,7 +198,7 @@ int test_states()
 
 	std::cout << "States: Test 'FiniteStates::find'... ";
 	try {
-		testFindState = find_state(finiteStates, s1->to_string());
+		testFindState = find_state(finiteStates, ((const NamedState *)s1)->get_name());
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} catch (const StateException &err) {
@@ -207,7 +207,7 @@ int test_states()
 
 	std::cout << "States: Test 'FiniteStates::find' (Expecting Error)... ";
 	try {
-		testFindState = find_state(finiteStates, s3->to_string());
+		testFindState = find_state(finiteStates, ((const NamedState *)s3)->get_name());
 		std::cout << " Failure." << std::endl;
 	} catch (const StateException &err) {
 		std::cout << " Success." << std::endl;
@@ -215,6 +215,7 @@ int test_states()
 	}
 
 	delete finiteStates;
+	finiteStates = nullptr;
 
 	s1 = new NamedState("s1");
 	s2 = new NamedState("s2");
@@ -245,7 +246,6 @@ int test_states()
 
 	try {
 		for (auto s : *finiteFactoredStates) {
-
 			const State *state = resolve(s);
 			const FactoredState *fs = static_cast<const FactoredState *>(state);
 			if (fs == nullptr) {
