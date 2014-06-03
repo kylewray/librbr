@@ -66,6 +66,25 @@ void FiniteObservations::set(const std::vector<const Observation *> &newObservat
 	}
 }
 
+bool FiniteObservations::exists(const Observation *observation)
+{
+	try {
+		observations.at(observation->hash_value());
+	} catch (const std::out_of_range &err) {
+		return false;
+	}
+	return true;
+}
+
+const Observation *FiniteObservations::get(unsigned int hash)
+{
+	try {
+		return observations.at(hash);
+	} catch (const std::out_of_range &err) {
+		throw ObservationException();
+	}
+}
+
 int FiniteObservations::get_num_observations() const
 {
 	return observations.size();

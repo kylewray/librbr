@@ -66,6 +66,25 @@ void FiniteStates::set(const std::vector<const State *> &newStates)
 	}
 }
 
+bool FiniteStates::exists(const State *state)
+{
+	try {
+		states.at(state->hash_value());
+	} catch (const std::out_of_range &err) {
+		return false;
+	}
+	return true;
+}
+
+const State *FiniteStates::get(unsigned int hash)
+{
+	try {
+		return states.at(hash);
+	} catch (const std::out_of_range &err) {
+		throw StateException();
+	}
+}
+
 int FiniteStates::get_num_states() const
 {
 	return states.size();

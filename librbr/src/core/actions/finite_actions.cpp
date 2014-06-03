@@ -65,14 +65,33 @@ void FiniteActions::set(const std::vector<const Action *> &newActions)
 	}
 }
 
-std::unordered_map<unsigned int, const Action *> FiniteActions::available(const State *state) const
+bool FiniteActions::exists(const Action *action)
 {
-	return actions;
+	try {
+		actions.at(action->hash_value());
+	} catch (const std::out_of_range &err) {
+		return false;
+	}
+	return true;
+}
+
+const Action *FiniteActions::get(unsigned int hash)
+{
+	try {
+		return actions.at(hash);
+	} catch (const std::out_of_range &err) {
+		throw ActionException();
+	}
 }
 
 int FiniteActions::get_num_actions() const
 {
 	return actions.size();
+}
+
+std::unordered_map<unsigned int, const Action *> FiniteActions::available(const State *state) const
+{
+	return actions;
 }
 
 void FiniteActions::reset()

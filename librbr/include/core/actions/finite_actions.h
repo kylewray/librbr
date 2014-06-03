@@ -84,17 +84,32 @@ public:
 	void set(const std::vector<const Action *> &newActions);
 
 	/**
-	 * Return a list of the actions available given a state.
-	 * @param	state	The current state.
-	 * @return	Return a list of available actions.
+	 * Check if this action has already been created or not.
+	 * @param	action		The action to check if it is created or not.
+	 * @return	Returns @code{true} if the action exists in the actions hash; @code{false} otherwise.
 	 */
-	virtual std::unordered_map<unsigned int, const Action *> available(const State *state) const;
+	bool exists(const Action *action);
+
+	/**
+	 * Get an action with a particular hash value.
+	 * @param	hash				The hash of the action.
+	 * @throw	ActionException		There are no actions with the hash value specified.
+	 * @return	The action with the particular hash value specified.
+	 */
+	const Action *get(unsigned int hash);
 
 	/**
 	 * Return the number of actions.
 	 * @return	The number of actions.
 	 */
-	virtual int get_num_actions() const;
+	int get_num_actions() const;
+
+	/**
+	 * Return a list of the actions available given a state.
+	 * @param	state	The current state.
+	 * @return	Return a list of available actions.
+	 */
+	virtual std::unordered_map<unsigned int, const Action *> available(const State *state) const;
 
 	/**
 	 * Reset the actions, clearing the internal list.

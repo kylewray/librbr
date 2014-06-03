@@ -66,7 +66,8 @@ int test_observations()
 			}
 		}
 
-		if (finiteObservations->get_num_observations() == 3 && o1Found && o2Found && o3Found) {
+		if (finiteObservations->get_num_observations() == 3 && o1Found && o2Found && o3Found &&
+				finiteObservations->exists(o1) && finiteObservations->exists(o2) && finiteObservations->exists(o3)) {
 			std::cout << " Success." << std::endl;
 			numSuccesses++;
 		} else {
@@ -103,9 +104,24 @@ int test_observations()
 		}
 	}
 
-	if (finiteObservations->get_num_observations() == 2 && o1Found && !o2Found && o3Found) {
+	if (finiteObservations->get_num_observations() == 2 && o1Found && !o2Found && o3Found &&
+			finiteObservations->exists(o1) && !finiteObservations->exists(o2) && finiteObservations->exists(o3)) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	std::cout << "Observations: Test 'FiniteObservations::get'... ";
+	if (finiteObservations->get(o1->hash_value()) == o1 &&
+			finiteObservations->get(o3->hash_value()) == o3) {
+		try {
+			finiteObservations->get(o2->hash_value());
+			std::cout << " Failure." << std::endl;
+        } catch (const ObservationException &err) {
+            std::cout << " Success." << std::endl;
+            numSuccesses++;
+        }
 	} else {
 		std::cout << " Failure." << std::endl;
 	}
@@ -140,7 +156,8 @@ int test_observations()
 		}
 	}
 
-	if (finiteObservations->get_num_observations() == 3 && o1Found && o2Found && o3Found) {
+	if (finiteObservations->get_num_observations() == 3 && o1Found && o2Found && o3Found &&
+			finiteObservations->exists(o1) && finiteObservations->exists(o2) && finiteObservations->exists(o3)) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -190,7 +207,8 @@ int test_observations()
 		}
 	}
 
-	if (finiteObservations->get_num_observations() == 2 && o1Found && o2Found && !o3Found) {
+	if (finiteObservations->get_num_observations() == 2 && o1Found && o2Found && !o3Found &&
+			finiteObservations->exists(o1) && finiteObservations->exists(o2) && !finiteObservations->exists(o3)) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {

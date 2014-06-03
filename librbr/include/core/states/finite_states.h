@@ -84,6 +84,21 @@ public:
 	void set(const std::vector<const State *> &newStates);
 
 	/**
+	 * Check if this state has already been created or not.
+	 * @param	state		The state to check if it is created or not.
+	 * @return	Returns @code{true} if the state exists in the states hash; @code{false} otherwise.
+	 */
+	bool exists(const State *state);
+
+	/**
+	 * Get a state with a particular hash value.
+	 * @param	hash				The hash of the state.
+	 * @throw	StateException		There are no states with the hash value specified.
+	 * @return	The state with the particular hash value specified.
+	 */
+	const State *get(unsigned int hash);
+
+	/**
 	 * Return the number of states.
 	 * @return	The number of states.
 	 */

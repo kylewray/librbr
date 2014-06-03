@@ -85,15 +85,30 @@ public:
 	void set(const std::vector<const Observation *> &newObservations);
 
 	/**
+	 * Check if this observation has already been created or not.
+	 * @param	observation		The observation to check if it is created or not.
+	 * @return	Returns @code{true} if the observation exists in the observations hash; @code{false} otherwise.
+	 */
+	bool exists(const Observation *observation);
+
+	/**
+	 * Get an observation with a particular hash value.
+	 * @param	hash					The hash of the observation.
+	 * @throw	ObservationException	There are no observations with the hash value specified.
+	 * @return	The observation with the particular hash value specified.
+	 */
+	const Observation *get(unsigned int hash);
+
+	/**
 	 * Return the number of observations.
 	 * @return	The number of observations.
 	 */
-	virtual int get_num_observations() const;
+	int get_num_observations() const;
 
 	/**
 	 * Reset the observations, clearing the internal list and freeing the memory.
 	 */
-	virtual void reset();
+	void reset();
 
 	/**
 	 * To facilitate easy iteration, return a constant beginning of the observations vector.

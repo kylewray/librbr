@@ -44,7 +44,7 @@ int test_actions()
 
 	FiniteActions *finiteActions = new FiniteActions();
 
-	std::cout << "Actions: Test 'FiniteActions::add' and 'FiniteActions::get'... ";
+	std::cout << "Actions: Test 'FiniteActions::add' and 'FiniteActions::exists'... ";
 
 	finiteActions->add(a1);
 	finiteActions->add(a2);
@@ -66,7 +66,8 @@ int test_actions()
 			}
 		}
 
-		if (finiteActions->get_num_actions() == 3 && a1Found && a2Found && a3Found) {
+		if (finiteActions->get_num_actions() == 3 && a1Found && a2Found && a3Found &&
+				finiteActions->exists(a1) && finiteActions->exists(a2) && finiteActions->exists(a3)) {
 			std::cout << " Success." << std::endl;
 			numSuccesses++;
 		} else {
@@ -103,9 +104,24 @@ int test_actions()
 		}
 	}
 
-	if (finiteActions->get_num_actions() == 2 && a1Found && !a2Found && a3Found) {
+	if (finiteActions->get_num_actions() == 2 && a1Found && !a2Found && a3Found &&
+			finiteActions->exists(a1) && !finiteActions->exists(a2) && finiteActions->exists(a3)) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	std::cout << "Actions: Test 'FiniteActions::get'... ";
+	if (finiteActions->get(a1->hash_value()) == a1 &&
+			finiteActions->get(a3->hash_value()) == a3) {
+		try {
+			finiteActions->get(a2->hash_value());
+			std::cout << " Failure." << std::endl;
+        } catch (const ActionException &err) {
+            std::cout << " Success." << std::endl;
+            numSuccesses++;
+        }
 	} else {
 		std::cout << " Failure." << std::endl;
 	}
@@ -140,7 +156,8 @@ int test_actions()
 		}
 	}
 
-	if (finiteActions->get_num_actions() == 3 && a1Found && a2Found && a3Found) {
+	if (finiteActions->get_num_actions() == 3 && a1Found && a2Found && a3Found &&
+			finiteActions->exists(a1) && finiteActions->exists(a2) && finiteActions->exists(a3)) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -190,7 +207,8 @@ int test_actions()
 		}
 	}
 
-	if (finiteActions->get_num_actions() == 2 && a1Found && a2Found && !a3Found) {
+	if (finiteActions->get_num_actions() == 2 && a1Found && a2Found && !a3Found &&
+			finiteActions->exists(a1) && finiteActions->exists(a2) && !finiteActions->exists(a3)) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {

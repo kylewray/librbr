@@ -66,7 +66,8 @@ int test_states()
 			}
 		}
 
-		if (finiteStates->get_num_states() == 3 && s1Found && s2Found && s3Found) {
+		if (finiteStates->get_num_states() == 3 && s1Found && s2Found && s3Found &&
+				finiteStates->exists(s1) && finiteStates->exists(s2) && finiteStates->exists(s3)) {
 			std::cout << " Success." << std::endl;
 			numSuccesses++;
 		} else {
@@ -103,9 +104,24 @@ int test_states()
 		}
 	}
 
-	if (finiteStates->get_num_states() == 2 && s1Found && !s2Found && s3Found) {
+	if (finiteStates->get_num_states() == 2 && s1Found && !s2Found && s3Found &&
+			finiteStates->exists(s1) && !finiteStates->exists(s2) && finiteStates->exists(s3)) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
+	} else {
+		std::cout << " Failure." << std::endl;
+	}
+
+	std::cout << "States: Test 'FiniteStates::get'... ";
+	if (finiteStates->get(s1->hash_value()) == s1 &&
+			finiteStates->get(s3->hash_value()) == s3) {
+		try {
+			finiteStates->get(s2->hash_value());
+			std::cout << " Failure." << std::endl;
+        } catch (const StateException &err) {
+            std::cout << " Success." << std::endl;
+            numSuccesses++;
+        }
 	} else {
 		std::cout << " Failure." << std::endl;
 	}
@@ -140,7 +156,8 @@ int test_states()
 		}
 	}
 
-	if (finiteStates->get_num_states() == 3 && s1Found && s2Found && s3Found) {
+	if (finiteStates->get_num_states() == 3 && s1Found && s2Found && s3Found &&
+			finiteStates->exists(s1) && finiteStates->exists(s2) && finiteStates->exists(s3)) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -187,7 +204,8 @@ int test_states()
 		}
 	}
 
-	if (finiteStates->get_num_states() == 2 && s1Found && s2Found && !s3Found) {
+	if (finiteStates->get_num_states() == 2 && s1Found && s2Found && !s3Found &&
+			finiteStates->exists(s1) && finiteStates->exists(s2) && !finiteStates->exists(s3)) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
