@@ -65,7 +65,7 @@ void FiniteActions::set(const std::vector<const Action *> &newActions)
 	}
 }
 
-bool FiniteActions::exists(const Action *action)
+bool FiniteActions::exists(const Action *action) const
 {
 	try {
 		actions.at(action->hash_value());
@@ -75,7 +75,7 @@ bool FiniteActions::exists(const Action *action)
 	return true;
 }
 
-const Action *FiniteActions::get(unsigned int hash)
+const Action *FiniteActions::get(unsigned int hash) const
 {
 	try {
 		return actions.at(hash);

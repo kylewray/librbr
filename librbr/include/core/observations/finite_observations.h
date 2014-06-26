@@ -89,7 +89,7 @@ public:
 	 * @param	observation		The observation to check if it is created or not.
 	 * @return	Returns @code{true} if the observation exists in the observations hash; @code{false} otherwise.
 	 */
-	bool exists(const Observation *observation);
+	bool exists(const Observation *observation) const;
 
 	/**
 	 * Get an observation with a particular hash value.
@@ -97,7 +97,7 @@ public:
 	 * @throw	ObservationException	There are no observations with the hash value specified.
 	 * @return	The observation with the particular hash value specified.
 	 */
-	const Observation *get(unsigned int hash);
+	const Observation *get(unsigned int hash) const;
 
 	/**
 	 * Return the number of observations.

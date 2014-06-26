@@ -89,6 +89,12 @@ public:
 	 */
 	virtual unsigned int hash_value() const;
 
+	/**
+	 * Create a hash value for use in searching based on the name specified.
+	 * @param	nameToHash		The name to convert to a hash value.
+	 */
+	static unsigned int hash_value(std::string nameToHash);
+
 protected:
 	/**
 	 * All actions must have the ability to convert the internal representation to a string.

@@ -65,8 +65,13 @@ std::string NamedAction::to_string() const
 
 unsigned int NamedAction::hash_value() const
 {
+	return hash_value(name);
+}
+
+unsigned int NamedAction::hash_value(std::string nameToHash)
+{
 	unsigned int hash = 7;
-	for (char c : name) {
+	for (char c : nameToHash) {
 		hash = 31 * hash + (int)c;
 	}
 	return hash;

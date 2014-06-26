@@ -66,7 +66,7 @@ void FiniteObservations::set(const std::vector<const Observation *> &newObservat
 	}
 }
 
-bool FiniteObservations::exists(const Observation *observation)
+bool FiniteObservations::exists(const Observation *observation) const
 {
 	try {
 		observations.at(observation->hash_value());
@@ -76,7 +76,7 @@ bool FiniteObservations::exists(const Observation *observation)
 	return true;
 }
 
-const Observation *FiniteObservations::get(unsigned int hash)
+const Observation *FiniteObservations::get(unsigned int hash) const
 {
 	try {
 		return observations.at(hash);

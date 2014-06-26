@@ -88,7 +88,7 @@ public:
 	 * @param	state		The state to check if it is created or not.
 	 * @return	Returns @code{true} if the state exists in the states hash; @code{false} otherwise.
 	 */
-	bool exists(const State *state);
+	bool exists(const State *state) const;
 
 	/**
 	 * Get a state with a particular hash value.
@@ -96,7 +96,7 @@ public:
 	 * @throw	StateException		There are no states with the hash value specified.
 	 * @return	The state with the particular hash value specified.
 	 */
-	const State *get(unsigned int hash);
+	const State *get(unsigned int hash) const;
 
 	/**
 	 * Return the number of states.

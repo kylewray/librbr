@@ -66,7 +66,7 @@ void FiniteStates::set(const std::vector<const State *> &newStates)
 	}
 }
 
-bool FiniteStates::exists(const State *state)
+bool FiniteStates::exists(const State *state) const
 {
 	try {
 		states.at(state->hash_value());
@@ -76,7 +76,7 @@ bool FiniteStates::exists(const State *state)
 	return true;
 }
 
-const State *FiniteStates::get(unsigned int hash)
+const State *FiniteStates::get(unsigned int hash) const
 {
 	try {
 		return states.at(hash);

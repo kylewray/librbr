@@ -88,7 +88,7 @@ public:
 	 * @param	action		The action to check if it is created or not.
 	 * @return	Returns @code{true} if the action exists in the actions hash; @code{false} otherwise.
 	 */
-	bool exists(const Action *action);
+	bool exists(const Action *action) const;
 
 	/**
 	 * Get an action with a particular hash value.
@@ -96,7 +96,7 @@ public:
 	 * @throw	ActionException		There are no actions with the hash value specified.
 	 * @return	The action with the particular hash value specified.
 	 */
-	const Action *get(unsigned int hash);
+	const Action *get(unsigned int hash) const;
 
 	/**
 	 * Return the number of actions.
