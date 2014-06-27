@@ -27,13 +27,13 @@
 
 #include <iostream>
 
-#include "../../../librbr/include/core/observation_transitions/finite_observation_transitions.h"
+#include "../../../librbr/include/core/observation_transitions/observation_transitions_map.h"
 
 #include "../../../librbr/include/core/states/named_state.h"
 #include "../../../librbr/include/core/actions/named_action.h"
 #include "../../../librbr/include/core/observations/named_observation.h"
 
-#include "../../../librbr/include/core/observations/finite_observations.h"
+#include "../../../librbr/include/core/observations/observations_map.h"
 
 int test_observation_transitions()
 {
@@ -48,7 +48,7 @@ int test_observation_transitions()
 	Action *a1 = new NamedAction("a1");
 	Action *a2 = new NamedAction("a2");
 
-	FiniteObservationTransitions *finiteObservationTransitions = new FiniteObservationTransitions();
+	ObservationTransitionsMap *finiteObservationTransitions = new ObservationTransitionsMap();
 
 	std::cout << "ObservationTransitions: Test 'FiniteObservationTransitions::set' and ";
 	std::cout << "'FiniteObservationTransitions::get' (All Values Mapped)... ";
@@ -73,7 +73,7 @@ int test_observation_transitions()
 	}
 
 	delete finiteObservationTransitions;
-	finiteObservationTransitions = new FiniteObservationTransitions();
+	finiteObservationTransitions = new ObservationTransitionsMap();
 
 	std::cout << "ObservationTransitions: Test 'FiniteObservationTransitions::set' and ";
 	std::cout << "'FiniteObservationTransitions::get' (Default Zero Values)... ";
@@ -98,7 +98,7 @@ int test_observation_transitions()
 	}
 
 	delete finiteObservationTransitions;
-	finiteObservationTransitions = new FiniteObservationTransitions();
+	finiteObservationTransitions = new ObservationTransitionsMap();
 
 	std::cout << "ObservationTransitions: Test 'FiniteObservationTransitions::set' and ";
 	std::cout << "'FiniteObservationTransitions::get' (Wildcard Next State)... ";
@@ -124,7 +124,7 @@ int test_observation_transitions()
 	}
 
 	delete finiteObservationTransitions;
-	finiteObservationTransitions = new FiniteObservationTransitions();
+	finiteObservationTransitions = new ObservationTransitionsMap();
 
 	std::cout << "ObservationTransitions: Test 'FiniteObservationTransitions::set' and ";
 	std::cout << "'FiniteObservationTransitions::get' (Wildcard Action)... ";
@@ -150,7 +150,7 @@ int test_observation_transitions()
 	}
 
 	delete finiteObservationTransitions;
-	finiteObservationTransitions = new FiniteObservationTransitions();
+	finiteObservationTransitions = new ObservationTransitionsMap();
 
 	std::cout << "ObservationTransitions: Test 'FiniteObservationTransitions::set' and ";
 	std::cout << "'FiniteObservationTransitions::get' (Wildcard Previous State)... ";
@@ -176,9 +176,9 @@ int test_observation_transitions()
 	}
 
 	delete finiteObservationTransitions;
-	finiteObservationTransitions = new FiniteObservationTransitions();
+	finiteObservationTransitions = new ObservationTransitionsMap();
 
-	FiniteObservations *Z = new FiniteObservations();
+	ObservationsMap *Z = new ObservationsMap();
 	Z->add(o1);
 	Z->add(o2);
 

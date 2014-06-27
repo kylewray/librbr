@@ -28,9 +28,9 @@
 #include <iostream>
 
 #include "../../../librbr/include/core/actions/named_action.h"
-#include "../../../librbr/include/core/actions/finite_actions.h"
+#include "../../../librbr/include/core/actions/actions_map.h"
 #include "../../../librbr/include/core/actions/joint_action.h"
-#include "../../../librbr/include/core/actions/finite_joint_actions.h"
+#include "../../../librbr/include/core/actions/joint_actions_map.h"
 #include "../../../librbr/include/core/actions/action_exception.h"
 #include "../../../librbr/include/core/actions/action_utilities.h"
 
@@ -42,7 +42,7 @@ int test_actions()
 	Action *a2 = new NamedAction("a2");
 	Action *a3 = new NamedAction("a3");
 
-	FiniteActions *finiteActions = new FiniteActions();
+	ActionsMap *finiteActions = new ActionsMap();
 
 	std::cout << "Actions: Test 'FiniteActions::add' and 'FiniteActions::exists'... ";
 
@@ -243,7 +243,7 @@ int test_actions()
 	a3 = new NamedAction("a3");
 	Action *a4 = new NamedAction("a4");
 
-	FiniteJointActions *finiteJointActions = new FiniteJointActions(2);
+	JointActionsMap *finiteJointActions = new JointActionsMap(2);
 
 	std::cout << "Actions: Test 'FiniteJointActions::add'... ";
 	try {

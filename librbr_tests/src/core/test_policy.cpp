@@ -38,10 +38,10 @@
 #include "../../../librbr/include/core/states/states_map.h"
 
 #include "../../../librbr/include/core/actions/named_action.h"
-#include "../../../librbr/include/core/actions/finite_actions.h"
+#include "../../../librbr/include/core/actions/actions_map.h"
 
 #include "../../../librbr/include/core/observations/named_observation.h"
-#include "../../../librbr/include/core/observations/finite_observations.h"
+#include "../../../librbr/include/core/observations/observations_map.h"
 
 #include "../../../librbr/include/core/horizon.h"
 
@@ -58,7 +58,7 @@ int test_policy()
 	Action *a2 = new NamedAction("a2");
 
 	StatesMap *states = new StatesMap({s1, s2});
-	FiniteActions *actions = new FiniteActions({a1, a2});
+	ActionsMap *actions = new ActionsMap({a1, a2});
 	Horizon *horizon = new Horizon((unsigned int)4);
 
 	PolicyMap *policyMap = new PolicyMap();
@@ -150,7 +150,7 @@ int test_policy()
 	NamedObservation *o1 = new NamedObservation("o1");
 	NamedObservation *o2 = new NamedObservation("o2");
 
-	FiniteObservations *observations = new FiniteObservations({o1, o2});
+	ObservationsMap *observations = new ObservationsMap({o1, o2});
 
 	PolicyTree *policyTree = new PolicyTree(observations, horizon);
 

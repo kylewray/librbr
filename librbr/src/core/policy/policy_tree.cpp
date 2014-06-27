@@ -54,13 +54,13 @@ PolicyTree::PolicyTree()
 	current = nullptr;
 }
 
-PolicyTree::PolicyTree(const FiniteObservations *observations, unsigned int horizon)
+PolicyTree::PolicyTree(const ObservationsMap *observations, unsigned int horizon)
 {
 	root = generate_tree(observations, horizon);
 	current = root;
 }
 
-PolicyTree::PolicyTree(const FiniteObservations *observations, const Horizon *horizon)
+PolicyTree::PolicyTree(const ObservationsMap *observations, const Horizon *horizon)
 {
 	if (horizon->is_finite()) {
 		root = generate_tree(observations, horizon->get_horizon());
@@ -109,7 +109,7 @@ const Action *PolicyTree::get(const std::vector<const Observation *> &history) c
 	return node->action;
 }
 
-bool PolicyTree::load(std::string filename, const FiniteActions *actions, const FiniteObservations *observations, const Horizon *horizon)
+bool PolicyTree::load(std::string filename, const ActionsMap *actions, const ObservationsMap *observations, const Horizon *horizon)
 {
 	// Reset the current tree, cleaning the memory, and then generate the tree's data.
 	reset();
@@ -229,7 +229,7 @@ void PolicyTree::reset()
 	current = nullptr;
 }
 
-PolicyTreeNode *PolicyTree::generate_tree(const FiniteObservations *observations, unsigned int horizon)
+PolicyTreeNode *PolicyTree::generate_tree(const ObservationsMap *observations, unsigned int horizon)
 {
 	// Create the new node regardless.
 	PolicyTreeNode *node = new PolicyTreeNode();

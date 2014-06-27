@@ -33,12 +33,12 @@
 #include "../core/agents/agents.h"
 #include "../core/states/states_map.h"
 #include "../core/states/factored_states_map.h"
-#include "../core/actions/finite_actions.h"
-#include "../core/actions/finite_joint_actions.h"
-#include "../core/observations/finite_observations.h"
-#include "../core/observations/finite_joint_observations.h"
+#include "../core/actions/actions_map.h"
+#include "../core/actions/joint_actions_map.h"
+#include "../core/observations/observations_map.h"
+#include "../core/observations/joint_observations_map.h"
 #include "../core/state_transitions/state_transitions_map.h"
-#include "../core/observation_transitions/finite_observation_transitions.h"
+#include "../core/observation_transitions/observation_transitions_map.h"
 #include "../core/rewards/sas_rewards_map.h"
 #include "../core/initial.h"
 #include "../core/horizon.h"
@@ -314,12 +314,12 @@ private:
 	/**
 	 * The actions in the MDP-like object; e.g., factored vectors of strings.
 	 */
-	FiniteActions *actions;
+	ActionsMap *actions;
 
 	/**
 	 * The observations in the MDP-like object; e.g., factored vectors of strings.
 	 */
-	FiniteObservations *observations;
+	ObservationsMap *observations;
 
 	/**
 	 * The state transition function in the MDP-like object; e.g., a three-dimensional array mapping to a double.
@@ -329,7 +329,7 @@ private:
 	/**
 	 * The observation transition function in the MDP-like object; e.g., a three-dimensional array mapping to a double.
 	 */
-	FiniteObservationTransitions *observationTransitions;
+	ObservationTransitionsMap *observationTransitions;
 
 	/**
 	 * The reward function in the MDP-like object; e.g., a two-dimensional array mapping to a double.

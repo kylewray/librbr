@@ -838,7 +838,7 @@ int UnifiedFile::load_actions(std::vector<std::string> items)
 	// If agents have been defined, then this was successful (so far) and we must load actions
 	// for each agent in the proceeding lines.
 	if (agents != nullptr) {
-		actions = new FiniteJointActions(agents->get_num_agents());
+		actions = new JointActionsMap(agents->get_num_agents());
 		return 1;
 	}
 
@@ -851,7 +851,7 @@ int UnifiedFile::load_actions(std::vector<std::string> items)
 
 	// Create the actions object if it has not been made yet.
 	if (actions == nullptr) {
-		actions = new FiniteActions();
+		actions = new ActionsMap();
 	}
 
 	std::vector<std::string> list = split_string_by_space(items[1]);
@@ -950,9 +950,9 @@ int UnifiedFile::load_agent_actions(int agentIndex, std::string line)
 
 	// Set the action index, and ignore any errors on an update. An error means that some action
 	// sets for other agents are not yet defined.
-	((FiniteJointActions *)actions)->set(agentIndex, newActions);
+	((JointActionsMap *)actions)->set(agentIndex, newActions);
 	try {
-		((FiniteJointActions *)actions)->update();
+		((JointActionsMap *)actions)->update();
 	} catch (const ActionException &err) { }
 
 	return 0;
@@ -963,7 +963,7 @@ int UnifiedFile::load_observations(std::vector<std::string> items)
 	// If agents have been defined, then this was successful (so far) and we must load observations
 	// for each agent in the proceeding lines.
 	if (agents != nullptr) {
-		observations = new FiniteJointObservations(agents->get_num_agents());
+		observations = new JointObservationsMap(agents->get_num_agents());
 		return 1;
 	}
 
@@ -976,7 +976,7 @@ int UnifiedFile::load_observations(std::vector<std::string> items)
 
 	// Create the observations object if it has not been made yet.
 	if (observations == nullptr) {
-		observations = new FiniteObservations();
+		observations = new ObservationsMap();
 	}
 
 	std::vector<std::string> list = split_string_by_space(items[1]);
@@ -1079,9 +1079,9 @@ int UnifiedFile::load_agent_observations(int agentIndex, std::string line)
 
 	// Set the observation, and ignore any errors on an update. An error means that some observation
 	// sets for other agents are not yet defined.
-	((FiniteJointObservations *)observations)->set(agentIndex, newObservations);
+	((JointObservationsMap *)observations)->set(agentIndex, newObservations);
 	try {
-		((FiniteJointObservations *)observations)->update();
+		((JointObservationsMap *)observations)->update();
 	} catch (const ObservationException &error) { }
 
 	// After the update, the internal observations have been reset, so we need to remake
@@ -1314,7 +1314,7 @@ int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 
 	// Create the observation transitions object if it has not been made yet.
 	if (observationTransitions == nullptr) {
-		observationTransitions = new FiniteObservationTransitions();
+		observationTransitions = new ObservationTransitionsMap();
 	}
 
 	std::string actionName = split_string_by_space(items[1])[0];

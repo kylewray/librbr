@@ -36,7 +36,7 @@
 #include "../states/state.h"
 #include "../states/states_map.h"
 #include "../actions/action.h"
-#include "../actions/finite_actions.h"
+#include "../actions/actions_map.h"
 #include "../horizon.h"
 
 /**
@@ -112,7 +112,7 @@ public:
 	 * @param	horizon		The horizons object to ensure valid policy creation.
 	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	virtual bool load(std::string filename, const StatesMap *states, const FiniteActions *actions, const Horizon *horizon);
+	virtual bool load(std::string filename, const StatesMap *states, const ActionsMap *actions, const Horizon *horizon);
 
 	/**
 	 * A function which must save a policy file.

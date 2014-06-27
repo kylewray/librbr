@@ -140,8 +140,8 @@ const Action *PolicyAlphaVectors::get(unsigned int horizon, const BeliefState *b
 	return action;
 }
 
-bool PolicyAlphaVectors::load(std::string filename, const StatesMap *states, const FiniteActions *actions,
-		const FiniteObservations *observations, const Horizon *horizon)
+bool PolicyAlphaVectors::load(std::string filename, const StatesMap *states, const ActionsMap *actions,
+		const ObservationsMap *observations, const Horizon *horizon)
 {
 	reset();
 

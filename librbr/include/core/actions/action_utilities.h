@@ -27,7 +27,7 @@
 #define ACTION_UTILITIES_H
 
 
-#include "finite_actions.h"
+#include "actions_map.h"
 #include "named_action.h"
 
 /**
@@ -37,7 +37,7 @@
  * @throw	ActionException		The name was invalid, or an action was not a NamedAction.
  * @return	The action with the corresponding name provided.
  */
-const Action *find_action(const FiniteActions *A, std::string actionName);
+const Action *find_action(const ActionsMap *A, std::string actionName);
 
 
 #endif // ACTION_UTILITIES_H

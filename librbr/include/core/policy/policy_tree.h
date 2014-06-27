@@ -37,9 +37,9 @@
 #include "../states/state.h"
 #include "../states/states_map.h"
 #include "../actions/action.h"
-#include "../actions/finite_actions.h"
+#include "../actions/actions_map.h"
 #include "../observations/observation.h"
-#include "../observations/finite_observations.h"
+#include "../observations/observations_map.h"
 #include "../horizon.h"
 
 /**
@@ -92,14 +92,14 @@ public:
 	 * @param	observations	The finite set of observations.
 	 * @param	horizon 		The horizon of the problem.
 	 */
-	PolicyTree(const FiniteObservations *observations, unsigned int horizon);
+	PolicyTree(const ObservationsMap *observations, unsigned int horizon);
 
 	/**
 	 * A constructor for a MapPolicy object which specifies the horizon.
 	 * @param	observations	The finite set of observations.
 	 * @param	horizon 		The horizon object from the MDP-like object.
 	 */
-	PolicyTree(const FiniteObservations *observations, const Horizon *horizon);
+	PolicyTree(const ObservationsMap *observations, const Horizon *horizon);
 
 	/**
 	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
@@ -130,7 +130,7 @@ public:
 	 * @param	horizon			The horizons object to ensure valid policy creation.
 	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	virtual bool load(std::string filename, const FiniteActions *actions, const FiniteObservations *observations, const Horizon *horizon);
+	virtual bool load(std::string filename, const ActionsMap *actions, const ObservationsMap *observations, const Horizon *horizon);
 
 	/**
 	 * A function which must save a policy file.
@@ -158,7 +158,7 @@ private:
 	 * @param	horizon			The remaining horizon value; once zero, recursion terminates.
 	 * @return	The root of this node's subtree.
 	 */
-	PolicyTreeNode *generate_tree(const FiniteObservations *observations, unsigned int horizon);
+	PolicyTreeNode *generate_tree(const ObservationsMap *observations, unsigned int horizon);
 
 	/**
 	 * Traverse the tree following the history provided.

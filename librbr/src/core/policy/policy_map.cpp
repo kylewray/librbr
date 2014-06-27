@@ -97,7 +97,7 @@ const Action *PolicyMap::get(unsigned int horizon, const State *state) const
 	return result->second;
 }
 
-bool PolicyMap::load(std::string filename, const StatesMap *states, const FiniteActions *actions, const Horizon *horizon)
+bool PolicyMap::load(std::string filename, const StatesMap *states, const ActionsMap *actions, const Horizon *horizon)
 {
 	reset();
 

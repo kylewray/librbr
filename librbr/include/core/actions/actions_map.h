@@ -23,8 +23,8 @@
  */
 
 
-#ifndef FINITE_ACTIONS_H
-#define FINITE_ACTIONS_H
+#ifndef ACTIONS_MAP_H
+#define ACTIONS_MAP_H
 
 
 #include <unordered_map>
@@ -45,23 +45,23 @@
  * which implements the function in the virtual functions described below. You will likely ignore the
  * internal actions vector variable here.
  */
-class FiniteActions : public Actions {
+class ActionsMap : public Actions {
 public:
 	/**
 	 * The default constructor for the FiniteActions class.
 	 */
-	FiniteActions();
+	ActionsMap();
 
 	/**
 	 * The constructor for the FiniteActions class which allows the specification of an initial set of actions.
 	 * @param	actions	The initial vector of actions.
 	 */
-	FiniteActions(const std::vector<const Action *> &actions);
+	ActionsMap(const std::vector<const Action *> &actions);
 
 	/**
 	 * The default deconstructor for the FiniteActions class.
 	 */
-	virtual ~FiniteActions();
+	virtual ~ActionsMap();
 
 	/**
 	 * Add an action to the set of available actions.
@@ -150,4 +150,4 @@ unsigned int hash_value(std::unordered_map<unsigned int, const Action *>::value_
 
 
 
-#endif // FINITE_ACTIONS_H
+#endif // ACTIONS_MAP_H

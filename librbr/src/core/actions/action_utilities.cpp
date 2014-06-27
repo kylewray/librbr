@@ -29,7 +29,7 @@
 #include "../../../include/core/actions/named_action.h"
 #include "../../../include/core/actions/joint_action.h"
 
-const Action *find_action(const FiniteActions *A, std::string actionName)
+const Action *find_action(const ActionsMap *A, std::string actionName)
 {
 	for (auto act : *A) {
 		const Action *action = resolve(act);

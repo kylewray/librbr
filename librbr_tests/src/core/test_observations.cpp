@@ -28,9 +28,9 @@
 #include <iostream>
 
 #include "../../../librbr/include/core/observations/named_observation.h"
-#include "../../../librbr/include/core/observations/finite_observations.h"
+#include "../../../librbr/include/core/observations/observations_map.h"
 #include "../../../librbr/include/core/observations/joint_observation.h"
-#include "../../../librbr/include/core/observations/finite_joint_observations.h"
+#include "../../../librbr/include/core/observations/joint_observations_map.h"
 #include "../../../librbr/include/core/observations/observation_exception.h"
 #include "../../../librbr/include/core/observations/observation_utilities.h"
 
@@ -42,7 +42,7 @@ int test_observations()
 	NamedObservation *o2 = new NamedObservation("o2");
 	NamedObservation *o3 = new NamedObservation("o3");
 
-	FiniteObservations *finiteObservations = new FiniteObservations();
+	ObservationsMap *finiteObservations = new ObservationsMap();
 
 	std::cout << "Observations: Test 'FiniteObservations::add' and 'FiniteObservations::get'... ";
 
@@ -243,7 +243,7 @@ int test_observations()
 	o3 = new NamedObservation("o3");
 	Observation *o4 = new NamedObservation("o4");
 
-	FiniteJointObservations *finiteJointObservations = new FiniteJointObservations(2);
+	JointObservationsMap *finiteJointObservations = new JointObservationsMap(2);
 
 	std::cout << "Observations: Test 'FiniteJointObservations::add'... ";
 	try {

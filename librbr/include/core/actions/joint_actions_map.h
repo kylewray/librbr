@@ -23,15 +23,15 @@
  */
 
 
-#ifndef FINITE_JOINT_ACTIONS_H
-#define FINITE_JOINT_ACTIONS_H
+#ifndef JOINT_ACTIONS_MAP_H
+#define JOINT_ACTIONS_MAP_H
 
 
 #include <vector>
 
 #include "action.h"
 #include "actions.h"
-#include "finite_actions.h"
+#include "actions_map.h"
 
 /**
  * A class for finite sets of joint actions in an MDP-like object. Informally, there are two basic ways to
@@ -45,19 +45,19 @@
  *
  * Note: The protected "states" variable implicitly must only store JointState objects, not State objects.
  */
-class FiniteJointActions : public FiniteActions {
+class JointActionsMap : public ActionsMap {
 public:
 	/**
 	 * The default constructor for the FiniteJointActions class which requires that you
 	 * specify the number of factors.
 	 * @param	numFactors	The number of action factors, minimum of 1.
 	 */
-	FiniteJointActions(int numFactors);
+	JointActionsMap(int numFactors);
 
 	/**
 	 * The default deconstructor for the FiniteJointActions class.
 	 */
-	virtual ~FiniteJointActions();
+	virtual ~JointActionsMap();
 
 	/**
 	 * Add a action to the set of available actions in a factor. This does *not* update the
@@ -133,4 +133,4 @@ private:
 };
 
 
-#endif // FINITE_JOINT_ACTIONS_H
+#endif // JOINT_ACTIONS_MAP_H

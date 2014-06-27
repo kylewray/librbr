@@ -23,30 +23,30 @@
  */
 
 
-#include "../../../include/core/observations/finite_observations.h"
+#include "../../../include/core/observations/observations_map.h"
 #include "../../../include/core/observations/observation_exception.h"
 
 #include <algorithm>
 
-FiniteObservations::FiniteObservations()
+ObservationsMap::ObservationsMap()
 { }
 
-FiniteObservations::FiniteObservations(const std::vector<const Observation *> &observations)
+ObservationsMap::ObservationsMap(const std::vector<const Observation *> &observations)
 {
 	set(observations);
 }
 
-FiniteObservations::~FiniteObservations()
+ObservationsMap::~ObservationsMap()
 {
 	reset();
 }
 
-void FiniteObservations::add(const Observation *newObservation)
+void ObservationsMap::add(const Observation *newObservation)
 {
 	observations[newObservation->hash_value()] = newObservation;
 }
 
-void FiniteObservations::remove(const Observation *removeObservation)
+void ObservationsMap::remove(const Observation *removeObservation)
 {
 	// Ensure that the element exists in the hash before removing it.
 	std::unordered_map<unsigned int, const Observation *>::const_iterator result = observations.find(removeObservation->hash_value());
@@ -58,7 +58,7 @@ void FiniteObservations::remove(const Observation *removeObservation)
 	delete removeObservation;
 }
 
-void FiniteObservations::set(const std::vector<const Observation *> &newObservations)
+void ObservationsMap::set(const std::vector<const Observation *> &newObservations)
 {
 	reset();
 	for (const Observation *observation : newObservations) {
@@ -66,7 +66,7 @@ void FiniteObservations::set(const std::vector<const Observation *> &newObservat
 	}
 }
 
-bool FiniteObservations::exists(const Observation *observation) const
+bool ObservationsMap::exists(const Observation *observation) const
 {
 	try {
 		observations.at(observation->hash_value());
@@ -76,7 +76,7 @@ bool FiniteObservations::exists(const Observation *observation) const
 	return true;
 }
 
-const Observation *FiniteObservations::get(unsigned int hash) const
+const Observation *ObservationsMap::get(unsigned int hash) const
 {
 	try {
 		return observations.at(hash);
@@ -85,12 +85,12 @@ const Observation *FiniteObservations::get(unsigned int hash) const
 	}
 }
 
-int FiniteObservations::get_num_observations() const
+int ObservationsMap::get_num_observations() const
 {
 	return observations.size();
 }
 
-void FiniteObservations::reset()
+void ObservationsMap::reset()
 {
 	for (auto observation : observations) {
 		delete resolve(observation);
@@ -98,12 +98,12 @@ void FiniteObservations::reset()
 	observations.clear();
 }
 
-std::unordered_map<unsigned int, const Observation *>::const_iterator FiniteObservations::begin() const
+std::unordered_map<unsigned int, const Observation *>::const_iterator ObservationsMap::begin() const
 {
 	return observations.begin();
 }
 
-std::unordered_map<unsigned int, const Observation *>::const_iterator FiniteObservations::end() const
+std::unordered_map<unsigned int, const Observation *>::const_iterator ObservationsMap::end() const
 {
 	return observations.end();
 }

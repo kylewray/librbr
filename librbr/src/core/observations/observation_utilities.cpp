@@ -29,7 +29,7 @@
 #include "../../../include/core/observations/named_observation.h"
 #include "../../../include/core/observations/joint_observation.h"
 
-const Observation *find_observation(const FiniteObservations *Z, std::string observationName)
+const Observation *find_observation(const ObservationsMap *Z, std::string observationName)
 {
 	for (auto z : *Z) {
 		const Observation *observation = resolve(z);

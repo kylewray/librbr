@@ -161,13 +161,13 @@ PolicyAlphaVectors *POMDPPBVI::solve(const POMDP *pomdp)
 	}
 
 	// Attempt to convert the actions object into FiniteActions.
-	const FiniteActions *A = dynamic_cast<const FiniteActions *>(pomdp->get_actions());
+	const ActionsMap *A = dynamic_cast<const ActionsMap *>(pomdp->get_actions());
 	if (A == nullptr) {
 		throw ActionException();
 	}
 
 	// Attempt to convert the observations object into FiniteObservations.
-	const FiniteObservations *Z = dynamic_cast<const FiniteObservations *>(pomdp->get_observations());
+	const ObservationsMap *Z = dynamic_cast<const ObservationsMap *>(pomdp->get_observations());
 	if (Z == nullptr) {
 		throw ObservationException();
 	}
@@ -180,8 +180,8 @@ PolicyAlphaVectors *POMDPPBVI::solve(const POMDP *pomdp)
 	}
 
 	// Attempt to convert the observation transitions object into FiniteObservationTransitions.
-	const FiniteObservationTransitions *O =
-			dynamic_cast<const FiniteObservationTransitions *>(pomdp->get_observation_transitions());
+	const ObservationTransitionsMap *O =
+			dynamic_cast<const ObservationTransitionsMap *>(pomdp->get_observation_transitions());
 	if (O == nullptr) {
 		throw ObservationTransitionException();
 	}
@@ -217,8 +217,8 @@ void POMDPPBVI::reset() {
 	B.clear();
 }
 
-PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
-		const StateTransitionsMap *T, const FiniteObservationTransitions *O, const SASORewards *R,
+PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
+		const StateTransitionsMap *T, const ObservationTransitionsMap *O, const SASORewards *R,
 		const Horizon *h)
 {
 	// Create the policy of alpha vectors variable. Set the horizon, to make the object's policy differ over time.
@@ -338,8 +338,8 @@ PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(const StatesMap *S, const Fi
 	return policy;
 }
 
-PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
-		const StateTransitionsMap *T, const FiniteObservationTransitions *O, const SASORewards *R,
+PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
+		const StateTransitionsMap *T, const ObservationTransitionsMap *O, const SASORewards *R,
 		const Horizon *h)
 {
 	// Create the policy of alpha vectors variable. Set the horizon, to make the object's policy differ over time.
@@ -492,8 +492,8 @@ void POMDPPBVI::expand_random_belief_selection(const StatesMap *S)
 	B.insert(B.end(), Bnew.begin(), Bnew.end());
 }
 
-void POMDPPBVI::expand_stochastic_simulation_random_actions(const StatesMap *S, const FiniteActions *A,
-		const FiniteObservations *Z, const StateTransitionsMap *T, const FiniteObservationTransitions *O)
+void POMDPPBVI::expand_stochastic_simulation_random_actions(const StatesMap *S, const ActionsMap *A,
+		const ObservationsMap *Z, const StateTransitionsMap *T, const ObservationTransitionsMap *O)
 {
 	std::vector<const BeliefState *> Bnew;
 
@@ -563,8 +563,8 @@ void POMDPPBVI::expand_stochastic_simulation_random_actions(const StatesMap *S, 
 	B.insert(B.end(), Bnew.begin(), Bnew.end());
 }
 
-void POMDPPBVI::expand_stochastic_simulation_greedy_action(const StatesMap *S, const FiniteActions *A,
-		const FiniteObservations *Z, const StateTransitionsMap *T, const FiniteObservationTransitions *O,
+void POMDPPBVI::expand_stochastic_simulation_greedy_action(const StatesMap *S, const ActionsMap *A,
+		const ObservationsMap *Z, const StateTransitionsMap *T, const ObservationTransitionsMap *O,
 		const std::vector<PolicyAlphaVector *> &gamma)
 {
 	std::vector<const BeliefState *> Bnew;
@@ -650,8 +650,8 @@ void POMDPPBVI::expand_stochastic_simulation_greedy_action(const StatesMap *S, c
 	B.insert(B.end(), Bnew.begin(), Bnew.end());
 }
 
-void POMDPPBVI::expand_stochastic_simulation_exploratory_action(const StatesMap *S, const FiniteActions *A,
-		const FiniteObservations *Z, const StateTransitionsMap *T, const FiniteObservationTransitions *O)
+void POMDPPBVI::expand_stochastic_simulation_exploratory_action(const StatesMap *S, const ActionsMap *A,
+		const ObservationsMap *Z, const StateTransitionsMap *T, const ObservationTransitionsMap *O)
 {
 	std::vector<const BeliefState *> Bnew;
 

@@ -106,13 +106,13 @@ PolicyAlphaVectors *POMDPValueIteration::solve(const POMDP *pomdp)
 	}
 
 	// Attempt to convert the actions object into FiniteActions.
-	const FiniteActions *A = dynamic_cast<const FiniteActions *>(pomdp->get_actions());
+	const ActionsMap *A = dynamic_cast<const ActionsMap *>(pomdp->get_actions());
 	if (A == nullptr) {
 		throw ActionException();
 	}
 
 	// Attempt to convert the observations object into FiniteObservations.
-	const FiniteObservations *Z = dynamic_cast<const FiniteObservations *>(pomdp->get_observations());
+	const ObservationsMap *Z = dynamic_cast<const ObservationsMap *>(pomdp->get_observations());
 	if (Z == nullptr) {
 		throw ObservationException();
 	}
@@ -125,8 +125,8 @@ PolicyAlphaVectors *POMDPValueIteration::solve(const POMDP *pomdp)
 	}
 
 	// Attempt to convert the observation transitions object into FiniteObservationTransitions.
-	const FiniteObservationTransitions *O =
-			dynamic_cast<const FiniteObservationTransitions *>(pomdp->get_observation_transitions());
+	const ObservationTransitionsMap *O =
+			dynamic_cast<const ObservationTransitionsMap *>(pomdp->get_observation_transitions());
 	if (O == nullptr) {
 		throw ObservationTransitionException();
 	}
@@ -146,8 +146,8 @@ PolicyAlphaVectors *POMDPValueIteration::solve(const POMDP *pomdp)
 	}
 }
 
-PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
-		const StateTransitionsMap *T, const FiniteObservationTransitions *O, const SASORewards *R,
+PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
+		const StateTransitionsMap *T, const ObservationTransitionsMap *O, const SASORewards *R,
 		const Horizon *h)
 {
 	// Create the policy of alpha vectors variable. Set the horizon, to make the object's policy differ over time.
@@ -200,8 +200,8 @@ PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const StatesMap *S
 	return policy;
 }
 
-PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
-		const StateTransitionsMap *T, const FiniteObservationTransitions *O, const SASORewards *R,
+PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
+		const StateTransitionsMap *T, const ObservationTransitionsMap *O, const SASORewards *R,
 		const Horizon *h)
 {
 	// Create the policy of alpha vectors variable. Set the horizon, to make the object's policy differ over time.

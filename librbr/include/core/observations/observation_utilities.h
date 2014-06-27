@@ -27,7 +27,7 @@
 #define OBSERVATION_UTILITIES_H
 
 
-#include "finite_observations.h"
+#include "observations_map.h"
 #include "named_observation.h"
 
 /**
@@ -37,7 +37,7 @@
  * @throw	ObservationException	The name was invalid.
  * @return	The observation with the corresponding name provided.
  */
-const Observation *find_observation(const FiniteObservations *Z, std::string observationName);
+const Observation *find_observation(const ObservationsMap *Z, std::string observationName);
 
 
 #endif // ACTION_UTILITIES_H

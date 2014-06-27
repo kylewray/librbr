@@ -23,13 +23,13 @@
  */
 
 
-#include "../../../include/core/observations/finite_joint_observations.h"
+#include "../../../include/core/observations/joint_observations_map.h"
 #include "../../../include/core/observations/joint_observation.h"
 #include "../../../include/core/observations/observation_exception.h"
 
 #include <algorithm>
 
-FiniteJointObservations::FiniteJointObservations(int numFactors)
+JointObservationsMap::JointObservationsMap(int numFactors)
 {
 	if (numFactors < 1) {
 		numFactors = 1;
@@ -37,12 +37,12 @@ FiniteJointObservations::FiniteJointObservations(int numFactors)
 	factoredObservations.resize(numFactors);
 }
 
-FiniteJointObservations::~FiniteJointObservations()
+JointObservationsMap::~JointObservationsMap()
 {
 	reset();
 }
 
-void FiniteJointObservations::add(int factorIndex, const Observation *newObservation)
+void JointObservationsMap::add(int factorIndex, const Observation *newObservation)
 {
 	if (factorIndex < 0 || factorIndex >= factoredObservations.size()) {
 		throw ObservationException();
@@ -51,7 +51,7 @@ void FiniteJointObservations::add(int factorIndex, const Observation *newObserva
 	factoredObservations[factorIndex].push_back(newObservation);
 }
 
-void FiniteJointObservations::remove(int factorIndex, const Observation *removeObservation)
+void JointObservationsMap::remove(int factorIndex, const Observation *removeObservation)
 {
 	if (factorIndex < 0 || factorIndex >= factoredObservations.size()) {
 		throw ObservationException();
@@ -67,7 +67,7 @@ void FiniteJointObservations::remove(int factorIndex, const Observation *removeO
 	delete removeObservation;
 }
 
-void FiniteJointObservations::set(int factorIndex, const std::vector<const Observation *> &newObservations)
+void JointObservationsMap::set(int factorIndex, const std::vector<const Observation *> &newObservations)
 {
 	if (factorIndex < 0 || factorIndex >= factoredObservations.size() || newObservations.size() == 0) {
 		throw ObservationException();
@@ -82,7 +82,7 @@ void FiniteJointObservations::set(int factorIndex, const std::vector<const Obser
 	factoredObservations[factorIndex] = newObservations;
 }
 
-const Observation *FiniteJointObservations::get(int factorIndex, int observationIndex) const
+const Observation *JointObservationsMap::get(int factorIndex, int observationIndex) const
 {
 	if (factorIndex < 0 || factorIndex >= factoredObservations.size() ||
 			observationIndex < 0 || observationIndex >= factoredObservations[factorIndex].size()) {
@@ -92,7 +92,7 @@ const Observation *FiniteJointObservations::get(int factorIndex, int observation
 	return factoredObservations[factorIndex][observationIndex];
 }
 
-void FiniteJointObservations::update()
+void JointObservationsMap::update()
 {
 	// Throw an error if one factor is not defined.
 	for (std::vector<const Observation *> &factor : factoredObservations) {
@@ -107,12 +107,12 @@ void FiniteJointObservations::update()
 	update_step(create, 0);
 }
 
-int FiniteJointObservations::get_num_factors()
+int JointObservationsMap::get_num_factors()
 {
 	return factoredObservations.size();
 }
 
-void FiniteJointObservations::reset()
+void JointObservationsMap::reset()
 {
 	for (std::vector<const Observation *> &factor : factoredObservations) {
 		for (const Observation *observation : factor) {
@@ -124,7 +124,7 @@ void FiniteJointObservations::reset()
 	observations.clear();
 }
 
-void FiniteJointObservations::update_step(std::vector<const Observation *> currentJointObservation, int currentFactorIndex)
+void JointObservationsMap::update_step(std::vector<const Observation *> currentJointObservation, int currentFactorIndex)
 {
 	// At the final factor index, we need to create a bunch of joint observations.
 	for (const Observation *observation : factoredObservations[currentFactorIndex]) {

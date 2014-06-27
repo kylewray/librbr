@@ -23,15 +23,15 @@
  */
 
 
-#ifndef FINITE_JOINT_OBSERVATIONS_H
-#define FINITE_JOINT_OBSERVATIONS_H
+#ifndef JOINT_OBSERVATIONS_MAP_H
+#define JOINT_OBSERVATIONS_MAP_H
 
 
 #include <vector>
 
 #include "observation.h"
 #include "observations.h"
-#include "finite_observations.h"
+#include "observations_map.h"
 
 /**
  * A class for finite sets of observations in an MDP-like object. Informally, there are two basic ways to
@@ -47,19 +47,19 @@
  * Observation objects.
  */
 
-class FiniteJointObservations : public FiniteObservations {
+class JointObservationsMap : public ObservationsMap {
 public:
 	/**
 	 * The default constructor for the FiniteJointObservations class which requires that you
 	 * specify the number of factors.
 	 * @param	numFactors		The number of observation factors, minimum of 1.
 	 */
-	FiniteJointObservations(int numFactors);
+	JointObservationsMap(int numFactors);
 
 	/**
 	 * The default deconstructor for the FiniteJointObservations class.
 	 */
-	virtual ~FiniteJointObservations();
+	virtual ~JointObservationsMap();
 
 	/**
 	 * Add an observation to the set of available observations in a factor. This does *not* update the
@@ -134,4 +134,4 @@ private:
 };
 
 
-#endif // FINITE_JOINT_OBSERVATIONS_H
+#endif // JOINT_OBSERVATIONS_MAP_H

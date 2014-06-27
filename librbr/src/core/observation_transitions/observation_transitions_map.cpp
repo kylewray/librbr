@@ -23,21 +23,21 @@
  */
 
 
-#include "../../../include/core/observation_transitions/finite_observation_transitions.h"
+#include "../../../include/core/observation_transitions/observation_transitions_map.h"
 #include "../../../include/core/observation_transitions/observation_transition_exception.h"
 
 #include "../../../include/core/states/named_state.h"
 #include "../../../include/core/actions/named_action.h"
 #include "../../../include/core/observations/named_observation.h"
 
-FiniteObservationTransitions::FiniteObservationTransitions()
+ObservationTransitionsMap::ObservationTransitionsMap()
 {
 	stateWildcard = new NamedState("*");
 	actionWildcard = new NamedAction("*");
 	observationWildcard = new NamedObservation("*");
 }
 
-FiniteObservationTransitions::~FiniteObservationTransitions()
+ObservationTransitionsMap::~ObservationTransitionsMap()
 {
 	reset();
 
@@ -46,7 +46,7 @@ FiniteObservationTransitions::~FiniteObservationTransitions()
 	delete observationWildcard;
 }
 
-void FiniteObservationTransitions::set(const Action *previousAction, const State *state,
+void ObservationTransitionsMap::set(const Action *previousAction, const State *state,
 		const Observation *observation, double probability)
 {
 	if (previousAction == nullptr) {
@@ -62,7 +62,7 @@ void FiniteObservationTransitions::set(const Action *previousAction, const State
 	observationTransitions[previousAction][state][observation] = std::max(0.0, std::min(1.0, probability));
 }
 
-double FiniteObservationTransitions::get(const Action *previousAction, const State *state,
+double ObservationTransitionsMap::get(const Action *previousAction, const State *state,
 		const Observation *observation) const
 {
 	// Iterate over all possible configurations of wildcards in the get statement.
@@ -93,7 +93,7 @@ double FiniteObservationTransitions::get(const Action *previousAction, const Sta
 	return 0.0;
 }
 
-void FiniteObservationTransitions::available(const FiniteObservations *Z, const Action *action,
+void ObservationTransitionsMap::available(const ObservationsMap *Z, const Action *action,
 		const State *nextState, std::vector<const Observation *> &result) const
 {
 	result.clear();
@@ -105,12 +105,12 @@ void FiniteObservationTransitions::available(const FiniteObservations *Z, const 
 	}
 }
 
-void FiniteObservationTransitions::reset()
+void ObservationTransitionsMap::reset()
 {
 	observationTransitions.clear();
 }
 
-double FiniteObservationTransitions::get_value(const Action *previousAction, const State *state,
+double ObservationTransitionsMap::get_value(const Action *previousAction, const State *state,
 		const Observation *observation) const
 {
 	std::unordered_map<const Action *,

@@ -23,8 +23,8 @@
  */
 
 
-#ifndef FINITE_OBSERVATION_TRANSITIONS_H
-#define FINITE_OBSERVATION_TRANSITIONS_H
+#ifndef OBSERVATION_TRANSITIONS_MAP_H
+#define OBSERVATION_TRANSITIONS_MAP_H
 
 
 #include <unordered_map>
@@ -36,7 +36,7 @@
 #include "../actions/action.h"
 
 #include "../observations/observation.h"
-#include "../observations/finite_observations.h"
+#include "../observations/observations_map.h"
 
 /**
  * A class for finite observation transitions in an MDP-like object. Informally, there are two basic ways to
@@ -48,17 +48,17 @@
  * class which implements the function in the virtual functions described below. You will likely ignore
  * the internal observationTrantions vector variable here.
  */
-class FiniteObservationTransitions : public ObservationTransitions {
+class ObservationTransitionsMap : public ObservationTransitions {
 public:
 	/**
 	 * The default constructor for the FiniteObservationTransitions class.
 	 */
-	FiniteObservationTransitions();
+	ObservationTransitionsMap();
 
 	/**
 	 * The default deconstructor for the FiniteObservationTransitions class.
 	 */
-	virtual ~FiniteObservationTransitions();
+	virtual ~ObservationTransitionsMap();
 
 	/**
 	 * Set a observation transition from a particular observation-action-state triple to a probability.
@@ -85,7 +85,7 @@ public:
 	 * @param	state 		The next state after taking the action in the previous state.
 	 * @param	result		The list to overwrite and set to be the list of successor states.
 	 */
-	void available(const FiniteObservations *Z, const Action *action, const State *nextState,
+	void available(const ObservationsMap *Z, const Action *action, const State *nextState,
 			std::vector<const Observation *> &result) const;
 
 	/**
@@ -130,4 +130,4 @@ private:
 };
 
 
-#endif // FINITE_OBSERVATION_TRANSITIONS_H
+#endif // OBSERVATION_TRANSITIONS_MAP_H

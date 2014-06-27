@@ -23,8 +23,8 @@
  */
 
 
-#ifndef FINITE_OBSERVATIONS_H
-#define FINITE_OBSERVATIONS_H
+#ifndef OBSERVATIONS_MAP_H
+#define OBSERVATIONS_MAP_H
 
 
 #include <unordered_map>
@@ -46,23 +46,23 @@
  * implements the function in the virtual functions described below. You will likely ignore the internal
  * observations vector variable here.
  */
-class FiniteObservations : public Observations {
+class ObservationsMap : public Observations {
 public:
 	/**
 	 * The default constructor for the FiniteObservations class.
 	 */
-	FiniteObservations();
+	ObservationsMap();
 
 	/**
 	 * The constructor for the FiniteObservations class which allows the specification of an initial set of observations.
 	 * @param	observations	The initial vector of observations.
 	 */
-	FiniteObservations(const std::vector<const Observation *> &observations);
+	ObservationsMap(const std::vector<const Observation *> &observations);
 
 	/**
 	 * The default deconstructor for the FiniteObservations class.
 	 */
-	virtual ~FiniteObservations();
+	virtual ~ObservationsMap();
 
 	/**
 	 * Add a observation to the set of available observations.
@@ -144,4 +144,4 @@ const Observation *resolve(std::unordered_map<unsigned int, const Observation *>
 unsigned int hash_value(std::unordered_map<unsigned int, const Observation *>::value_type &observationIterator);
 
 
-#endif // FINITE_OBSERVATIONS_H
+#endif // OBSERVATIONS_MAP_H

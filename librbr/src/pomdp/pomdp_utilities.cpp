@@ -25,8 +25,8 @@
 
 #include "../../include/pomdp/pomdp_utilities.h"
 
-PolicyAlphaVector *create_gamma_a_star(const StatesMap *S, const FiniteActions *A,
-		const FiniteObservations *Z, const StateTransitionsMap *T, const FiniteObservationTransitions *O,
+PolicyAlphaVector *create_gamma_a_star(const StatesMap *S, const ActionsMap *A,
+		const ObservationsMap *Z, const StateTransitionsMap *T, const ObservationTransitionsMap *O,
 		const SASORewards *R, const Action *action)
 {
 	PolicyAlphaVector *alpha = new PolicyAlphaVector(action);
@@ -53,7 +53,7 @@ PolicyAlphaVector *create_gamma_a_star(const StatesMap *S, const FiniteActions *
 }
 
 BeliefState *belief_state_update(const StatesMap *S, const StateTransitionsMap *T,
-		const FiniteObservationTransitions *O, const BeliefState *belief, const Action *action,
+		const ObservationTransitionsMap *O, const BeliefState *belief, const Action *action,
 		const Observation *observation) {
 	BeliefState *nextBelief = new BeliefState();
 
@@ -82,8 +82,8 @@ BeliefState *belief_state_update(const StatesMap *S, const StateTransitionsMap *
 	return nextBelief;
 }
 
-std::vector<PolicyAlphaVector *> bellman_update_cross_sum(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
-		const StateTransitionsMap *T, const FiniteObservationTransitions *O, const SASORewards *R,
+std::vector<PolicyAlphaVector *> bellman_update_cross_sum(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
+		const StateTransitionsMap *T, const ObservationTransitionsMap *O, const SASORewards *R,
 		const Horizon *h, const std::vector<PolicyAlphaVector *> &gammaAStar, const std::vector<PolicyAlphaVector *> &gamma,
 		const Action *action)
 {
@@ -151,8 +151,8 @@ std::vector<PolicyAlphaVector *> bellman_update_cross_sum(const StatesMap *S, co
 	return gammaA;
 }
 
-PolicyAlphaVector *bellman_update_belief_state(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
-		const StateTransitionsMap *T, const FiniteObservationTransitions *O, const SASORewards *R,
+PolicyAlphaVector *bellman_update_belief_state(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
+		const StateTransitionsMap *T, const ObservationTransitionsMap *O, const SASORewards *R,
 		const Horizon *h, const std::vector<PolicyAlphaVector *> &gammaAStar, const std::vector<PolicyAlphaVector *> &gamma,
 		const Action *action, const BeliefState *b)
 {

@@ -23,30 +23,30 @@
  */
 
 
-#include "../../../include/core/actions/finite_actions.h"
+#include "../../../include/core/actions/actions_map.h"
 #include "../../../include/core/actions/action_exception.h"
 
 #include <algorithm>
 
-FiniteActions::FiniteActions()
+ActionsMap::ActionsMap()
 { }
 
-FiniteActions::FiniteActions(const std::vector<const Action *> &actions)
+ActionsMap::ActionsMap(const std::vector<const Action *> &actions)
 {
 	set(actions);
 }
 
-FiniteActions::~FiniteActions()
+ActionsMap::~ActionsMap()
 {
 	reset();
 }
 
-void FiniteActions::add(const Action *newAction)
+void ActionsMap::add(const Action *newAction)
 {
 	actions[newAction->hash_value()] = newAction;
 }
 
-void FiniteActions::remove(const Action *removeAction)
+void ActionsMap::remove(const Action *removeAction)
 {
 	std::unordered_map<unsigned int, const Action *>::const_iterator result = actions.find(removeAction->hash_value());
 	if (result == actions.end()) {
@@ -57,7 +57,7 @@ void FiniteActions::remove(const Action *removeAction)
 	delete removeAction;
 }
 
-void FiniteActions::set(const std::vector<const Action *> &newActions)
+void ActionsMap::set(const std::vector<const Action *> &newActions)
 {
 	reset();
 	for (const Action *action : newActions) {
@@ -65,7 +65,7 @@ void FiniteActions::set(const std::vector<const Action *> &newActions)
 	}
 }
 
-bool FiniteActions::exists(const Action *action) const
+bool ActionsMap::exists(const Action *action) const
 {
 	try {
 		actions.at(action->hash_value());
@@ -75,7 +75,7 @@ bool FiniteActions::exists(const Action *action) const
 	return true;
 }
 
-const Action *FiniteActions::get(unsigned int hash) const
+const Action *ActionsMap::get(unsigned int hash) const
 {
 	try {
 		return actions.at(hash);
@@ -84,17 +84,17 @@ const Action *FiniteActions::get(unsigned int hash) const
 	}
 }
 
-int FiniteActions::get_num_actions() const
+int ActionsMap::get_num_actions() const
 {
 	return actions.size();
 }
 
-std::unordered_map<unsigned int, const Action *> FiniteActions::available(const State *state) const
+std::unordered_map<unsigned int, const Action *> ActionsMap::available(const State *state) const
 {
 	return actions;
 }
 
-void FiniteActions::reset()
+void ActionsMap::reset()
 {
 	for (auto action : actions) {
 		delete resolve(action);
@@ -102,12 +102,12 @@ void FiniteActions::reset()
 	actions.clear();
 }
 
-std::unordered_map<unsigned int, const Action *>::const_iterator FiniteActions::begin() const
+std::unordered_map<unsigned int, const Action *>::const_iterator ActionsMap::begin() const
 {
 	return actions.begin();
 }
 
-std::unordered_map<unsigned int, const Action *>::const_iterator FiniteActions::end() const
+std::unordered_map<unsigned int, const Action *>::const_iterator ActionsMap::end() const
 {
 	return actions.end();
 }
