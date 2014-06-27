@@ -23,19 +23,19 @@
  */
 
 
-#include "../../../include/core/state_transitions/finite_state_transitions.h"
+#include "../../../include/core/state_transitions/state_transitions_map.h"
 #include "../../../include/core/state_transitions/state_transition_exception.h"
 
 #include "../../../include/core/states/named_state.h"
 #include "../../../include/core/actions/named_action.h"
 
-FiniteStateTransitions::FiniteStateTransitions()
+StateTransitionsMap::StateTransitionsMap()
 {
 	stateWildcard = new NamedState("*");
 	actionWildcard = new NamedAction("*");
 }
 
-FiniteStateTransitions::~FiniteStateTransitions()
+StateTransitionsMap::~StateTransitionsMap()
 {
 	reset();
 
@@ -43,7 +43,7 @@ FiniteStateTransitions::~FiniteStateTransitions()
 	delete actionWildcard;
 }
 
-void FiniteStateTransitions::set(const State *state, const Action *action, const State *nextState, double probability)
+void StateTransitionsMap::set(const State *state, const Action *action, const State *nextState, double probability)
 {
 	if (state == nullptr) {
 		state = stateWildcard;
@@ -58,7 +58,7 @@ void FiniteStateTransitions::set(const State *state, const Action *action, const
 	stateTransitions[state][action][nextState] = std::max(0.0, std::min(1.0, probability));
 }
 
-double FiniteStateTransitions::get(const State *state, const Action *action, const State *nextState) const
+double StateTransitionsMap::get(const State *state, const Action *action, const State *nextState) const
 {
 	// Iterate over all possible configurations of wildcards in the get statement.
 	// For each, use the get_value() function to check if the value exists. If it
@@ -88,7 +88,7 @@ double FiniteStateTransitions::get(const State *state, const Action *action, con
 	return 0.0;
 }
 
-void FiniteStateTransitions::successors(const StatesMap *S, const State *state,
+void StateTransitionsMap::successors(const StatesMap *S, const State *state,
 		const Action *action, std::vector<const State *> &result) const
 {
 	result.clear();
@@ -100,12 +100,12 @@ void FiniteStateTransitions::successors(const StatesMap *S, const State *state,
 	}
 }
 
-void FiniteStateTransitions::reset()
+void StateTransitionsMap::reset()
 {
 	stateTransitions.clear();
 }
 
-double FiniteStateTransitions::get_value(const State *state, const Action *action, const State *nextState) const
+double StateTransitionsMap::get_value(const State *state, const Action *action, const State *nextState) const
 {
 	std::unordered_map<const State *,
 		std::unordered_map<const Action *,

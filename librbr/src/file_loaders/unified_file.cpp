@@ -1105,7 +1105,7 @@ int UnifiedFile::load_state_transition(std::vector<std::string> items)
 
 	// Create the state transitions object if it has not been made yet.
 	if (stateTransitions == nullptr) {
-		stateTransitions = new FiniteStateTransitions();
+		stateTransitions = new StateTransitionsMap();
 	}
 
 	std::string actionName = split_string_by_space(items[1])[0];

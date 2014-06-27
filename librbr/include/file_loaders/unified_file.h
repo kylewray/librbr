@@ -37,7 +37,7 @@
 #include "../core/actions/finite_joint_actions.h"
 #include "../core/observations/finite_observations.h"
 #include "../core/observations/finite_joint_observations.h"
-#include "../core/state_transitions/finite_state_transitions.h"
+#include "../core/state_transitions/state_transitions_map.h"
 #include "../core/observation_transitions/finite_observation_transitions.h"
 #include "../core/rewards/sas_rewards_map.h"
 #include "../core/initial.h"
@@ -324,7 +324,7 @@ private:
 	/**
 	 * The state transition function in the MDP-like object; e.g., a three-dimensional array mapping to a double.
 	 */
-	FiniteStateTransitions *stateTransitions;
+	StateTransitionsMap *stateTransitions;
 
 	/**
 	 * The observation transition function in the MDP-like object; e.g., a three-dimensional array mapping to a double.

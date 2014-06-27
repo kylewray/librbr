@@ -23,8 +23,8 @@
  */
 
 
-#ifndef FINITE_STATE_TRANSITIONS_H
-#define FINITE_STATE_TRANSITIONS_H
+#ifndef STATE_TRANSITIONS_MAP_H
+#define STATE_TRANSITIONS_MAP_H
 
 
 #include <unordered_map>
@@ -46,17 +46,17 @@
  * class which implements the function in the virtual functions described below. You will likely ignore
  * the internal stateTrantions vector variable here.
  */
-class FiniteStateTransitions : public StateTransitions {
+class StateTransitionsMap : public StateTransitions {
 public:
 	/**
 	 * The default constructor for the FiniteStateTransitions class.
 	 */
-	FiniteStateTransitions();
+	StateTransitionsMap();
 
 	/**
 	 * The default deconstructor for the FiniteStateTransitions class.
 	 */
-	virtual ~FiniteStateTransitions();
+	virtual ~StateTransitionsMap();
 
 	/**
 	 * Set a state transition from a particular state-action-state triple to a probability.
@@ -123,4 +123,4 @@ private:
 };
 
 
-#endif // FINITE_STATE_TRANSITIONS_H
+#endif // STATE_TRANSITIONS_MAP_H

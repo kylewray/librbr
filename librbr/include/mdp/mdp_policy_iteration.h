@@ -33,7 +33,7 @@
 
 #include "../core/states/states_map.h"
 #include "../core/actions/finite_actions.h"
-#include "../core/state_transitions/finite_state_transitions.h"
+#include "../core/state_transitions/state_transitions_map.h"
 #include "../core/rewards/sas_rewards.h"
 #include "../core/horizon.h"
 
@@ -88,7 +88,7 @@ private:
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy.
 	 */
-	PolicyMap *solve_exact(const StatesMap *S, const FiniteActions *A, const FiniteStateTransitions *T,
+	PolicyMap *solve_exact(const StatesMap *S, const FiniteActions *A, const StateTransitionsMap *T,
 			const SASRewards *R, const Horizon *h);
 
 	/**
@@ -101,7 +101,7 @@ private:
 	 * @throws	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy.
 	 */
-	PolicyMap *solve_modified(const StatesMap *S, const FiniteActions *A, const FiniteStateTransitions *T,
+	PolicyMap *solve_modified(const StatesMap *S, const FiniteActions *A, const StateTransitionsMap *T,
 			const SASRewards *R, const Horizon *h);
 
 	/**

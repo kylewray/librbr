@@ -118,8 +118,8 @@ PolicyAlphaVectors *POMDPValueIteration::solve(const POMDP *pomdp)
 	}
 
 	// Attempt to convert the state transitions object into FiniteStateTransitions.
-	const FiniteStateTransitions *T =
-			dynamic_cast<const FiniteStateTransitions *>(pomdp->get_state_transitions());
+	const StateTransitionsMap *T =
+			dynamic_cast<const StateTransitionsMap *>(pomdp->get_state_transitions());
 	if (T == nullptr) {
 		throw StateTransitionException();
 	}
@@ -147,7 +147,7 @@ PolicyAlphaVectors *POMDPValueIteration::solve(const POMDP *pomdp)
 }
 
 PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
-		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
+		const StateTransitionsMap *T, const FiniteObservationTransitions *O, const SASORewards *R,
 		const Horizon *h)
 {
 	// Create the policy of alpha vectors variable. Set the horizon, to make the object's policy differ over time.
@@ -201,7 +201,7 @@ PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const StatesMap *S
 }
 
 PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
-		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
+		const StateTransitionsMap *T, const FiniteObservationTransitions *O, const SASORewards *R,
 		const Horizon *h)
 {
 	// Create the policy of alpha vectors variable. Set the horizon, to make the object's policy differ over time.

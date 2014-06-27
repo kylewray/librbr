@@ -27,7 +27,7 @@
 
 #include <iostream>
 
-#include "../../../librbr/include/core/state_transitions/finite_state_transitions.h"
+#include "../../../librbr/include/core/state_transitions/state_transitions_map.h"
 
 #include "../../../librbr/include/core/states/named_state.h"
 #include "../../../librbr/include/core/actions/named_action.h"
@@ -44,7 +44,7 @@ int test_state_transitions()
 	Action *a1 = new NamedAction("a1");
 	Action *a2 = new NamedAction("a2");
 
-	FiniteStateTransitions *finiteStateTransitions = new FiniteStateTransitions();
+	StateTransitionsMap *finiteStateTransitions = new StateTransitionsMap();
 
 	std::cout << "StateTransitions: Test 'FiniteStateTransitions::set' and ";
 	std::cout << "'FiniteStateTransitions::get' (All Values Mapped)... ";
@@ -69,7 +69,7 @@ int test_state_transitions()
 	}
 
 	delete finiteStateTransitions;
-	finiteStateTransitions = new FiniteStateTransitions();
+	finiteStateTransitions = new StateTransitionsMap();
 
 	std::cout << "StateTransitions: Test 'FiniteStateTransitions::set' and ";
 	std::cout << "'FiniteStateTransitions::get' (Default Zero Values)... ";
@@ -94,7 +94,7 @@ int test_state_transitions()
 	}
 
 	delete finiteStateTransitions;
-	finiteStateTransitions = new FiniteStateTransitions();
+	finiteStateTransitions = new StateTransitionsMap();
 
 	std::cout << "StateTransitions: Test 'FiniteStateTransitions::set' and ";
 	std::cout << "'FiniteStateTransitions::get' (Wildcard Next State)... ";
@@ -120,7 +120,7 @@ int test_state_transitions()
 	}
 
 	delete finiteStateTransitions;
-	finiteStateTransitions = new FiniteStateTransitions();
+	finiteStateTransitions = new StateTransitionsMap();
 
 	std::cout << "StateTransitions: Test 'FiniteStateTransitions::set' and ";
 	std::cout << "'FiniteStateTransitions::get' (Wildcard Action)... ";
@@ -146,7 +146,7 @@ int test_state_transitions()
 	}
 
 	delete finiteStateTransitions;
-	finiteStateTransitions = new FiniteStateTransitions();
+	finiteStateTransitions = new StateTransitionsMap();
 
 	std::cout << "StateTransitions: Test 'FiniteStateTransitions::set' and ";
 	std::cout << "'FiniteStateTransitions::get' (Wildcard Previous State)... ";
@@ -172,7 +172,7 @@ int test_state_transitions()
 	}
 
 	delete finiteStateTransitions;
-	finiteStateTransitions = new FiniteStateTransitions();
+	finiteStateTransitions = new StateTransitionsMap();
 
 	std::cout << "StateTransitions: Test 'FiniteStateTransitions::successors'... ";
 

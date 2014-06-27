@@ -68,8 +68,8 @@ PolicyMap *MDPValueIteration::solve(const MDP *mdp)
 	}
 
 	// Attempt to convert the state transitions object into FiniteStateTransitions.
-	const FiniteStateTransitions *T =
-			dynamic_cast<const FiniteStateTransitions *>(mdp->get_state_transitions());
+	const StateTransitionsMap *T =
+			dynamic_cast<const StateTransitionsMap *>(mdp->get_state_transitions());
 	if (T == nullptr) {
 		throw StateTransitionException();
 	}
@@ -89,7 +89,7 @@ PolicyMap *MDPValueIteration::solve(const MDP *mdp)
 	}
 }
 
-PolicyMap *MDPValueIteration::solve_finite_horizon(const StatesMap *S, const FiniteActions *A, const FiniteStateTransitions *T,
+PolicyMap *MDPValueIteration::solve_finite_horizon(const StatesMap *S, const FiniteActions *A, const StateTransitionsMap *T,
 		const SASRewards *R, const Horizon *h)
 {
 	// Create the policy based on the horizon.
@@ -115,7 +115,7 @@ PolicyMap *MDPValueIteration::solve_finite_horizon(const StatesMap *S, const Fin
 	return policy;
 }
 
-PolicyMap *MDPValueIteration::solve_infinite_horizon(const StatesMap *S, const FiniteActions *A, const FiniteStateTransitions *T,
+PolicyMap *MDPValueIteration::solve_infinite_horizon(const StatesMap *S, const FiniteActions *A, const StateTransitionsMap *T,
 		const SASRewards *R, const Horizon *h)
 {
 	// Create the policy based on the horizon.
