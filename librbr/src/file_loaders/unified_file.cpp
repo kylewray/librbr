@@ -715,7 +715,7 @@ int UnifiedFile::load_states(std::vector<std::string> items)
 
 	// Create the states object if it has not been made yet.
 	if (states == nullptr) {
-		states = new FiniteStates();
+		states = new StatesMap();
 	}
 
 	std::vector<std::string> list = split_string_by_space(items[1]);

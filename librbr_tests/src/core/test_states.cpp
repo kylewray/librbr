@@ -28,9 +28,9 @@
 #include <iostream>
 
 #include "../../../librbr/include/core/states/named_state.h"
-#include "../../../librbr/include/core/states/finite_states.h"
+#include "../../../librbr/include/core/states/states_map.h"
 #include "../../../librbr/include/core/states/factored_state.h"
-#include "../../../librbr/include/core/states/finite_factored_states.h"
+#include "../../../librbr/include/core/states/factored_states_map.h"
 #include "../../../librbr/include/core/states/state_exception.h"
 #include "../../../librbr/include/core/states/state_utilities.h"
 
@@ -42,7 +42,7 @@ int test_states()
 	State *s2 = new NamedState("s2");
 	State *s3 = new NamedState("s3");
 
-	FiniteStates *finiteStates = new FiniteStates();
+	StatesMap *finiteStates = new StatesMap();
 
 	std::cout << "States: Test 'FiniteStates::add' and 'FiniteStates::get'... ";
 

@@ -140,7 +140,7 @@ const Action *PolicyAlphaVectors::get(unsigned int horizon, const BeliefState *b
 	return action;
 }
 
-bool PolicyAlphaVectors::load(std::string filename, const FiniteStates *states, const FiniteActions *actions,
+bool PolicyAlphaVectors::load(std::string filename, const StatesMap *states, const FiniteActions *actions,
 		const FiniteObservations *observations, const Horizon *horizon)
 {
 	reset();
@@ -263,7 +263,7 @@ bool PolicyAlphaVectors::load(std::string filename, const FiniteStates *states, 
 	return false;
 }
 
-bool PolicyAlphaVectors::save(std::string filename, const FiniteStates *states) const
+bool PolicyAlphaVectors::save(std::string filename, const StatesMap *states) const
 {
 	std::ofstream file(filename);
 	if (!file.is_open()) {
@@ -324,7 +324,7 @@ void PolicyAlphaVectors::reset()
 	alphaVectors.clear();
 }
 
-void PolicyAlphaVectors::prune_dominated(const FiniteStates *S, std::vector<PolicyAlphaVector *> &alphas)
+void PolicyAlphaVectors::prune_dominated(const StatesMap *S, std::vector<PolicyAlphaVector *> &alphas)
 {
 	if (S == nullptr || S->get_num_states() == 0 || alphas.size() == 0 || alphas[0] == nullptr) {
 		throw PolicyException();

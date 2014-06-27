@@ -100,7 +100,7 @@ PolicyAlphaVectors *POMDPValueIteration::solve(const POMDP *pomdp)
 	}
 
 	// Attempt to convert the states object into FiniteStates.
-	const FiniteStates *S = dynamic_cast<const FiniteStates *>(pomdp->get_states());
+	const StatesMap *S = dynamic_cast<const StatesMap *>(pomdp->get_states());
 	if (S == nullptr) {
 		throw StateException();
 	}
@@ -146,7 +146,7 @@ PolicyAlphaVectors *POMDPValueIteration::solve(const POMDP *pomdp)
 	}
 }
 
-PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
 		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
 		const Horizon *h)
 {
@@ -200,7 +200,7 @@ PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const FiniteStates
 	return policy;
 }
 
-PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
 		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
 		const Horizon *h)
 {

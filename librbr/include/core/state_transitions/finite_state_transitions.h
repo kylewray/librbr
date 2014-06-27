@@ -32,7 +32,7 @@
 #include "state_transitions.h"
 
 #include "../states/state.h"
-#include "../states/finite_states.h"
+#include "../states/states_map.h"
 
 #include "../actions/action.h"
 
@@ -84,7 +84,7 @@ public:
 	 * @param	action			The action taken at the previous state.
 	 * @param	successors		The list to overwrite and set to be the list of successor states.
 	 */
-	virtual void successors(const FiniteStates *S, const State *state, const Action *action, std::vector<const State *> &result) const;
+	virtual void successors(const StatesMap *S, const State *state, const Action *action, std::vector<const State *> &result) const;
 
 	/**
 	 * Reset the state transitions, clearing the internal mapping.

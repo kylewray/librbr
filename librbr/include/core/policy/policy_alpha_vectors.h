@@ -35,7 +35,7 @@
 #include "policy_alpha_vector.h"
 
 #include "../states/state.h"
-#include "../states/finite_states.h"
+#include "../states/states_map.h"
 #include "../actions/action.h"
 #include "../actions/finite_actions.h"
 #include "../observations/observation.h"
@@ -130,7 +130,7 @@ public:
 	 * @param	horizon			The horizons object to ensure valid policy creation.
 	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	virtual bool load(std::string filename, const FiniteStates *states, const FiniteActions *actions,
+	virtual bool load(std::string filename, const StatesMap *states, const FiniteActions *actions,
 			const FiniteObservations *observations, const Horizon *horizon);
 
 	/**
@@ -139,7 +139,7 @@ public:
 	 * @param	states		The states object which contains the actual state objects to be mapped.
 	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	bool save(std::string filename, const FiniteStates *states) const;
+	bool save(std::string filename, const StatesMap *states) const;
 
 	/**
 	 * Reset the alpha vectors, freeing the memory.
@@ -153,7 +153,7 @@ public:
 	 * @param	alphas 				The set of alpha vectors for which dominated ones will be pruned in place.
 	 * @throws	PolicyException		The states were invalid, there were zero alpha vectors, or the first alpha vector is null.
 	 */
-	static void prune_dominated(const FiniteStates *S, std::vector<PolicyAlphaVector *> &alphas);
+	static void prune_dominated(const StatesMap *S, std::vector<PolicyAlphaVector *> &alphas);
 
 private:
 	/**

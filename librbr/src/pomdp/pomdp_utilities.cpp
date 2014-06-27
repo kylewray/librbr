@@ -25,7 +25,7 @@
 
 #include "../../include/pomdp/pomdp_utilities.h"
 
-PolicyAlphaVector *create_gamma_a_star(const FiniteStates *S, const FiniteActions *A,
+PolicyAlphaVector *create_gamma_a_star(const StatesMap *S, const FiniteActions *A,
 		const FiniteObservations *Z, const FiniteStateTransitions *T, const FiniteObservationTransitions *O,
 		const SASORewards *R, const Action *action)
 {
@@ -52,7 +52,7 @@ PolicyAlphaVector *create_gamma_a_star(const FiniteStates *S, const FiniteAction
 	return alpha;
 }
 
-BeliefState *belief_state_update(const FiniteStates *S, const FiniteStateTransitions *T,
+BeliefState *belief_state_update(const StatesMap *S, const FiniteStateTransitions *T,
 		const FiniteObservationTransitions *O, const BeliefState *belief, const Action *action,
 		const Observation *observation) {
 	BeliefState *nextBelief = new BeliefState();
@@ -82,7 +82,7 @@ BeliefState *belief_state_update(const FiniteStates *S, const FiniteStateTransit
 	return nextBelief;
 }
 
-std::vector<PolicyAlphaVector *> bellman_update_cross_sum(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+std::vector<PolicyAlphaVector *> bellman_update_cross_sum(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
 		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
 		const Horizon *h, const std::vector<PolicyAlphaVector *> &gammaAStar, const std::vector<PolicyAlphaVector *> &gamma,
 		const Action *action)
@@ -151,7 +151,7 @@ std::vector<PolicyAlphaVector *> bellman_update_cross_sum(const FiniteStates *S,
 	return gammaA;
 }
 
-PolicyAlphaVector *bellman_update_belief_state(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+PolicyAlphaVector *bellman_update_belief_state(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
 		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
 		const Horizon *h, const std::vector<PolicyAlphaVector *> &gammaAStar, const std::vector<PolicyAlphaVector *> &gamma,
 		const Action *action, const BeliefState *b)

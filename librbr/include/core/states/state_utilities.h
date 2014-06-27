@@ -27,7 +27,7 @@
 #define STATE_UTILITIES_H
 
 
-#include "finite_states.h"
+#include "states_map.h"
 #include "named_state.h"
 
 /**
@@ -37,7 +37,7 @@
  * @throw	StateException		The name was invalid, or a state was not a NamedState.
  * @return	The state with the corresponding name provided.
  */
-const State *find_state(const FiniteStates *S, std::string stateName);
+const State *find_state(const StatesMap *S, std::string stateName);
 
 
 #endif // STATE_UTILITIES_H

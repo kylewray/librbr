@@ -35,7 +35,7 @@
 #include "policy.h"
 
 #include "../states/state.h"
-#include "../states/finite_states.h"
+#include "../states/states_map.h"
 #include "../actions/action.h"
 #include "../actions/finite_actions.h"
 #include "../observations/observation.h"

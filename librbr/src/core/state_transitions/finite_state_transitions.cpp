@@ -88,7 +88,7 @@ double FiniteStateTransitions::get(const State *state, const Action *action, con
 	return 0.0;
 }
 
-void FiniteStateTransitions::successors(const FiniteStates *S, const State *state,
+void FiniteStateTransitions::successors(const StatesMap *S, const State *state,
 		const Action *action, std::vector<const State *> &result) const
 {
 	result.clear();

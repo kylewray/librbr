@@ -31,8 +31,8 @@
 #include <vector>
 
 #include "../core/agents/agents.h"
-#include "../core/states/finite_states.h"
-#include "../core/states/finite_factored_states.h"
+#include "../core/states/states_map.h"
+#include "../core/states/factored_states_map.h"
 #include "../core/actions/finite_actions.h"
 #include "../core/actions/finite_joint_actions.h"
 #include "../core/observations/finite_observations.h"
@@ -309,7 +309,7 @@ private:
 	/**
 	 * The states in the MDP-like object; e.g., factored vectors of strings.
 	 */
-	FiniteStates *states;
+	StatesMap *states;
 
 	/**
 	 * The actions in the MDP-like object; e.g., factored vectors of strings.

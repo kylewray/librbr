@@ -32,7 +32,7 @@
 #include "../core/policy/policy_alpha_vectors.h"
 #include "../core/policy/policy_alpha_vector.h"
 
-#include "../core/states/finite_states.h"
+#include "../core/states/states_map.h"
 #include "../core/actions/finite_actions.h"
 #include "../core/observations/finite_observations.h"
 #include "../core/state_transitions/finite_state_transitions.h"
@@ -192,7 +192,7 @@ private:
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy as a collection of alpha vectors.
 	 */
-	PolicyAlphaVectors *solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+	PolicyAlphaVectors *solve_finite_horizon(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
 			const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
 			const Horizon *h);
 
@@ -208,7 +208,7 @@ private:
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy as a collection of alpha vectors.
 	 */
-	PolicyAlphaVectors *solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+	PolicyAlphaVectors *solve_infinite_horizon(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
 			const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
 			const Horizon *h);
 
@@ -218,7 +218,7 @@ private:
 	 * quantity each time.
 	 * @param	S	The finite states.
 	 */
-	void expand_random_belief_selection(const FiniteStates *S);
+	void expand_random_belief_selection(const StatesMap *S);
 
 	/**
 	 * Expand the set of beliefs following Stochastic Simulation with Random Actions. "Stochastic Simulation" means it
@@ -232,7 +232,7 @@ private:
 	 * @param	T	The finite state transition function.
 	 * @param	O	The finite observation transition function.
 	 */
-	void expand_stochastic_simulation_random_actions(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+	void expand_stochastic_simulation_random_actions(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
 			const FiniteStateTransitions *T, const FiniteObservationTransitions *O);
 
 	/**
@@ -248,7 +248,7 @@ private:
 	 * @param	O 		The finite observation transition function.
 	 * @param	gamma	The current set of alpha vectors.
 	 */
-	void expand_stochastic_simulation_greedy_action(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+	void expand_stochastic_simulation_greedy_action(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
 			const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const std::vector<PolicyAlphaVector *> &gamma);
 
 	/**
@@ -262,7 +262,7 @@ private:
 	 * @param	T	The finite state transition function.
 	 * @param	O	The finite observation transition function.
 	 */
-	void expand_stochastic_simulation_exploratory_action(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+	void expand_stochastic_simulation_exploratory_action(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
 			const FiniteStateTransitions *T, const FiniteObservationTransitions *O);
 
 	/**

@@ -155,7 +155,7 @@ PolicyAlphaVectors *POMDPPBVI::solve(const POMDP *pomdp)
 	}
 
 	// Attempt to convert the states object into FiniteStates.
-	const FiniteStates *S = dynamic_cast<const FiniteStates *>(pomdp->get_states());
+	const StatesMap *S = dynamic_cast<const StatesMap *>(pomdp->get_states());
 	if (S == nullptr) {
 		throw StateException();
 	}
@@ -217,7 +217,7 @@ void POMDPPBVI::reset() {
 	B.clear();
 }
 
-PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
 		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
 		const Horizon *h)
 {
@@ -338,7 +338,7 @@ PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(const FiniteStates *S, const
 	return policy;
 }
 
-PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
 		const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
 		const Horizon *h)
 {
@@ -457,7 +457,7 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(const FiniteStates *S, con
 	return policy;
 }
 
-void POMDPPBVI::expand_random_belief_selection(const FiniteStates *S)
+void POMDPPBVI::expand_random_belief_selection(const StatesMap *S)
 {
 	std::vector<const BeliefState *> Bnew;
 
@@ -492,7 +492,7 @@ void POMDPPBVI::expand_random_belief_selection(const FiniteStates *S)
 	B.insert(B.end(), Bnew.begin(), Bnew.end());
 }
 
-void POMDPPBVI::expand_stochastic_simulation_random_actions(const FiniteStates *S, const FiniteActions *A,
+void POMDPPBVI::expand_stochastic_simulation_random_actions(const StatesMap *S, const FiniteActions *A,
 		const FiniteObservations *Z, const FiniteStateTransitions *T, const FiniteObservationTransitions *O)
 {
 	std::vector<const BeliefState *> Bnew;
@@ -563,7 +563,7 @@ void POMDPPBVI::expand_stochastic_simulation_random_actions(const FiniteStates *
 	B.insert(B.end(), Bnew.begin(), Bnew.end());
 }
 
-void POMDPPBVI::expand_stochastic_simulation_greedy_action(const FiniteStates *S, const FiniteActions *A,
+void POMDPPBVI::expand_stochastic_simulation_greedy_action(const StatesMap *S, const FiniteActions *A,
 		const FiniteObservations *Z, const FiniteStateTransitions *T, const FiniteObservationTransitions *O,
 		const std::vector<PolicyAlphaVector *> &gamma)
 {
@@ -650,7 +650,7 @@ void POMDPPBVI::expand_stochastic_simulation_greedy_action(const FiniteStates *S
 	B.insert(B.end(), Bnew.begin(), Bnew.end());
 }
 
-void POMDPPBVI::expand_stochastic_simulation_exploratory_action(const FiniteStates *S, const FiniteActions *A,
+void POMDPPBVI::expand_stochastic_simulation_exploratory_action(const StatesMap *S, const FiniteActions *A,
 		const FiniteObservations *Z, const FiniteStateTransitions *T, const FiniteObservationTransitions *O)
 {
 	std::vector<const BeliefState *> Bnew;

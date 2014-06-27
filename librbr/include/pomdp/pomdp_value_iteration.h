@@ -32,7 +32,7 @@
 #include "../core/policy/policy_alpha_vectors.h"
 #include "../core/policy/policy_alpha_vector.h"
 
-#include "../core/states/finite_states.h"
+#include "../core/states/states_map.h"
 #include "../core/actions/finite_actions.h"
 #include "../core/observations/finite_observations.h"
 #include "../core/state_transitions/finite_state_transitions.h"
@@ -119,7 +119,7 @@ private:
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy as a collection of alpha vectors.
 	 */
-	PolicyAlphaVectors *solve_finite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+	PolicyAlphaVectors *solve_finite_horizon(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
 			const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
 			const Horizon *h);
 
@@ -135,7 +135,7 @@ private:
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy as a collection of alpha vectors.
 	 */
-	PolicyAlphaVectors *solve_infinite_horizon(const FiniteStates *S, const FiniteActions *A, const FiniteObservations *Z,
+	PolicyAlphaVectors *solve_infinite_horizon(const StatesMap *S, const FiniteActions *A, const FiniteObservations *Z,
 			const FiniteStateTransitions *T, const FiniteObservationTransitions *O, const SASORewards *R,
 			const Horizon *h);
 

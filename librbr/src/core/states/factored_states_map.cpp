@@ -23,7 +23,7 @@
  */
 
 
-#include "../../../include/core/states/finite_factored_states.h"
+#include "../../../include/core/states/factored_states_map.h"
 #include "../../../include/core/states/factored_state.h"
 #include "../../../include/core/states/state_exception.h"
 

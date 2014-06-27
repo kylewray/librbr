@@ -30,7 +30,7 @@
 #include <unordered_map>
 
 #include "../core/states/state.h"
-#include "../core/states/finite_states.h"
+#include "../core/states/states_map.h"
 #include "../core/actions/finite_actions.h"
 #include "../core/state_transitions/finite_state_transitions.h"
 #include "../core/rewards/sas_rewards.h"
@@ -48,7 +48,7 @@
  * @param	V		The current Bellman backup, mapping states to expected rewards. This will be updated.
  * @param	aBest	The action which produced the maximum V(s) value. This will be updated.
  */
-void bellman_update(const FiniteStates *S, const FiniteActions *A, const FiniteStateTransitions *T,
+void bellman_update(const StatesMap *S, const FiniteActions *A, const FiniteStateTransitions *T,
 		const SASRewards *R, const Horizon *h, const State *s,
 		std::unordered_map<const State *, double> &V, const Action *&aBest);
 

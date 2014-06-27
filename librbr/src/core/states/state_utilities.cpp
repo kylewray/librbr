@@ -29,7 +29,7 @@
 #include "../../../include/core/states/named_state.h"
 #include "../../../include/core/states/factored_state.h"
 
-const State *find_state(const FiniteStates *S, std::string stateName)
+const State *find_state(const StatesMap *S, std::string stateName)
 {
 	for (auto stateIterator : *S) {
 		const State *state = resolve(stateIterator);

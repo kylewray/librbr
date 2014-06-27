@@ -23,8 +23,8 @@
  */
 
 
-#ifndef FINITE_STATES_H
-#define FINITE_STATES_H
+#ifndef STATES_MAP_H
+#define STATES_MAP_H
 
 
 #include <unordered_map>
@@ -45,23 +45,23 @@
  * implements the function in the virtual functions described below. You will likely ignore the internal
  * states vector variable here.
  */
-class FiniteStates : public States {
+class StatesMap : public States {
 public:
 	/**
 	 * The default constructor for the FiniteStates class.
 	 */
-	FiniteStates();
+	StatesMap();
 
 	/**
 	 * The constructor for the FiniteStates class which allows the specification of an initial set of states.
 	 * @param	states	The initial vector of states.
 	 */
-	FiniteStates(const std::vector<const State *> &states);
+	StatesMap(const std::vector<const State *> &states);
 
 	/**
 	 * The default deconstructor for the FiniteStates class.
 	 */
-	virtual ~FiniteStates();
+	virtual ~StatesMap();
 
 	/**
 	 * Add a state to the set of available states.
@@ -142,4 +142,4 @@ const State *resolve(std::unordered_map<unsigned int, const State *>::value_type
 unsigned int hash_value(std::unordered_map<unsigned int, const State *>::value_type &stateIterator);
 
 
-#endif // FINITE_STATES_H
+#endif // STATES_MAP_H

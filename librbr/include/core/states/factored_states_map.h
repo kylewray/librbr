@@ -23,15 +23,15 @@
  */
 
 
-#ifndef FINITE_FACTORED_STATES_H
-#define FINITE_FACTORED_STATES_H
+#ifndef FACTORED_STATES_MAP_H
+#define FACTORED_STATES_MAP_H
 
 
 #include <vector>
 
 #include "state.h"
 #include "states.h"
-#include "finite_states.h"
+#include "states_map.h"
 
 /**
  * A class for finite sets of factored states in an MDP-like object. Informally, there are two basic ways to
@@ -45,7 +45,7 @@
  *
  * Note: The protected "states" variable implicitly must only store FactoredState objects, not State objects.
  */
-class FiniteFactoredStates : public FiniteStates {
+class FiniteFactoredStates : public StatesMap {
 public:
 	/**
 	 * The default constructor for the FiniteFactoredStates class.
@@ -146,4 +146,4 @@ private:
 };
 
 
-#endif // FINITE_FACTORED_STATES_H
+#endif // FACTORED_STATES_MAP_H

@@ -32,7 +32,7 @@
 #include "../../../librbr/include/core/states/named_state.h"
 #include "../../../librbr/include/core/actions/named_action.h"
 
-#include "../../../librbr/include/core/states/finite_states.h"
+#include "../../../librbr/include/core/states/states_map.h"
 
 int test_state_transitions()
 {
@@ -185,7 +185,7 @@ int test_state_transitions()
 	finiteStateTransitions->set(s2, a2, s1, 1.0);
 	finiteStateTransitions->set(s2, a2, s2, 1.0);
 
-	FiniteStates *S = new FiniteStates();
+	StatesMap *S = new StatesMap();
 	S->add(s1);
 	S->add(s2);
 

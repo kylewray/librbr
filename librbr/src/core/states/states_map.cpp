@@ -23,30 +23,30 @@
  */
 
 
-#include "../../../include/core/states/finite_states.h"
+#include "../../../include/core/states/states_map.h"
 #include "../../../include/core/states/state_exception.h"
 
 #include <algorithm>
 
-FiniteStates::FiniteStates()
+StatesMap::StatesMap()
 { }
 
-FiniteStates::FiniteStates(const std::vector<const State *> &states)
+StatesMap::StatesMap(const std::vector<const State *> &states)
 {
 	set(states);
 }
 
-FiniteStates::~FiniteStates()
+StatesMap::~StatesMap()
 {
 	reset();
 }
 
-void FiniteStates::add(const State *newState)
+void StatesMap::add(const State *newState)
 {
 	states[newState->hash_value()] = newState;
 }
 
-void FiniteStates::remove(const State *removeState)
+void StatesMap::remove(const State *removeState)
 {
 	// Ensure that the element exists in the hash before removing it.
 	std::unordered_map<unsigned int, const State *>::const_iterator result = states.find(removeState->hash_value());
@@ -58,7 +58,7 @@ void FiniteStates::remove(const State *removeState)
 	delete removeState;
 }
 
-void FiniteStates::set(const std::vector<const State *> &newStates)
+void StatesMap::set(const std::vector<const State *> &newStates)
 {
 	reset();
 	for (const State *state : newStates) {
@@ -66,7 +66,7 @@ void FiniteStates::set(const std::vector<const State *> &newStates)
 	}
 }
 
-bool FiniteStates::exists(const State *state) const
+bool StatesMap::exists(const State *state) const
 {
 	try {
 		states.at(state->hash_value());
@@ -76,7 +76,7 @@ bool FiniteStates::exists(const State *state) const
 	return true;
 }
 
-const State *FiniteStates::get(unsigned int hash) const
+const State *StatesMap::get(unsigned int hash) const
 {
 	try {
 		return states.at(hash);
@@ -85,12 +85,12 @@ const State *FiniteStates::get(unsigned int hash) const
 	}
 }
 
-int FiniteStates::get_num_states() const
+int StatesMap::get_num_states() const
 {
 	return states.size();
 }
 
-void FiniteStates::reset()
+void StatesMap::reset()
 {
 	for (auto state : states) {
 		delete resolve(state);
@@ -98,12 +98,12 @@ void FiniteStates::reset()
 	states.clear();
 }
 
-std::unordered_map<unsigned int, const State *>::const_iterator FiniteStates::begin() const
+std::unordered_map<unsigned int, const State *>::const_iterator StatesMap::begin() const
 {
 	return states.begin();
 }
 
-std::unordered_map<unsigned int, const State *>::const_iterator FiniteStates::end() const
+std::unordered_map<unsigned int, const State *>::const_iterator StatesMap::end() const
 {
 	return states.end();
 }
