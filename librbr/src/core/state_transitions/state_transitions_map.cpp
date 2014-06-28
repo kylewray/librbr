@@ -26,6 +26,8 @@
 #include "../../../include/core/state_transitions/state_transitions_map.h"
 #include "../../../include/core/state_transitions/state_transition_exception.h"
 
+#include "../../../include/core/states/states_map.h"
+
 #include "../../../include/core/states/named_state.h"
 #include "../../../include/core/actions/named_action.h"
 
@@ -88,11 +90,17 @@ double StateTransitionsMap::get(const State *state, const Action *action, const 
 	return 0.0;
 }
 
-void StateTransitionsMap::successors(const StatesMap *S, const State *state,
+void StateTransitionsMap::successors(const States *S, const State *state,
 		const Action *action, std::vector<const State *> &result) const
 {
+	// ToDo: Create a StatesArray object, and replace this cast with that instead.
+	const StatesMap *SMap = static_cast<const StatesMap *>(S);
+	if (SMap == nullptr) {
+		throw StateTransitionException();
+	}
+
 	result.clear();
-	for (auto sp : *S) {
+	for (auto sp : *SMap) {
 		const State *nextState = resolve(sp);
 		if (get(state, action, nextState) > 0.0) {
 			result.push_back(nextState);

@@ -23,11 +23,9 @@
  */
 
 
-#ifndef OBSERVATION_TRANSITIONS_MAP_H
-#define OBSERVATION_TRANSITIONS_MAP_H
+#ifndef OBSERVATION_TRANSITIONS_ARRAY_H
+#define OBSERVATION_TRANSITIONS_ARRAY_H
 
-
-#include <unordered_map>
 
 #include "observation_transitions.h"
 
@@ -35,6 +33,7 @@
 #include "../observations/observations.h"
 
 #include "../states/state.h"
+
 #include "../actions/action.h"
 
 /**
@@ -43,90 +42,94 @@
  * or a generator function based on one of these triples. In both cases, we require that any class with
  * finite observation transitions provide certain get functions so that any generic solver can handle both cases.
  *
- * If you want to create a generator function-based ObservationTransitionsMap class, please create a child
+ * If you want to create a generator function-based ObservationTransitionsArray class, please create a child
  * class which implements the function in the virtual functions described below. You will likely ignore
  * the internal observationTrantions vector variable here.
+ *
+ * This class requires that states and actions be of types IndexedState and IndexedAction, respectively.
  */
-class ObservationTransitionsMap : public ObservationTransitions {
+class ObservationTransitionsArray : public ObservationTransitions {
 public:
 	/**
-	 * The default constructor for the ObservationTransitionsMap class.
+	 * The default constructor for the ObservationTransitionsArray class. This requires the
+	 * number of states, actions, and observations to be specified.
+	 * @param	numStates		The number of states.
+	 * @param	numActions		The number of actions.
+	 * @param	numObservations	The number of observations.
 	 */
-	ObservationTransitionsMap();
+	ObservationTransitionsArray(unsigned int numStates, unsigned int numActions, unsigned int numObservations);
 
 	/**
-	 * The default deconstructor for the ObservationTransitionsMap class.
+	 * The default deconstructor for the ObservationTransitionsArray class.
 	 */
-	virtual ~ObservationTransitionsMap();
+	virtual ~ObservationTransitionsArray();
 
 	/**
 	 * Set a observation transition from a particular observation-action-state triple to a probability.
-	 * @param	previousAction	The action taken at the previous state which resulted in the current state.
-	 * @param	state			The current state.
-	 * @param	observation		The next observation to which we assign a probability.
-	 * @param	probability		The probability of the observation given we took the action and landed in the state given.
+	 * @param	previousAction					The action taken at the previous state which resulted in the current state.
+	 * @param	state							The current state.
+	 * @param	observation						The next observation to which we assign a probability.
+	 * @param	probability						The probability of the observation given we took the action and landed
+	 * 											in the state given.
+	 * @throw	ObservationTransitionException	Either the state, action, or observation was invalid.
 	 */
 	virtual void set(const Action *previousAction, const State *state, const Observation *observation, double probability);
 
 	/**
 	 * The probability of a transition following the observation-action-state triple provided.
-	 * @param	previousAction		The action taken at the previous state which resulted in the current state.
-	 * @param	state				The current state.
-	 * @param	observation			The next observation to which we assign a probability.
+	 * @param	previousAction					The action taken at the previous state which resulted in the current state.
+	 * @param	state							The current state.
+	 * @param	observation						The next observation to which we assign a probability.
+	 * @throw	ObservationTransitionException	Either the state, action, or observation was invalid.
 	 * @return	The probability of the observation given we took the action and landed in the state given.
 	 */
 	virtual double get(const Action *previousAction, const State *state, const Observation *observation) const;
 
 	/**
 	 * Return a list of the observations available given a previous state and the action taken there.
-	 * @param	Z					A set of observations.
-	 * @param	previousAction		The action taken at the previous state which resulted in the current state.
-	 * @param	state				The current state.
-	 * @param	result				The list to overwrite and set to be the list of successor states.
+	 * @param	Z								A set of observations.
+	 * @param	previousAction					The action taken at the previous state which resulted in the current state.
+	 * @param	state							The current state.
+	 * @param	result							The list to overwrite and set to be the list of successor states.
+	 * @throw	ObservationTransitionException	Either the state, action, or observation was invalid.
 	 */
 	virtual void available(const Observations *Z, const Action *previousAction, const State *state,
 			std::vector<const Observation *> &result) const;
 
 	/**
-	 * Reset the observation transitions, clearing the internal mapping.
+	 * Get the memory location of the 3-dimensional array.
+	 * @return	A pointer to the raw observation transitions data.
+	 */
+	virtual const float ***get_observation_transitions() const;
+
+	/**
+	 * Reset the observation transitions by assigning all probabilities to zero. This does not free memory.
 	 */
 	virtual void reset();
 
 private:
 	/**
-	 * The actual get function which returns a value. This will throw an error if the value is undefined.
-	 * It is used as a helper function for the public get function.
-	 * @param	previousAction					The action taken at the previous state which resulted in the current state.
-	 * @param	state							The current state.
-	 * @param	observation						The next observation to which we assign a probability.
-	 * @throw	ObservationTransitionException 	The observation transition was not defined.
-	 * @return	The probability of the observation given we took the action and landed in the state given.
+	 * The 3-dimensional array of all action-state-observation transitions. Internally,
+	 * these are floats to improve speed.
 	 */
-	virtual double get_value(const Action *previousAction, const State *state, const Observation *observation) const;
+	float ***observationTransitions;
 
 	/**
-	 * The list of all state-action-state transitions.
+	 * The number of states in the state transitions second dimension.
 	 */
-	std::unordered_map<const Action *,
-		std::unordered_map<const State *,
-		std::unordered_map<const Observation *, double> > > observationTransitions;
+	unsigned int states;
 
 	/**
-	 * A special action (implicitly constant) referring to an action wildcard.
+	 * The number of actions in the state transitions first dimension.
 	 */
-	Action *actionWildcard;
+	unsigned int actions;
 
 	/**
-	 * A special state (implicitly constant) referring to a state wildcard.
+	 * The number of observations in the state transitions third dimension.
 	 */
-	State *stateWildcard;
-
-	/**
-	 * A special observation (implicitly constant) referring to an observation wildcard.
-	 */
-	Observation *observationWildcard;
+	unsigned int observations;
 
 };
 
 
-#endif // OBSERVATION_TRANSITIONS_MAP_H
+#endif // OBSERVATION_TRANSITIONS_ARRAY_H

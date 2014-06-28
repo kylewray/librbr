@@ -41,25 +41,25 @@
  * cases, we require that any class with finite states provide certain get functions so that any generic
  * solver can handle both cases.
  *
- * If you want to create a generator function-based FiniteStates class, please create a child class which
+ * If you want to create a generator function-based StatesMap class, please create a child class which
  * implements the function in the virtual functions described below. You will likely ignore the internal
  * states vector variable here.
  */
 class StatesMap : public States {
 public:
 	/**
-	 * The default constructor for the FiniteStates class.
+	 * The default constructor for the StatesMap class.
 	 */
 	StatesMap();
 
 	/**
-	 * The constructor for the FiniteStates class which allows the specification of an initial set of states.
+	 * The constructor for the StatesMap class which allows the specification of an initial set of states.
 	 * @param	states	The initial vector of states.
 	 */
 	StatesMap(const std::vector<const State *> &states);
 
 	/**
-	 * The default deconstructor for the FiniteStates class.
+	 * The default deconstructor for the StatesMap class.
 	 */
 	virtual ~StatesMap();
 

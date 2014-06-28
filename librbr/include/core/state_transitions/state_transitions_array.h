@@ -23,11 +23,9 @@
  */
 
 
-#ifndef STATE_TRANSITIONS_MAP_H
-#define STATE_TRANSITIONS_MAP_H
+#ifndef STATE_TRANSITIONS_ARRAY_H
+#define STATE_TRANSITIONS_ARRAY_H
 
-
-#include <unordered_map>
 
 #include "state_transitions.h"
 
@@ -42,85 +40,88 @@
  * or a generator function based on one of these triples. In both cases, we require that any class with
  * finite state transitions provide certain get functions so that any generic solver can handle both cases.
  *
- * If you want to create a generator function-based StateTransitionsMap class, please create a child
+ * If you want to create a generator function-based StateTransitionsArray class, please create a child
  * class which implements the function in the virtual functions described below. You will likely ignore
  * the internal stateTrantions vector variable here.
+ *
+ * This class requires that states and actions be of types IndexedState and IndexedAction, respectively.
  */
-class StateTransitionsMap : public StateTransitions {
+class StateTransitionsArray : public StateTransitions {
 public:
 	/**
-	 * The default constructor for the StateTransitionsMap class.
+	 * The default constructor for the StateTransitionsArray class. This requires the
+	 * number of states and actions to be specified.
+	 * @param	numStates		The number of states.
+	 * @param	numActions		The number of actions.
 	 */
-	StateTransitionsMap();
+	StateTransitionsArray(unsigned int numStates, unsigned int numActions);
 
 	/**
-	 * The default deconstructor for the StateTransitionsMap class.
+	 * The default deconstructor for the StateTransitionsArray class.
 	 */
-	virtual ~StateTransitionsMap();
+	virtual ~StateTransitionsArray();
 
 	/**
 	 * Set a state transition from a particular state-action-state triple to a probability.
-	 * @param	state			The current state of the system.
-	 * @param	action			The action taken at the current state.
-	 * @param	nextState		The next state with which we assign the probability.
-	 * @param	probability		The probability of going from the state, taking the action, then
-	 * 							moving to the nextState.
+	 * @param	state						The current state of the system.
+	 * @param	action						The action taken at the current state.
+	 * @param	nextState					The next state with which we assign the probability.
+	 * @param	probability					The probability of going from the state, taking the action, then
+	 * 										moving to the nextState.
+	 * @throw	StateTransitionException	Either one of the states or the action was invalid.
 	 */
 	virtual void set(const State *state, const Action *action, const State *nextState, double probability);
 
 	/**
 	 * The probability of a transition following the state-action-state triple provided.
-	 * @param	state		The current state of the system.
-	 * @param	action		The action taken at the current state.
-	 * @param	nextState	The next state with which we assign the probability.
+	 * @param	state						The current state of the system.
+	 * @param	action						The action taken at the current state.
+	 * @param	nextState					The next state with which we assign the probability.
+	 * @throw	StateTransitionException	Either one of the states or the action was invalid.
 	 * @return	The probability of going from the state, taking the action, then moving to the nextState.
 	 */
 	virtual double get(const State *state, const Action *action, const State *nextState) const;
 
 	/**
 	 * Return a list of the states available given a previous state and the action taken there.
-	 * @param	S				The set of states.
-	 * @param	state			The previous state.
-	 * @param	action			The action taken at the previous state.
-	 * @param	successors		The list to overwrite and set to be the list of successor states.
+	 * @param	S							The set of states.
+	 * @param	state						The previous state.
+	 * @param	action						The action taken at the previous state.
+	 * @param	successors					The list to overwrite and set to be the list of successor states.
+	 * @throw	StateTransitionException	Either the states array, state, or action was invalid.
 	 */
-	virtual void successors(const States *S, const State *state, const Action *action, std::vector<const State *> &result) const;
+	virtual void successors(const States *S, const State *state, const Action *action,
+			std::vector<const State *> &result) const;
 
 	/**
-	 * Reset the state transitions, clearing the internal mapping.
+	 * Get the memory location of the 3-dimensional array.
+	 * @return	A pointer to the raw state transitions data.
+	 */
+	virtual const float ***get_state_transitions() const;
+
+	/**
+	 * Reset the state transitions by assigning all probabilities to zero. This does not free memory.
 	 */
 	virtual void reset();
 
 private:
 	/**
-	 * The actual get function which returns a value. This will throw an error if the value is undefined.
-	 * It is used as a helper function for the public get function.
-	 * @param	state						The current state of the system.
-	 * @param	action						The action taken at the current state.
-	 * @param	nextState					The next state with which we assign the reward.
-	 * @throw	StateTransitionException	The state transition was not defined.
-	 * @return	The probability of going from the state, taking the action, then moving to the nextState.
+	 * The 3-dimensional array of all state-action-state transitions. Internally,
+	 * these are floats to improve speed.
 	 */
-	virtual double get_value(const State *state, const Action *action, const State *nextState) const;
+	float ***stateTransitions;
 
 	/**
-	 * The list of all state-action-state transitions.
+	 * The number of states in the state transitions first and third dimensions.
 	 */
-	std::unordered_map<const State *,
-		std::unordered_map<const Action *,
-		std::unordered_map<const State *, double> > > stateTransitions;
+	unsigned int states;
 
 	/**
-	 * A special state (implicitly constant) referring to a state wildcard.
+	 * The number of actions in the state transitions second dimension.
 	 */
-	State *stateWildcard;
-
-	/**
-	 * A special action (implicitly constant) referring to an action wildcard.
-	 */
-	Action *actionWildcard;
+	unsigned int actions;
 
 };
 
 
-#endif // STATE_TRANSITIONS_MAP_H
+#endif // STATE_TRANSITIONS_ARRAY_H

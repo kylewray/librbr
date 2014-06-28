@@ -27,6 +27,13 @@
 #define STATE_TRANSITIONS_H
 
 
+#include <vector>
+
+#include "../states/state.h"
+#include "../states/states.h"
+
+#include "../actions/action.h"
+
 /**
  * An abstract class which defines how to interact with a state transitions object.
  * This general structure should work for any implementation of state transitions,
@@ -45,6 +52,38 @@ public:
 	 * classes properly deconstruct themselves.
 	 */
 	virtual ~StateTransitions();
+
+	/**
+	 * Set a state transition from a particular state-action-state triple to a probability.
+	 * @param	state						The current state of the system.
+	 * @param	action						The action taken at the current state.
+	 * @param	nextState					The next state with which we assign the probability.
+	 * @param	probability					The probability of going from the state, taking the action, then
+	 * 										moving to the nextState.
+	 * @throw	StateTransitionException	An error occurred. Please see child class definitions for specifics.
+	 */
+	virtual void set(const State *state, const Action *action, const State *nextState, double probability) = 0;
+
+	/**
+	 * The probability of a transition following the state-action-state triple provided.
+	 * @param	state						The current state of the system.
+	 * @param	action						The action taken at the current state.
+	 * @param	nextState					The next state with which we assign the probability.
+	 * @throw	StateTransitionException	An error occurred. Please see child class definitions for specifics.
+	 * @return	The probability of going from the state, taking the action, then moving to the nextState.
+	 */
+	virtual double get(const State *state, const Action *action, const State *nextState) const = 0;
+
+	/**
+	 * Return a list of the states available given a previous state and the action taken there.
+	 * @param	S							The set of states.
+	 * @param	state						The previous state.
+	 * @param	action						The action taken at the previous state.
+	 * @param	successors					The list to overwrite and set to be the list of successor states.
+	 * @throw	StateTransitionException	An error occurred. Please see child class definitions for specifics.
+	 */
+	virtual void successors(const States *S, const State *state, const Action *action,
+			std::vector<const State *> &result) const = 0;
 
 };
 

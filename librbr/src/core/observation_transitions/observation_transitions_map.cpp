@@ -26,6 +26,8 @@
 #include "../../../include/core/observation_transitions/observation_transitions_map.h"
 #include "../../../include/core/observation_transitions/observation_transition_exception.h"
 
+#include "../../../include/core/observations/observations_map.h"
+
 #include "../../../include/core/states/named_state.h"
 #include "../../../include/core/actions/named_action.h"
 #include "../../../include/core/observations/named_observation.h"
@@ -93,13 +95,18 @@ double ObservationTransitionsMap::get(const Action *previousAction, const State 
 	return 0.0;
 }
 
-void ObservationTransitionsMap::available(const ObservationsMap *Z, const Action *action,
-		const State *nextState, std::vector<const Observation *> &result) const
+void ObservationTransitionsMap::available(const Observations *Z, const Action *previousAction, const State *state,
+		std::vector<const Observation *> &result) const
 {
+	const ObservationsMap *ZMap = static_cast<const ObservationsMap *>(Z);
+	if (ZMap == nullptr) {
+		throw ObservationTransitionException();
+	}
+
 	result.clear();
-	for (auto z : *Z) {
+	for (auto z : *ZMap) {
 		const Observation *observation = resolve(z);
-		if (get(action, nextState, observation) > 0.0) {
+		if (get(previousAction, state, observation) > 0.0) {
 			result.push_back(observation);
 		}
 	}

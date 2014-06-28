@@ -27,6 +27,14 @@
 #define OBSERVATION_TRANSITIONS_H
 
 
+#include <vector>
+
+#include "../observations/observation.h"
+#include "../observations/observations.h"
+
+#include "../states/state.h"
+#include "../actions/action.h"
+
 /**
  * An abstract class which defines how to interact with a observation transitions object.
  * This general structure should work for any implementation of observation transitions,
@@ -45,6 +53,34 @@ public:
 	 * classes properly deconstruct themselves.
 	 */
 	virtual ~ObservationTransitions();
+
+	/**
+	 * Set a observation transition from a particular observation-action-state triple to a probability.
+	 * @param	previousAction	The action taken at the previous state which resulted in the current state.
+	 * @param	state			The current state.
+	 * @param	observation		The next observation to which we assign a probability.
+	 * @param	probability		The probability of the observation given we took the action and landed in the state given.
+	 */
+	virtual void set(const Action *previousAction, const State *state, const Observation *observation, double probability) = 0;
+
+	/**
+	 * The probability of a transition following the observation-action-state triple provided.
+	 * @param	previousAction		The action taken at the previous state which resulted in the current state.
+	 * @param	state				The current state.
+	 * @param	observation			The next observation to which we assign a probability.
+	 * @return	The probability of the observation given we took the action and landed in the state given.
+	 */
+	virtual double get(const Action *previousAction, const State *state, const Observation *observation) const = 0;
+
+	/**
+	 * Return a list of the observations available given a previous state and the action taken there.
+	 * @param	Z					A set of observations.
+	 * @param	previousAction		The action taken at the previous state which resulted in the current state.
+	 * @param	state				The current state.
+	 * @param	result				The list to overwrite and set to be the list of successor states.
+	 */
+	virtual void available(const Observations *Z, const Action *previousAction, const State *state,
+			std::vector<const Observation *> &result) const = 0;
 
 };
 
