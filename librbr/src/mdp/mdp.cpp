@@ -35,13 +35,13 @@ MDP::MDP()
 	horizon = nullptr;
 }
 
-MDP::MDP(States *s, Actions *a, StateTransitions *st, Rewards *r, Initial *is, Horizon *h)
+MDP::MDP(States *S, Actions *A, StateTransitions *T, Rewards *R, Initial *s, Horizon *h)
 {
-	states = s;
-	actions = a;
-	stateTransitions = st;
-	rewards = r;
-	initialState = is;
+	states = S;
+	actions = A;
+	stateTransitions = T;
+	rewards = R;
+	initialState = s;
 	horizon = h;
 }
 

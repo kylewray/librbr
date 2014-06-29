@@ -30,10 +30,10 @@ DecPOMDP::DecPOMDP() : POMDP()
 	agents = nullptr;
 }
 
-DecPOMDP::DecPOMDP(Agents *ag, States *s, Actions *a, Observations *o, StateTransitions *st, ObservationTransitions *ot,
-		Rewards *r, Initial *is, Horizon *h) : POMDP(s, a, o, st, ot, r, is, h)
+DecPOMDP::DecPOMDP(Agents *N, States *S, Actions *A, Observations *Z, StateTransitions *T, ObservationTransitions *O,
+		Rewards *R, Initial *s, Horizon *h) : POMDP(S, A, Z, T, O, R, s, h)
 {
-	agents = ag;
+	agents = N;
 }
 
 DecPOMDP::~DecPOMDP()

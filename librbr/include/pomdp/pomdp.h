@@ -50,17 +50,17 @@ public:
 
 	/**
 	 * A constructor for the POMDP class.
-	 * @param	s		The states.
-	 * @param	a		The actions.
-	 * @param	o		The observations.
-	 * @param	st		The state transitions, which uses the states and actions parameters.
-	 * @param	ot		The observation transitions, which uses the states, actions, and observations parameters.
-	 * @param	r		The rewards, which uses the states and actions parameters.
-	 * @param	is		The initial state, which uses the states parameter.
+	 * @param	S		The states.
+	 * @param	A		The actions.
+	 * @param	Z		The observations.
+	 * @param	T		The state transitions, which uses the states and actions parameters.
+	 * @param	O		The observation transitions, which uses the states, actions, and observations parameters.
+	 * @param	R		The rewards, which uses the states and actions parameters.
+	 * @param	s		The initial state, which uses the states parameter.
 	 * @param	h		The horizon.
 	 */
-	POMDP(States *s, Actions *a, Observations *o, StateTransitions *st, ObservationTransitions *ot,
-			Rewards *r, Initial *is, Horizon *h);
+	POMDP(States *S, Actions *A, Observations *Z, StateTransitions *T, ObservationTransitions *O,
+			Rewards *R, Initial *s, Horizon *h);
 
 	/**
 	 * A deconstructor for the POMDP class.

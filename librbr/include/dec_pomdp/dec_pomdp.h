@@ -51,19 +51,18 @@ public:
 
 	/**
 	 * A constructor for the DecPOMDP class.
-	 * @param	ag		The agents.
-	 * @param	s		The states.
-	 * @param	a		The actions.
-	 * @param	o		The observations.
-	 * @param	st		The state transitions, which uses the states and actions parameters.
-	 * @param	ot		The observation transitions, which uses the states, actions, and observations parameters.
-	 * @param	r		The rewards, which uses the states and actions parameters.
-	 * @param	is		The initial state, which uses the states parameter.
+	 * @param	N		The agents.
+	 * @param	S		The states.
+	 * @param	A		The actions.
+	 * @param	Z		The observations.
+	 * @param	T		The state transitions, which uses the states and actions parameters.
+	 * @param	O		The observation transitions, which uses the states, actions, and observations parameters.
+	 * @param	R		The rewards, which uses the states and actions parameters.
+	 * @param	s		The initial state, which uses the states parameter.
 	 * @param	h		The horizon.
 	 */
-	DecPOMDP(Agents *agents, States *states, Actions *actions, Observations *observations,
-			StateTransitions *stateTransitions, ObservationTransitions *observationTransitions,
-			Rewards *rewards, Initial *initialState, Horizon *horizon);
+	DecPOMDP(Agents *N, States *S, Actions *A, Observations *Z, StateTransitions *T, ObservationTransitions *O,
+			Rewards *R, Initial *s, Horizon *h);
 
 	/**
 	 * The deconstructor for the DecPOMDP class.

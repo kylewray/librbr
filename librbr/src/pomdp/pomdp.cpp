@@ -31,11 +31,11 @@ POMDP::POMDP() : MDP()
 	observationTransitions = nullptr;
 }
 
-POMDP::POMDP(States *s, Actions *a, Observations *o, StateTransitions *st, ObservationTransitions *ot,
-		Rewards *r, Initial *is, Horizon *h) : MDP(s, a, st, r, is, h)
+POMDP::POMDP(States *S, Actions *A, Observations *Z, StateTransitions *T, ObservationTransitions *O,
+		Rewards *R, Initial *s, Horizon *h) : MDP(S, A, T, R, s, h)
 {
-	observations = o;
-	observationTransitions = ot;
+	observations = Z;
+	observationTransitions = O;
 }
 
 POMDP::~POMDP()

@@ -1723,18 +1723,6 @@ POMDP *UnifiedFile::get_pomdp()
 	return pomdp;
 }
 
-DecMDP *UnifiedFile::get_dec_mdp()
-{
-	if (agents == nullptr || states == nullptr || actions == nullptr || stateTransitions == nullptr ||
-			rewards == nullptr || initialState == nullptr || horizon == nullptr) {
-		throw CoreException();
-	}
-
-	DecMDP *decmdp = new DecMDP(agents, states, actions, stateTransitions, rewards, initialState, horizon);
-	release();
-	return decmdp;
-}
-
 DecPOMDP *UnifiedFile::get_dec_pomdp()
 {
 	if (agents == nullptr || states == nullptr || actions == nullptr || observations == nullptr ||

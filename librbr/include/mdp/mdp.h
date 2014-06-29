@@ -46,14 +46,14 @@ public:
 
 	/**
 	 * A constructor for the MDP class.
-	 * @param	s		The states.
-	 * @param	a		The actions.
-	 * @param	st		The state transitions, which uses the states and actions parameters.
-	 * @param	r		The rewards, which uses the states and actions parameters.
-	 * @param	is		The initial state, which uses the states parameter.
+	 * @param	S		The states.
+	 * @param	A		The actions.
+	 * @param	T		The state transitions, which uses the states and actions parameters.
+	 * @param	R		The rewards, which uses the states and actions parameters.
+	 * @param	s		The initial state, which uses the states parameter.
 	 * @param	h		The horizon.
 	 */
-	MDP(States *s, Actions *a, StateTransitions *st, Rewards *r, Initial *is, Horizon *h);
+	MDP(States *S, Actions *A, StateTransitions *T, Rewards *R, Initial *s, Horizon *h);
 
 	/**
 	 * A deconstructor for the MDP class.

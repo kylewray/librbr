@@ -45,7 +45,6 @@
 
 #include "../mdp/mdp.h"
 #include "../pomdp/pomdp.h"
-#include "../dec_mdp/dec_mdp.h"
 #include "../dec_pomdp/dec_pomdp.h"
 
 #include "../utilities/string_manipulation.h"
@@ -109,14 +108,6 @@ public:
 	 * @return	A POMDP defined by the file loaded.
 	 */
 	POMDP *get_pomdp();
-
-	/**
-	 * Get an Dec-MDP version of a loaded file. This releases control of the memory to the
-	 * MDP object, and therefore removes pointers to any loaded file information.
-	 * @throw	CoreException		The MDP was missing a vital component to be defined.
-	 * @return	A Dec-MDP defined by the file loaded.
-	 */
-	DecMDP *get_dec_mdp();
 
 	/**
 	 * Get an Dec-POMDP version of a loaded file. This releases control of the memory to the
