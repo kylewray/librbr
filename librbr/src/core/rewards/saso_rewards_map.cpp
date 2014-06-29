@@ -37,6 +37,7 @@ SASORewardsMap::SASORewardsMap()
 	stateWildcard = new NamedState("*");
 	actionWildcard = new NamedAction("*");
 	observationWildcard = new NamedObservation("*");
+
 	Rmin = std::numeric_limits<double>::lowest() * -1.0;
 	Rmax = std::numeric_limits<double>::lowest();
 }
@@ -47,6 +48,7 @@ SASORewardsMap::~SASORewardsMap()
 
 	delete stateWildcard;
 	delete actionWildcard;
+	delete observationWildcard;
 }
 
 void SASORewardsMap::set(const State *state, const Action *action, const State *nextState,

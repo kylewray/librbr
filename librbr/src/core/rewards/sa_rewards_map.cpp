@@ -33,6 +33,7 @@ SARewardsMap::SARewardsMap()
 {
 	stateWildcard = new NamedState("*");
 	actionWildcard = new NamedAction("*");
+
 	Rmin = std::numeric_limits<double>::lowest() * -1.0;
 	Rmax = std::numeric_limits<double>::lowest();
 }

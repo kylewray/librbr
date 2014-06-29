@@ -113,7 +113,7 @@ double ObservationTransitionsArray::get(const Action *previousAction, const Stat
 void ObservationTransitionsArray::available(const Observations *Z, const Action *previousAction, const State *state,
 		std::vector<const Observation *> &result) const
 {
-	// ToDo: Create a ObservationsMap object, and replace this cast with that instead.
+	// ToDo: Create an ObservationsArray object, and replace this cast with that instead.
 	const ObservationsMap *ZMap = static_cast<const ObservationsMap *>(Z);
 	if (ZMap == nullptr) {
 		throw ObservationTransitionException();
