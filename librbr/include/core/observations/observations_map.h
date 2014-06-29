@@ -103,7 +103,7 @@ public:
 	 * Return the number of observations.
 	 * @return	The number of observations.
 	 */
-	int get_num_observations() const;
+	unsigned int get_num_observations() const;
 
 	/**
 	 * Reset the observations, clearing the internal list and freeing the memory.

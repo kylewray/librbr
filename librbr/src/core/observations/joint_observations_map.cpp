@@ -107,7 +107,7 @@ void JointObservationsMap::update()
 	update_step(create, 0);
 }
 
-int JointObservationsMap::get_num_factors()
+unsigned int JointObservationsMap::get_num_factors()
 {
 	return factoredObservations.size();
 }

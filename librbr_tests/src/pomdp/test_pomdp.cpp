@@ -27,7 +27,7 @@
 
 #include <iostream>
 
-#include "../../../librbr/include/file_loaders/unified_file.h"
+#include "../../../librbr/include/management/unified_file.h"
 
 #include "../../../librbr/include/pomdp/pomdp.h"
 #include "../../../librbr/include/pomdp/pomdp_value_iteration.h"

@@ -102,7 +102,7 @@ public:
 	 * Return the number of states.
 	 * @return	The number of states.
 	 */
-	int get_num_states() const;
+	unsigned int get_num_states() const;
 
 	/**
 	 * Reset the states, clearing the internal list and freeing the memory.

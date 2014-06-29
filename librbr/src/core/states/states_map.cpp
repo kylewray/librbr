@@ -85,7 +85,7 @@ const State *StatesMap::get(unsigned int hash) const
 	}
 }
 
-int StatesMap::get_num_states() const
+unsigned int StatesMap::get_num_states() const
 {
 	return states.size();
 }

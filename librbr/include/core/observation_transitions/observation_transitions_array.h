@@ -103,6 +103,24 @@ public:
 	virtual const float ***get_observation_transitions() const;
 
 	/**
+	 * Get the number of states used for the observation transitions array.
+	 * @return	The number of states.
+	 */
+	virtual unsigned int get_num_states() const;
+
+	/**
+	 * Get the number of actions used for the observation transitions array.
+	 * @return	The number of actions.
+	 */
+	virtual unsigned int get_num_actions() const;
+
+	/**
+	 * Get the number of observations used for the observation transitions array.
+	 * @return	The number of observations.
+	 */
+	virtual unsigned int get_num_observations() const;
+
+	/**
 	 * Reset the observation transitions by assigning all probabilities to zero. This does not free memory.
 	 */
 	virtual void reset();

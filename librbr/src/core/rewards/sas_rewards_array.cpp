@@ -134,6 +134,21 @@ void SASRewardsArray::reset()
 	Rmax = std::numeric_limits<double>::lowest();
 }
 
+const float ***SASRewardsArray::get_rewards() const
+{
+	return (const float ***)rewards;
+}
+
+unsigned int SASRewardsArray::get_num_states() const
+{
+	return states;
+}
+
+unsigned int SASRewardsArray::get_num_actions() const
+{
+	return actions;
+}
+
 double SASRewardsArray::get_min() const
 {
 	return Rmin;

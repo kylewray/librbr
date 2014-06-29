@@ -102,7 +102,7 @@ public:
 	 * Return the number of actions.
 	 * @return	The number of actions.
 	 */
-	int get_num_actions() const;
+	unsigned int get_num_actions() const;
 
 	/**
 	 * Return a list of the actions available given a state.

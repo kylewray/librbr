@@ -85,7 +85,7 @@ const Observation *ObservationsMap::get(unsigned int hash) const
 	}
 }
 
-int ObservationsMap::get_num_observations() const
+unsigned int ObservationsMap::get_num_observations() const
 {
 	return observations.size();
 }

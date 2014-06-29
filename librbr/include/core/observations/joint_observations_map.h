@@ -110,7 +110,7 @@ public:
 	/**
 	 * Get the number of factored observations.
 	 */
-	int get_num_factors();
+	unsigned int get_num_factors();
 
 	/**
 	 * Reset the joint observations, clearing the internal list and freeing the memory.

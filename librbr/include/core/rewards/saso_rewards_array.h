@@ -76,6 +76,30 @@ public:
 			const Observation *observation) const;
 
 	/**
+	 * Get the memory location of the 4-dimensional array.
+	 * @return	A pointer to the raw rewards data.
+	 */
+	virtual const float ****get_rewards() const;
+
+	/**
+	 * Get the number of states used for the rewards array.
+	 * @return	The number of states.
+	 */
+	virtual unsigned int get_num_states() const;
+
+	/**
+	 * Get the number of actions used for the rewards array.
+	 * @return	The number of actions.
+	 */
+	virtual unsigned int get_num_actions() const;
+
+	/**
+	 * Get the number of observations used for the rewards array.
+	 * @return	The number of observations.
+	 */
+	virtual unsigned int get_num_observations() const;
+
+	/**
 	 * Get the minimal R-value.
 	 * @return	The minimal R-value.
 	 */

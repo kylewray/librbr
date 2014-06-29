@@ -84,7 +84,7 @@ const Action *ActionsMap::get(unsigned int hash) const
 	}
 }
 
-int ActionsMap::get_num_actions() const
+unsigned int ActionsMap::get_num_actions() const
 {
 	return actions.size();
 }

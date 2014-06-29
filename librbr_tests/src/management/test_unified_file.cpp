@@ -27,7 +27,7 @@
 
 #include <iostream>
 
-#include "../../../librbr/include/file_loaders/unified_file.h"
+#include "../../../librbr/include/management/unified_file.h"
 
 int test_unified_file()
 {

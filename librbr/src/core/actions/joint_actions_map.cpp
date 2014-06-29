@@ -106,7 +106,7 @@ void JointActionsMap::update()
 	update_step(create, 0);
 }
 
-int JointActionsMap::get_num_factors()
+unsigned int JointActionsMap::get_num_factors()
 {
 	return factoredActions.size();
 }

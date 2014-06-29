@@ -123,6 +123,16 @@ const float ***StateTransitionsArray::get_state_transitions() const
 	return (const float ***)stateTransitions;
 }
 
+unsigned int StateTransitionsArray::get_num_states() const
+{
+	return states;
+}
+
+unsigned int StateTransitionsArray::get_num_actions() const
+{
+	return actions;
+}
+
 void StateTransitionsArray::reset()
 {
 	for (int s = 0; s < states; s++) {

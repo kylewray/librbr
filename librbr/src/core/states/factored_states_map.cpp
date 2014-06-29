@@ -124,7 +124,7 @@ void FiniteFactoredStates::update()
 	update_step(create, 0);
 }
 
-int FiniteFactoredStates::get_num_factors()
+unsigned int FiniteFactoredStates::get_num_factors()
 {
 	return factoredStates.size();
 }

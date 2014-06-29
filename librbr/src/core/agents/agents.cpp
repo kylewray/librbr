@@ -64,7 +64,7 @@ const Agent *Agents::get(int agentIndex) const
 	return agents[agentIndex];
 }
 
-int Agents::get_num_agents() const
+unsigned int Agents::get_num_agents() const
 {
 	return agents.size();
 }

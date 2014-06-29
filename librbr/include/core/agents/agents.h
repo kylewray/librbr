@@ -82,7 +82,7 @@ public:
 	 * Return the number of agents.
 	 * @return	The number of agents.
 	 */
-	virtual int get_num_agents() const;
+	unsigned int get_num_agents() const;
 
 	/**
 	 * Get a particular agent given the name.

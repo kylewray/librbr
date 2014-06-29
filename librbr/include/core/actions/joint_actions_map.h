@@ -109,7 +109,7 @@ public:
 	 * Get the number of factored actions.
 	 * @return	The number of factored actions.
 	 */
-	int get_num_factors();
+	unsigned int get_num_factors();
 
 	/**
 	 * Reset the joint actions, clearing the internal list and freeing the memory.

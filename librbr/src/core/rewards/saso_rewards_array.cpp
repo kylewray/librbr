@@ -140,6 +140,26 @@ void SASORewardsArray::reset()
 	Rmax = std::numeric_limits<double>::lowest();
 }
 
+const float ****SASORewardsArray::get_rewards() const
+{
+	return (const float ****)rewards;
+}
+
+unsigned int SASORewardsArray::get_num_states() const
+{
+	return states;
+}
+
+unsigned int SASORewardsArray::get_num_actions() const
+{
+	return actions;
+}
+
+unsigned int SASORewardsArray::get_num_observations() const
+{
+	return observations;
+}
+
 double SASORewardsArray::get_min() const
 {
 	return Rmin;

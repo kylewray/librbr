@@ -133,6 +133,21 @@ const float ***ObservationTransitionsArray::get_observation_transitions() const
 	return (const float ***)observationTransitions;
 }
 
+unsigned int ObservationTransitionsArray::get_num_states() const
+{
+	return states;
+}
+
+unsigned int ObservationTransitionsArray::get_num_actions() const
+{
+	return actions;
+}
+
+unsigned int ObservationTransitionsArray::get_num_observations() const
+{
+	return observations;
+}
+
 void ObservationTransitionsArray::reset()
 {
 	for (int a = 0; a < actions; a++) {

@@ -122,7 +122,7 @@ public:
 	 * Get the number of factored states.
 	 * @return	The number of factors.
 	 */
-	int get_num_factors();
+	unsigned int get_num_factors();
 
 	/**
 	 * Reset the factored states, clearing the internal list and freeing the memory.
