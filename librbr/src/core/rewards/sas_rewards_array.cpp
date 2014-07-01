@@ -43,26 +43,14 @@ SASRewardsArray::SASRewardsArray(unsigned int numStates, unsigned int numActions
 		actions = 1;
 	}
 
-	rewards = new float**[states];
-	for (int s = 0; s < states; s++) {
-		rewards[s] = new float*[actions];
-		for (int a = 0; a < actions; a++) {
-			rewards[s][a] = new float[states];
-		}
-	}
+	rewards = new float[states * actions * states];
 
 	reset();
 }
 
 SASRewardsArray::~SASRewardsArray()
 {
-	for (int s = 0; s < states; s++) {
-		for (int a = 0; a < actions; a++) {
-			delete [] rewards[s][a];
-		}
-		delete [] rewards[s];
-	}
-	delete rewards;
+	delete [] rewards;
 }
 
 void SASRewardsArray::set(const State *state, const Action *action, const State *nextState, double reward)
@@ -80,7 +68,9 @@ void SASRewardsArray::set(const State *state, const Action *action, const State 
 		throw RewardException();
 	}
 
-	rewards[s->get_index()][a->get_index()][sp->get_index()] = reward;
+	rewards[s->get_index() * actions * states +
+	        a->get_index() * states +
+	        sp->get_index()] = reward;
 
 	if (Rmin > reward) {
 		Rmin = reward;
@@ -111,7 +101,9 @@ double SASRewardsArray::get(const State *state, const Action *action, const Stat
 		throw RewardException();
 	}
 
-	return rewards[s->get_index()][a->get_index()][sp->get_index()];
+	return rewards[s->get_index() * actions * states +
+	               a->get_index() * states +
+	               sp->get_index()];
 }
 
 double SASRewardsArray::get(const State *state, const Action *action, const State *nextState,
@@ -125,7 +117,7 @@ void SASRewardsArray::reset()
 	for (int s = 0; s < states; s++) {
 		for (int a = 0; a < actions; a++) {
 			for (int sp = 0; sp < states; sp++) {
-				rewards[s][a][sp] = 0.0f;
+				rewards[s * actions * states + a * states + sp] = 0.0f;
 			}
 		}
 	}
@@ -134,9 +126,9 @@ void SASRewardsArray::reset()
 	Rmax = std::numeric_limits<double>::lowest();
 }
 
-const float ***SASRewardsArray::get_rewards() const
+const float *SASRewardsArray::get_rewards() const
 {
-	return (const float ***)rewards;
+	return (const float *)rewards;
 }
 
 unsigned int SASRewardsArray::get_num_states() const

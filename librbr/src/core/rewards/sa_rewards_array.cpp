@@ -43,20 +43,14 @@ SARewardsArray::SARewardsArray(unsigned int numStates, unsigned int numActions)
 		actions = 1;
 	}
 
-	rewards = new float*[states];
-	for (int s = 0; s < states; s++) {
-		rewards[s] = new float[actions];
-	}
+	rewards = new float[states * actions];
 
 	reset();
 }
 
 SARewardsArray::~SARewardsArray()
 {
-	for (int s = 0; s < states; s++) {
-		delete [] rewards[s];
-	}
-	delete rewards;
+	delete [] rewards;
 }
 
 void SARewardsArray::set(const State *state, const Action *action, double reward)
@@ -72,7 +66,7 @@ void SARewardsArray::set(const State *state, const Action *action, double reward
 		throw RewardException();
 	}
 
-	rewards[s->get_index()][a->get_index()] = reward;
+	rewards[s->get_index() * actions + a->get_index()] = reward;
 
 	if (Rmin > reward) {
 		Rmin = reward;
@@ -106,7 +100,7 @@ double SARewardsArray::get(const State *state, const Action *action) const
 		throw RewardException();
 	}
 
-	return rewards[s->get_index()][a->get_index()];
+	return rewards[s->get_index() * actions + a->get_index()];
 }
 
 double SARewardsArray::get(const State *state, const Action *action, const State *nextState) const
@@ -124,7 +118,7 @@ void SARewardsArray::reset()
 {
 	for (int s = 0; s < states; s++) {
 		for (int a = 0; a < actions; a++) {
-			rewards[s][a] = 0.0f;
+			rewards[s * actions + a] = 0.0f;
 		}
 	}
 
@@ -132,9 +126,9 @@ void SARewardsArray::reset()
 	Rmax = std::numeric_limits<double>::lowest();
 }
 
-const float **SARewardsArray::get_rewards() const
+const float *SARewardsArray::get_rewards() const
 {
-	return (const float **)rewards;
+	return (const float *)rewards;
 }
 
 unsigned int SARewardsArray::get_num_states() const

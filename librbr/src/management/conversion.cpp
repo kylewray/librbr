@@ -49,6 +49,8 @@
 
 #include <unordered_map>
 
+//#include <iostream>   // ToDo: REMOVE ME!
+
 MDP *convert_map_to_array(const MDP *mdp)
 {
 	if (mdp == nullptr) {
@@ -79,7 +81,6 @@ MDP *convert_map_to_array(const StatesMap *states, const ActionsMap *actions,
 		const StateTransitionsMap *stateTransitions, const SASRewardsMap *rewards,
 		const Initial *initial, const Horizon *horizon)
 {
-
 	// Next, create the states object. As part of this, we must create a mapping from the
 	// indexed states to the original states. Also create the initial state in the process.
 	StatesMap *S = new StatesMap();
@@ -125,6 +126,9 @@ MDP *convert_map_to_array(const StatesMap *states, const ActionsMap *actions,
 				const State *sp = resolve(nextState);
 				const State *spOriginal = convertStates[sp->hash_value()];
 
+//				std::cout << "(" << sOriginal->to_string() << ", " << aOriginal->to_string() << ", " << spOriginal->to_string() << ")\n";
+//				std::cout.flush();
+
 				T->set(s, a, sp, stateTransitions->get(sOriginal, aOriginal, spOriginal));
 				R->set(s, a, sp, rewards->get(sOriginal, aOriginal, spOriginal));
 			}
@@ -134,9 +138,9 @@ MDP *convert_map_to_array(const StatesMap *states, const ActionsMap *actions,
 	// Finally, create a copy of the horizon.
 	Horizon *h = nullptr;
 	if (horizon->is_finite()) {
-		h = new Horizon(h->get_horizon());
+		h = new Horizon(horizon->get_horizon());
 	} else {
-		h = new Horizon(h->get_discount_factor());
+		h = new Horizon(horizon->get_discount_factor());
 	}
 
 	return new MDP(S, A, T, R, s0, h);

@@ -43,27 +43,14 @@ StateTransitionsArray::StateTransitionsArray(unsigned int numStates, unsigned in
 		actions = 1;
 	}
 
-	stateTransitions = new float**[states];
-	for (int s = 0; s < states; s++) {
-		stateTransitions[s] = new float*[actions];
-		for (int a = 0; a < actions; a++) {
-			stateTransitions[s][a] = new float[states];
-		}
-	}
+	stateTransitions = new float[states * actions * states];
 
 	reset();
 }
 
 StateTransitionsArray::~StateTransitionsArray()
 {
-	for (int s = 0; s < states; s++) {
-		for (int a = 0; a < actions; a++) {
-			delete [] stateTransitions[s][a];
-		}
-		delete [] stateTransitions[s];
-	}
 	delete [] stateTransitions;
-	stateTransitions = nullptr;
 }
 
 void StateTransitionsArray::set(const State *state, const Action *action, const State *nextState, double probability)
@@ -80,7 +67,9 @@ void StateTransitionsArray::set(const State *state, const Action *action, const 
 		throw StateTransitionException();
 	}
 
-	stateTransitions[s->get_index()][a->get_index()][sp->get_index()] = (float)std::max(0.0, std::min(1.0, probability));
+	stateTransitions[s->get_index() * actions * states +
+	                 a->get_index() * states +
+	                 sp->get_index()] = (float)std::max(0.0, std::min(1.0, probability));
 }
 
 double StateTransitionsArray::get(const State *state, const Action *action, const State *nextState) const
@@ -97,7 +86,9 @@ double StateTransitionsArray::get(const State *state, const Action *action, cons
 		throw StateTransitionException();
 	}
 
-	return stateTransitions[s->get_index()][a->get_index()][sp->get_index()];
+	return stateTransitions[s->get_index() * actions * states +
+	                        a->get_index() * states +
+	                        sp->get_index()];
 }
 
 void StateTransitionsArray::successors(const States *S, const State *state,
@@ -118,9 +109,9 @@ void StateTransitionsArray::successors(const States *S, const State *state,
 	}
 }
 
-const float ***StateTransitionsArray::get_state_transitions() const
+const float *StateTransitionsArray::get_state_transitions() const
 {
-	return (const float ***)stateTransitions;
+	return (const float *)stateTransitions;
 }
 
 unsigned int StateTransitionsArray::get_num_states() const
@@ -138,7 +129,9 @@ void StateTransitionsArray::reset()
 	for (int s = 0; s < states; s++) {
 		for (int a = 0; a < actions; a++) {
 			for (int sp = 0; sp < states; sp++) {
-				stateTransitions[s][a][sp] = 0.0f;
+				stateTransitions[s * actions * states +
+				                 a * states +
+				                 sp] = 0.0f;
 			}
 		}
 	}

@@ -95,7 +95,7 @@ public:
 	 * Get the memory location of the 3-dimensional array.
 	 * @return	A pointer to the raw rewards data.
 	 */
-	virtual const float ***get_rewards() const;
+	virtual const float *get_rewards() const;
 
 	/**
 	 * Get the number of states used for the rewards array.
@@ -131,7 +131,7 @@ private:
 	 * The 3-dimensional array mapping state-action-state to floats. Floats were
 	 * used to improve speed.
 	 */
-	float ***rewards;
+	float *rewards;
 
 	/**
 	 * The number of states, which is the first and third dimension of the rewards array.

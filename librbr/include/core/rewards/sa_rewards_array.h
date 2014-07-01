@@ -111,7 +111,7 @@ public:
 	 * Get the memory location of the 2-dimensional array.
 	 * @return	A pointer to the raw rewards data.
 	 */
-	virtual const float **get_rewards() const;
+	virtual const float *get_rewards() const;
 
 	/**
 	 * Get the number of states used for the rewards array.
@@ -147,7 +147,7 @@ private:
 	 * The 2-dimensional array mapping state-action to floats. Floats were
 	 * used to improve speed.
 	 */
-	float **rewards;
+	float *rewards;
 
 	/**
 	 * The number of states, which is the first dimension of the rewards array.

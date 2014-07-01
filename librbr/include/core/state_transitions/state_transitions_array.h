@@ -97,7 +97,7 @@ public:
 	 * Get the memory location of the 3-dimensional array.
 	 * @return	A pointer to the raw state transitions data.
 	 */
-	virtual const float ***get_state_transitions() const;
+	virtual const float *get_state_transitions() const;
 
 	/**
 	 * Get the number of states used for the state transitions array.
@@ -121,7 +121,7 @@ private:
 	 * The 3-dimensional array of all state-action-state transitions. Internally,
 	 * these are floats to improve speed.
 	 */
-	float ***stateTransitions;
+	float *stateTransitions;
 
 	/**
 	 * The number of states in the state transitions first and third dimensions.

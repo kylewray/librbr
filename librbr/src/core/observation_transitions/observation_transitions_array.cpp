@@ -50,27 +50,14 @@ ObservationTransitionsArray::ObservationTransitionsArray(unsigned int numStates,
 		observations = 1;
 	}
 
-	observationTransitions = new float**[actions];
-	for (int a = 0; a < actions; a++) {
-		observationTransitions[a] = new float*[states];
-		for (int s = 0; s < states; s++) {
-			observationTransitions[a][s] = new float[observations];
-		}
-	}
+	observationTransitions = new float[actions * states * observations];
 
 	reset();
 }
 
 ObservationTransitionsArray::~ObservationTransitionsArray()
 {
-	for (int a = 0; a < actions; a++) {
-		for (int s = 0; s < states; s++) {
-			delete [] observationTransitions[a][s];
-		}
-		delete [] observationTransitions[a];
-	}
 	delete [] observationTransitions;
-	observationTransitions = nullptr;
 }
 
 void ObservationTransitionsArray::set(const Action *previousAction, const State *state,
@@ -88,7 +75,9 @@ void ObservationTransitionsArray::set(const Action *previousAction, const State 
 		throw ObservationTransitionException();
 	}
 
-	observationTransitions[a->get_index()][s->get_index()][z->get_index()] =
+	observationTransitions[a->get_index() * states * observations +
+	                       s->get_index() * observations +
+	                       z->get_index()] =
 			(float)std::max(0.0, std::min(1.0, probability));
 }
 
@@ -107,7 +96,9 @@ double ObservationTransitionsArray::get(const Action *previousAction, const Stat
 		throw ObservationTransitionException();
 	}
 
-	return observationTransitions[a->get_index()][s->get_index()][z->get_index()];
+	return observationTransitions[a->get_index() * states * observations +
+	   	                       s->get_index() * observations +
+	   	                       z->get_index()];
 }
 
 void ObservationTransitionsArray::available(const Observations *Z, const Action *previousAction, const State *state,
@@ -128,9 +119,9 @@ void ObservationTransitionsArray::available(const Observations *Z, const Action 
 	}
 }
 
-const float ***ObservationTransitionsArray::get_observation_transitions() const
+const float *ObservationTransitionsArray::get_observation_transitions() const
 {
-	return (const float ***)observationTransitions;
+	return (const float *)observationTransitions;
 }
 
 unsigned int ObservationTransitionsArray::get_num_states() const
@@ -153,7 +144,9 @@ void ObservationTransitionsArray::reset()
 	for (int a = 0; a < actions; a++) {
 		for (int s = 0; s < states; s++) {
 			for (int z = 0; z < observations; z++) {
-				observationTransitions[a][s][z] = 0.0f;
+				observationTransitions[a * states * observations +
+				                       s * observations +
+				                       z] = 0.0f;
 			}
 		}
 	}

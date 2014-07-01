@@ -49,32 +49,14 @@ SASORewardsArray::SASORewardsArray(unsigned int numStates, unsigned int numActio
 		observations = 1;
 	}
 
-	rewards = new float***[states];
-	for (int s = 0; s < states; s++) {
-		rewards[s] = new float**[actions];
-		for (int a = 0; a < actions; a++) {
-			rewards[s][a] = new float*[states];
-			for (int sp = 0; sp < states; sp++) {
-				rewards[s][a][sp] = new float[observations];
-			}
-		}
-	}
+	rewards = new float[states * actions * states * observations];
 
 	reset();
 }
 
 SASORewardsArray::~SASORewardsArray()
 {
-	for (int s = 0; s < states; s++) {
-		for (int a = 0; a < actions; a++) {
-			for (int sp = 0; sp < states; sp++) {
-				delete [] rewards[s][a][sp];
-			}
-			delete [] rewards[s][a];
-		}
-		delete [] rewards[s];
-	}
-	delete rewards;
+	delete [] rewards;
 }
 
 void SASORewardsArray::set(const State *state, const Action *action, const State *nextState,
@@ -94,7 +76,10 @@ void SASORewardsArray::set(const State *state, const Action *action, const State
 		throw RewardException();
 	}
 
-	rewards[s->get_index()][a->get_index()][sp->get_index()][z->get_index()] = reward;
+	rewards[s->get_index() * actions * states * observations +
+	        a->get_index() * states * observations +
+	        sp->get_index() * observations +
+	        z->get_index()] = reward;
 
 	if (Rmin > reward) {
 		Rmin = reward;
@@ -121,7 +106,10 @@ double SASORewardsArray::get(const State *state, const Action *action, const Sta
 		throw RewardException();
 	}
 
-	return rewards[s->get_index()][a->get_index()][sp->get_index()][z->get_index()];
+	return rewards[s->get_index() * actions * states * observations +
+	               a->get_index() * states * observations +
+	               sp->get_index() * observations +
+	               z->get_index()];
 }
 
 void SASORewardsArray::reset()
@@ -130,7 +118,10 @@ void SASORewardsArray::reset()
 		for (int a = 0; a < actions; a++) {
 			for (int sp = 0; sp < states; sp++) {
 				for (int z = 0; z < observations; z++) {
-					rewards[s][a][sp][z] = 0.0f;
+					rewards[s * actions * states * observations +
+					        a * states * observations +
+					        sp * observations +
+					        z] = 0.0f;
 				}
 			}
 		}
@@ -140,9 +131,9 @@ void SASORewardsArray::reset()
 	Rmax = std::numeric_limits<double>::lowest();
 }
 
-const float ****SASORewardsArray::get_rewards() const
+const float *SASORewardsArray::get_rewards() const
 {
-	return (const float ****)rewards;
+	return (const float *)rewards;
 }
 
 unsigned int SASORewardsArray::get_num_states() const
