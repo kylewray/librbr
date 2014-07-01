@@ -62,15 +62,23 @@ MDP *convert_map_to_array(const MDP *mdp)
 
 	const StateTransitionsMap *stateTransitions =
 			static_cast<const StateTransitionsMap *>(mdp->get_state_transitions());
-	const SASRewardsMap *sasRewards = static_cast<const SASRewardsMap *>(mdp->get_rewards());
+	const SASRewardsMap *rewards = static_cast<const SASRewardsMap *>(mdp->get_rewards());
 
 	const Initial *initial = static_cast<const Initial *>(mdp->get_initial_state());
 	const Horizon *horizon = static_cast<const Horizon *>(mdp->get_horizon());
 
 	if (states == nullptr || actions == nullptr || stateTransitions == nullptr ||
-			sasRewards == nullptr || initial == nullptr) {
+			rewards == nullptr || initial == nullptr) {
 		throw CoreException();
 	}
+
+	return convert_map_to_array(states, actions, stateTransitions, rewards, initial, horizon);
+}
+
+MDP *convert_map_to_array(const StatesMap *states, const ActionsMap *actions,
+		const StateTransitionsMap *stateTransitions, const SASRewardsMap *rewards,
+		const Initial *initial, const Horizon *horizon)
+{
 
 	// Next, create the states object. As part of this, we must create a mapping from the
 	// indexed states to the original states. Also create the initial state in the process.
@@ -118,7 +126,7 @@ MDP *convert_map_to_array(const MDP *mdp)
 				const State *spOriginal = convertStates[sp->hash_value()];
 
 				T->set(s, a, sp, stateTransitions->get(sOriginal, aOriginal, spOriginal));
-				R->set(s, a, sp, sasRewards->get(sOriginal, aOriginal, spOriginal));
+				R->set(s, a, sp, rewards->get(sOriginal, aOriginal, spOriginal));
 			}
 		}
 	}

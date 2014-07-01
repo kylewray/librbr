@@ -26,10 +26,16 @@
 #ifndef CONVERSION_H
 #define CONVERSION_H
 
+#include "../core/states/states_map.h"
+#include "../core/actions/actions_map.h"
+#include "../core/observations/observations_map.h"
+#include "../core/state_transitions/state_transitions_map.h"
+#include "../core/observation_transitions/observation_transitions_map.h"
+#include "../core/rewards/sas_rewards_map.h"
+#include "../core/rewards/saso_rewards_map.h"
 
 #include "../mdp/mdp.h"
 #include "../pomdp/pomdp.h"
-
 
 /**
  * Convert a map-based MDP to an array-based MDP.
@@ -40,6 +46,20 @@
  */
 MDP *convert_map_to_array(const MDP *mdp);
 
+/**
+ * Convert the components of a map-based MDP to an array-based MDP.
+ * @param	states				The states.
+ * @param	actions				The actions.
+ * @param	stateTransitions	The state transitions.
+ * @param	rewards				The state-action-state rewards.
+ * @param	initial				The initial state.
+ * @param	horizon				The horizon.
+ * @throw	CoreException		The MDP provided was invalid.
+ * @return	The new array-based MDP, for its state transitions and rewards.
+ */
+MDP *convert_map_to_array(const StatesMap *states, const ActionsMap *actions,
+		const StateTransitionsMap *stateTransitions, const SASRewardsMap *rewards,
+		const Initial *initial, const Horizon *horizon);
 
 /**
  * Convert a map-based POMDP to an array-based POMDP.
