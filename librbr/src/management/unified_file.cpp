@@ -23,9 +23,6 @@
  */
 
 
-#include <iostream>
-#include <fstream>
-
 #include "../../include/management/unified_file.h"
 
 #include "../../include/utilities/log.h"
@@ -47,6 +44,9 @@
 
 #include "../../include/core/observations/named_observation.h"
 #include "../../include/core/observations/observation_utilities.h"
+
+#include <iostream>
+#include <fstream>
 
 UnifiedFile::UnifiedFile()
 {
