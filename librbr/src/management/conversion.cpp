@@ -35,9 +35,11 @@
 #include "../../include/core/actions/actions_map.h"
 //#include "../../include/core/actions/actions_array.h"
 
+#include "../../include/core/state_transitions/state_transitions.h"
 #include "../../include/core/state_transitions/state_transitions_map.h"
 #include "../../include/core/state_transitions/state_transitions_array.h"
 
+#include "../../include/core/rewards/sas_rewards.h"
 #include "../../include/core/rewards/sas_rewards_map.h"
 #include "../../include/core/rewards/sas_rewards_array.h"
 
@@ -78,7 +80,7 @@ MDP *convert_map_to_array(const MDP *mdp)
 }
 
 MDP *convert_map_to_array(const StatesMap *states, const ActionsMap *actions,
-		const StateTransitionsMap *stateTransitions, const SASRewardsMap *rewards,
+		const StateTransitions *stateTransitions, const SASRewards *rewards,
 		const Initial *initial, const Horizon *horizon)
 {
 	// Next, create the states object. As part of this, we must create a mapping from the

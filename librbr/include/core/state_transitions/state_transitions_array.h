@@ -94,6 +94,13 @@ public:
 			std::vector<const State *> &result) const;
 
 	/**
+	 * Set the entire 3-dimensional array with the one provided. This only performs a copy.
+	 * @param	T	A pointer to the new 3-d array of raw state transitions data. This must be
+	 * 				an array of size n x m x n.
+	 */
+	virtual void set_state_transitions(const float *T);
+
+	/**
 	 * Get the memory location of the 3-dimensional array.
 	 * @return	A pointer to the raw state transitions data.
 	 */

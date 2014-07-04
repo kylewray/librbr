@@ -126,6 +126,22 @@ void SARewardsArray::reset()
 	Rmax = std::numeric_limits<double>::lowest();
 }
 
+void SARewardsArray::set_rewards(const float *R)
+{
+	for (int s = 0; s < states; s++) {
+		for (int a = 0; a < actions; a++) {
+			rewards[s * actions + a] = R[s * actions + a];
+
+			if (Rmin > R[s * actions + a]) {
+				Rmin = R[s * actions + a];
+			}
+			if (Rmax < R[s * actions + a]) {
+				Rmax = R[s * actions + a];
+			}
+		}
+	}
+}
+
 const float *SARewardsArray::get_rewards() const
 {
 	return (const float *)rewards;

@@ -109,6 +109,18 @@ void StateTransitionsArray::successors(const States *S, const State *state,
 	}
 }
 
+void StateTransitionsArray::set_state_transitions(const float *T)
+{
+	for (int s = 0; s < states; s++) {
+		for (int a = 0; a < actions; a++) {
+			for (int sp = 0; sp < states; sp++) {
+				stateTransitions[s * actions * states + a * states + sp] =
+						T[s * actions * states + a * states + sp];
+			}
+		}
+	}
+}
+
 const float *StateTransitionsArray::get_state_transitions() const
 {
 	return (const float *)stateTransitions;

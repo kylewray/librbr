@@ -131,6 +131,27 @@ void SASORewardsArray::reset()
 	Rmax = std::numeric_limits<double>::lowest();
 }
 
+void SASORewardsArray::set_rewards(const float *R)
+{
+	for (int s = 0; s < states; s++) {
+		for (int a = 0; a < actions; a++) {
+			for (int sp = 0; sp < states; sp++) {
+				for (int z = 0; z < observations; z++) {
+					rewards[s * actions * states * observations + a * states * observations + sp * observations + z] =
+							R[s * actions * states * observations + a * states * observations + sp * observations + z];
+
+					if (Rmin > R[s * actions * states * observations + a * states * observations + sp * observations + z]) {
+						Rmin = R[s * actions * states * observations + a * states * observations + sp * observations + z];
+					}
+					if (Rmax < R[s * actions * states * observations + a * states * observations + sp * observations + z]) {
+						Rmax = R[s * actions * states * observations + a * states * observations + sp * observations + z];
+					}
+				}
+			}
+		}
+	}
+}
+
 const float *SASORewardsArray::get_rewards() const
 {
 	return (const float *)rewards;

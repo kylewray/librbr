@@ -33,6 +33,17 @@
 #include <fstream>
 
 /**
+ * An enumeration for the types of rewards that are possible.
+ */
+enum RawFileRewardsType {
+	RawFileSRewards,
+	RawFileSARewards,
+	RawFileSASRewards,
+	RawFileSASORewards,
+	NumRawFileRewardsTypes
+};
+
+/**
  * A class which provides functionality load a raw Markovian file into a array-based Markovian object,
  * as well as save *any* Markovian object as a the appropriate raw Markovian file.
  */

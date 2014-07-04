@@ -126,6 +126,25 @@ void SASRewardsArray::reset()
 	Rmax = std::numeric_limits<double>::lowest();
 }
 
+void SASRewardsArray::set_rewards(const float *R)
+{
+	for (int s = 0; s < states; s++) {
+		for (int a = 0; a < actions; a++) {
+			for (int sp = 0; sp < states; sp++) {
+				rewards[s * actions * states + a * states + sp] =
+						R[s * actions * states + a * states + sp];
+
+				if (Rmin > R[s * actions * states + a * states + sp]) {
+					Rmin = R[s * actions * states + a * states + sp];
+				}
+				if (Rmax < R[s * actions * states + a * states + sp]) {
+					Rmax = R[s * actions * states + a * states + sp];
+				}
+			}
+		}
+	}
+}
+
 const float *SASRewardsArray::get_rewards() const
 {
 	return (const float *)rewards;

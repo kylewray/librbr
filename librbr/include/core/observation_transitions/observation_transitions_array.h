@@ -97,6 +97,13 @@ public:
 			std::vector<const Observation *> &result) const;
 
 	/**
+	 * Set the entire 3-dimensional array with the one provided. This only performs a copy.
+	 * @param	O	A pointer to the new 3-d array of raw observations transitions data. This must be
+	 * 				an array of size m x n x z.
+	 */
+	virtual void set_observation_transitions(const float *O);
+
+	/**
 	 * Get the memory location of the 3-dimensional array.
 	 * @return	A pointer to the raw observation transitions data.
 	 */

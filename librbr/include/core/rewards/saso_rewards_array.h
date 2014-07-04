@@ -76,6 +76,13 @@ public:
 			const Observation *observation) const;
 
 	/**
+	 * Set the entire 4-dimensional array with the one provided. This only performs a copy.
+	 * @param	R	A pointer to the new 4-d array of raw rewards data. This must be
+	 * 				an array of size n x m x n x z.
+	 */
+	virtual void set_rewards(const float *R);
+
+	/**
 	 * Get the memory location of the 4-dimensional array.
 	 * @return	A pointer to the raw rewards data.
 	 */

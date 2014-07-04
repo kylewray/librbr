@@ -29,10 +29,10 @@
 #include "../core/states/states_map.h"
 #include "../core/actions/actions_map.h"
 #include "../core/observations/observations_map.h"
-#include "../core/state_transitions/state_transitions_map.h"
-#include "../core/observation_transitions/observation_transitions_map.h"
-#include "../core/rewards/sas_rewards_map.h"
-#include "../core/rewards/saso_rewards_map.h"
+#include "../core/state_transitions/state_transitions.h"
+#include "../core/observation_transitions/observation_transitions.h"
+#include "../core/rewards/sas_rewards.h"
+#include "../core/rewards/saso_rewards.h"
 
 #include "../mdp/mdp.h"
 #include "../pomdp/pomdp.h"
@@ -58,7 +58,7 @@ MDP *convert_map_to_array(const MDP *mdp);
  * @return	The new array-based MDP, for its state transitions and rewards.
  */
 MDP *convert_map_to_array(const StatesMap *states, const ActionsMap *actions,
-		const StateTransitionsMap *stateTransitions, const SASRewardsMap *rewards,
+		const StateTransitions *stateTransitions, const SASRewards *rewards,
 		const Initial *initial, const Horizon *horizon);
 
 /**

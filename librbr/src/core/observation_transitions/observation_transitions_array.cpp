@@ -119,6 +119,18 @@ void ObservationTransitionsArray::available(const Observations *Z, const Action 
 	}
 }
 
+void ObservationTransitionsArray::set_observation_transitions(const float *O)
+{
+	for (int a = 0; a < actions; a++) {
+		for (int sp = 0; sp < states; sp++) {
+			for (int z = 0; z < observations; z++) {
+				observationTransitions[a * states * observations + sp * observations + z] =
+						O[a * states * observations + sp * observations + z];
+			}
+		}
+	}
+}
+
 const float *ObservationTransitionsArray::get_observation_transitions() const
 {
 	return (const float *)observationTransitions;
