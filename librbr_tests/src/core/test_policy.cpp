@@ -25,6 +25,7 @@
 #include "../../include/perform_tests.h"
 
 #include <iostream>
+#include <vector>
 
 #include "../../../librbr/include/core/policy/policy_map.h"
 #include "../../../librbr/include/core/policy/policy_tree.h"
