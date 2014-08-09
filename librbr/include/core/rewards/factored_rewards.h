@@ -26,13 +26,13 @@
 #define MULTI_REWARDS_H
 
 
-#include <vector>
-
 #include "rewards.h"
 
 #include "../states/state.h"
 #include "../actions/action.h"
 #include "../observations/observation.h"
+
+#include <vector>
 
 /**
  * A class for factored rewards in an MDP-like object, i.e., multi-objective MDPs (MOMDPs). This
@@ -50,7 +50,7 @@ public:
 	 * of the number of rewards.
 	 * @param	numRewards		The number of rewards in the multi-rewards vector, minimum of 1.
 	 */
-	FactoredRewards(int numRewards);
+	FactoredRewards(unsigned int numRewards);
 
 	/**
 	 * The default deconstructor for the FactoredRewards class.
@@ -71,7 +71,7 @@ public:
 	 * @param	newRewardsFactor	The new rewards factor for this index.
 	 * @throw	RewardException		The index was invalid.
 	 */
-	virtual void set(int index, Rewards *newRewardsFactor);
+	virtual void set(unsigned int factorIndex, Rewards *newRewardsFactor);
 
 	/**
 	 * Get the particular rewards element in the factored rewards vector.
@@ -79,13 +79,13 @@ public:
 	 * @throw	RewardException		The index was invalid.
 	 * @return	The rewards for this index.
 	 */
-	virtual Rewards *get(int index) const;
+	virtual Rewards *get(unsigned int factorIndex) const;
 
 	/**
 	 * Get the number of rewards, i.e., the dimension of the factored rewards vector.
 	 * @return	The number of rewards.
 	 */
-	virtual int get_num_rewards() const;
+	virtual unsigned int get_num_rewards() const;
 
 	/**
 	 * Reset the rewards, freeing all the memory allocated by each object in the vector.

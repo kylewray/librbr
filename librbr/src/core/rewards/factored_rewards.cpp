@@ -30,14 +30,14 @@
 FactoredRewards::FactoredRewards()
 { }
 
-FactoredRewards::FactoredRewards(int numRewards)
+FactoredRewards::FactoredRewards(unsigned int numRewards)
 {
 	if (numRewards < 1) {
 		numRewards = 1;
 	}
 
 	rewards.resize(numRewards);
-	for (int i = 0; i < numRewards; i++) {
+	for (int i = 0; i < (int)numRewards; i++) {
 		rewards[i] = nullptr;
 	}
 }
@@ -55,9 +55,9 @@ void FactoredRewards::add_factor(Rewards *newRewardsFactor)
 	rewards.push_back(newRewardsFactor);
 }
 
-void FactoredRewards::set(int factorIndex, Rewards *newRewardsFactor)
+void FactoredRewards::set(unsigned int factorIndex, Rewards *newRewardsFactor)
 {
-	if (factorIndex < 0 || factorIndex >= rewards.size()) {
+	if (factorIndex >= rewards.size()) {
 		throw RewardException();
 	}
 
@@ -67,16 +67,16 @@ void FactoredRewards::set(int factorIndex, Rewards *newRewardsFactor)
 	rewards[factorIndex] = newRewardsFactor;
 }
 
-Rewards *FactoredRewards::get(int factorIndex) const
+Rewards *FactoredRewards::get(unsigned int factorIndex) const
 {
-	if (factorIndex < 0 || factorIndex >= rewards.size()) {
+	if (factorIndex >= rewards.size()) {
 		throw RewardException();
 	}
 
 	return rewards[factorIndex];
 }
 
-int FactoredRewards::get_num_rewards() const
+unsigned int FactoredRewards::get_num_rewards() const
 {
 	return rewards.size();
 }
