@@ -34,7 +34,7 @@
  * An action object identified by a unique index which is determined using a static variable,
  * incremented each time a new IndexedAction is created.
  */
-class IndexedAction : public Action {
+class IndexedAction : virtual public Action {
 public:
 	/**
 	 * The default constructor of the IndexedAction object.
@@ -60,7 +60,8 @@ public:
 
 	/**
 	 * Overload the equals operator to set this action equal to the action provided.
-	 * @param	other		The action to copy.
+	 * @param	other				The action to copy.
+	 * @param	ActionException		The other action is not a IndexedAction.
 	 * @return	The new version of this action.
 	 */
 	virtual Action &operator=(const Action &other);

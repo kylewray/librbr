@@ -38,7 +38,7 @@
  * A class for state-action-state-observation rewards in an MDP-like object, internally storing
  * the rewards as a map.
  */
-class SASORewardsMap : public SASORewards {
+class SASORewardsMap : virtual public SASORewards {
 public:
 	/**
 	 * The default constructor for the SASORewardsMap class.

@@ -47,7 +47,7 @@
  *
  * This class requires that states and actions be of types IndexedState and IndexedAction, respectively.
  */
-class ObservationTransitionsArray : public ObservationTransitions {
+class ObservationTransitionsArray : virtual public ObservationTransitions {
 public:
 	/**
 	 * The default constructor for the ObservationTransitionsArray class. This requires the

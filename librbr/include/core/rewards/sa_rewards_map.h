@@ -37,7 +37,7 @@
  * A class for state-action rewards in an MDP-like object, internally storing the rewards as
  * a map.
  */
-class SARewardsMap : public SARewards {
+class SARewardsMap : virtual public SARewards {
 public:
 	/**
 	 * The default constructor for the SARewardsMap class.

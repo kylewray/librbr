@@ -708,7 +708,7 @@ int UnifiedFile::load_states(std::vector<std::string> items)
 {
 	// If the item is not defined, then it must be a sequence of factored states.
 	if (items.size() < 2) {
-		states = new FiniteFactoredStates();
+		states = new FactoredStatesMap();
 		return 1;
 	}
 
@@ -815,12 +815,17 @@ bool UnifiedFile::load_factored_states(int factorIndex, std::string line)
 		}
 	}
 
-	if (factorIndex >= ((FiniteFactoredStates *)states)->get_num_factors()) {
-		((FiniteFactoredStates *)states)->add_factor(newStates);
-	} else {
-		((FiniteFactoredStates *)states)->set(factorIndex, newStates);
+	FactoredStatesMap *S = dynamic_cast<FactoredStatesMap *>(states);
+	if (S == nullptr) {
+		throw CoreException();
 	}
-	((FiniteFactoredStates *)states)->update();
+
+	if (factorIndex >= (int)S->get_num_factors()) {
+		S->add_factor(newStates);
+	} else {
+		S->set(factorIndex, newStates);
+	}
+	S->update();
 
 	// After the update, the internal states have been reset, so we need to remake
 	// the ordered list of states.
@@ -949,9 +954,11 @@ int UnifiedFile::load_agent_actions(int agentIndex, std::string line)
 
 	// Set the action index, and ignore any errors on an update. An error means that some action
 	// sets for other agents are not yet defined.
-	((JointActionsMap *)actions)->set(agentIndex, newActions);
+	JointActionsMap *A = dynamic_cast<JointActionsMap *>(actions);
+
+	A->set(agentIndex, newActions);
 	try {
-		((JointActionsMap *)actions)->update();
+		A->update();
 	} catch (const ActionException &err) { }
 
 	return 0;

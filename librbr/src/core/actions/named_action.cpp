@@ -23,6 +23,7 @@
 
 
 #include "../../../include/core/actions/named_action.h"
+#include "../../../include/core/actions/action_exception.h"
 
 NamedAction::NamedAction()
 { }
@@ -52,7 +53,10 @@ std::string NamedAction::get_name() const
 
 Action &NamedAction::operator=(const Action &other)
 {
-    const NamedAction *a = static_cast<const NamedAction*>(&other);
+    const NamedAction *a = dynamic_cast<const NamedAction*>(&other);
+    if (a == nullptr) {
+    	throw ActionException();
+    }
 	name = a->get_name();
 	return *this;
 }

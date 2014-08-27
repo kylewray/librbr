@@ -36,7 +36,7 @@
  * Note: This class does *not* manage the memory of the actions provided. Memory should be managed in
  * a class such as FiniteJointActions.
  */
-class JointAction : public Action {
+class JointAction : virtual public Action {
 public:
 	/**
 	 * The constructor of the JointAction object which allows initial specification of the
@@ -90,7 +90,8 @@ public:
 
 	/**
 	 * Overload the equals operator to set this joint action equal to the state provided.
-	 * @param	other	The joint action to copy.
+	 * @param	other				The joint action to copy.
+	 * @param	ActionException		The other action is not a JointAction.
 	 * @return	The new version of this action.
 	 */
 	virtual Action &operator=(const Action &other);

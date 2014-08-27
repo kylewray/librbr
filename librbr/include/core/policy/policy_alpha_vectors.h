@@ -49,7 +49,7 @@
  * which set alpha vectors automatically assume the user has relinquished control of memory
  * management once passed into the method.
  */
-class PolicyAlphaVectors : public Policy {
+class PolicyAlphaVectors : virtual public Policy {
 public:
 	/**
 	 * The default constructor for a PolicyAlphaVectors object. It defaults to a horizon of 1.

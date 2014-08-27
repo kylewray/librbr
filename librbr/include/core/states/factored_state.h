@@ -36,7 +36,7 @@
  * Note: This class does *not* manage the memory of the states provided. Memory should be managed in
  * a class such as FiniteFactoredStates.
  */
-class FactoredState : public State {
+class FactoredState : virtual public State {
 public:
 	/**
 	 * The constructor of the FactoredState object which allows initial specification of the
@@ -90,7 +90,8 @@ public:
 
 	/**
 	 * Overload the equals operator to set this factored state equal to the state provided.
-	 * @param	other		The factored state to copy.
+	 * @param	other			The factored state to copy.
+	 * @throw	StateException	The other state is not a FactoredState.
 	 * @return	The new version of this state.
 	 */
 	virtual State &operator=(const State &other);

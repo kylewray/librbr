@@ -69,7 +69,10 @@ int JointAction::get_num_actions() const
 
 Action &JointAction::operator=(const Action &other)
 {
-    const JointAction *a = static_cast<const JointAction*>(&other);
+    const JointAction *a = dynamic_cast<const JointAction*>(&other);
+    if (a == nullptr) {
+    	throw ActionException();
+    }
 	actions = a->get();
 	return *this;
 }

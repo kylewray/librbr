@@ -34,7 +34,7 @@
  * A state object identified by a unique index which is determined using a static variable,
  * incremented each time a new IndexedState is created.
  */
-class IndexedState : public State {
+class IndexedState : virtual public State {
 public:
 	/**
 	 * The default constructor of the IndexedState object.
@@ -60,7 +60,8 @@ public:
 
 	/**
 	 * Overload the equals operator to set this state equal to the state provided.
-	 * @param	other		The state to copy.
+	 * @param	other			The state to copy.
+	 * @throw	StateException	The other state is not a IndexedState.
 	 * @return	The new version of this state.
 	 */
 	virtual State &operator=(const State &other);

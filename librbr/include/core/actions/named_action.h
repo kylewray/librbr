@@ -33,7 +33,7 @@
 /**
  * An action object identified by a unique name.
  */
-class NamedAction : public Action {
+class NamedAction : virtual public Action {
 public:
 	/**
 	 * The default constructor of the NamedAction object.
@@ -71,7 +71,8 @@ public:
 
 	/**
 	 * Overload the equals operator to set this action equal to the action provided.
-	 * @param	other		The action to copy.
+	 * @param	other				The action to copy.
+	 * @param	ActionException		The other action is not a NamedAction.
 	 * @return	The new version of this action.
 	 */
 	virtual Action &operator=(const Action &other);

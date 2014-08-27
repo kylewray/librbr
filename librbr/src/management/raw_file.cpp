@@ -222,8 +222,10 @@ MDP *RawFile::load_raw_mdp(std::string filename)
 	// Create the rewards, based on the reward type.
 	Rewards *rewards = nullptr;
 
-	for (int i = 0; i < k; i++) {
+	for (int i = 0; i < (int)k; i++) {
 		Rewards *Ri = nullptr;
+		SARewardsArray *RiSA = nullptr;
+		SASRewardsArray *RiSAS = nullptr;
 
 		switch (r) {
 		case RawFileRewardsType::RawFileSRewards:
@@ -232,11 +234,23 @@ MDP *RawFile::load_raw_mdp(std::string filename)
 			break;
 		case RawFileRewardsType::RawFileSARewards:
 			Ri = new SARewardsArray(n, m);
-			((SARewardsArray *)Ri)->set_rewards(R[i]);
+
+			RiSA = dynamic_cast<SARewardsArray *>(rewards);
+			if (RiSA == nullptr) {
+				throw CoreException();
+			}
+
+			RiSA->set_rewards(R[i]);
 			break;
 		case RawFileRewardsType::RawFileSASRewards:
 			Ri = new SASRewardsArray(n, m);
-			((SASRewardsArray *)Ri)->set_rewards(R[i]);
+
+			RiSAS = dynamic_cast<SASRewardsArray *>(rewards);
+			if (RiSAS == nullptr) {
+				throw CoreException();
+			}
+
+			RiSAS->set_rewards(R[i]);
 			break;
 		};
 
@@ -249,11 +263,17 @@ MDP *RawFile::load_raw_mdp(std::string filename)
 			if (rewards == nullptr) {
 				rewards = new FactoredRewards();
 			}
-			((FactoredRewards *)rewards)->add_factor(Ri);
+
+			FactoredRewards *RiStar = dynamic_cast<FactoredRewards *>(rewards);
+			if (RiStar == nullptr) {
+				throw CoreException();
+			}
+
+			RiStar->add_factor(Ri);
 		}
 	}
 
-	for (int i = 0; i < k; i++) {
+	for (int i = 0; i < (int)k; i++) {
 		delete [] R[i];
 	}
 	delete [] R;
@@ -284,8 +304,8 @@ void RawFile::save_raw_mdp(const MDP *mdp, std::string filename)
 
 	// First, obtain all the objects for easy reference. Also, check to make sure this
 	// is a valid MDP.
-	const StatesMap *S = static_cast<const StatesMap *>(mdp->get_states());
-	const ActionsMap *A = static_cast<const ActionsMap *>(mdp->get_actions());
+	const StatesMap *S = dynamic_cast<const StatesMap *>(mdp->get_states());
+	const ActionsMap *A = dynamic_cast<const ActionsMap *>(mdp->get_actions());
 	const StateTransitions *T = mdp->get_state_transitions();
 	const Rewards *R = nullptr;
 	const Initial *s0 = mdp->get_initial_state();
@@ -307,7 +327,11 @@ void RawFile::save_raw_mdp(const MDP *mdp, std::string filename)
 			r = 2;
 		}
 	} else {
-		k = ((const FactoredRewards *)R)->get_num_rewards();
+		const FactoredRewards *RF = dynamic_cast<const FactoredRewards *>(R);
+		if (RF == nullptr) {
+			throw CoreException();
+		}
+		k = RF->get_num_rewards();
 
 //		// Note: We attempt to cast the first one, and assume that the rest are of the same class.
 //		const Rewards *R0 = nullptr;
@@ -371,15 +395,23 @@ void RawFile::save_raw_mdp(const MDP *mdp, std::string filename)
 	}
 
 	// Write all of the reward information, based on the reward type.
-	for (int i = 0; i < k; i++) {
+	for (int i = 0; i < (int)k; i++) {
 		// In order to reuse code, do this small trick. If this is only a single reward, then
 		// we will just type cast the normal reward R; however, if this is a factored reward, then
 		// get the particular factor we are iterating over.
 		const Rewards *Ri = nullptr;
+		const FactoredRewards *RF = nullptr;
+		const SARewardsArray *RiSA = nullptr;
+		const SASRewardsArray *RiSAS = nullptr;
+
 		if (k == 1) {
 			Ri = R;
 		} else {
-			Ri = ((const FactoredRewards *)R)->get(i);
+			RF = dynamic_cast<const FactoredRewards *>(R);
+			if (RF == nullptr) {
+				throw CoreException();
+			}
+			Ri = RF->get(i);
 		}
 
 		switch (r) {
@@ -388,7 +420,11 @@ void RawFile::save_raw_mdp(const MDP *mdp, std::string filename)
 			throw CoreException();
 			break;
 		case RawFileRewardsType::RawFileSARewards:
-			Ri = ((const FactoredRewards *)R)->get(i);
+			RF = dynamic_cast<const FactoredRewards *>(R);
+			if (RF == nullptr) {
+				throw CoreException();
+			}
+			Ri = RF->get(i);
 
 			for (auto state : *S) {
 				const State *s = resolve(state);
@@ -397,9 +433,14 @@ void RawFile::save_raw_mdp(const MDP *mdp, std::string filename)
 				for (auto action : *A) {
 					const Action *a = resolve(action);
 
-					file << ((const SARewards *)Ri)->get(s, a);
+					RiSA = dynamic_cast<const SARewardsArray *>(Ri);
+					if (RiSA == nullptr) {
+						throw CoreException();
+					}
 
-					if (i < S->get_num_states() - 1) {
+					file << RiSA->get(s, a);
+
+					if (i < (int)S->get_num_states() - 1) {
 						file << " ";
 					}
 					i++;
@@ -408,7 +449,11 @@ void RawFile::save_raw_mdp(const MDP *mdp, std::string filename)
 			}
 			break;
 		case RawFileRewardsType::RawFileSASRewards:
-			Ri = ((const FactoredRewards *)R)->get(i);
+			RF = dynamic_cast<const FactoredRewards *>(R);
+			if (RF == nullptr) {
+				throw CoreException();
+			}
+			Ri = RF->get(i);
 
 			for (auto state : *S) {
 				const State *s = resolve(state);
@@ -420,7 +465,12 @@ void RawFile::save_raw_mdp(const MDP *mdp, std::string filename)
 					for (auto nextState : *S) {
 						const State *sp = resolve(nextState);
 
-						file << ((const SASRewards *)Ri)->get(s, a, sp);
+						RiSAS = dynamic_cast<const SASRewardsArray *>(Ri);
+						if (RiSAS == nullptr) {
+							throw CoreException();
+						}
+
+						file << RiSAS->get(s, a, sp);
 
 						if (i < S->get_num_states() - 1) {
 							file << " ";

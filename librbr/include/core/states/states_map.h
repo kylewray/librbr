@@ -44,7 +44,7 @@
  * implements the function in the virtual functions described below. You will likely ignore the internal
  * states vector variable here.
  */
-class StatesMap : public States {
+class StatesMap : virtual public States {
 public:
 	/**
 	 * The default constructor for the StatesMap class.

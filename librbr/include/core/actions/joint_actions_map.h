@@ -44,7 +44,7 @@
  *
  * Note: The protected "states" variable implicitly must only store JointState objects, not State objects.
  */
-class JointActionsMap : public ActionsMap {
+class JointActionsMap : virtual public ActionsMap {
 public:
 	/**
 	 * The default constructor for the FiniteJointActions class which requires that you

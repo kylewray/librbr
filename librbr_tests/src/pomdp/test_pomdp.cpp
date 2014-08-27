@@ -89,8 +89,8 @@ int test_pomdp()
 
 	// Save and destroy the alpha vectors.
 	if (pomdp != nullptr) {
-		policyAlphaVectors->save("tmp/test_pomdp_vi_finite_horizon.pomdp_alpha_vectors",
-				(const StatesMap *)pomdp->get_states());
+		const StatesMap *states = dynamic_cast<const StatesMap *>(pomdp->get_states());
+		policyAlphaVectors->save("tmp/test_pomdp_vi_finite_horizon.pomdp_alpha_vectors", states);
 	}
 
 	delete policyAlphaVectors;
@@ -101,7 +101,7 @@ int test_pomdp()
 	POMDPPBVI pbvi;
 
 	try {
-		const StatesMap *states = (const StatesMap *)pomdp->get_states();
+		const StatesMap *states = dynamic_cast<const StatesMap *>(pomdp->get_states());
 		std::vector<const State *> orderedStates;
 		for (auto s : *states) {
 			orderedStates.push_back(resolve(s));
@@ -155,8 +155,8 @@ int test_pomdp()
 
 	// Save and destroy the alpha vectors. Also, We are done with the tiger problem, so destroy it.
 	if (pomdp != nullptr) {
-		policyAlphaVectors->save("tmp/test_pomdp_pbvi_finite_horizon.pomdp_alpha_vectors",
-				(const StatesMap *)pomdp->get_states());
+		const StatesMap *states = dynamic_cast<const StatesMap *>(pomdp->get_states());
+		policyAlphaVectors->save("tmp/test_pomdp_pbvi_finite_horizon.pomdp_alpha_vectors", states);
 		delete pomdp;
 	}
 	pomdp = nullptr;
@@ -201,8 +201,8 @@ int test_pomdp()
 
 	// Save and destroy the alpha vectors.
 	if (pomdp != nullptr) {
-		policyAlphaVectors->save("tmp/test_pomdp_vi_infinite_horizon.pomdp_alpha_vectors",
-				(const StatesMap *)pomdp->get_states());
+		const StatesMap *states = dynamic_cast<const StatesMap *>(pomdp->get_states());
+		policyAlphaVectors->save("tmp/test_pomdp_vi_infinite_horizon.pomdp_alpha_vectors", states);
 	}
 
 	delete policyAlphaVectors;
@@ -218,7 +218,7 @@ int test_pomdp()
 	pbvi.reset();
 
 	try {
-		const StatesMap *states = (const StatesMap *)pomdp->get_states();
+		const StatesMap *states = dynamic_cast<const StatesMap *>(pomdp->get_states());
 		std::vector<const State *> orderedStates;
 		for (auto s : *states) {
 			orderedStates.push_back(resolve(s));
@@ -272,8 +272,8 @@ int test_pomdp()
 
 	// Save and destroy the alpha vectors. Also, We are done with the tiger problem, so destroy it.
 	if (pomdp != nullptr) {
-		policyAlphaVectors->save("tmp/test_pomdp_pbvi_infinite_horizon.pomdp_alpha_vectors",
-				(const StatesMap *)pomdp->get_states());
+		const StatesMap *states = dynamic_cast<const StatesMap *>(pomdp->get_states());
+		policyAlphaVectors->save("tmp/test_pomdp_pbvi_infinite_horizon.pomdp_alpha_vectors", states);
 		delete pomdp;
 	}
 	pomdp = nullptr;

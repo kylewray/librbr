@@ -46,7 +46,7 @@
  * Additionally, the class supports finite horizon solutions, too. By default
  * it assumes infinite horizon.
  */
-class PolicyMap : public Policy {
+class PolicyMap : virtual public Policy {
 public:
 	/**
 	 * The default constructor for a PolicyMap object. It defaults to a horizon of 1.

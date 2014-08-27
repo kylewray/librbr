@@ -447,15 +447,18 @@ int test_rewards()
 	std::cout << ((SARewards *)(factoredRewards->get(1)))->get(s2, a2) << std::endl;
 	 */
 
-	if (factoredRewards->get_num_rewards() == 2 &&
-		((SARewards *)(factoredRewards->get(0)))->get(s1, a1) == 42.0 &&
-		((SARewards *)(factoredRewards->get(0)))->get(s1, a2) == 10.0 &&
-		((SARewards *)(factoredRewards->get(0)))->get(s2, a1) == -1.0 &&
-		((SARewards *)(factoredRewards->get(0)))->get(s2, a2) == -100.0 &&
-		((SARewards *)(factoredRewards->get(1)))->get(s1, a1) == -1.0 &&
-		((SARewards *)(factoredRewards->get(1)))->get(s1, a2) == 0.0 &&
-		((SARewards *)(factoredRewards->get(1)))->get(s2, a1) == 1.0 &&
-		((SARewards *)(factoredRewards->get(1)))->get(s2, a2) == 2.0) {
+	const SARewards *R0 = dynamic_cast<const SARewards *>(factoredRewards->get(0));
+	const SARewards *R1 = dynamic_cast<const SARewards *>(factoredRewards->get(1));
+
+	if (R0 != nullptr && R1 != nullptr && factoredRewards->get_num_rewards() == 2 &&
+			R0->get(s1, a1) == 42.0 &&
+			R0->get(s1, a2) == 10.0 &&
+			R0->get(s2, a1) == -1.0 &&
+			R0->get(s2, a2) == -100.0 &&
+			R1->get(s1, a1) == -1.0 &&
+			R1->get(s1, a2) == 0.0 &&
+			R1->get(s2, a1) == 1.0 &&
+			R1->get(s2, a2) == 2.0) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {
@@ -480,15 +483,18 @@ int test_rewards()
 
 	factoredRewards->set(1, saRewardsMap);
 
-	if (factoredRewards->get_num_rewards() == 2 &&
-		((SARewards *)(factoredRewards->get(0)))->get(s1, a1) == -1.0 &&
-		((SARewards *)(factoredRewards->get(0)))->get(s1, a2) == 0.0 &&
-		((SARewards *)(factoredRewards->get(0)))->get(s2, a1) == 1.0 &&
-		((SARewards *)(factoredRewards->get(0)))->get(s2, a2) == 2.0 &&
-		((SARewards *)(factoredRewards->get(1)))->get(s1, a1) == 42.0 &&
-		((SARewards *)(factoredRewards->get(1)))->get(s1, a2) == 10.0 &&
-		((SARewards *)(factoredRewards->get(1)))->get(s2, a1) == -1.0 &&
-		((SARewards *)(factoredRewards->get(1)))->get(s2, a2) == -100.0) {
+	R0 = dynamic_cast<const SARewards *>(factoredRewards->get(0));
+	R1 = dynamic_cast<const SARewards *>(factoredRewards->get(1));
+
+	if (R0 != nullptr && R1 != nullptr && factoredRewards->get_num_rewards() == 2 &&
+		R0->get(s1, a1) == -1.0 &&
+		R0->get(s1, a2) == 0.0 &&
+		R0->get(s2, a1) == 1.0 &&
+		R0->get(s2, a2) == 2.0 &&
+		R1->get(s1, a1) == 42.0 &&
+		R1->get(s1, a2) == 10.0 &&
+		R1->get(s2, a1) == -1.0 &&
+		R1->get(s2, a2) == -100.0) {
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} else {

@@ -28,10 +28,10 @@
 
 #include <algorithm>
 
-FiniteFactoredStates::FiniteFactoredStates()
+FactoredStatesMap::FactoredStatesMap()
 { }
 
-FiniteFactoredStates::FiniteFactoredStates(int numFactors)
+FactoredStatesMap::FactoredStatesMap(int numFactors)
 {
 	if (numFactors < 1) {
 		numFactors = 1;
@@ -39,12 +39,12 @@ FiniteFactoredStates::FiniteFactoredStates(int numFactors)
 	factoredStates.resize(numFactors);
 }
 
-FiniteFactoredStates::~FiniteFactoredStates()
+FactoredStatesMap::~FactoredStatesMap()
 {
 	reset();
 }
 
-void FiniteFactoredStates::add_factor(const std::vector<const State *> &newStates)
+void FactoredStatesMap::add_factor(const std::vector<const State *> &newStates)
 {
 	if (newStates.size() == 0) {
 		throw StateException();
@@ -59,7 +59,7 @@ void FiniteFactoredStates::add_factor(const std::vector<const State *> &newState
 	factoredStates.push_back(newStates);
 }
 
-void FiniteFactoredStates::add(int factorIndex, const State *newState)
+void FactoredStatesMap::add(int factorIndex, const State *newState)
 {
 	if (factorIndex < 0 || factorIndex >= factoredStates.size()) {
 		throw StateException();
@@ -68,7 +68,7 @@ void FiniteFactoredStates::add(int factorIndex, const State *newState)
 	factoredStates[factorIndex].push_back(newState);
 }
 
-void FiniteFactoredStates::remove(int factorIndex, const State *removeState)
+void FactoredStatesMap::remove(int factorIndex, const State *removeState)
 {
 	if (factorIndex < 0 || factorIndex >= factoredStates.size()) {
 		throw StateException();
@@ -83,7 +83,7 @@ void FiniteFactoredStates::remove(int factorIndex, const State *removeState)
 	delete removeState;
 }
 
-void FiniteFactoredStates::set(int factorIndex, const std::vector<const State *> &newStates)
+void FactoredStatesMap::set(int factorIndex, const std::vector<const State *> &newStates)
 {
 	if (factorIndex < 0 || factorIndex >= factoredStates.size() || newStates.size() == 0) {
 		throw StateException();
@@ -98,7 +98,7 @@ void FiniteFactoredStates::set(int factorIndex, const std::vector<const State *>
 	factoredStates[factorIndex] = newStates;
 }
 
-const State *FiniteFactoredStates::get(int factorIndex, int stateIndex) const
+const State *FactoredStatesMap::get(int factorIndex, int stateIndex) const
 {
 	if (factorIndex < 0 || factorIndex >= factoredStates.size() ||
 			stateIndex < 0 || stateIndex >= factoredStates[factorIndex].size()) {
@@ -108,7 +108,7 @@ const State *FiniteFactoredStates::get(int factorIndex, int stateIndex) const
 	return factoredStates[factorIndex][stateIndex];
 }
 
-void FiniteFactoredStates::update()
+void FactoredStatesMap::update()
 {
 	// Throw an error if one factor is not defined.
 	for (std::vector<const State *> &factor : factoredStates) {
@@ -123,12 +123,12 @@ void FiniteFactoredStates::update()
 	update_step(create, 0);
 }
 
-unsigned int FiniteFactoredStates::get_num_factors()
+unsigned int FactoredStatesMap::get_num_factors()
 {
 	return factoredStates.size();
 }
 
-void FiniteFactoredStates::reset()
+void FactoredStatesMap::reset()
 {
 	for (std::vector<const State *> &factor : factoredStates) {
 		for (const State *state : factor) {
@@ -140,7 +140,7 @@ void FiniteFactoredStates::reset()
 	states.clear();
 }
 
-void FiniteFactoredStates::update_step(std::vector<const State *> currentFactoredState, int currentFactorIndex)
+void FactoredStatesMap::update_step(std::vector<const State *> currentFactoredState, int currentFactorIndex)
 {
 	// At the final factor index, we need to create a bunch of factored states.
 	for (const State *state : factoredStates[currentFactorIndex]) {

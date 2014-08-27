@@ -23,6 +23,7 @@
 
 
 #include "../../../include/core/states/named_state.h"
+#include "../../../include/core/states/state_exception.h"
 
 NamedState::NamedState()
 { }
@@ -52,7 +53,10 @@ std::string NamedState::get_name() const
 
 State &NamedState::operator=(const State &other)
 {
-    const NamedState *s = static_cast<const NamedState*> (&other);
+    const NamedState *s = dynamic_cast<const NamedState*> (&other);
+    if (s == nullptr) {
+    	throw StateException();
+    }
     name = s->get_name();
     return *this;
 }

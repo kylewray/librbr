@@ -23,6 +23,7 @@
 
 
 #include "../../../include/core/actions/indexed_action.h"
+#include "../../../include/core/actions/action_exception.h"
 
 unsigned int IndexedAction::indexer = 0;
 
@@ -50,7 +51,10 @@ unsigned int IndexedAction::get_index() const
 
 Action &IndexedAction::operator=(const Action &other)
 {
-    const IndexedAction *s = static_cast<const IndexedAction*> (&other);
+    const IndexedAction *s = dynamic_cast<const IndexedAction*>(&other);
+    if (s == nullptr) {
+    	throw ActionException();
+    }
     index = s->get_index();
     return *this;
 }

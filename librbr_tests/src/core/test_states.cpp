@@ -211,11 +211,10 @@ int test_states()
 		std::cout << " Failure." << std::endl;
 	}
 
-	const State *testFindState = nullptr;
-
 	std::cout << "States: Test 'FiniteStates::find'... ";
 	try {
-		testFindState = find_state(finiteStates, ((const NamedState *)s1)->get_name());
+		const NamedState *ns1 = dynamic_cast<const NamedState *>(s1);
+		find_state(finiteStates, ns1->get_name());
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} catch (const StateException &err) {
@@ -224,7 +223,8 @@ int test_states()
 
 	std::cout << "States: Test 'FiniteStates::find' (Expecting Error)... ";
 	try {
-		testFindState = find_state(finiteStates, ((const NamedState *)s3)->get_name());
+		const NamedState *ns3 = dynamic_cast<const NamedState *>(s3);
+		find_state(finiteStates, ns3->get_name());
 		std::cout << " Failure." << std::endl;
 	} catch (const StateException &err) {
 		std::cout << " Success." << std::endl;
@@ -239,7 +239,7 @@ int test_states()
 	s3 = new NamedState("s3");
 	State *s4 = new NamedState("s4");
 
-	FiniteFactoredStates *finiteFactoredStates = new FiniteFactoredStates(2);
+	FactoredStatesMap *finiteFactoredStates = new FactoredStatesMap(2);
 
 	std::cout << "States: Test 'FiniteFactoredStates::add'... ";
 	try {
@@ -264,7 +264,7 @@ int test_states()
 	try {
 		for (auto s : *finiteFactoredStates) {
 			const State *state = resolve(s);
-			const FactoredState *fs = static_cast<const FactoredState *>(state);
+			const FactoredState *fs = dynamic_cast<const FactoredState *>(state);
 			if (fs == nullptr) {
 				throw StateException();
 			}
@@ -412,11 +412,9 @@ int test_states()
 		std::cout << " Failure." << std::endl;
 	}
 
-	testFindState = nullptr;
-
 	std::cout << "States: Test 'FiniteFactoredStates::find'... ";
 	try {
-		testFindState = find_state(finiteFactoredStates, "s1 s4");
+		find_state(finiteFactoredStates, "s1 s4");
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} catch (const StateException &err) {
@@ -425,7 +423,7 @@ int test_states()
 
 	std::cout << "States: Test 'finiteFactoredStates::find' (Expecting Error)... ";
 	try {
-		testFindState = find_state(finiteFactoredStates, "s3 s2");
+		find_state(finiteFactoredStates, "s3 s2");
 		std::cout << " Failure." << std::endl;
 	} catch (const StateException &err) {
 		std::cout << " Success." << std::endl;

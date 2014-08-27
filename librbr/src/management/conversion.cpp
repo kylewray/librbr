@@ -60,15 +60,15 @@ MDP *convert_map_to_array(const MDP *mdp)
 
 	// Check the validity of the MDP's components by attempting to cast the
 	// states, actions, state transitions, rewards, and initial state.
-	const StatesMap *states = static_cast<const StatesMap *>(mdp->get_states());
-	const ActionsMap *actions = static_cast<const ActionsMap *>(mdp->get_actions());
+	const StatesMap *states = dynamic_cast<const StatesMap *>(mdp->get_states());
+	const ActionsMap *actions = dynamic_cast<const ActionsMap *>(mdp->get_actions());
 
 	const StateTransitionsMap *stateTransitions =
-			static_cast<const StateTransitionsMap *>(mdp->get_state_transitions());
-	const SASRewardsMap *rewards = static_cast<const SASRewardsMap *>(mdp->get_rewards());
+			dynamic_cast<const StateTransitionsMap *>(mdp->get_state_transitions());
+	const SASRewardsMap *rewards = dynamic_cast<const SASRewardsMap *>(mdp->get_rewards());
 
-	const Initial *initial = static_cast<const Initial *>(mdp->get_initial_state());
-	const Horizon *horizon = static_cast<const Horizon *>(mdp->get_horizon());
+	const Initial *initial = dynamic_cast<const Initial *>(mdp->get_initial_state());
+	const Horizon *horizon = dynamic_cast<const Horizon *>(mdp->get_horizon());
 
 	if (states == nullptr || actions == nullptr || stateTransitions == nullptr ||
 			rewards == nullptr || initial == nullptr) {

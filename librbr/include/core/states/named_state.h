@@ -33,7 +33,7 @@
 /**
  * A state object identified by a unique name.
  */
-class NamedState : public State {
+class NamedState : virtual public State {
 public:
 	/**
 	 * The default constructor of the NamedState object.
@@ -71,7 +71,8 @@ public:
 
 	/**
 	 * Overload the equals operator to set this state equal to the state provided.
-	 * @param	other		The state to copy.
+	 * @param	other			The state to copy.
+	 * @throw	StateException	The other state is not a NamedState.
 	 * @return	The new version of this state.
 	 */
 	virtual State &operator=(const State &other);

@@ -35,7 +35,7 @@
  * A class for state-action-state rewards in an MDP-like object, internally storing the
  * rewards as an array.
  */
-class SASRewardsArray : public SASRewards {
+class SASRewardsArray : virtual public SASRewards {
 public:
 	/**
 	 * The default constructor for the SASRewardsArray class. This requires the number of states,

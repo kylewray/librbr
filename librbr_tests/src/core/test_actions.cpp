@@ -214,11 +214,10 @@ int test_actions()
 		std::cout << " Failure." << std::endl;
 	}
 
-	const Action *testFindAction = nullptr;
-
 	std::cout << "Actions: Test 'FiniteActions::find'... ";
 	try {
-		testFindAction = find_action(finiteActions, ((const NamedAction *)a1)->get_name());
+		const NamedAction *na1 = dynamic_cast<const NamedAction *>(a1);
+		find_action(finiteActions, na1->get_name());
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} catch (const ActionException &err) {
@@ -227,7 +226,8 @@ int test_actions()
 
 	std::cout << "Actions: Test 'FiniteActions::find' (Expecting Error)... ";
 	try {
-		testFindAction = find_action(finiteActions, ((const NamedAction *)a3)->get_name());
+		const NamedAction *na3 = dynamic_cast<const NamedAction *>(a3);
+		find_action(finiteActions, na3->get_name());
 		std::cout << " Failure." << std::endl;
 	} catch (const ActionException &err) {
 		std::cout << " Success." << std::endl;
@@ -267,7 +267,7 @@ int test_actions()
 	try {
 		for (auto a : *finiteJointActions) {
 			const Action *action = resolve(a);
-			const JointAction *ja = static_cast<const JointAction *>(action);
+			const JointAction *ja = dynamic_cast<const JointAction *>(action);
 			if (ja == nullptr) {
 				throw ActionException();
 			}
@@ -420,11 +420,9 @@ int test_actions()
 		std::cout << " Failure." << std::endl;
 	}
 
-	testFindAction = nullptr;
-
 	std::cout << "Actions: Test 'FiniteJointActions::find'... ";
 	try {
-		testFindAction = find_action(finiteJointActions, "a1 a4");
+		find_action(finiteJointActions, "a1 a4");
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
 	} catch (const ActionException &err) {
@@ -433,7 +431,7 @@ int test_actions()
 
 	std::cout << "Actions: Test 'finiteJointActions::find' (Expecting Error)... ";
 	try {
-		testFindAction = find_action(finiteJointActions, "a3 a2");
+		find_action(finiteJointActions, "a3 a2");
 		std::cout << " Failure." << std::endl;
 	} catch (const ActionException &err) {
 		std::cout << " Success." << std::endl;

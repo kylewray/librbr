@@ -23,6 +23,7 @@
 
 
 #include "../../../include/core/states/indexed_state.h"
+#include "../../../include/core/states/state_exception.h"
 
 unsigned int IndexedState::indexer = 0;
 
@@ -50,7 +51,10 @@ unsigned int IndexedState::get_index() const
 
 State &IndexedState::operator=(const State &other)
 {
-    const IndexedState *s = static_cast<const IndexedState*> (&other);
+    const IndexedState *s = dynamic_cast<const IndexedState*> (&other);
+    if (s == nullptr) {
+    	throw StateException();
+    }
     index = s->get_index();
     return *this;
 }

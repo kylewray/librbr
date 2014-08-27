@@ -47,7 +47,7 @@
  * particular underlying storage structure will be defined by a child class of SASRewards, e.g.,
  * SASRewardsMap.
  */
-class SASRewards : public SASORewards {
+class SASRewards : virtual public SASORewards {
 public:
 	/**
 	 * The default constructor for the SASRewards class.

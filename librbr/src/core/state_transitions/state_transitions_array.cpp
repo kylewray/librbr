@@ -94,7 +94,7 @@ void StateTransitionsArray::successors(const States *S, const State *state,
 		const Action *action, std::vector<const State *> &result) const
 {
 	// ToDo: Create a StatesArray object, and replace this cast with that instead.
-	const StatesMap *SMap = static_cast<const StatesMap *>(S);
+	const StatesMap *SMap = dynamic_cast<const StatesMap *>(S);
 	if (SMap == nullptr) {
 		throw StateTransitionException();
 	}

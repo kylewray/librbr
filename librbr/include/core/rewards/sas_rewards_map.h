@@ -37,7 +37,7 @@
  * A class for state-action-state rewards in an MDP-like object, internally storing the rewards as
  * a map.
  */
-class SASRewardsMap : public SASRewards {
+class SASRewardsMap : virtual public SASRewards {
 public:
 	/**
 	 * The default constructor for the SASRewardsMap class.

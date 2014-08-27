@@ -69,7 +69,11 @@ void FactoredWeightedRewards::set(unsigned int factorIndex, Rewards *newRewardsF
 
 const SASORewards *FactoredWeightedRewards::get(unsigned int factorIndex) const
 {
-	return (const SASORewards *)FactoredRewards::get(factorIndex);
+	const SASORewards *R = dynamic_cast<const SASORewards *>(FactoredRewards::get(factorIndex));
+	if (R == nullptr) {
+		throw RewardException();
+	}
+	return R;
 }
 
 void FactoredWeightedRewards::set(const State *state, const Action *action, const State *nextState,

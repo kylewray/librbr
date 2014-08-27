@@ -44,24 +44,24 @@
  *
  * Note: The protected "states" variable implicitly must only store FactoredState objects, not State objects.
  */
-class FiniteFactoredStates : public StatesMap {
+class FactoredStatesMap : virtual public StatesMap {
 public:
 	/**
-	 * The default constructor for the FiniteFactoredStates class.
+	 * The default constructor for the FactoredStatesMap class.
 	 */
-	FiniteFactoredStates();
+	FactoredStatesMap();
 
 	/**
-	 * The constructor for the FiniteFactoredStates class which requires that you
+	 * The constructor for the FactoredStatesMap class which requires that you
 	 * specify the number of factors.
 	 * @param	numFactors		The number of state factors, minimum of 1.
 	 */
-	FiniteFactoredStates(int numFactors);
+	FactoredStatesMap(int numFactors);
 
 	/**
-	 * The default deconstructor for the FiniteFactoredStates class.
+	 * The default deconstructor for the FactoredStatesMap class.
 	 */
-	virtual ~FiniteFactoredStates();
+	virtual ~FactoredStatesMap();
 
 	/**
 	 * Add a new factor states to the set of available states in a factor. This does *not* update the

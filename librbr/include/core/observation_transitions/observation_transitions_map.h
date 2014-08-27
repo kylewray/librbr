@@ -46,7 +46,7 @@
  * class which implements the function in the virtual functions described below. You will likely ignore
  * the internal observationTrantions vector variable here.
  */
-class ObservationTransitionsMap : public ObservationTransitions {
+class ObservationTransitionsMap : virtual public ObservationTransitions {
 public:
 	/**
 	 * The default constructor for the ObservationTransitionsMap class.

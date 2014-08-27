@@ -44,7 +44,7 @@
  * SASORewards is the most 'ancestral' of the rewards objects, and is abstract, we define
  * those methods.
  */
-class FactoredWeightedRewards : public FactoredRewards, public SASORewards {
+class FactoredWeightedRewards : virtual public FactoredRewards, virtual public SASORewards {
 public:
 	/**
 	 * The default constructor for the FactoredWeightedRewards class.
@@ -87,7 +87,7 @@ public:
 	 * Get the particular rewards element in the factored rewards vector. Note that this is an overloaded
 	 * method since it returns a SASORewards object; this is more for convenience.
 	 * @param	factorIndex			The index of the factor to add the rewards factor to.
-	 * @throw	RewardException		The index was invalid.
+	 * @throw	RewardException		The index was invalid, or the reward was not a SASORewards.
 	 * @return	The rewards for this index.
 	 */
 	virtual const SASORewards *get(unsigned int factorIndex) const;

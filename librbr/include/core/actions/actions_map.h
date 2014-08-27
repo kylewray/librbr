@@ -44,7 +44,7 @@
  * which implements the function in the virtual functions described below. You will likely ignore the
  * internal actions vector variable here.
  */
-class ActionsMap : public Actions {
+class ActionsMap : virtual public Actions {
 public:
 	/**
 	 * The default constructor for the FiniteActions class.

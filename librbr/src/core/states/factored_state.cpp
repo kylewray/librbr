@@ -69,7 +69,10 @@ int FactoredState::get_num_states() const
 
 State &FactoredState::operator=(const State &other)
 {
-    const FactoredState *s = static_cast<const FactoredState *> (&other);
+    const FactoredState *s = dynamic_cast<const FactoredState *> (&other);
+    if (s == nullptr) {
+    	throw StateException();
+    }
 	states = s->states;
 	return *this;
 }

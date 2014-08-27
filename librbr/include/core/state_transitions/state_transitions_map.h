@@ -45,7 +45,7 @@
  * class which implements the function in the virtual functions described below. You will likely ignore
  * the internal stateTrantions vector variable here.
  */
-class StateTransitionsMap : public StateTransitions {
+class StateTransitionsMap : virtual public StateTransitions {
 public:
 	/**
 	 * The default constructor for the StateTransitionsMap class.

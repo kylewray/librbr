@@ -45,7 +45,7 @@
  *
  * This class requires that states and actions be of types IndexedState and IndexedAction, respectively.
  */
-class StateTransitionsArray : public StateTransitions {
+class StateTransitionsArray : virtual public StateTransitions {
 public:
 	/**
 	 * The default constructor for the StateTransitionsArray class. This requires the
