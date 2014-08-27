@@ -26,7 +26,7 @@
 
 #include <limits>
 
-void bellman_update(const StatesMap *S, const ActionsMap *A, const StateTransitionsMap *T,
+void bellman_update(const StatesMap *S, const ActionsMap *A, const StateTransitions *T,
 		const SASRewards *R, const Horizon *h, const State *s,
 		std::unordered_map<const State *, double> &V, const Action *&aBest)
 {

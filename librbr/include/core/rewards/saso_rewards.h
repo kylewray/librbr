@@ -48,7 +48,7 @@
  * particular underlying storage structure will be defined by a child class of SASORewards, e.g.,
  * SASORewardsMap.
  */
-class SASORewards : public Rewards {
+class SASORewards : virtual public Rewards {
 public:
 	/**
 	 * The default constructor for the SASORewards class.

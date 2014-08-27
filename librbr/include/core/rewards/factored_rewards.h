@@ -22,8 +22,8 @@
  */
 
 
-#ifndef MULTI_REWARDS_H
-#define MULTI_REWARDS_H
+#ifndef FACTORED_REWARDS_H
+#define FACTORED_REWARDS_H
 
 
 #include "rewards.h"
@@ -38,7 +38,7 @@
  * A class for factored rewards in an MDP-like object, i.e., multi-objective MDPs (MOMDPs). This
  * class stores a fixed set of reward functions, each a Rewards child object in-and-of-itself.
  */
-class FactoredRewards : public Rewards {
+class FactoredRewards : virtual public Rewards {
 public:
 	/**
 	 * The default constructor for the FactoredRewards class.
@@ -79,7 +79,7 @@ public:
 	 * @throw	RewardException		The index was invalid.
 	 * @return	The rewards for this index.
 	 */
-	virtual Rewards *get(unsigned int factorIndex) const;
+	virtual const Rewards *get(unsigned int factorIndex) const;
 
 	/**
 	 * Get the number of rewards, i.e., the dimension of the factored rewards vector.
@@ -92,7 +92,7 @@ public:
 	 */
 	virtual void reset();
 
-private:
+protected:
 	/**
 	 * The vector of modifiable reward objects.
 	 */
@@ -101,4 +101,4 @@ private:
 };
 
 
-#endif // MULTI_REWARDS_H
+#endif // FACTORED_REWARDS_H

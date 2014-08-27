@@ -22,8 +22,8 @@
  */
 
 
-#ifndef POLICY_ITERATION_H
-#define POLICY_ITERATION_H
+#ifndef MDP_POLICY_ITERATION_H
+#define MDP_POLICY_ITERATION_H
 
 
 #include "mdp.h"
@@ -112,4 +112,4 @@ private:
 };
 
 
-#endif // POLICY_ITERATION_H
+#endif // MDP_POLICY_ITERATION_H

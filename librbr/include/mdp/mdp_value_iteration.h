@@ -22,8 +22,8 @@
  */
 
 
-#ifndef VALUE_ITERATION_H
-#define VALUE_ITERATION_H
+#ifndef MDP_VALUE_ITERATION_H
+#define MDP_VALUE_ITERATION_H
 
 
 #include "mdp.h"
@@ -32,7 +32,7 @@
 
 #include "../core/states/states_map.h"
 #include "../core/actions/actions_map.h"
-#include "../core/state_transitions/state_transitions_map.h"
+#include "../core/state_transitions/state_transitions.h"
 #include "../core/rewards/sas_rewards.h"
 #include "../core/horizon.h"
 
@@ -47,27 +47,27 @@
 class MDPValueIteration {
 public:
 	/**
-	 * The default constructor for the ValueIteration class. The default tolerance is 0.001.
+	 * The default constructor for the MDPValueIteration class. The default tolerance is 0.001.
 	 */
 	MDPValueIteration();
 
 	/**
-	 * A constructor for the ValueIteration class which allows for the specification
+	 * A constructor for the MDPValueIteration class which allows for the specification
 	 * of the convergence criterion (tolerance).
 	 * @param	tolerance		The tolerance which determines convergence of value iteration.
 	 */
 	MDPValueIteration(double tolerance);
 
 	/**
-	 * The deconstructor for the ValueIteration class.
+	 * The deconstructor for the MDPValueIteration class.
 	 */
 	virtual ~MDPValueIteration();
 
 	/**
 	 * Solve the MDP provided using value iteration.
 	 * @param	mdp							The Markov decision process to solve.
-	 * @throw	StateException				The MDP did not have a FiniteStates states object.
-	 * @throw	ActionException				The MDP did not have a FiniteActions actions object.
+	 * @throw	StateException				The MDP did not have a StatesMap states object.
+	 * @throw	ActionException				The MDP did not have a ActionsMap actions object.
 	 * @throw	StateTransitionsException	The MDP did not have a FiniteStateTransitions state transitions object.
 	 * @throw	RewardException				The MDP did not have a SASRewards rewards object.
 	 * @throw	PolicyException				An error occurred computing the policy.
@@ -86,7 +86,7 @@ private:
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy.
 	 */
-	PolicyMap *solve_finite_horizon(const StatesMap *S, const ActionsMap *A, const StateTransitionsMap *T,
+	PolicyMap *solve_finite_horizon(const StatesMap *S, const ActionsMap *A, const StateTransitions *T,
 			const SASRewards *R, const Horizon *h);
 
 	/**
@@ -99,7 +99,7 @@ private:
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy.
 	 */
-	PolicyMap *solve_infinite_horizon(const StatesMap *S, const ActionsMap *A, const StateTransitionsMap *T,
+	PolicyMap *solve_infinite_horizon(const StatesMap *S, const ActionsMap *A, const StateTransitions *T,
 			const SASRewards *R, const Horizon *h);
 
 	/**
@@ -110,4 +110,4 @@ private:
 };
 
 
-#endif // VALUE_ITERATION_H
+#endif // MDP_VALUE_ITERATION_H
