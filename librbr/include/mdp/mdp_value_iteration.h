@@ -36,6 +36,8 @@
 #include "../core/rewards/sas_rewards.h"
 #include "../core/horizon.h"
 
+#include <unordered_map>
+
 /**
  * Solve an MDP via value iteration (finite or infinite horizon). This solver has the
  * following requirements:
@@ -75,6 +77,12 @@ public:
 	 */
 	PolicyMap *solve(const MDP *mdp);
 
+	/**
+	 * Get the values of the states' mapping.
+	 * @return	The mapping from states to values.
+	 */
+	const std::unordered_map<const State *, double> &get_V() const;
+
 private:
 	/**
 	 * Solve a finite horizon MDP using value iteration.
@@ -101,6 +109,11 @@ private:
 	 */
 	PolicyMap *solve_infinite_horizon(const StatesMap *S, const ActionsMap *A, const StateTransitions *T,
 			const SASRewards *R, const Horizon *h);
+
+	/**
+	 * The value of a states and state's actions.
+	 */
+	std::unordered_map<const State *, double> V;
 
 	/**
 	 * The tolerance convergence criterion.

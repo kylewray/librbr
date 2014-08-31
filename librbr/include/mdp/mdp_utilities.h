@@ -27,13 +27,16 @@
 
 
 #include <unordered_map>
+#include <vector>
 
 #include "../core/states/state.h"
 #include "../core/states/states_map.h"
 #include "../core/actions/actions_map.h"
 #include "../core/state_transitions/state_transitions.h"
 #include "../core/rewards/sas_rewards.h"
+#include "../core/rewards/factored_rewards.h"
 #include "../core/horizon.h"
+#include "../core/policy/policy_map.h"
 
 /**
  * Compute the Bellman update/backup for a given state and compute the action which achieves the
@@ -50,6 +53,36 @@
 void bellman_update(const StatesMap *S, const ActionsMap *A, const StateTransitions *T,
 		const SASRewards *R, const Horizon *h, const State *s,
 		std::unordered_map<const State *, double> &V, const Action *&aBest);
+
+/**
+ * Compute the value of states (V^\pi), following the Bellman's equation, given a policy. This assumes
+ * a single reward function.
+ * @param	S 			The finite states.
+ * @param	A 			The finite actions.
+ * @param	T 			The finite state transition function.
+ * @param	R 			The state-action-state rewards.
+ * @param	h 			The horizon.
+ * @param	epsilon		The tolerance for convergence.
+ * @param	pi			The policy mapping states to actions.
+ * @param	V			The resultant values, mapping states to expected rewards. This will be updated.
+ */
+void compute_V_pi(const StatesMap *S, const ActionsMap *A, const StateTransitions *T, const SASRewards *R, const Horizon *h,
+		double epsilon, const PolicyMap *pi, std::unordered_map<const State *, double> &V);
+
+/**
+ * Compute the value of states (V^\pi), following the Bellman's equation, given a policy. This assumes
+ * a factored reward function, eaching having a SASReward.
+ * @param	S 			The finite states.
+ * @param	A 			The finite actions.
+ * @param	T 			The finite state transition function.
+ * @param	R 			The factored rewards, each being a state-action-state reward.
+ * @param	h 			The horizon.
+ * @param	epsilon		The tolerance for convergence.
+ * @param	pi			The policy mapping states to actions.
+ * @param	V			The resultant values, mapping states to expected rewards. This will be updated.
+ */
+void compute_V_pi(const StatesMap *S, const ActionsMap *A, const StateTransitions *T, const FactoredRewards *R, const Horizon *h,
+		double epsilon, const PolicyMap *pi, std::vector<std::unordered_map<const State *, double> > &V);
 
 
 #endif // MDP_UTILITIES_H

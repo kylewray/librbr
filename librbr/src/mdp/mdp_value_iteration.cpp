@@ -31,7 +31,6 @@
 #include "../../include/core/rewards/reward_exception.h"
 #include "../../include/core/policy/policy_exception.h"
 
-#include <unordered_map>
 #include <math.h>
 
 MDPValueIteration::MDPValueIteration()
@@ -88,14 +87,18 @@ PolicyMap *MDPValueIteration::solve(const MDP *mdp)
 	}
 }
 
+const std::unordered_map<const State *, double> &MDPValueIteration::get_V() const
+{
+	return V;
+}
+
 PolicyMap *MDPValueIteration::solve_finite_horizon(const StatesMap *S, const ActionsMap *A, const StateTransitions *T,
 		const SASRewards *R, const Horizon *h)
 {
 	// Create the policy based on the horizon.
 	PolicyMap *policy = new PolicyMap(h);
 
-	// The value of a states and state's actions.
-	std::unordered_map<const State *, double> V;
+	V.clear();
 
 	// Continue to iterate until the maximum difference between two V[s]'s is less than the tolerance.
 	for (int t = h->get_horizon() - 1; t >= 0; t--){
@@ -120,8 +123,7 @@ PolicyMap *MDPValueIteration::solve_infinite_horizon(const StatesMap *S, const A
 	// Create the policy based on the horizon.
 	PolicyMap *policy = new PolicyMap(h);
 
-	// The value of the states.
-	std::unordered_map<const State *, double> V;
+	V.clear();
 
 	// Continue to iterate until the maximum difference between two V[s]'s is less than the tolerance.
 	double convergenceCriterion = epsilon * (1.0 - h->get_discount_factor()) / h->get_discount_factor();

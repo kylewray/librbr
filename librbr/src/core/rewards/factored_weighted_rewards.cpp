@@ -67,13 +67,20 @@ void FactoredWeightedRewards::set(unsigned int factorIndex, Rewards *newRewardsF
 	FactoredRewards::set(factorIndex, newRewardsFactor);
 }
 
-const SASORewards *FactoredWeightedRewards::get(unsigned int factorIndex) const
+void FactoredWeightedRewards::set(const State *state, const Action *action, double reward)
 {
-	const SASORewards *R = dynamic_cast<const SASORewards *>(FactoredRewards::get(factorIndex));
-	if (R == nullptr) {
-		throw RewardException();
+	for (Rewards *R : rewards) {
+		SARewards *Ri = dynamic_cast<SARewards *>(R);
+		Ri->set(state, action, reward);
 	}
-	return R;
+}
+
+void FactoredWeightedRewards::set(const State *state, const Action *action, const State *nextState, double reward)
+{
+	for (Rewards *R : rewards) {
+		SASRewards *Ri = dynamic_cast<SASRewards *>(R);
+		Ri->set(state, action, nextState, reward);
+	}
 }
 
 void FactoredWeightedRewards::set(const State *state, const Action *action, const State *nextState,
@@ -85,6 +92,38 @@ void FactoredWeightedRewards::set(const State *state, const Action *action, cons
 	}
 }
 
+double FactoredWeightedRewards::get(const State *state, const Action *action) const
+{
+	double weightedAverage = 0.0;
+
+	for (int i = 0; i < (int)rewards.size(); i++) {
+		SARewards *Ri = dynamic_cast<SARewards *>(rewards[i]);
+		if (Ri == nullptr) {
+			throw RewardException();
+		}
+
+		weightedAverage += w[i] * Ri->get(state, action);
+	}
+
+	return weightedAverage;
+}
+
+double FactoredWeightedRewards::get(const State *state, const Action *action, const State *nextState) const
+{
+	double weightedAverage = 0.0;
+
+	for (int i = 0; i < (int)rewards.size(); i++) {
+		SASRewards *Ri = dynamic_cast<SASRewards *>(rewards[i]);
+		if (Ri == nullptr) {
+			throw RewardException();
+		}
+
+		weightedAverage += w[i] * Ri->get(state, action, nextState);
+	}
+
+	return weightedAverage;
+}
+
 double FactoredWeightedRewards::get(const State *state, const Action *action, const State *nextState,
 		const Observation *observation) const
 {
@@ -92,11 +131,27 @@ double FactoredWeightedRewards::get(const State *state, const Action *action, co
 
 	for (int i = 0; i < (int)rewards.size(); i++) {
 		SASORewards *Ri = dynamic_cast<SASORewards *>(rewards[i]);
+		if (Ri == nullptr) {
+			throw RewardException();
+		}
 
 		weightedAverage += w[i] * Ri->get(state, action, nextState, observation);
 	}
 
 	return weightedAverage;
+}
+
+void FactoredWeightedRewards::set_weights(const std::vector<double> &weights)
+{
+	w.clear();
+	for (double weight : weights) {
+		w.push_back(weight);
+	}
+}
+
+const std::vector<double> &FactoredWeightedRewards::get_weights() const
+{
+	return w;
 }
 
 double FactoredWeightedRewards::get_min() const
@@ -131,6 +186,9 @@ void FactoredWeightedRewards::reset()
 
 	for (Rewards *R : rewards) {
 		SASORewards *Ri = dynamic_cast<SASORewards *>(R);
+		if (Ri == nullptr) {
+			throw RewardException();
+		}
 		Ri->reset();
 	}
 }

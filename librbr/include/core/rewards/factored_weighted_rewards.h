@@ -27,7 +27,7 @@
 
 
 #include "factored_rewards.h"
-#include "saso_rewards.h"
+#include "sa_rewards.h"
 
 #include "../states/state.h"
 #include "../actions/action.h"
@@ -43,8 +43,10 @@
  * The class does not re-implement all of the FactoredRewards methods; however, since
  * SASORewards is the most 'ancestral' of the rewards objects, and is abstract, we define
  * those methods.
+ *
+ * TODO: Inherit from SRewards, once created. Then, implement the missing 'get' and 'set' methods.
  */
-class FactoredWeightedRewards : virtual public FactoredRewards, virtual public SASORewards {
+class FactoredWeightedRewards : virtual public FactoredRewards, virtual public SARewards {
 public:
 	/**
 	 * The default constructor for the FactoredWeightedRewards class.
@@ -76,7 +78,7 @@ public:
 
 	/**
 	 * Set the particular rewards element in the multi-rewards vector. This frees memory. This places the
-	 * additional requirement that the newRewardsFactor must be of type SASORewards.
+	 * additional requirement that the newRewardsFactor must be of type S***Rewards.
 	 * @param	factorIndex 		The index of the factor to add the rewards factor to.
 	 * @param	newRewardsFactor	The new rewards factor for this index.
 	 * @throw	RewardException		The index was invalid.
@@ -84,26 +86,62 @@ public:
 	virtual void set(unsigned int factorIndex, Rewards *newRewardsFactor);
 
 	/**
-	 * Get the particular rewards element in the factored rewards vector. Note that this is an overloaded
-	 * method since it returns a SASORewards object; this is more for convenience.
-	 * @param	factorIndex			The index of the factor to add the rewards factor to.
-	 * @throw	RewardException		The index was invalid, or the reward was not a SASORewards.
-	 * @return	The rewards for this index.
+	 * Set a state transition from a particular state-action-state-observation quadruple to a probability.
+	 * In the case of FactoredWeightedRewards, all factors will be set to the reward, so that the sum of
+	 * the weighted rewards equals the reward defined here. This method is defined for SARewards.
+	 * @param	state			The current state of the system.
+	 * @param	action			The action taken in the current state.
+	 * @param	reward			The reward from the provided state-action-state-observation quadruple.
+	 * @throw	RewardException	A reward was found which was not of type SARewards.
 	 */
-	virtual const SASORewards *get(unsigned int factorIndex) const;
+	virtual void set(const State *state, const Action *action, double reward);
 
 	/**
 	 * Set a state transition from a particular state-action-state-observation quadruple to a probability.
 	 * In the case of FactoredWeightedRewards, all factors will be set to the reward, so that the sum of
-	 * the weighted rewards equals the reward defined here. This method is defined for SASORewards.
+	 * the weighted rewards equals the reward defined here. This method is defined for SARewards.
+	 * @param	state			The current state of the system.
+	 * @param	action			The action taken in the current state.
+	 * @param	nextState		The next state with which we assign the reward.
+	 * @param	reward			The reward from the provided state-action-state-observation quadruple.
+	 * @throw	RewardException	A reward was found which was not of type SASRewards.
+	 */
+	virtual void set(const State *state, const Action *action, const State *nextState, double reward);
+
+	/**
+	 * Set a state transition from a particular state-action-state-observation quadruple to a probability.
+	 * In the case of FactoredWeightedRewards, all factors will be set to the reward, so that the sum of
+	 * the weighted rewards equals the reward defined here. This method is defined for SARewards.
 	 * @param	state			The current state of the system.
 	 * @param	action			The action taken in the current state.
 	 * @param	nextState		The next state with which we assign the reward.
 	 * @param	observation		The observation made at the next state.
 	 * @param	reward			The reward from the provided state-action-state-observation quadruple.
+	 * @throw	RewardException	A reward was found which was not of type SASORewards.
 	 */
 	virtual void set(const State *state, const Action *action, const State *nextState,
 			const Observation *observation, double reward);
+
+	/**
+	 * The probability of a transition following the state-action pair provided.
+	 * This method is defined for SARewards.
+	 * @param	state			The current state of the system.
+	 * @param	action			The action taken in the current state.
+	 * @throw	RewardException	A reward was found which was not of type SARewards.
+	 * @return	The reward from taking the given action in the given state.
+	 */
+	virtual double get(const State *state, const Action *action) const;
+
+	/**
+	 * The probability of a transition following the state-action-state triple provided.
+	 * This method is defined for SASRewards.
+	 * @param	state			The current state of the system.
+	 * @param	action			The action taken in the current state.
+	 * @param	nextState		The next state with which we assign the reward.
+	 * @throw	RewardException	A reward was found which was not of type SASRewards.
+	 * @return	The reward from taking the given action in the given state.
+	 */
+	virtual double get(const State *state, const Action *action, const State *nextState) const;
 
 	/**
 	 * The probability of a transition following the state-action-state-observation quadruple provided.
@@ -112,10 +150,23 @@ public:
 	 * @param	action			The action taken in the current state.
 	 * @param	nextState		The next state with which we assign the reward.
 	 * @param	observation		The observation made at the next state.
+	 * @throw	RewardException	A reward was found which was not of type SASORewards.
 	 * @return	The reward from taking the given action in the given state.
 	 */
 	virtual double get(const State *state, const Action *action, const State *nextState,
 			const Observation *observation) const;
+
+	/**
+	 * Set the weights for the factored weighted rewards.
+	 * @param	weights		The new weight vector.
+	 */
+	void set_weights(const std::vector<double> &weights);
+
+	/**
+	 * Get the weights for the factored weighted rewards.
+	 * @return	The weight vector.
+	 */
+	const std::vector<double> &get_weights() const;
 
 	/**
 	 * Get the minimal R-value. This method is defined for SASORewards.
@@ -137,11 +188,6 @@ public:
 	virtual void reset();
 
 protected:
-	/**
-	 * The vector of modifiable reward objects. This comes from FactoredRewards.
-	 */
-	std::vector<Rewards *> rewards;
-
 	/**
 	 * The weight vector used to combine each of the factors into a single value.
 	 */

@@ -25,6 +25,7 @@
 #include "../../include/mdp/mdp_utilities.h"
 
 #include <limits>
+#include <math.h>
 
 void bellman_update(const StatesMap *S, const ActionsMap *A, const StateTransitions *T,
 		const SASRewards *R, const Horizon *h, const State *s,
@@ -54,4 +55,52 @@ void bellman_update(const StatesMap *S, const ActionsMap *A, const StateTransiti
 	}
 
 	V[s] = maxQsa;
+}
+
+void compute_V_pi(const StatesMap *S, const ActionsMap *A, const StateTransitions *T, const SASRewards *R, const Horizon *h,
+		double epsilon, const PolicyMap *pi, std::unordered_map<const State *, double> &V)
+{
+	for (auto state : *S) {
+		const State *s = resolve(state);
+		V[s] = 0.0;
+	}
+
+	double convergenceCriterion = epsilon * (1.0 - h->get_discount_factor()) / h->get_discount_factor();
+	double delta = convergenceCriterion + 1.0;
+
+	while (delta > convergenceCriterion) {
+		delta = 0.0;
+
+		// For all the states, compute V(s).
+		for (auto state : *S) {
+			const State *s = resolve(state);
+
+			std::vector<const State *> successors;
+			T->successors(S, s, pi->get(s), successors);
+
+			double QsPIs = 0.0;
+
+			for (const State *sPrime : successors) {
+				QsPIs += T->get(s, pi->get(s), sPrime) * (R->get(s, pi->get(s), sPrime) + h->get_discount_factor() * V[sPrime]);
+			}
+
+			if (fabs(V[s] - QsPIs) > delta) {
+				delta = fabs(V[s] - QsPIs);
+			}
+
+			V[s] = QsPIs;
+		}
+	}
+}
+
+void compute_V_pi(const StatesMap *S, const ActionsMap *A, const StateTransitions *T, const FactoredRewards *R, const Horizon *h,
+		double epsilon, const PolicyMap *pi, std::vector<std::unordered_map<const State *, double> > &V)
+{
+	V.clear();
+	V.resize(R->get_num_rewards());
+
+	for (int i = 0; i < (int)R->get_num_rewards(); i++) {
+		const SASRewards *Ri = dynamic_cast<const SASRewards *>(R->get(i));
+		compute_V_pi(S, A, T, Ri, h, epsilon, pi, V[i]);
+	}
 }
