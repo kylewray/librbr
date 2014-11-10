@@ -58,8 +58,8 @@ public:
 	 * @param	observation		The observation made at the next state.
 	 * @param	reward			The reward from the provided state-action-state-observation quadruple.
 	 */
-	virtual void set(const State *state, const Action *action, const State *nextState,
-			const Observation *observation, double reward);
+	virtual void set(State *state, Action *action, State *nextState,
+			Observation *observation, double reward);
 
 	/**
 	 * The probability of a transition following the state-action-state-observation quadruple provided.
@@ -69,8 +69,8 @@ public:
 	 * @param	observation		The observation made at the next state.
 	 * @return	The reward from taking the given action in the given state.
 	 */
-	virtual double get(const State *state, const Action *action, const State *nextState,
-			const Observation *observation) const;
+	virtual double get(State *state, Action *action, State *nextState,
+			Observation *observation);
 
 	/**
 	 * Get the minimal R-value.
@@ -100,16 +100,16 @@ private:
 	 * @throw	RewardException		The reward was not defined.
 	 * @return	The reward from taking the given action in the given state.
 	 */
-	virtual double get_value(const State *state, const Action *action, const State *nextState,
-			const Observation *observation) const;
+	virtual double get_value(State *state, Action *action, State *nextState,
+			Observation *observation);
 
 	/**
 	 * The list of all state-action-state-observation rewards.
 	 */
-	std::unordered_map<const State *,
-		std::unordered_map<const Action *,
-		std::unordered_map<const State *,
-		std::unordered_map<const Observation *, double> > > > rewards;
+	std::unordered_map<State *,
+		std::unordered_map<Action *,
+		std::unordered_map<State *,
+		std::unordered_map<Observation *, double> > > > rewards;
 
 	/**
 	 * A special state (implicitly constant) referring to a state wildcard.

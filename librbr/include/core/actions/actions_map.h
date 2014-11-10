@@ -55,7 +55,7 @@ public:
 	 * The constructor for the FiniteActions class which allows the specification of an initial set of actions.
 	 * @param	actions	The initial vector of actions.
 	 */
-	ActionsMap(const std::vector<const Action *> &actions);
+	ActionsMap(const std::vector<Action *> &actions);
 
 	/**
 	 * The default deconstructor for the FiniteActions class.
@@ -66,28 +66,28 @@ public:
 	 * Add an action to the set of available actions.
 	 * @param	newAction	The new action to include in the set of available actions.
 	 */
-	void add(const Action *newAction);
+	void add(Action *newAction);
 
 	/**
 	 * Remove an action to the set of available actions. This frees the memory.
 	 * @param	removeAction 		The action to remove from the set of available actions.
 	 * @throw	ActionException		The action was not found in the actions list.
 	 */
-	void remove(const Action *removeAction);
+	void remove(Action *removeAction);
 
 	/**
 	 * Set the internal actions list given another list, performing a deep copy. This resets
 	 * the current list of states and frees the memory.
 	 * @param	newActions	The vector of new actions to use.
 	 */
-	void set(const std::vector<const Action *> &newActions);
+	void set(const std::vector<Action *> &newActions);
 
 	/**
 	 * Check if this action has already been created or not.
 	 * @param	action		The action to check if it is created or not.
 	 * @return	Returns @code{true} if the action exists in the actions hash; @code{false} otherwise.
 	 */
-	bool exists(const Action *action) const;
+	bool exists(Action *action) const;
 
 	/**
 	 * Get an action with a particular hash value.
@@ -95,7 +95,7 @@ public:
 	 * @throw	ActionException		There are no actions with the hash value specified.
 	 * @return	The action with the particular hash value specified.
 	 */
-	const Action *get(unsigned int hash) const;
+	Action *get(unsigned int hash);
 
 	/**
 	 * Return the number of actions.
@@ -108,7 +108,7 @@ public:
 	 * @param	state	The current state.
 	 * @return	Return a list of available actions.
 	 */
-	virtual std::unordered_map<unsigned int, const Action *> available(const State *state) const;
+	virtual std::unordered_map<unsigned int, Action *> available(State *state);
 
 	/**
 	 * Reset the actions, clearing the internal list.
@@ -119,19 +119,19 @@ public:
 	 * To facilitate easy iteration, return a constant beginning of the actions vector.
 	 * @return	The iterator which points to a constant beginning of the actions vector.
 	 */
-	std::unordered_map<unsigned int, const Action *>::const_iterator begin() const;
+	std::unordered_map<unsigned int, Action *>::iterator begin();
 
 	/**
 	 * To facilitate easy iteration, return a constant end of the actions vector.
 	 * @return	The iterator which points to a constant end of the actions vector.
 	 */
-	std::unordered_map<unsigned int, const Action *>::const_iterator end() const;
+	std::unordered_map<unsigned int, Action *>::iterator end();
 
 protected:
 	/**
 	 * The mapping of actions hash values to states. This is the main container of states.
 	 */
-	std::unordered_map<unsigned int, const Action *> actions;
+	std::unordered_map<unsigned int, Action *> actions;
 
 };
 
@@ -139,13 +139,13 @@ protected:
  * Get the action pointer of an action iterator.
  * @param	actionIterator	The action iterator to retrieve the action pointer from.
  */
-const Action *resolve(std::unordered_map<unsigned int, const Action *>::value_type &actionIterator);
+Action *resolve(std::unordered_map<unsigned int, Action *>::value_type &actionIterator);
 
 /**
  * Get the hash of an action iterator.
  * @param	actionIterator	The action iterator to retrieve the hash value from.
  */
-unsigned int hash_value(std::unordered_map<unsigned int, const Action *>::value_type &actionIterator);
+unsigned int hash_value(std::unordered_map<unsigned int, Action *>::value_type &actionIterator);
 
 
 

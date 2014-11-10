@@ -88,7 +88,7 @@ public:
 	 * @param	epsilon				The desired tolerance between value functions to check for convergence.
 	 * @throw	RewardException		The POMDP did not have a SASORewards rewards object.
 	 */
-	void compute_num_iterations(const POMDP *pomdp, double epsilon);
+	void compute_num_iterations(POMDP *pomdp, double epsilon);
 
 	/**
 	 * Solve the POMDP provided using value iteration.
@@ -103,7 +103,7 @@ public:
 	 * @throw	PolicyException					An error occurred computing the policy.
 	 * @return	Return the optimal policy as a finite state controller (infinite horizon) or tree (finite horizon).
 	 */
-	PolicyAlphaVectors *solve(const POMDP *pomdp);
+	PolicyAlphaVectors *solve(POMDP *pomdp);
 
 private:
 	/**
@@ -118,9 +118,9 @@ private:
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy as a collection of alpha vectors.
 	 */
-	PolicyAlphaVectors *solve_finite_horizon(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
-			const StateTransitionsMap *T, const ObservationTransitionsMap *O, const SASORewards *R,
-			const Horizon *h);
+	PolicyAlphaVectors *solve_finite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+			StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+			Horizon *h);
 
 	/**
 	 * Solve an infinite horizon POMDP using value iteration.
@@ -134,9 +134,9 @@ private:
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy as a collection of alpha vectors.
 	 */
-	PolicyAlphaVectors *solve_infinite_horizon(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
-			const StateTransitionsMap *T, const ObservationTransitionsMap *O, const SASORewards *R,
-			const Horizon *h);
+	PolicyAlphaVectors *solve_infinite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+			StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+			Horizon *h);
 
 	/**
 	 * The number of iterations until the solver stops for infinite horizon POMDPs.

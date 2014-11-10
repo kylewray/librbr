@@ -29,12 +29,12 @@ PolicyAlphaVector::PolicyAlphaVector()
 	alphaVectorAction = nullptr;
 }
 
-PolicyAlphaVector::PolicyAlphaVector(const Action *action)
+PolicyAlphaVector::PolicyAlphaVector(Action *action)
 {
 	alphaVectorAction = action;
 }
 
-PolicyAlphaVector::PolicyAlphaVector(const PolicyAlphaVector &other)
+PolicyAlphaVector::PolicyAlphaVector(PolicyAlphaVector &other)
 {
 	*this = other;
 }
@@ -44,14 +44,14 @@ PolicyAlphaVector::~PolicyAlphaVector()
 	reset();
 }
 
-void PolicyAlphaVector::set(const State *state, double value)
+void PolicyAlphaVector::set(State *state, double value)
 {
 	alphaVector[state] = value;
 }
 
-double PolicyAlphaVector::get(const State *state) const
+double PolicyAlphaVector::get(State *state)
 {
-	std::map<const State *, double>::const_iterator result = alphaVector.find(state);
+	std::map<State *, double>::const_iterator result = alphaVector.find(state);
 	if (result == alphaVector.end()) {
 		return 0.0;
 	} else {
@@ -59,12 +59,12 @@ double PolicyAlphaVector::get(const State *state) const
 	}
 }
 
-void PolicyAlphaVector::set_action(const Action *action)
+void PolicyAlphaVector::set_action(Action *action)
 {
 	alphaVectorAction = action;
 }
 
-const Action *PolicyAlphaVector::get_action() const
+Action *PolicyAlphaVector::get_action()
 {
 	return alphaVectorAction;
 }
@@ -74,28 +74,28 @@ int PolicyAlphaVector::get_dimension() const
 	return alphaVector.size();
 }
 
-double PolicyAlphaVector::compute_value(const BeliefState *belief) const
+double PolicyAlphaVector::compute_value(BeliefState *belief)
 {
 	// Perform the dot product: dot(beta, alpha), but do so with map objects.
 	double value = 0.0;
-	for (std::map<const State *, double>::value_type alpha : alphaVector) {
+	for (std::map<State *, double>::value_type alpha : alphaVector) {
 		value += alpha.second * belief->get(alpha.first);
 	}
 	return value;
 }
 
-PolicyAlphaVector &PolicyAlphaVector::operator=(const PolicyAlphaVector &other)
+PolicyAlphaVector &PolicyAlphaVector::operator=(PolicyAlphaVector &other)
 {
 	alphaVector = other.alphaVector;
 	alphaVectorAction = other.get_action();
 	return *this;
 }
 
-PolicyAlphaVector PolicyAlphaVector::operator+(const PolicyAlphaVector &other) const
+PolicyAlphaVector PolicyAlphaVector::operator+(PolicyAlphaVector &other)
 {
 	PolicyAlphaVector result;
 
-	for (std::map<const State *, double>::value_type alpha : alphaVector) {
+	for (std::map<State *, double>::value_type alpha : alphaVector) {
 		double a = alpha.second;
 		double b = other.get(alpha.first);
 		result.set(alpha.first, a + b);
@@ -104,20 +104,20 @@ PolicyAlphaVector PolicyAlphaVector::operator+(const PolicyAlphaVector &other) c
 	return result;
 }
 
-PolicyAlphaVector &PolicyAlphaVector::operator+=(const PolicyAlphaVector &other)
+PolicyAlphaVector &PolicyAlphaVector::operator+=(PolicyAlphaVector &other)
 {
-	for (std::map<const State *, double>::value_type &alpha :alphaVector) {
+	for (std::map<State *, double>::value_type &alpha :alphaVector) {
 		alpha.second += other.get(alpha.first);
 	}
 
 	return *this;
 }
 
-PolicyAlphaVector PolicyAlphaVector::operator-(const PolicyAlphaVector &other) const
+PolicyAlphaVector PolicyAlphaVector::operator-(PolicyAlphaVector &other)
 {
 	PolicyAlphaVector result;
 
-	for (std::map<const State *, double>::value_type alpha : alphaVector) {
+	for (std::map<State *, double>::value_type alpha : alphaVector) {
 		double a = alpha.second;
 		double b = other.get(alpha.first);
 		result.set(alpha.first, a - b);
@@ -126,9 +126,9 @@ PolicyAlphaVector PolicyAlphaVector::operator-(const PolicyAlphaVector &other) c
 	return result;
 }
 
-PolicyAlphaVector &PolicyAlphaVector::operator-=(const PolicyAlphaVector &other)
+PolicyAlphaVector &PolicyAlphaVector::operator-=(PolicyAlphaVector &other)
 {
-	for (std::map<const State *, double>::value_type &alpha :alphaVector) {
+	for (std::map<State *, double>::value_type &alpha :alphaVector) {
 		alpha.second -= other.get(alpha.first);
 	}
 
@@ -141,8 +141,8 @@ void PolicyAlphaVector::reset()
 	alphaVectorAction = nullptr;
 }
 
-std::vector<PolicyAlphaVector *> PolicyAlphaVector::cross_sum(const std::vector<PolicyAlphaVector *> &A,
-		const std::vector<PolicyAlphaVector *> &B)
+std::vector<PolicyAlphaVector *> PolicyAlphaVector::cross_sum(std::vector<PolicyAlphaVector *> &A,
+		std::vector<PolicyAlphaVector *> &B)
 {
 	std::vector<PolicyAlphaVector *> C;
 
@@ -161,7 +161,8 @@ std::vector<PolicyAlphaVector *> PolicyAlphaVector::cross_sum(const std::vector<
 		// Perform the cross-sum and store the result in C.
 		for (PolicyAlphaVector *a : A) {
 			for (PolicyAlphaVector *b : B) {
-				PolicyAlphaVector *c = new PolicyAlphaVector(*a + *b);
+				PolicyAlphaVector *c = new PolicyAlphaVector(*a);
+				*c += *b;
 				C.push_back(c);
 			}
 		}

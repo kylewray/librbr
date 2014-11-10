@@ -74,7 +74,7 @@ public:
 	 * @throw	PolicyException				An error occurred computing the policy.
 	 * @return	Return the optimal policy.
 	 */
-	PolicyMap *solve(const MDP *mdp);
+	PolicyMap *solve(MDP *mdp);
 
 private:
 	/**
@@ -87,8 +87,8 @@ private:
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy.
 	 */
-	PolicyMap *solve_exact(const StatesMap *S, const ActionsMap *A, const StateTransitionsMap *T,
-			const SASRewards *R, const Horizon *h);
+	PolicyMap *solve_exact(StatesMap *S, ActionsMap *A, StateTransitionsMap *T,
+			SASRewards *R, Horizon *h);
 
 	/**
 	 * Solve an infinite horizon MDP using modified policy iteration.
@@ -100,8 +100,8 @@ private:
 	 * @throws	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy.
 	 */
-	PolicyMap *solve_modified(const StatesMap *S, const ActionsMap *A, const StateTransitionsMap *T,
-			const SASRewards *R, const Horizon *h);
+	PolicyMap *solve_modified(StatesMap *S, ActionsMap *A, StateTransitionsMap *T,
+			SASRewards *R, Horizon *h);
 
 	/**
 	 * The number of times to iterate in the modified version. Disable the modified version of

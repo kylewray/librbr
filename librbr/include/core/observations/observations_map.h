@@ -56,7 +56,7 @@ public:
 	 * The constructor for the FiniteObservations class which allows the specification of an initial set of observations.
 	 * @param	observations	The initial vector of observations.
 	 */
-	ObservationsMap(const std::vector<const Observation *> &observations);
+	ObservationsMap(const std::vector<Observation *> &observations);
 
 	/**
 	 * The default deconstructor for the FiniteObservations class.
@@ -67,28 +67,28 @@ public:
 	 * Add a observation to the set of available observations.
 	 * @param	newObservation	The new observation to include in the set of available states.
 	 */
-	void add(const Observation *newObservation);
+	void add(Observation *newObservation);
 
 	/**
 	 * Remove a observation to the set of available observations. This frees the memory.
 	 * @param	removeObservation 		The state to remove from the set of available observations.
 	 * @throw	ObservationException	The observation was not found in the observations list.
 	 */
-	void remove(const Observation *removeObservation);
+	void remove(Observation *removeObservation);
 
 	/**
 	 * Set the internal observations list given another list, performing a deep copy. This resets
 	 * the current list of observations and frees the memory.
 	 * @param	newObservations		The vector of new observations to use.
 	 */
-	void set(const std::vector<const Observation *> &newObservations);
+	void set(const std::vector<Observation *> &newObservations);
 
 	/**
 	 * Check if this observation has already been created or not.
 	 * @param	observation		The observation to check if it is created or not.
 	 * @return	Returns @code{true} if the observation exists in the observations hash; @code{false} otherwise.
 	 */
-	bool exists(const Observation *observation) const;
+	bool exists(Observation *observation);
 
 	/**
 	 * Get an observation with a particular hash value.
@@ -96,7 +96,7 @@ public:
 	 * @throw	ObservationException	There are no observations with the hash value specified.
 	 * @return	The observation with the particular hash value specified.
 	 */
-	const Observation *get(unsigned int hash) const;
+	Observation *get(unsigned int hash);
 
 	/**
 	 * Return the number of observations.
@@ -113,20 +113,20 @@ public:
 	 * To facilitate easy iteration, return a constant beginning of the observations vector.
 	 * @return	The iterator which points to a constant beginning of the observations vector.
 	 */
-	std::unordered_map<unsigned int, const Observation *>::const_iterator begin() const;
+	std::unordered_map<unsigned int, Observation *>::iterator begin();
 
 	/**
 	 * To facilitate easy iteration, return a constant end of the observations vector.
 	 * @return	The iterator which points to a constant end of the observations vector.
 	 */
-	std::unordered_map<unsigned int, const Observation *>::const_iterator end() const;
+	std::unordered_map<unsigned int, Observation *>::iterator end();
 
 protected:
 	/**
 	 * The mapping of observation hash values to observations. This is the main
 	 * container of observations.
 	 */
-	std::unordered_map<unsigned int, const Observation *> observations;
+	std::unordered_map<unsigned int, Observation *> observations;
 
 };
 
@@ -134,13 +134,13 @@ protected:
  * Get the observation pointer of a observation iterator.
  * @param	observationIterator		The observation iterator to retrieve the observation pointer from.
  */
-const Observation *resolve(std::unordered_map<unsigned int, const Observation *>::value_type &observationIterator);
+Observation *resolve(std::unordered_map<unsigned int, Observation *>::value_type &observationIterator);
 
 /**
  * Get the hash of a observation iterator.
  * @param	observationIterator		The observation iterator to retrieve the hash value from.
  */
-unsigned int hash_value(std::unordered_map<unsigned int, const Observation *>::value_type &observationIterator);
+unsigned int hash_value(std::unordered_map<unsigned int, Observation *>::value_type &observationIterator);
 
 
 #endif // OBSERVATIONS_MAP_H

@@ -47,13 +47,13 @@ public:
 	 * A constructor for the PolicyAlphaVector class which specifies the initial action.
 	 * @param	action		The action to take if this is the maximal alpha vector.
 	 */
-	PolicyAlphaVector(const Action *action);
+	PolicyAlphaVector(Action *action);
 
 	/**
 	 * The copy constructor for the PolicyAlphaVector class.
 	 * @param	other		The other alpha vector to copy.
 	 */
-	PolicyAlphaVector(const PolicyAlphaVector &other);
+	PolicyAlphaVector(PolicyAlphaVector &other);
 
 	/**
 	 * A deconstructor for the PolicyAlphaVector class.
@@ -65,25 +65,25 @@ public:
 	 * @param	state	Set the value of this state.
 	 * @param	value	The alpha value of the state.
 	 */
-	void set(const State *state, double value);
+	void set(State *state, double value);
 
 	/**
 	 * Get the value of a state. Unset alpha values are assumed to be 0.
 	 * @param	state		Get the value of this state.
 	 * @return	The alpha vector's value of the state.
 	 */
-	double get(const State *state) const;
+	double get(State *state);
 
 	/**
 	 * Set the action to take if this alpha vector is optimal for a belief state.
 	 */
-	void set_action(const Action *action);
+	void set_action(Action *action);
 
 	/**
 	 * Get the action to take at this alpha vector.
 	 * @return	The action to take if this alpha vector is optimal for a belief state.
 	 */
-	const Action *get_action() const;
+	Action *get_action();
 
 	/**
 	 * Get the dimension of this alpha vector (which is the number of states).
@@ -96,42 +96,42 @@ public:
 	 * @param	belief		The belief state 'beta' vector.
 	 * @return	The value of the belief state provided.
 	 */
-	double compute_value(const BeliefState *belief) const;
+	double compute_value(BeliefState *belief);
 
 	/**
 	 * Overload the equals operator to set this alpha vector equal to the alpha vector provided.
 	 * @param	other		The alpha vector to copy.
 	 * @return	The new version of this alpha vector.
 	 */
-	PolicyAlphaVector &operator=(const PolicyAlphaVector &other);
+	PolicyAlphaVector &operator=(PolicyAlphaVector &other);
 
 	/**
 	 * Overload the plus operator to return the summation of all elements in the vectors.
 	 * @param	other		The alpha vector to add to this one.
 	 * @return	The resultant alpha vector from the sum of this one and the other one provided.
 	 */
-	PolicyAlphaVector operator+(const PolicyAlphaVector &other) const;
+	PolicyAlphaVector operator+(PolicyAlphaVector &other);
 
 	/**
 	 * Overload the plus-equals operator to return the summation of all elements in the vectors.
 	 * @param	other		The alpha vector to add to this one.
 	 * @return	The resultant alpha vector from the sum of this one and the other one provided.
 	 */
-	PolicyAlphaVector &operator+=(const PolicyAlphaVector &other);
+	PolicyAlphaVector &operator+=(PolicyAlphaVector &other);
 
 	/**
 	 * Overload the minus operator to return the subtraction of all elements in the vectors.
 	 * @param	other		The alpha vector to subtract to this one.
 	 * @return	The resultant alpha vector from the element-wise subtraction of this one and the other one provided.
 	 */
-	PolicyAlphaVector operator-(const PolicyAlphaVector &other) const;
+	PolicyAlphaVector operator-(PolicyAlphaVector &other);
 
 	/**
 	 * Overload the minus-equals operator to return the subtraction of all elements in the vectors.
 	 * @param	other		The alpha vector to subtract to this one.
 	 * @return	The resultant alpha vector from the element-wise subtraction of this one and the other one provided.
 	 */
-	PolicyAlphaVector &operator-=(const PolicyAlphaVector &other);
+	PolicyAlphaVector &operator-=(PolicyAlphaVector &other);
 
 	/**
 	 * Reset the alpha vector.
@@ -144,19 +144,19 @@ public:
 	 * @param	B	The right set of alpha vectors.
 	 * @return	The result from performing the cross-sum on the two sets of alpha vectors.
 	 */
-	static std::vector<PolicyAlphaVector *> cross_sum(const std::vector<PolicyAlphaVector *> &A, const std::vector<PolicyAlphaVector *> &B);
+	static std::vector<PolicyAlphaVector *> cross_sum(std::vector<PolicyAlphaVector *> &A, std::vector<PolicyAlphaVector *> &B);
 
 private:
 	/**
 	 * The alpha vector values: alpha = <V(s_1), ..., V(s_n)>. Unset alpha values are
 	 * assumed to be 0.
 	 */
-	std::map<const State *, double> alphaVector;
+	std::map<State *, double> alphaVector;
 
 	/**
 	 * The action to take if this alpha vector is optimal for a belief state.
 	 */
-	const Action *alphaVectorAction;
+	Action *alphaVectorAction;
 
 };
 

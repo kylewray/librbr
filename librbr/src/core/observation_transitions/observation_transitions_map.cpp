@@ -47,8 +47,8 @@ ObservationTransitionsMap::~ObservationTransitionsMap()
 	delete observationWildcard;
 }
 
-void ObservationTransitionsMap::set(const Action *previousAction, const State *state,
-		const Observation *observation, double probability)
+void ObservationTransitionsMap::set(Action *previousAction, State *state,
+		Observation *observation, double probability)
 {
 	if (previousAction == nullptr) {
 		previousAction = actionWildcard;
@@ -63,25 +63,25 @@ void ObservationTransitionsMap::set(const Action *previousAction, const State *s
 	observationTransitions[previousAction][state][observation] = std::max(0.0, std::min(1.0, probability));
 }
 
-double ObservationTransitionsMap::get(const Action *previousAction, const State *state,
-		const Observation *observation) const
+double ObservationTransitionsMap::get(Action *previousAction, State *state,
+		Observation *observation)
 {
 	// Iterate over all possible configurations of wildcards in the get statement.
 	// For each, use the get_value() function to check if the value exists. If it
 	// does, perhaps using a wildcard, then return that, otherwise continue.
 	// Return 0 by default.
 	for (int i = 0; i < 8; i++) {
-		const Action *alpha = actionWildcard;
+		Action *alpha = actionWildcard;
 		if (i & (1 << 1)) {
 			alpha = previousAction;
 		}
 
-		const State *beta = stateWildcard;
+		State *beta = stateWildcard;
 		if (i & (1 << 2)) {
 			beta = state;
 		}
 
-		const Observation *gamma = observationWildcard;
+		Observation *gamma = observationWildcard;
 		if (i & (1 << 0)) {
 			gamma = observation;
 		}
@@ -94,17 +94,17 @@ double ObservationTransitionsMap::get(const Action *previousAction, const State 
 	return 0.0;
 }
 
-void ObservationTransitionsMap::available(const Observations *Z, const Action *previousAction, const State *state,
-		std::vector<const Observation *> &result) const
+void ObservationTransitionsMap::available(Observations *Z, Action *previousAction, State *state,
+		std::vector<Observation *> &result)
 {
-	const ObservationsMap *ZMap = static_cast<const ObservationsMap *>(Z);
+	ObservationsMap *ZMap = static_cast<ObservationsMap *>(Z);
 	if (ZMap == nullptr) {
 		throw ObservationTransitionException();
 	}
 
 	result.clear();
 	for (auto z : *ZMap) {
-		const Observation *observation = resolve(z);
+		Observation *observation = resolve(z);
 		if (get(previousAction, state, observation) > 0.0) {
 			result.push_back(observation);
 		}
@@ -116,23 +116,23 @@ void ObservationTransitionsMap::reset()
 	observationTransitions.clear();
 }
 
-double ObservationTransitionsMap::get_value(const Action *previousAction, const State *state,
-		const Observation *observation) const
+double ObservationTransitionsMap::get_value(Action *previousAction, State *state,
+		Observation *observation)
 {
-	std::unordered_map<const Action *,
-		std::unordered_map<const State *,
-		std::unordered_map<const Observation *, double> > >::const_iterator alpha = observationTransitions.find(previousAction);
+	std::unordered_map<Action *,
+		std::unordered_map<State *,
+		std::unordered_map<Observation *, double> > >::const_iterator alpha = observationTransitions.find(previousAction);
 	if (alpha == observationTransitions.end()) {
 		throw ObservationTransitionException();
 	}
 
-	std::unordered_map<const State *,
-		std::unordered_map<const Observation *, double> >::const_iterator beta = alpha->second.find(state);
+	std::unordered_map<State *,
+		std::unordered_map<Observation *, double> >::const_iterator beta = alpha->second.find(state);
 	if (beta == alpha->second.end()) {
 		throw ObservationTransitionException();
 	}
 
-	std::unordered_map<const Observation *, double>::const_iterator gamma = beta->second.find(observation);
+	std::unordered_map<Observation *, double>::const_iterator gamma = beta->second.find(observation);
 	if (gamma == beta->second.end()) {
 		throw ObservationTransitionException();
 	}

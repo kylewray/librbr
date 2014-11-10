@@ -50,9 +50,9 @@
  * @param	V		The current Bellman backup, mapping states to expected rewards. This will be updated.
  * @param	aBest	The action which produced the maximum V(s) value. This will be updated.
  */
-void bellman_update(const StatesMap *S, const ActionsMap *A, const StateTransitions *T,
-		const SASRewards *R, const Horizon *h, const State *s,
-		std::unordered_map<const State *, double> &V, const Action *&aBest);
+void bellman_update(StatesMap *S, ActionsMap *A, StateTransitions *T,
+		SASRewards *R, Horizon *h, State *s,
+		std::unordered_map<State *, double> &V, Action *&aBest);
 
 /**
  * Compute the value of states (V^\pi), following the Bellman's equation, given a policy. This assumes
@@ -66,8 +66,8 @@ void bellman_update(const StatesMap *S, const ActionsMap *A, const StateTransiti
  * @param	pi			The policy mapping states to actions.
  * @param	V			The resultant values, mapping states to expected rewards. This will be updated.
  */
-void compute_V_pi(const StatesMap *S, const ActionsMap *A, const StateTransitions *T, const SASRewards *R, const Horizon *h,
-		double epsilon, const PolicyMap *pi, std::unordered_map<const State *, double> &V);
+void compute_V_pi(StatesMap *S, ActionsMap *A, StateTransitions *T, SASRewards *R, Horizon *h,
+		double epsilon, PolicyMap *pi, std::unordered_map<State *, double> &V);
 
 /**
  * Compute the value of states (V^\pi), following the Bellman's equation, given a policy. This assumes
@@ -81,8 +81,8 @@ void compute_V_pi(const StatesMap *S, const ActionsMap *A, const StateTransition
  * @param	pi			The policy mapping states to actions.
  * @param	V			The resultant values, mapping states to expected rewards. This will be updated.
  */
-void compute_V_pi(const StatesMap *S, const ActionsMap *A, const StateTransitions *T, const FactoredRewards *R, const Horizon *h,
-		double epsilon, const PolicyMap *pi, std::vector<std::unordered_map<const State *, double> > &V);
+void compute_V_pi(StatesMap *S, ActionsMap *A, StateTransitions *T, FactoredRewards *R, Horizon *h,
+		double epsilon, PolicyMap *pi, std::vector<std::unordered_map<State *, double> > &V);
 
 
 #endif // MDP_UTILITIES_H

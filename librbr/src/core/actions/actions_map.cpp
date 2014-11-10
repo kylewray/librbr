@@ -30,7 +30,7 @@
 ActionsMap::ActionsMap()
 { }
 
-ActionsMap::ActionsMap(const std::vector<const Action *> &actions)
+ActionsMap::ActionsMap(const std::vector<Action *> &actions)
 {
 	set(actions);
 }
@@ -40,14 +40,14 @@ ActionsMap::~ActionsMap()
 	reset();
 }
 
-void ActionsMap::add(const Action *newAction)
+void ActionsMap::add(Action *newAction)
 {
 	actions[newAction->hash_value()] = newAction;
 }
 
-void ActionsMap::remove(const Action *removeAction)
+void ActionsMap::remove(Action *removeAction)
 {
-	std::unordered_map<unsigned int, const Action *>::const_iterator result = actions.find(removeAction->hash_value());
+	std::unordered_map<unsigned int, Action *>::const_iterator result = actions.find(removeAction->hash_value());
 	if (result == actions.end()) {
 		throw ActionException();
 	}
@@ -56,15 +56,15 @@ void ActionsMap::remove(const Action *removeAction)
 	delete removeAction;
 }
 
-void ActionsMap::set(const std::vector<const Action *> &newActions)
+void ActionsMap::set(const std::vector<Action *> &newActions)
 {
 	reset();
-	for (const Action *action : newActions) {
+	for (Action *action : newActions) {
 		actions[action->hash_value()] = action;
 	}
 }
 
-bool ActionsMap::exists(const Action *action) const
+bool ActionsMap::exists(Action *action) const
 {
 	try {
 		actions.at(action->hash_value());
@@ -74,7 +74,7 @@ bool ActionsMap::exists(const Action *action) const
 	return true;
 }
 
-const Action *ActionsMap::get(unsigned int hash) const
+Action *ActionsMap::get(unsigned int hash)
 {
 	try {
 		return actions.at(hash);
@@ -88,7 +88,7 @@ unsigned int ActionsMap::get_num_actions() const
 	return actions.size();
 }
 
-std::unordered_map<unsigned int, const Action *> ActionsMap::available(const State *state) const
+std::unordered_map<unsigned int, Action *> ActionsMap::available(State *state)
 {
 	return actions;
 }
@@ -101,22 +101,22 @@ void ActionsMap::reset()
 	actions.clear();
 }
 
-std::unordered_map<unsigned int, const Action *>::const_iterator ActionsMap::begin() const
+std::unordered_map<unsigned int, Action *>::iterator ActionsMap::begin()
 {
 	return actions.begin();
 }
 
-std::unordered_map<unsigned int, const Action *>::const_iterator ActionsMap::end() const
+std::unordered_map<unsigned int, Action *>::iterator ActionsMap::end()
 {
 	return actions.end();
 }
 
-const Action *resolve(std::unordered_map<unsigned int, const Action *>::value_type &actionIterator)
+Action *resolve(std::unordered_map<unsigned int, Action *>::value_type &actionIterator)
 {
 	return actionIterator.second;
 }
 
-unsigned int hash_value(std::unordered_map<unsigned int, const Action *>::value_type &actionIterator)
+unsigned int hash_value(std::unordered_map<unsigned int, Action *>::value_type &actionIterator)
 {
 	return actionIterator.first;
 }

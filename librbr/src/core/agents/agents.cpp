@@ -33,12 +33,12 @@ Agents::~Agents()
 	reset();
 }
 
-void Agents::add(const Agent *newAgent)
+void Agents::add(Agent *newAgent)
 {
 	agents.push_back(newAgent);
 }
 
-void Agents::remove(const Agent *removeAgent)
+void Agents::remove(Agent *removeAgent)
 {
 	if (std::find(agents.begin(), agents.end(), removeAgent) == agents.end()) {
 		throw AgentException();
@@ -48,13 +48,13 @@ void Agents::remove(const Agent *removeAgent)
 	delete removeAgent;
 }
 
-void Agents::set(const std::vector<const Agent *> &newAgents)
+void Agents::set(const std::vector<Agent *> &newAgents)
 {
 	reset();
 	agents = newAgents;
 }
 
-const Agent *Agents::get(int agentIndex) const
+Agent *Agents::get(unsigned int agentIndex)
 {
 	if (agentIndex < 0 || agentIndex >= agents.size()) {
 		throw AgentException();
@@ -68,9 +68,9 @@ unsigned int Agents::get_num_agents() const
 	return agents.size();
 }
 
-const Agent *Agents::find(std::string agentName) const
+Agent *Agents::find(std::string agentName)
 {
-	for (const Agent *agent : agents) {
+	for (Agent *agent : agents) {
 		if (agent->get_name().compare(agentName) == 0) {
 			return agent;
 		}
@@ -80,18 +80,18 @@ const Agent *Agents::find(std::string agentName) const
 
 void Agents::reset()
 {
-	for (const Agent *agent : agents) {
+	for (Agent *agent : agents) {
 		delete agent;
 	}
 	agents.clear();
 }
 
-std::vector<const Agent *>::const_iterator Agents::begin() const
+std::vector<Agent *>::iterator Agents::begin()
 {
 	return agents.begin();
 }
 
-std::vector<const Agent *>::const_iterator Agents::end() const
+std::vector<Agent *>::iterator Agents::end()
 {
 	return agents.end();
 }

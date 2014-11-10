@@ -51,7 +51,7 @@ public:
 	 * specify the number of factors.
 	 * @param	numFactors	The number of action factors, minimum of 1.
 	 */
-	JointActionsMap(int numFactors);
+	JointActionsMap(unsigned int numFactors);
 
 	/**
 	 * The default deconstructor for the FiniteJointActions class.
@@ -65,7 +65,7 @@ public:
 	 * @param	newAction			The new actions to include in the set of available actions.
 	 * @throw	ActionException		The index was invalid.
 	 */
-	void add(int factorIndex, const Action *newAction);
+	void add(unsigned int factorIndex, Action *newAction);
 
 	/**
 	 * Remove an action to the set of available actions in a factor. This frees the memory. This does *not*
@@ -74,7 +74,7 @@ public:
 	 * @param	removeAction 		The action to remove from the set of available actions.
 	 * @throw	ActionException		The index was invalid, or the action was not found in the actions list.
 	 */
-	void remove(int factorIndex, const Action *removeAction);
+	void remove(unsigned int factorIndex, Action *removeAction);
 
 	/**
 	 * Set the internal actions list for a factor given another list, performing a deep copy. This resets
@@ -84,7 +84,7 @@ public:
 	 * @param	newActions 			The vector of new actions to use.
 	 * @throw	ActionException		The index was invalid, or newActions was empty.
 	 */
-	void set(int factorIndex, const std::vector<const Action *> &newActions);
+	void set(unsigned int factorIndex, const std::vector<Action *> &newActions);
 
 	/**
 	 * Get the action at the corresponding index, given the particular factor. The factor index
@@ -95,7 +95,7 @@ public:
 	 * @throw	ActionException		The index was invalid.
 	 * @return	The action at the corresponding index.
 	 */
-	const Action *get(int factorIndex, int actionIndex) const;
+	Action *get(unsigned int factorIndex, unsigned int actionIndex);
 
 	/**
 	 * Update the internal actions list which holds all permutations of joint actions in an efficient structure.
@@ -119,7 +119,7 @@ protected:
 	/**
 	 * The list of all available actions for each action factor.
 	 */
-	std::vector<std::vector<const Action *> > factoredActions;
+	std::vector<std::vector<Action *> > factoredActions;
 
 private:
 	/**
@@ -127,7 +127,7 @@ private:
 	 * @param	currentJointAction		The current (incomplete) joint action as a vector of actions.
 	 * @param	currentFactorIndex		The current factor index.
 	 */
-	void update_step(std::vector<const Action *> currentJointAction, int currentFactorIndex);
+	void update_step(std::vector<Action *> currentJointAction, unsigned int currentFactorIndex);
 
 };
 

@@ -75,7 +75,7 @@ public:
 	 * @throw	CoreException	An error arose trying to save the MDP object. This could be
 	 * 							an invalid mdp was provided, or the filename was invalid.
 	 */
-	void save_raw_mdp(const MDP *mdp, std::string filename);
+	void save_raw_mdp(MDP *mdp, std::string filename);
 
 	/**
 	 * A method which simply loads a raw MDP file into an array-based MDP object.
@@ -95,7 +95,7 @@ public:
 	 * 							be an invalid mdp was provided, or the filename was invalid.
 	 * ToDo: Implement saving raw pomdp files.
 	 */
-//	void save_raw_pomdp(const POMDP *pomdp, std::string filename);
+//	void save_raw_pomdp(POMDP *pomdp, std::string filename);
 
 	/**
 	 * A method which simply loads a raw MDP file into an array-based MDP object.
@@ -115,7 +115,7 @@ public:
 	 * 							be an invalid mdp was provided, or the filename was invalid.
 	 * ToDo: Implement saving raw dec-pomdp files.
 	 */
-//	void save_raw_decpomdp(const DecPOMDP *decpomdp, std::string filename);
+//	void save_raw_decpomdp(DecPOMDP *decpomdp, std::string filename);
 
 private:
 	/**

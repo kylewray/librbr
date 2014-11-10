@@ -180,7 +180,7 @@ private:
 	 * @param	line			The line string from the file.
 	 * @return	Return @code{true} if an error occurred, and @code{false} otherwise.
 	 */
-	bool load_factored_states(int factorIndex, std::string line);
+	bool load_factored_states(unsigned int factorIndex, std::string line);
 
 	/**
 	 * Load the actions from the file's data.
@@ -197,7 +197,7 @@ private:
 	 * @return	Return -1 if an error occurred, 0 if successful, and 1 if this begins
 	 * 			loading a sequence of actions.
 	 */
-	int load_agent_actions(int agentIndex, std::string line);
+	int load_agent_actions(unsigned int agentIndex, std::string line);
 
 	/**
 	 * Load the observations from the file's data.
@@ -214,7 +214,7 @@ private:
 	 * @return	Return -1 if an error occurred, 0 if successful, and 1 if this begins
 	 * 		loading a sequence of actions.
 	 */
-	int load_agent_observations(int agentIndex, std::string line);
+	int load_agent_observations(unsigned int agentIndex, std::string line);
 
 	/**
 	 * Load the state transitions from the file's data.
@@ -238,7 +238,7 @@ private:
 	 * @param	line			The line to parse containing a vector of probabilities.
 	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	bool load_state_transition_matrix(int stateIndex, std::string line);
+	bool load_state_transition_matrix(unsigned int stateIndex, std::string line);
 
 	/**
 	 * Load the observation transitions from the file's data.
@@ -261,7 +261,7 @@ private:
 	 * @param	line			The line to parse containing a vector of probabilities.
 	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	bool load_observation_transition_matrix(int stateIndex, std::string line);
+	bool load_observation_transition_matrix(unsigned int stateIndex, std::string line);
 
 	/**
 	 * Load the rewards from the file's data.
@@ -284,7 +284,7 @@ private:
 	 * @param	line			The line to parse containing a vector of rewards or costs.
 	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	bool load_reward_matrix(int stateIndex, std::string line);
+	bool load_reward_matrix(unsigned int stateIndex, std::string line);
 
 	/**
 	 * Release control over the memory of the variables.
@@ -327,14 +327,14 @@ private:
 	SASRewards *rewards;
 
 	/**
-	 * The initial state or initial belief state; e.g., factored initial state.
-	 */
-	Initial *initialState;
-
-	/**
 	 * The horizon, either a finite time or a discount factor.
 	 */
 	Horizon *horizon;
+
+	/**
+	 * The initial state.
+	 */
+	Initial *initialState;
 
 	/**
 	 * If this represents a reward or a cost.
@@ -344,7 +344,7 @@ private:
 	/**
 	 * The number of rows in the file (primarily for error output purposes).
 	 */
-	int rows;
+	unsigned int rows;
 
 	/**
 	 * The name of the file (primarily for error output purposes).
@@ -359,27 +359,27 @@ private:
 	/**
 	 * A helper state variable for loading vectors or matrices.
 	 */
-	const State *loadingState;
+	State *loadingState;
 
 	/**
 	 * A helper action variable for loading vectors or matrices.
 	 */
-	const Action *loadingAction;
+	Action *loadingAction;
 
 	/**
 	 * A helper observation variable for loading vectors or matrices.
 	 */
-	const Observation *loadingObservation;
+	Observation *loadingObservation;
 
 	/**
 	 * An ordered list of states for use in loading vectors or matrices.
 	 */
-	std::vector<const State *> orderedStates;
+	std::vector<State *> orderedStates;
 
 	/**
 	 * An ordered list of observations for use in loading vectors or matrices.
 	 */
-	std::vector<const Observation *> orderedObservations;
+	std::vector<Observation *> orderedObservations;
 
 };
 

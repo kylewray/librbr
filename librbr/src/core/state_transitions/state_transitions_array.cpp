@@ -52,11 +52,11 @@ StateTransitionsArray::~StateTransitionsArray()
 	delete [] stateTransitions;
 }
 
-void StateTransitionsArray::set(const State *state, const Action *action, const State *nextState, double probability)
+void StateTransitionsArray::set(State *state, Action *action, State *nextState, double probability)
 {
-	const IndexedState *s = dynamic_cast<const IndexedState *>(state);
-	const IndexedAction *a = dynamic_cast<const IndexedAction *>(action);
-	const IndexedState *sp = dynamic_cast<const IndexedState *>(nextState);
+	IndexedState *s = dynamic_cast<IndexedState *>(state);
+	IndexedAction *a = dynamic_cast<IndexedAction *>(action);
+	IndexedState *sp = dynamic_cast<IndexedState *>(nextState);
 
 	if (s == nullptr || a == nullptr || sp == nullptr) {
 		throw StateTransitionException();
@@ -71,11 +71,11 @@ void StateTransitionsArray::set(const State *state, const Action *action, const 
 	                 sp->get_index()] = (float)std::max(0.0, std::min(1.0, probability));
 }
 
-double StateTransitionsArray::get(const State *state, const Action *action, const State *nextState) const
+double StateTransitionsArray::get(State *state, Action *action, State *nextState)
 {
-	const IndexedState *s = dynamic_cast<const IndexedState *>(state);
-	const IndexedAction *a = dynamic_cast<const IndexedAction *>(action);
-	const IndexedState *sp = dynamic_cast<const IndexedState *>(nextState);
+	IndexedState *s = dynamic_cast<IndexedState *>(state);
+	IndexedAction *a = dynamic_cast<IndexedAction *>(action);
+	IndexedState *sp = dynamic_cast<IndexedState *>(nextState);
 
 	if (s == nullptr || a == nullptr || sp == nullptr) {
 		throw StateTransitionException();
@@ -90,18 +90,18 @@ double StateTransitionsArray::get(const State *state, const Action *action, cons
 	                        sp->get_index()];
 }
 
-void StateTransitionsArray::successors(const States *S, const State *state,
-		const Action *action, std::vector<const State *> &result) const
+void StateTransitionsArray::successors(States *S, State *state,
+		Action *action, std::vector<State *> &result)
 {
 	// ToDo: Create a StatesArray object, and replace this cast with that instead.
-	const StatesMap *SMap = dynamic_cast<const StatesMap *>(S);
+	StatesMap *SMap = dynamic_cast<StatesMap *>(S);
 	if (SMap == nullptr) {
 		throw StateTransitionException();
 	}
 
 	result.clear();
 	for (auto sp : *SMap) {
-		const State *nextState = resolve(sp);
+		State *nextState = resolve(sp);
 		if (get(state, action, nextState) > 0.0) {
 			result.push_back(nextState);
 		}
@@ -110,9 +110,9 @@ void StateTransitionsArray::successors(const States *S, const State *state,
 
 void StateTransitionsArray::set_state_transitions(const float *T)
 {
-	for (int s = 0; s < states; s++) {
-		for (int a = 0; a < actions; a++) {
-			for (int sp = 0; sp < states; sp++) {
+	for (unsigned int s = 0; s < states; s++) {
+		for (unsigned int a = 0; a < actions; a++) {
+			for (unsigned int sp = 0; sp < states; sp++) {
 				stateTransitions[s * actions * states + a * states + sp] =
 						T[s * actions * states + a * states + sp];
 			}
@@ -120,9 +120,9 @@ void StateTransitionsArray::set_state_transitions(const float *T)
 	}
 }
 
-const float *StateTransitionsArray::get_state_transitions() const
+float *StateTransitionsArray::get_state_transitions()
 {
-	return (const float *)stateTransitions;
+	return stateTransitions;
 }
 
 unsigned int StateTransitionsArray::get_num_states() const
@@ -137,9 +137,9 @@ unsigned int StateTransitionsArray::get_num_actions() const
 
 void StateTransitionsArray::reset()
 {
-	for (int s = 0; s < states; s++) {
-		for (int a = 0; a < actions; a++) {
-			for (int sp = 0; sp < states; sp++) {
+	for (unsigned int s = 0; s < states; s++) {
+		for (unsigned int a = 0; a < actions; a++) {
+			for (unsigned int sp = 0; sp < states; sp++) {
 				stateTransitions[s * actions * states +
 				                 a * states +
 				                 sp] = 0.0f;

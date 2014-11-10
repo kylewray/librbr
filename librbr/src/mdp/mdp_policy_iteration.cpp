@@ -48,7 +48,7 @@ MDPPolicyIteration::MDPPolicyIteration(unsigned int k)
 MDPPolicyIteration::~MDPPolicyIteration()
 { }
 
-PolicyMap *MDPPolicyIteration::solve(const MDP *mdp)
+PolicyMap *MDPPolicyIteration::solve(MDP *mdp)
 {
 	// Handle the trivial case.
 	if (mdp == nullptr) {
@@ -56,32 +56,32 @@ PolicyMap *MDPPolicyIteration::solve(const MDP *mdp)
 	}
 
 	// Attempt to convert the states object into FiniteStates.
-	const StatesMap *S = dynamic_cast<const StatesMap *>(mdp->get_states());
+	StatesMap *S = dynamic_cast<StatesMap *>(mdp->get_states());
 	if (S == nullptr) {
 		throw StateException();
 	}
 
 	// Attempt to convert the actions object into FiniteActions.
-	const ActionsMap *A = dynamic_cast<const ActionsMap *>(mdp->get_actions());
+	ActionsMap *A = dynamic_cast<ActionsMap *>(mdp->get_actions());
 	if (A == nullptr) {
 		throw ActionException();
 	}
 
 	// Attempt to convert the state transitions object into FiniteStateTransitions.
-	const StateTransitionsMap *T =
-			dynamic_cast<const StateTransitionsMap *>(mdp->get_state_transitions());
+	StateTransitionsMap *T =
+			dynamic_cast<StateTransitionsMap *>(mdp->get_state_transitions());
 	if (T == nullptr) {
 		throw StateTransitionException();
 	}
 
 	// Attempt to convert the rewards object into SASRewards.
-	const SASRewards *R = dynamic_cast<const SASRewards *>(mdp->get_rewards());
+	SASRewards *R = dynamic_cast<SASRewards *>(mdp->get_rewards());
 	if (R == nullptr) {
 		throw RewardException();
 	}
 
 	// Obtain the horizon and throw an error if it is not infinite.
-	const Horizon *h = mdp->get_horizon();
+	Horizon *h = mdp->get_horizon();
 	if (h->is_finite()) {
 		throw PolicyException();
 	}
@@ -94,8 +94,8 @@ PolicyMap *MDPPolicyIteration::solve(const MDP *mdp)
 	}
 }
 
-PolicyMap *MDPPolicyIteration::solve_exact(const StatesMap *S, const ActionsMap *A, const StateTransitionsMap *T,
-		const SASRewards *R, const Horizon *h)
+PolicyMap *MDPPolicyIteration::solve_exact(StatesMap *S, ActionsMap *A, StateTransitionsMap *T,
+		SASRewards *R, Horizon *h)
 {
 	PolicyMap *policy = new PolicyMap(h);
 	for (auto s : *S) {
@@ -118,11 +118,11 @@ PolicyMap *MDPPolicyIteration::solve_exact(const StatesMap *S, const ActionsMap 
 		// Update the matrix M with the new policy changes.
 		unsigned int i = 0;
 		for (auto stateI : *S) {
-			const State *si = resolve(stateI);
+			State *si = resolve(stateI);
 
 			unsigned int j = 0;
 			for (auto stateJ : *S) {
-				const State *sj = resolve(stateJ);
+				State *sj = resolve(stateJ);
 
 				M(i, j) = h->get_discount_factor() * T->get(si, policy->get(si), sj);
 
@@ -140,11 +140,11 @@ PolicyMap *MDPPolicyIteration::solve_exact(const StatesMap *S, const ActionsMap 
 		// Update the vector b with the new policy changes.
 		i = 0;
 		for (auto stateI : *S) {
-			const State *si = resolve(stateI);
+			State *si = resolve(stateI);
 
 			b(i) = 0.0;
 			for (auto stateJ : *S) {
-				const State *sj = resolve(stateJ);
+				State *sj = resolve(stateJ);
 				b(i) -= T->get(si, policy->get(si), sj) * R->get(si, policy->get(si), sj);
 			}
 
@@ -156,7 +156,7 @@ PolicyMap *MDPPolicyIteration::solve_exact(const StatesMap *S, const ActionsMap 
 		x = M.colPivHouseholderQr().solve(b);
 
 		// Store updates in V.
-		std::unordered_map<const State *, double> V;
+		std::unordered_map<State *, double> V;
 		i = 0;
 		for (auto s : *S) {
 			V[resolve(s)] = x(i);
@@ -167,10 +167,10 @@ PolicyMap *MDPPolicyIteration::solve_exact(const StatesMap *S, const ActionsMap 
 		// policy changes occur.
 		i = 0;
 		for (auto state : *S) {
-			const State *s = resolve(state);
+			State *s = resolve(state);
 
 			// Perform the Bellman update, but we only care about aBest = argmax Q(s, a).
-			const Action *aBest = nullptr;
+			Action *aBest = nullptr;
 			bellman_update(S, A, T, R, h, s, V, aBest);
 
 			// Check if a policy change was required. Also, handle the initial case with an undefined mapping.
@@ -185,14 +185,14 @@ PolicyMap *MDPPolicyIteration::solve_exact(const StatesMap *S, const ActionsMap 
 	return policy;
 }
 
-PolicyMap *MDPPolicyIteration::solve_modified(const StatesMap *S, const ActionsMap *A, const StateTransitionsMap *T,
-		const SASRewards *R, const Horizon *h)
+PolicyMap *MDPPolicyIteration::solve_modified(StatesMap *S, ActionsMap *A, StateTransitionsMap *T,
+		SASRewards *R, Horizon *h)
 {
 	// Create the policy based on the horizon.
 	PolicyMap *policy = new PolicyMap(h);
 
 	// The value of the states, which will be constantly improved over iterations.
-	std::unordered_map<const State *, double> V;
+	std::unordered_map<State *, double> V;
 
 	// Continue to iterate until the policy is unchanged in between two iterations.
 	bool unchanged = false;
@@ -201,12 +201,12 @@ PolicyMap *MDPPolicyIteration::solve_modified(const StatesMap *S, const ActionsM
 		unchanged = true;
 
 		// Continue to iterate a number of times equal to the constant k specified at initialization.
-		for (int k = 0; k < modifiedK; k++) {
+		for (unsigned int k = 0; k < modifiedK; k++) {
 			// For all the states, compute V(s).
 			for (auto state : *S) {
-				const State *s = resolve(state);
+				State *s = resolve(state);
 
-				const Action *aBest = nullptr;
+				Action *aBest = nullptr;
 
 				// Perform the Bellman update, which modifies V and aBest such that V(s) = max Q(s, a)
 				// and aBest = argmax Q(s, a).

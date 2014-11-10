@@ -63,7 +63,7 @@ public:
 	 * A constructor for a PolicyMap object which specifies the horizon.
 	 * @param	horizon		The horizon object from the MDP-like object.
 	 */
-	PolicyMap(const Horizon *horizon);
+	PolicyMap(Horizon *horizon);
 
 	/**
 	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
@@ -75,7 +75,7 @@ public:
 	 * @param	state		The state to define.
 	 * @param	action		The action which should be taken at the state.
 	 */
-	void set(const State *state, const Action *action);
+	void set(State *state, Action *action);
 
 	/**
 	 * Set the mapping from a state to an action, allowing the explicit specification of the horizon.
@@ -84,7 +84,7 @@ public:
 	 * @param	action				The action which should be taken at the state.
 	 * @throw	PolicyException		The horizon was invalid.
 	 */
-	void set(unsigned int horizon, const State *state, const Action *action);
+	void set(unsigned int horizon, State *state, Action *action);
 
 	/**
 	 * Get the action for a given state. For finite horizon, it assumes 0 by default.
@@ -92,7 +92,7 @@ public:
 	 * @throw	PolicyException		The policy was not defined for this state.
 	 * @return	The action to take at the given state.
 	 */
-	const Action *get(const State *state) const;
+	Action *get(State *state);
 
 	/**
 	 * Get the action for a given state, allowing the explicit specification of the horizon.
@@ -101,7 +101,7 @@ public:
 	 * @throw	PolicyException		The policy was not defined for this state, or horizon was invalid.
 	 * @return	The action to take at the given state.
 	 */
-	const Action *get(unsigned int horizon, const State *state) const;
+	Action *get(unsigned int horizon, State *state);
 
 	/**
 	 * A function which must load a policy file.
@@ -111,14 +111,14 @@ public:
 	 * @param	horizon		The horizons object to ensure valid policy creation.
 	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	virtual bool load(std::string filename, const StatesMap *states, const ActionsMap *actions, const Horizon *horizon);
+	virtual bool load(std::string filename, StatesMap *states, ActionsMap *actions, Horizon *horizon);
 
 	/**
 	 * A function which must save a policy file.
 	 * @param	filename	The name and path of the file to save.
 	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	virtual bool save(std::string filename) const;
+	virtual bool save(std::string filename);
 
 	/**
 	 * Reset the policy mapping.
@@ -130,7 +130,7 @@ private:
 	 * Defines the policy itself; it's the internal mapping from states to actions. There is
 	 * one of these mappings for each horizon.
 	 */
-	std::vector<std::map<const State *, const Action *> > policy;
+	std::vector<std::map<State *, Action *> > policy;
 
 };
 

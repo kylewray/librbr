@@ -59,12 +59,12 @@ ObservationTransitionsArray::~ObservationTransitionsArray()
 	delete [] observationTransitions;
 }
 
-void ObservationTransitionsArray::set(const Action *previousAction, const State *state,
-		const Observation *observation, double probability)
+void ObservationTransitionsArray::set(Action *previousAction, State *state,
+		Observation *observation, double probability)
 {
-	const IndexedAction *a = dynamic_cast<const IndexedAction *>(previousAction);
-	const IndexedState *s = dynamic_cast<const IndexedState *>(state);
-	const IndexedObservation *z = dynamic_cast<const IndexedObservation *>(observation);
+	IndexedAction *a = dynamic_cast<IndexedAction *>(previousAction);
+	IndexedState *s = dynamic_cast<IndexedState *>(state);
+	IndexedObservation *z = dynamic_cast<IndexedObservation *>(observation);
 
 	if (a == nullptr || s == nullptr || z == nullptr) {
 		throw ObservationTransitionException();
@@ -80,12 +80,12 @@ void ObservationTransitionsArray::set(const Action *previousAction, const State 
 			(float)std::max(0.0, std::min(1.0, probability));
 }
 
-double ObservationTransitionsArray::get(const Action *previousAction, const State *state,
-		const Observation *observation) const
+double ObservationTransitionsArray::get(Action *previousAction, State *state,
+		Observation *observation)
 {
-	const IndexedAction *a = dynamic_cast<const IndexedAction *>(previousAction);
-	const IndexedState *s = dynamic_cast<const IndexedState *>(state);
-	const IndexedState *z = dynamic_cast<const IndexedState *>(observation);
+	IndexedAction *a = dynamic_cast<IndexedAction *>(previousAction);
+	IndexedState *s = dynamic_cast<IndexedState *>(state);
+	IndexedState *z = dynamic_cast<IndexedState *>(observation);
 
 	if (a == nullptr || s == nullptr || z == nullptr) {
 		throw ObservationTransitionException();
@@ -100,18 +100,18 @@ double ObservationTransitionsArray::get(const Action *previousAction, const Stat
 	   	                       z->get_index()];
 }
 
-void ObservationTransitionsArray::available(const Observations *Z, const Action *previousAction, const State *state,
-		std::vector<const Observation *> &result) const
+void ObservationTransitionsArray::available(Observations *Z, Action *previousAction, State *state,
+		std::vector<Observation *> &result)
 {
 	// ToDo: Create an ObservationsArray object, and replace this cast with that instead.
-	const ObservationsMap *ZMap = static_cast<const ObservationsMap *>(Z);
+	ObservationsMap *ZMap = static_cast<ObservationsMap *>(Z);
 	if (ZMap == nullptr) {
 		throw ObservationTransitionException();
 	}
 
 	result.clear();
 	for (auto z : *ZMap) {
-		const Observation *observation = resolve(z);
+		Observation *observation = resolve(z);
 		if (get(previousAction, state, observation) > 0.0) {
 			result.push_back(observation);
 		}
@@ -120,9 +120,9 @@ void ObservationTransitionsArray::available(const Observations *Z, const Action 
 
 void ObservationTransitionsArray::set_observation_transitions(const float *O)
 {
-	for (int a = 0; a < actions; a++) {
-		for (int sp = 0; sp < states; sp++) {
-			for (int z = 0; z < observations; z++) {
+	for (unsigned int a = 0; a < actions; a++) {
+		for (unsigned int sp = 0; sp < states; sp++) {
+			for (unsigned int z = 0; z < observations; z++) {
 				observationTransitions[a * states * observations + sp * observations + z] =
 						O[a * states * observations + sp * observations + z];
 			}
@@ -130,9 +130,9 @@ void ObservationTransitionsArray::set_observation_transitions(const float *O)
 	}
 }
 
-const float *ObservationTransitionsArray::get_observation_transitions() const
+float *ObservationTransitionsArray::get_observation_transitions()
 {
-	return (const float *)observationTransitions;
+	return observationTransitions;
 }
 
 unsigned int ObservationTransitionsArray::get_num_states() const
@@ -152,9 +152,9 @@ unsigned int ObservationTransitionsArray::get_num_observations() const
 
 void ObservationTransitionsArray::reset()
 {
-	for (int a = 0; a < actions; a++) {
-		for (int s = 0; s < states; s++) {
-			for (int z = 0; z < observations; z++) {
+	for (unsigned int a = 0; a < actions; a++) {
+		for (unsigned int s = 0; s < states; s++) {
+			for (unsigned int z = 0; z < observations; z++) {
 				observationTransitions[a * states * observations +
 				                       s * observations +
 				                       z] = 0.0f;

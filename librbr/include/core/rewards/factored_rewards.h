@@ -79,7 +79,7 @@ public:
 	 * @throw	RewardException		The index was invalid.
 	 * @return	The rewards for this index.
 	 */
-	virtual const Rewards *get(unsigned int factorIndex) const;
+	virtual Rewards *get(unsigned int factorIndex);
 
 	/**
 	 * Get the number of rewards, i.e., the dimension of the factored rewards vector.

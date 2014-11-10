@@ -67,7 +67,7 @@ void FactoredRewards::set(unsigned int factorIndex, Rewards *newRewardsFactor)
 	rewards[factorIndex] = newRewardsFactor;
 }
 
-const Rewards *FactoredRewards::get(unsigned int factorIndex) const
+Rewards *FactoredRewards::get(unsigned int factorIndex)
 {
 	if (factorIndex >= rewards.size()) {
 		throw RewardException();

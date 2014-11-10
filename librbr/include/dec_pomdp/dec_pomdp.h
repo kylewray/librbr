@@ -61,7 +61,7 @@ public:
 	 * @param	h		The horizon.
 	 */
 	DecPOMDP(Agents *N, States *S, Actions *A, Observations *Z, StateTransitions *T, ObservationTransitions *O,
-			Rewards *R, Initial *s, Horizon *h);
+			Rewards *R, Horizon *h);
 
 	/**
 	 * The deconstructor for the DecPOMDP class.
@@ -72,7 +72,7 @@ public:
 	 * Get the agents object.
 	 * @return	The agents object.
 	 */
-	const Agents *get_agents() const;
+	Agents *get_agents();
 
 protected:
 	/**

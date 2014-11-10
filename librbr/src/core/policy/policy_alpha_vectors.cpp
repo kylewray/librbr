@@ -59,7 +59,7 @@ PolicyAlphaVectors::PolicyAlphaVectors(unsigned int horizon)
 	}
 }
 
-PolicyAlphaVectors::PolicyAlphaVectors(const Horizon *horizon)
+PolicyAlphaVectors::PolicyAlphaVectors(Horizon *horizon)
 {
 	if (horizon->get_horizon() > 0) {
 		alphaVectors.resize(horizon->get_horizon());
@@ -68,13 +68,13 @@ PolicyAlphaVectors::PolicyAlphaVectors(const Horizon *horizon)
 	}
 }
 
-PolicyAlphaVectors::PolicyAlphaVectors(const std::vector<PolicyAlphaVector *> &alphas)
+PolicyAlphaVectors::PolicyAlphaVectors(std::vector<PolicyAlphaVector *> &alphas)
 {
 	alphaVectors.resize(1);
 	set(alphas);
 }
 
-PolicyAlphaVectors::PolicyAlphaVectors(const std::vector<std::vector<PolicyAlphaVector *> > &alphas)
+PolicyAlphaVectors::PolicyAlphaVectors(std::vector<std::vector<PolicyAlphaVector *> > &alphas)
 {
 	// If no alpha vectors are properly given, then simply reserve the size for 1 horizon.
 	if (alphas.size() == 0 || alphas[0].size() == 0) {
@@ -84,7 +84,7 @@ PolicyAlphaVectors::PolicyAlphaVectors(const std::vector<std::vector<PolicyAlpha
 
 	// Otherwise, set each of the horizon's alpha vectors.
 	alphaVectors.resize(alphas.size());
-	for (const std::vector<PolicyAlphaVector *> &alpha : alphas) {
+	for (std::vector<PolicyAlphaVector *> &alpha : alphas) {
 		set(alpha);
 	}
 }
@@ -92,12 +92,12 @@ PolicyAlphaVectors::PolicyAlphaVectors(const std::vector<std::vector<PolicyAlpha
 PolicyAlphaVectors::~PolicyAlphaVectors()
 { }
 
-void PolicyAlphaVectors::set(const std::vector<PolicyAlphaVector *> &alphas)
+void PolicyAlphaVectors::set(std::vector<PolicyAlphaVector *> &alphas)
 {
 	set(0, alphas);
 }
 
-void PolicyAlphaVectors::set(unsigned int horizon, const std::vector<PolicyAlphaVector *> &alphas)
+void PolicyAlphaVectors::set(unsigned int horizon, std::vector<PolicyAlphaVector *> &alphas)
 {
 	if (horizon >= alphaVectors.size()) {
 		throw PolicyException();
@@ -111,12 +111,12 @@ void PolicyAlphaVectors::set(unsigned int horizon, const std::vector<PolicyAlpha
 	alphaVectors[horizon] = alphas;
 }
 
-const Action *PolicyAlphaVectors::get(const BeliefState *belief) const
+Action *PolicyAlphaVectors::get(BeliefState *belief)
 {
 	return get(0, belief);
 }
 
-const Action *PolicyAlphaVectors::get(unsigned int horizon, const BeliefState *belief) const
+Action *PolicyAlphaVectors::get(unsigned int horizon, BeliefState *belief)
 {
 	// Ensure that there is an alpha vector defined.
 	if (horizon >= alphaVectors.size() || alphaVectors[horizon].size() == 0) {
@@ -124,7 +124,7 @@ const Action *PolicyAlphaVectors::get(unsigned int horizon, const BeliefState *b
 	}
 
 	// Initially assume the first alpha vector is the best.
-	const Action *action = alphaVectors[horizon][0]->get_action();
+	Action *action = alphaVectors[horizon][0]->get_action();
 	double Vb = alphaVectors[horizon][0]->compute_value(belief);
 
 	// Find the alpha vector which maximizes "dot(b, alpha)" and return the corresponding action.
@@ -139,8 +139,8 @@ const Action *PolicyAlphaVectors::get(unsigned int horizon, const BeliefState *b
 	return action;
 }
 
-bool PolicyAlphaVectors::load(std::string filename, const StatesMap *states, const ActionsMap *actions,
-		const ObservationsMap *observations, const Horizon *horizon)
+bool PolicyAlphaVectors::load(std::string filename, StatesMap *states, ActionsMap *actions,
+		ObservationsMap *observations, Horizon *horizon)
 {
 	reset();
 
@@ -157,10 +157,10 @@ bool PolicyAlphaVectors::load(std::string filename, const StatesMap *states, con
 	int rows = 1;
 	std::string line;
 
-	int h = 1;
+	unsigned int h = 1;
 
-	const State *state = nullptr;
-	const Action *action = nullptr;
+	State *state = nullptr;
+	Action *action = nullptr;
 
 	// Before starting, reserve the space for the horizon given.
 	alphaVectors.resize(horizon->get_horizon());
@@ -226,7 +226,7 @@ bool PolicyAlphaVectors::load(std::string filename, const StatesMap *states, con
 
 			// The remaining items are state-value pairs.
 			PolicyAlphaVector *newAlphaVector = new PolicyAlphaVector(action);
-			for (int i = 1; i < items.size(); i += 2) {
+			for (unsigned int i = 1; i < items.size(); i += 2) {
 				// First is the state in the pair.
 				try {
 					state = find_state(states, items[i]);
@@ -262,7 +262,7 @@ bool PolicyAlphaVectors::load(std::string filename, const StatesMap *states, con
 	return false;
 }
 
-bool PolicyAlphaVectors::save(std::string filename, const StatesMap *states) const
+bool PolicyAlphaVectors::save(std::string filename, StatesMap *states)
 {
 	std::ofstream file(filename);
 	if (!file.is_open()) {
@@ -275,13 +275,13 @@ bool PolicyAlphaVectors::save(std::string filename, const StatesMap *states) con
 		int h = 1;
 
 		// This ranged-based for loop iterates without cloning each set of alpha vectors.
-		for (const std::vector<PolicyAlphaVector *> &alphaVectorSet : alphaVectors) {
+		for (std::vector<PolicyAlphaVector *> &alphaVectorSet : alphaVectors) {
 			file << "horizon: " << h << std::endl;
 
 			for (PolicyAlphaVector *alpha : alphaVectorSet) {
 				file << alpha->get_action()->to_string();
 				for (auto s : *states) {
-					const State *state = resolve(s);
+					State *state = resolve(s);
 					file << " : " << state->to_string() << " : " << alpha->get(state);
 				}
 				file << std::endl;
@@ -294,7 +294,7 @@ bool PolicyAlphaVectors::save(std::string filename, const StatesMap *states) con
 		for (PolicyAlphaVector *alpha : alphaVectors[0]) {
 			file << alpha->get_action()->to_string();
 			for (auto s : *states) {
-				const State *state = resolve(s);
+				State *state = resolve(s);
 				file << " : " << state->to_string() << " : " << alpha->get(state);
 			}
 			file << std::endl;
@@ -314,7 +314,7 @@ bool PolicyAlphaVectors::save(std::string filename, const StatesMap *states) con
 
 void PolicyAlphaVectors::reset()
 {
-	for (int t = 0; t < alphaVectors.size(); t++) {
+	for (unsigned int t = 0; t < alphaVectors.size(); t++) {
 		for (PolicyAlphaVector *alpha : alphaVectors[t]) {
 			delete alpha;
 		}
@@ -323,7 +323,7 @@ void PolicyAlphaVectors::reset()
 	alphaVectors.clear();
 }
 
-void PolicyAlphaVectors::prune_dominated(const StatesMap *S, std::vector<PolicyAlphaVector *> &alphas)
+void PolicyAlphaVectors::prune_dominated(StatesMap *S, std::vector<PolicyAlphaVector *> &alphas)
 {
 	if (S == nullptr || S->get_num_states() == 0 || alphas.size() == 0 || alphas[0] == nullptr) {
 		throw PolicyException();
@@ -343,7 +343,7 @@ void PolicyAlphaVectors::prune_dominated(const StatesMap *S, std::vector<PolicyA
 
 		// This is the constant vector c, defined to be the particular alpha vector in this iteration.
 		double *objective = new double[numCols];
-		int i = 0;
+		unsigned int i = 0;
 		for (auto state : *S) {
 			// Note: Negative since CLP minimizes the objective function.
 			objective[i] = -(*iter)->get(resolve(state));
@@ -389,7 +389,7 @@ void PolicyAlphaVectors::prune_dominated(const StatesMap *S, std::vector<PolicyA
 			CoinPackedVector otherRow;
 			int j = 0;
 			for (auto s : *S) {
-				const State *state = resolve(s);
+				State *state = resolve(s);
 				otherRow.insert(j, (*iterA)->get(state) - (*iter)->get(state));
 				j++;
 			}

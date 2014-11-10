@@ -31,7 +31,7 @@
 FactoredStatesMap::FactoredStatesMap()
 { }
 
-FactoredStatesMap::FactoredStatesMap(int numFactors)
+FactoredStatesMap::FactoredStatesMap(unsigned int numFactors)
 {
 	if (numFactors < 1) {
 		numFactors = 1;
@@ -44,7 +44,7 @@ FactoredStatesMap::~FactoredStatesMap()
 	reset();
 }
 
-void FactoredStatesMap::add_factor(const std::vector<const State *> &newStates)
+void FactoredStatesMap::add_factor(const std::vector<State *> &newStates)
 {
 	if (newStates.size() == 0) {
 		throw StateException();
@@ -59,7 +59,7 @@ void FactoredStatesMap::add_factor(const std::vector<const State *> &newStates)
 	factoredStates.push_back(newStates);
 }
 
-void FactoredStatesMap::add(int factorIndex, const State *newState)
+void FactoredStatesMap::add(unsigned int factorIndex, State *newState)
 {
 	if (factorIndex < 0 || factorIndex >= factoredStates.size()) {
 		throw StateException();
@@ -68,7 +68,7 @@ void FactoredStatesMap::add(int factorIndex, const State *newState)
 	factoredStates[factorIndex].push_back(newState);
 }
 
-void FactoredStatesMap::remove(int factorIndex, const State *removeState)
+void FactoredStatesMap::remove(unsigned int factorIndex, State *removeState)
 {
 	if (factorIndex < 0 || factorIndex >= factoredStates.size()) {
 		throw StateException();
@@ -83,14 +83,14 @@ void FactoredStatesMap::remove(int factorIndex, const State *removeState)
 	delete removeState;
 }
 
-void FactoredStatesMap::set(int factorIndex, const std::vector<const State *> &newStates)
+void FactoredStatesMap::set(unsigned int factorIndex, const std::vector<State *> &newStates)
 {
 	if (factorIndex < 0 || factorIndex >= factoredStates.size() || newStates.size() == 0) {
 		throw StateException();
 	}
 
 	// Delete the current factor's states list.
-	for (const State *state : factoredStates[factorIndex]) {
+	for (State *state : factoredStates[factorIndex]) {
 		delete state;
 	}
 	factoredStates[factorIndex].clear();
@@ -98,7 +98,7 @@ void FactoredStatesMap::set(int factorIndex, const std::vector<const State *> &n
 	factoredStates[factorIndex] = newStates;
 }
 
-const State *FactoredStatesMap::get(int factorIndex, int stateIndex) const
+State *FactoredStatesMap::get(unsigned int factorIndex, unsigned int stateIndex)
 {
 	if (factorIndex < 0 || factorIndex >= factoredStates.size() ||
 			stateIndex < 0 || stateIndex >= factoredStates[factorIndex].size()) {
@@ -111,7 +111,7 @@ const State *FactoredStatesMap::get(int factorIndex, int stateIndex) const
 void FactoredStatesMap::update()
 {
 	// Throw an error if one factor is not defined.
-	for (std::vector<const State *> &factor : factoredStates) {
+	for (std::vector<State *> &factor : factoredStates) {
 		if (factor.size() == 0) {
 			throw StateException();
 		}
@@ -119,7 +119,7 @@ void FactoredStatesMap::update()
 
 	states.clear();
 
-	std::vector<const State *> create;
+	std::vector<State *> create;
 	update_step(create, 0);
 }
 
@@ -130,8 +130,8 @@ unsigned int FactoredStatesMap::get_num_factors()
 
 void FactoredStatesMap::reset()
 {
-	for (std::vector<const State *> &factor : factoredStates) {
-		for (const State *state : factor) {
+	for (std::vector<State *> &factor : factoredStates) {
+		for (State *state : factor) {
 			delete state;
 		}
 		factor.clear();
@@ -140,17 +140,17 @@ void FactoredStatesMap::reset()
 	states.clear();
 }
 
-void FactoredStatesMap::update_step(std::vector<const State *> currentFactoredState, int currentFactorIndex)
+void FactoredStatesMap::update_step(std::vector<State *> currentFactoredState, unsigned int currentFactorIndex)
 {
 	// At the final factor index, we need to create a bunch of factored states.
-	for (const State *state : factoredStates[currentFactorIndex]) {
+	for (State *state : factoredStates[currentFactorIndex]) {
 		// Begin by pushing a current factor's state on the vector (tuple).
 		currentFactoredState.push_back(state);
 
 		// If this is the final index, then create a factored state object and append it to the list of states.
 		// Otherwise, recurse to the next index, using the new currentFactoredState object.
 		if (currentFactorIndex == factoredStates.size() - 1) {
-			const FactoredState *newState = new FactoredState(currentFactoredState);
+			FactoredState *newState = new FactoredState(currentFactoredState);
 			states[newState->hash_value()] = newState;
 		} else {
 			update_step(currentFactoredState, currentFactorIndex + 1);

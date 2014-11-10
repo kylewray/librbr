@@ -28,16 +28,16 @@
 #include "../../../include/core/observations/named_observation.h"
 #include "../../../include/core/observations/joint_observation.h"
 
-const Observation *find_observation(const ObservationsMap *Z, std::string observationName)
+Observation *find_observation(ObservationsMap *Z, std::string observationName)
 {
 	for (auto z : *Z) {
-		const Observation *observation = resolve(z);
+		Observation *observation = resolve(z);
 
 		// Try to cast the observation as a NamedObservation. If it fails, it may still be a joint observation.
-	    const NamedObservation *o = dynamic_cast<const NamedObservation *>(observation);
+	    NamedObservation *o = dynamic_cast<NamedObservation *>(observation);
 	    if (o == nullptr) {
 	    	// Try to cast it as a JointObservation.
-	    	const JointObservation *jo = dynamic_cast<const JointObservation *>(observation);
+	    	JointObservation *jo = dynamic_cast<JointObservation *>(observation);
 		    if (jo == nullptr) {
 		    	throw ObservationException();
 		    }
@@ -45,7 +45,7 @@ const Observation *find_observation(const ObservationsMap *Z, std::string observ
 		    // Construct the joint observation name from the component names, separated by spaces.
 		    std::string joName = "";
 	    	for (int i = 0; i < jo->get_num_observations(); i++) {
-	    		o = dynamic_cast<const NamedObservation *>(jo->get(i));
+	    		o = dynamic_cast<NamedObservation *>(jo->get(i));
 	    		if (o == nullptr) {
 	    			throw ObservationException();
 	    		}

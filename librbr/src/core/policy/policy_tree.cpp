@@ -41,7 +41,7 @@ PolicyTreeNode::PolicyTreeNode()
 	action = nullptr;
 }
 
-PolicyTreeNode::PolicyTreeNode(const Action *a)
+PolicyTreeNode::PolicyTreeNode(Action *a)
 {
 	action = a;
 }
@@ -53,13 +53,13 @@ PolicyTree::PolicyTree()
 	current = nullptr;
 }
 
-PolicyTree::PolicyTree(const ObservationsMap *observations, unsigned int horizon)
+PolicyTree::PolicyTree(ObservationsMap *observations, unsigned int horizon)
 {
 	root = generate_tree(observations, horizon);
 	current = root;
 }
 
-PolicyTree::PolicyTree(const ObservationsMap *observations, const Horizon *horizon)
+PolicyTree::PolicyTree(ObservationsMap *observations, Horizon *horizon)
 {
 	if (horizon->is_finite()) {
 		root = generate_tree(observations, horizon->get_horizon());
@@ -74,7 +74,7 @@ PolicyTree::~PolicyTree()
 	reset();
 }
 
-void PolicyTree::set(const std::vector<const Observation *> &history, const Action *action)
+void PolicyTree::set(const std::vector<Observation *> &history, Action *action)
 {
 	PolicyTreeNode *node = nullptr;
 
@@ -91,7 +91,7 @@ void PolicyTree::set(const std::vector<const Observation *> &history, const Acti
 	node->action = action;
 }
 
-const Action *PolicyTree::get(const std::vector<const Observation *> &history) const
+Action *PolicyTree::get(const std::vector<Observation *> &history)
 {
 	PolicyTreeNode *node = nullptr;
 
@@ -108,7 +108,7 @@ const Action *PolicyTree::get(const std::vector<const Observation *> &history) c
 	return node->action;
 }
 
-bool PolicyTree::load(std::string filename, const ActionsMap *actions, const ObservationsMap *observations, const Horizon *horizon)
+bool PolicyTree::load(std::string filename, ActionsMap *actions, ObservationsMap *observations, Horizon *horizon)
 {
 	// Reset the current tree, cleaning the memory, and then generate the tree's data.
 	reset();
@@ -143,10 +143,10 @@ bool PolicyTree::load(std::string filename, const ActionsMap *actions, const Obs
 
 		std::vector<std::string> items = split_string_by_colon(line);
 
-		std::vector<const Observation *> history;
-		const Action *action = nullptr;
+		std::vector<Observation *> history;
+		Action *action = nullptr;
 
-		int counter = 1;
+		unsigned int counter = 1;
 
 		// Create the history of observations and the action to take.
 		for (std::string item : items) {
@@ -191,7 +191,7 @@ bool PolicyTree::load(std::string filename, const ActionsMap *actions, const Obs
 	return false;
 }
 
-bool PolicyTree::save(std::string filename) const
+bool PolicyTree::save(std::string filename)
 {
 	char error[1024];
 
@@ -202,7 +202,7 @@ bool PolicyTree::save(std::string filename) const
 		return true;
 	}
 
-	std::vector<const Observation *> history;
+	std::vector<Observation *> history;
 
 	save_tree(file, root, history);
 
@@ -211,9 +211,9 @@ bool PolicyTree::save(std::string filename) const
 	return false;
 }
 
-const Action *PolicyTree::next(const Observation *observation)
+Action *PolicyTree::next(Observation *observation)
 {
-	const Action *action = current->action;
+	Action *action = current->action;
 	current = current->next[observation];
 	return action;
 }
@@ -228,7 +228,7 @@ void PolicyTree::reset()
 	current = nullptr;
 }
 
-PolicyTreeNode *PolicyTree::generate_tree(const ObservationsMap *observations, unsigned int horizon)
+PolicyTreeNode *PolicyTree::generate_tree(ObservationsMap *observations, unsigned int horizon)
 {
 	// Create the new node regardless.
 	PolicyTreeNode *node = new PolicyTreeNode();
@@ -247,13 +247,13 @@ PolicyTreeNode *PolicyTree::generate_tree(const ObservationsMap *observations, u
 	return node;
 }
 
-PolicyTreeNode *PolicyTree::traverse(const std::vector<const Observation *> &history) const
+PolicyTreeNode *PolicyTree::traverse(const std::vector<Observation *> &history)
 {
 	// Traverse the policy tree, following the history path, until the node is reached.
 	PolicyTreeNode *node = root;
 
-	for (const Observation *o : history) {
-		std::map<const Observation *, PolicyTreeNode *>::iterator result = node->next.find(o);
+	for (Observation *o : history) {
+		std::map<Observation *, PolicyTreeNode *>::iterator result = node->next.find(o);
 
 		if (result == node->next.end()) {
 			throw PolicyException();
@@ -265,7 +265,7 @@ PolicyTreeNode *PolicyTree::traverse(const std::vector<const Observation *> &his
 	return node;
 }
 
-void PolicyTree::save_tree(std::ofstream &file, PolicyTreeNode *node, std::vector<const Observation *> history) const
+void PolicyTree::save_tree(std::ofstream &file, PolicyTreeNode *node, std::vector<Observation *> history)
 {
 	if (node == nullptr) {
 		return;
@@ -273,7 +273,7 @@ void PolicyTree::save_tree(std::ofstream &file, PolicyTreeNode *node, std::vecto
 
 	// Save the history of observations and the corresponding action.
 //	file << history.size() << " : ";
-	for (const Observation *o : history) {
+	for (Observation *o : history) {
 		file << o->to_string() << " : ";
 	}
 	if (node->action != nullptr) {
@@ -282,9 +282,9 @@ void PolicyTree::save_tree(std::ofstream &file, PolicyTreeNode *node, std::vecto
 	file << std::endl;
 
 	// Recursively explore the children of this node.
-	for (std::map<const Observation *, PolicyTreeNode *>::value_type child : root->next) {
+	for (std::map<Observation *, PolicyTreeNode *>::value_type child : root->next) {
 		// Create a new history vector with the observation traversed to reach this child included.
-		std::vector<const Observation *> newHistory = history;
+		std::vector<Observation *> newHistory = history;
 		newHistory.push_back(child.first);
 
 		// Save the child using this new history.

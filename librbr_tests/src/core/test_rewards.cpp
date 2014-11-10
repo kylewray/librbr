@@ -447,8 +447,8 @@ int test_rewards()
 	std::cout << ((SARewards *)(factoredRewards->get(1)))->get(s2, a2) << std::endl;
 	 */
 
-	const SARewards *R0 = dynamic_cast<const SARewards *>(factoredRewards->get(0));
-	const SARewards *R1 = dynamic_cast<const SARewards *>(factoredRewards->get(1));
+	SARewards *R0 = dynamic_cast<SARewards *>(factoredRewards->get(0));
+	SARewards *R1 = dynamic_cast<SARewards *>(factoredRewards->get(1));
 
 	if (R0 != nullptr && R1 != nullptr && factoredRewards->get_num_rewards() == 2 &&
 			R0->get(s1, a1) == 42.0 &&
@@ -483,8 +483,8 @@ int test_rewards()
 
 	factoredRewards->set(1, saRewardsMap);
 
-	R0 = dynamic_cast<const SARewards *>(factoredRewards->get(0));
-	R1 = dynamic_cast<const SARewards *>(factoredRewards->get(1));
+	R0 = dynamic_cast<SARewards *>(factoredRewards->get(0));
+	R1 = dynamic_cast<SARewards *>(factoredRewards->get(1));
 
 	if (R0 != nullptr && R1 != nullptr && factoredRewards->get_num_rewards() == 2 &&
 		R0->get(s1, a1) == -1.0 &&

@@ -163,22 +163,22 @@ int test_policy()
 
 	std::cout << "Policy: Test 'PolicyTree::get' (Check Result)... ";
 
-	const std::vector<const Observation *> history;
-	const std::vector<const Observation *> history1 = {o1};
-	const std::vector<const Observation *> history2 = {o2};
-	const std::vector<const Observation *> history11 = {o1, o1};
-	const std::vector<const Observation *> history12 = {o1, o2};
-	const std::vector<const Observation *> history21 = {o2, o1};
-	const std::vector<const Observation *> history22 = {o2, o2};
-	const std::vector<const Observation *> history111 = {o1, o1, o1};
-	const std::vector<const Observation *> history112 = {o1, o1, o2};
-	const std::vector<const Observation *> history121 = {o1, o2, o1};
-	const std::vector<const Observation *> history122 = {o1, o2, o2};
-	const std::vector<const Observation *> history211 = {o2, o1, o1};
-	const std::vector<const Observation *> history212 = {o2, o1, o2};
-	const std::vector<const Observation *> history221 = {o2, o2, o1};
-	const std::vector<const Observation *> history222 = {o2, o2, o2};
-	const std::vector<const Observation *> history1111 = {o1, o1, o1, o1};
+	std::vector<Observation *> history;
+	std::vector<Observation *> history1 = {o1};
+	std::vector<Observation *> history2 = {o2};
+	std::vector<Observation *> history11 = {o1, o1};
+	std::vector<Observation *> history12 = {o1, o2};
+	std::vector<Observation *> history21 = {o2, o1};
+	std::vector<Observation *> history22 = {o2, o2};
+	std::vector<Observation *> history111 = {o1, o1, o1};
+	std::vector<Observation *> history112 = {o1, o1, o2};
+	std::vector<Observation *> history121 = {o1, o2, o1};
+	std::vector<Observation *> history122 = {o1, o2, o2};
+	std::vector<Observation *> history211 = {o2, o1, o1};
+	std::vector<Observation *> history212 = {o2, o1, o2};
+	std::vector<Observation *> history221 = {o2, o2, o1};
+	std::vector<Observation *> history222 = {o2, o2, o2};
+	std::vector<Observation *> history1111 = {o1, o1, o1, o1};
 
 	try {
 		if (policyTree->get(history) == a1 &&

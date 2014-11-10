@@ -31,10 +31,7 @@
 								<option id="gnu.cpp.compiler.option.debugging.level.135584775" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.dialect.std.692694752" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.c++1y" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.other.pic.1997944338" name="Position Independent Code (-fPIC)" superClass="gnu.cpp.compiler.option.other.pic" useByScannerDiscovery="false" value="true" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.include.paths.342996038" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/include/coin"/>
-									<listOptionValue builtIn="false" value="/usr/include/eigen3"/>
-								</option>
+								<option id="gnu.cpp.compiler.option.include.paths.342996038" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.58931452" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.181942802" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
@@ -42,10 +39,7 @@
 								<option id="gnu.c.compiler.option.debugging.level.1453440840" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.dialect.std.22277158" name="Language standard" superClass="gnu.c.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.c.compiler.dialect.c11" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.misc.pic.48236111" name="Position Independent Code (-fPIC)" superClass="gnu.c.compiler.option.misc.pic" useByScannerDiscovery="false" value="true" valueType="boolean"/>
-								<option id="gnu.c.compiler.option.include.paths.702556320" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/include/coin"/>
-									<listOptionValue builtIn="false" value="/usr/include/eigen3"/>
-								</option>
+								<option id="gnu.c.compiler.option.include.paths.702556320" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1596350630" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.base.1337872673" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base">
@@ -71,9 +65,7 @@
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="OsiClp"/>
 								</option>
 								<option defaultValue="true" id="gnu.cpp.link.option.shared.1794895027" name="Shared (-shared)" superClass="gnu.cpp.link.option.shared" valueType="boolean"/>
-								<option id="gnu.cpp.link.option.paths.1770835932" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="../"/>
-								</option>
+								<option id="gnu.cpp.link.option.paths.1770835932" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.506517806" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -88,23 +80,7 @@
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-				<externalSettings containerId="org.eclipse.cdt.managedbuilder.pkgconfig.extSettings" factoryId="org.eclipse.cdt.core.extension.container.factory">
-					<externalSetting contentTypes="org.eclipse.cdt.core.cSource:org.eclipse.cdt.core.cxxSource">
-						<entry flags="BUILTIN" kind="includePath" name="/usr/include/coin"/>
-						<entry flags="BUILTIN" kind="includePath" name="/usr/include/eigen3"/>
-					</externalSetting>
-					<externalSetting contentTypes="org.eclipse.cdt.managedbuilder.core.compiledObjectFile">
-						<entry flags="RESOLVED" kind="libraryPath" name=""/>
-						<entry flags="UNDEFINED" kind="libraryFile" name="Clp" srcPrefixMapping="" srcRootPath=""/>
-						<entry flags="UNDEFINED" kind="libraryFile" name="CoinUtils" srcPrefixMapping="" srcRootPath=""/>
-						<entry flags="UNDEFINED" kind="libraryFile" name="bz2" srcPrefixMapping="" srcRootPath=""/>
-						<entry flags="UNDEFINED" kind="libraryFile" name="z" srcPrefixMapping="" srcRootPath=""/>
-						<entry flags="UNDEFINED" kind="libraryFile" name="m" srcPrefixMapping="" srcRootPath=""/>
-						<entry flags="UNDEFINED" kind="libraryFile" name="" srcPrefixMapping="" srcRootPath=""/>
-						<entry flags="UNDEFINED" kind="libraryFile" name="Osi" srcPrefixMapping="" srcRootPath=""/>
-						<entry flags="UNDEFINED" kind="libraryFile" name="OsiClp" srcPrefixMapping="" srcRootPath=""/>
-					</externalSetting>
-				</externalSettings>
+				<externalSettings containerId="org.eclipse.cdt.managedbuilder.pkgconfig.extSettings" factoryId="org.eclipse.cdt.core.extension.container.factory"/>
 			</storageModule>
 			<storageModule Coin="false" QtCLucene="false" QtCore="false" QtDeclarative="false" QtDesigner="false" QtDesignerComponents="false" QtGui="false" QtHelp="false" QtMultimedia="false" QtNetwork="false" QtOpenGL="false" QtScript="false" QtScriptTools="false" QtSql="false" QtSvg="false" QtTest="false" QtUiTools="false" QtUiTools_debug="false" QtWebKit="false" QtXml="false" QtXmlPatterns="false" SDL2_image="false" SDL2_mixer="false" SDL2_net="false" SDL2_ttf="false" SDL_image="false" SDL_mixer="false" SDL_ttf="false" SoQt="false" apr-1="false" apr-util-1="false" atk="false" atkmm-1.6="false" bdw-gc="false" cairo="false" cairo-fc="false" cairo-ft="false" cairo-gobject="false" cairo-pdf="false" cairo-png="false" cairo-ps="false" cairo-quartz="false" cairo-quartz-font="false" cairo-script="false" cairo-svg="false" cairo-xcb="false" cairo-xcb-shm="false" cairo-xlib="false" cairo-xlib-xrender="false" cairomm-1.0="false" cairomm-ft-1.0="false" cairomm-pdf-1.0="false" cairomm-png-1.0="false" cairomm-ps-1.0="false" cairomm-quartz-1.0="false" cairomm-quartz-font-1.0="false" cairomm-svg-1.0="false" cairomm-xlib-1.0="false" cairomm-xlib-xrender-1.0="false" cbc="false" cgl="false" cloog-isl="false" clp="true" coindatasample="false" coinmp="false" coinutils="true" eigen3="true" fontconfig="false" freetype2="false" gail="false" gdk-2.0="false" gdk-pixbuf-2.0="false" gdk-x11-2.0="false" gdkmm-2.4="false" gdlib="false" gio-2.0="false" gio-unix-2.0="false" giomm-2.4="false" glib-2.0="false" glibmm-2.4="false" gmodule-2.0="false" gmodule-export-2.0="false" gmodule-no-export-2.0="false" gobject-2.0="false" gobject-introspection-1.0="false" gobject-introspection-no-export-1.0="false" gsl="false" gthread-2.0="false" gtkmm-2.4="false" gtkplus-2.0="false" gtkplus-unix-print-2.0="false" gtkplus-x11-2.0="false" harfbuzz="false" harfbuzz-icu="false" isl="false" lcms="false" libavcodec="false" libavdevice="false" libavfilter="false" libavformat="false" libavresample="false" libavutil="false" libcrypto="false" libedit="false" libevent="false" libevent_openssl="false" libevent_pthreads="false" libgphoto2="false" libgphoto2_port="false" libicns="false" libiodbc="false" liblog4cxx="false" liblzma="false" libmpeg2="false" libmpeg2convert="false" libpcre="false" libpcre16="false" libpcre32="false" libpcrecpp="false" libpcreposix="false" libpng="false" libpng16="false" libpostproc="false" libssl="false" libswresample="false" libswscale="false" libtiff-4="false" libusb="false" libusb-1.0="false" libwebp="false" libwebpdecoder="false" libwebpdemux="false" libwebpmux="false" mm-common-libstdcplusplus="false" mm-common-util="false" moduleId="packages" ompi="false" ompi-c="false" ompi-cxx="false" ompi-f77="false" ompi-f90="false" ompi-fort="false" opencv="false" openssl="false" orte="false" osi="true" osi-cbc="false" osi-clp="true" osi-unittests="false" pango="false" pangocairo="false" pangoft2="false" pangomm-1.4="false" pangoxft="false" phonon="false" pixman-1="false" popt="false" ruby-2.1="false" sane-backends="false" sdl="false" sdl2="false" sigcplusplus-2.0="false" x264="false" yaml-0.1="false"/>
 			<storageModule moduleId="com.nvidia.cuda.ide.build.project.ICudaProjectConfiguration"/>

@@ -55,7 +55,7 @@ public:
 	 * The constructor for the StatesMap class which allows the specification of an initial set of states.
 	 * @param	states	The initial vector of states.
 	 */
-	StatesMap(const std::vector<const State *> &states);
+	StatesMap(const std::vector<State *> &states);
 
 	/**
 	 * The default deconstructor for the StatesMap class.
@@ -66,21 +66,21 @@ public:
 	 * Add a state to the set of available states.
 	 * @param	newState	The new state to include in the set of available states.
 	 */
-	void add(const State *newState);
+	void add(State *newState);
 
 	/**
 	 * Remove a state to the set of available states. This frees the memory.
 	 * @param	removeState 		The state to remove from the set of available states.
 	 * @throw	StateException		The state was not found in the states list.
 	 */
-	void remove(const State *removeState);
+	void remove(State *removeState);
 
 	/**
 	 * Set the internal states list given another list, performing a deep copy. This resets
 	 * the current list of states and frees the memory.
 	 * @param	newStates	The vector of new states to use.
 	 */
-	void set(const std::vector<const State *> &newStates);
+	void set(const std::vector<State *> &newStates);
 
 	/**
 	 * Check if this state has already been created or not.
@@ -95,7 +95,7 @@ public:
 	 * @throw	StateException		There are no states with the hash value specified.
 	 * @return	The state with the particular hash value specified.
 	 */
-	const State *get(unsigned int hash) const;
+	State *get(unsigned int hash);
 
 	/**
 	 * Return the number of states.
@@ -112,19 +112,19 @@ public:
 	 * To facilitate easy iteration, return a constant beginning of the states vector.
 	 * @return	The iterator which points to a constant beginning of the states vector.
 	 */
-	std::unordered_map<unsigned int, const State *>::const_iterator begin() const;
+	std::unordered_map<unsigned int, State *>::iterator begin();
 
 	/**
 	 * To facilitate easy iteration, return a constant end of the states vector.
 	 * @return	The iterator which points to a constant end of the states vector.
 	 */
-	std::unordered_map<unsigned int, const State *>::const_iterator end() const;
+	std::unordered_map<unsigned int, State *>::iterator end();
 
 protected:
 	/**
 	 * The mapping of state hash values to states. This is the main container of states.
 	 */
-	std::unordered_map<unsigned int, const State *> states;
+	std::unordered_map<unsigned int, State *> states;
 
 };
 
@@ -132,13 +132,13 @@ protected:
  * Get the state pointer of a state iterator.
  * @param	stateIterator	The state iterator to retrieve the state pointer from.
  */
-const State *resolve(std::unordered_map<unsigned int, const State *>::value_type &stateIterator);
+State *resolve(std::unordered_map<unsigned int, State *>::value_type &stateIterator);
 
 /**
  * Get the hash of a state iterator.
  * @param	stateIterator	The state iterator to retrieve the hash value from.
  */
-unsigned int hash_value(std::unordered_map<unsigned int, const State *>::value_type &stateIterator);
+unsigned int hash_value(std::unordered_map<unsigned int, State *>::value_type &stateIterator);
 
 
 #endif // STATES_MAP_H

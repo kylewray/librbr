@@ -53,7 +53,7 @@ public:
 	 * specify the number of factors.
 	 * @param	numFactors		The number of observation factors, minimum of 1.
 	 */
-	JointObservationsMap(int numFactors);
+	JointObservationsMap(unsigned int numFactors);
 
 	/**
 	 * The default deconstructor for the FiniteJointObservations class.
@@ -67,7 +67,7 @@ public:
 	 * @param	newObservation 			The new observation to include in the set of available observations.
 	 * @throw	ObservationException	The index was invalid.
 	 */
-	void add(int factorIndex, const Observation *newObservation);
+	void add(unsigned int factorIndex, Observation *newObservation);
 
 	/**
 	 * Remove an observation to the set of available observations in a factor. This frees the memory. This
@@ -76,7 +76,7 @@ public:
 	 * @param	removeObservation 		The observation to remove from the set of available observations.
 	 * @throw	ObservationException	The index was invalid, or the observation was not found in the observations list.
 	 */
-	void remove(int factorIndex, const Observation *removeObservation);
+	void remove(unsigned int factorIndex, Observation *removeObservation);
 
 	/**
 	 * Set the internal observations list for a factor given another list, performing a deep copy. This resets
@@ -86,7 +86,7 @@ public:
 	 * @param	newObservations 		The vector of new observations to use.
 	 * @throw	ObservationException	The index was invalid, or newObservations was empty.
 	 */
-	void set(int factorIndex, const std::vector<const Observation *> &newObservations);
+	void set(unsigned int factorIndex, const std::vector<Observation *> &newObservations);
 
 	/**
 	 * Get the observation at the corresponding index, given the particular factor. The factor index
@@ -97,7 +97,7 @@ public:
 	 * @throw	ObservationException	The index was invalid.
 	 * @return	The observation at the corresponding index.
 	 */
-	const Observation *get(int factorIndex, int observationIndex) const;
+	Observation *get(unsigned int factorIndex, unsigned int observationIndex);
 
 	/**
 	 * Update the internal observations list which holds all permutations of joint observations in an efficient structure.
@@ -120,7 +120,7 @@ protected:
 	/**
 	 * The list of all available observations for each observation factor.
 	 */
-	std::vector<std::vector<const Observation *> > factoredObservations;
+	std::vector<std::vector<Observation *> > factoredObservations;
 
 private:
 	/**
@@ -128,7 +128,7 @@ private:
 	 * @param	currentJointObservation		The current (incomplete) joint observation as a vector of observations.
 	 * @param	currentFactorIndex			The current factor index.
 	 */
-	void update_step(std::vector<const Observation *> currentJointObservation, int currentFactorIndex);
+	void update_step(std::vector<Observation *> currentJointObservation, unsigned int currentFactorIndex);
 
 };
 

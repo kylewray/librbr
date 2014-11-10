@@ -30,7 +30,7 @@ DecPOMDP::DecPOMDP() : POMDP()
 }
 
 DecPOMDP::DecPOMDP(Agents *N, States *S, Actions *A, Observations *Z, StateTransitions *T, ObservationTransitions *O,
-		Rewards *R, Initial *s, Horizon *h) : POMDP(S, A, Z, T, O, R, s, h)
+		Rewards *R, Horizon *h) : POMDP(S, A, Z, T, O, R, h)
 {
 	agents = N;
 }
@@ -42,7 +42,7 @@ DecPOMDP::~DecPOMDP()
 	}
 }
 
-const Agents *DecPOMDP::get_agents() const
+Agents *DecPOMDP::get_agents()
 {
 	return agents;
 }

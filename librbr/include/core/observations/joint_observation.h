@@ -49,13 +49,13 @@ public:
 	 * actual joint observation tuple (vector).
 	 * @param	jointObservation		The list of states which define this joint observation.
 	 */
-	JointObservation(const std::vector<const Observation *> &jointObservation);
+	JointObservation(const std::vector<Observation *> &jointObservation);
 
 	/**
 	 * The copy constructor of the JointObservation object.
 	 * @param	other		The observation to copy.
 	 */
-	JointObservation(const JointObservation &other);
+	JointObservation(JointObservation &other);
 
 	/**
 	 * The default deconstructor of the JointObservation object.
@@ -66,13 +66,13 @@ public:
 	 * Set the joint observation given a list of observations.
 	 * @param	jointObservation	The list of observations which define this joint observation.
 	 */
-	virtual void set(const std::vector<const Observation *> &jointObservation);
+	virtual void set(const std::vector<Observation *> &jointObservation);
 
 	/**
 	 * Get the joint observation.
 	 * @return	The list of observations.
 	 */
-	virtual const std::vector<const Observation *> &get() const;
+	virtual std::vector<Observation *> &get();
 
 	/**
 	 * Get a particular observation at a index.
@@ -80,7 +80,7 @@ public:
 	 * @throw	ObservationException	The index is not valid.
 	 * @return	The observation at the index provided.
 	 */
-	virtual const Observation *get(int index) const;
+	virtual Observation *get(unsigned int index);
 
 	/**
 	 * Get the number of observations within the joint observation.
@@ -93,7 +93,7 @@ public:
 	 * @param	other		The joint observation to copy.
 	 * @return	The new version of this observation.
 	 */
-	virtual Observation &operator=(const Observation &other);
+	virtual Observation &operator=(Observation &other);
 
 	/**
 	 * Returns a string representation of this action.
@@ -112,7 +112,7 @@ protected:
 	 * The joint observation is defined as a tuple of observations. To remain general, this is a vector, but
 	 * should remain a fixed size. This class will manage the memory of these observation objects.
 	 */
-	std::vector<const Observation *> observations;
+	std::vector<Observation *> observations;
 
 };
 

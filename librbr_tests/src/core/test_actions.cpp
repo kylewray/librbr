@@ -55,7 +55,7 @@ int test_actions()
 
 	try {
 		for (auto a : *finiteActions) {
-			const Action *action = resolve(a);
+			Action *action = resolve(a);
 			if (action == a1) {
 				a1Found = true;
 			} else if (action == a2) {
@@ -93,7 +93,7 @@ int test_actions()
 	a3Found = false;
 
 	for (auto a : *finiteActions) {
-		const Action *action = resolve(a);
+		Action *action = resolve(a);
 		if (action == a1) {
 			a1Found = true;
 		} else if (action == a2) {
@@ -145,7 +145,7 @@ int test_actions()
 	a3Found = false;
 
 	for (auto a : *finiteActions) {
-		const Action *action = resolve(a);
+		Action *action = resolve(a);
 		if (action == a1) {
 			a1Found = true;
 		} else if (action == a2) {
@@ -182,7 +182,7 @@ int test_actions()
 	Action *a1New = new NamedAction("a1");
 	Action *a2New = new NamedAction("a2");
 
-	std::vector<const Action *> testActionsList;
+	std::vector<Action *> testActionsList;
 	testActionsList.push_back(a1New);
 	testActionsList.push_back(a2New);
 	finiteActions->set(testActionsList);
@@ -196,7 +196,7 @@ int test_actions()
 	a3Found = false;
 
 	for (auto a : *finiteActions) {
-		const Action *action = resolve(a);
+		Action *action = resolve(a);
 		if (action == a1) {
 			a1Found = true;
 		} else if (action == a2) {
@@ -216,7 +216,7 @@ int test_actions()
 
 	std::cout << "Actions: Test 'FiniteActions::find'... ";
 	try {
-		const NamedAction *na1 = dynamic_cast<const NamedAction *>(a1);
+		NamedAction *na1 = dynamic_cast<NamedAction *>(a1);
 		find_action(finiteActions, na1->get_name());
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
@@ -226,7 +226,7 @@ int test_actions()
 
 	std::cout << "Actions: Test 'FiniteActions::find' (Expecting Error)... ";
 	try {
-		const NamedAction *na3 = dynamic_cast<const NamedAction *>(a3);
+		NamedAction *na3 = dynamic_cast<NamedAction *>(a3);
 		find_action(finiteActions, na3->get_name());
 		std::cout << " Failure." << std::endl;
 	} catch (const ActionException &err) {
@@ -266,8 +266,8 @@ int test_actions()
 
 	try {
 		for (auto a : *finiteJointActions) {
-			const Action *action = resolve(a);
-			const JointAction *ja = dynamic_cast<const JointAction *>(action);
+			Action *action = resolve(a);
+			JointAction *ja = dynamic_cast<JointAction *>(action);
 			if (ja == nullptr) {
 				throw ActionException();
 			}

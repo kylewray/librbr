@@ -94,7 +94,7 @@ public:
 	 * @param	reward			The reward from the provided state-action-state-observation quadruple.
 	 * @throw	RewardException	A reward was found which was not of type SARewards.
 	 */
-	virtual void set(const State *state, const Action *action, double reward);
+	virtual void set(State *state, Action *action, double reward);
 
 	/**
 	 * Set a state transition from a particular state-action-state-observation quadruple to a probability.
@@ -106,7 +106,7 @@ public:
 	 * @param	reward			The reward from the provided state-action-state-observation quadruple.
 	 * @throw	RewardException	A reward was found which was not of type SASRewards.
 	 */
-	virtual void set(const State *state, const Action *action, const State *nextState, double reward);
+	virtual void set(State *state, Action *action, State *nextState, double reward);
 
 	/**
 	 * Set a state transition from a particular state-action-state-observation quadruple to a probability.
@@ -119,8 +119,8 @@ public:
 	 * @param	reward			The reward from the provided state-action-state-observation quadruple.
 	 * @throw	RewardException	A reward was found which was not of type SASORewards.
 	 */
-	virtual void set(const State *state, const Action *action, const State *nextState,
-			const Observation *observation, double reward);
+	virtual void set(State *state, Action *action, State *nextState,
+			Observation *observation, double reward);
 
 	/**
 	 * The probability of a transition following the state-action pair provided.
@@ -130,7 +130,7 @@ public:
 	 * @throw	RewardException	A reward was found which was not of type SARewards.
 	 * @return	The reward from taking the given action in the given state.
 	 */
-	virtual double get(const State *state, const Action *action) const;
+	virtual double get(State *state, Action *action);
 
 	/**
 	 * The probability of a transition following the state-action-state triple provided.
@@ -141,7 +141,7 @@ public:
 	 * @throw	RewardException	A reward was found which was not of type SASRewards.
 	 * @return	The reward from taking the given action in the given state.
 	 */
-	virtual double get(const State *state, const Action *action, const State *nextState) const;
+	virtual double get(State *state, Action *action, State *nextState);
 
 	/**
 	 * The probability of a transition following the state-action-state-observation quadruple provided.
@@ -153,8 +153,8 @@ public:
 	 * @throw	RewardException	A reward was found which was not of type SASORewards.
 	 * @return	The reward from taking the given action in the given state.
 	 */
-	virtual double get(const State *state, const Action *action, const State *nextState,
-			const Observation *observation) const;
+	virtual double get(State *state, Action *action, State *nextState,
+			Observation *observation);
 
 	/**
 	 * Set the weights for the factored weighted rewards.

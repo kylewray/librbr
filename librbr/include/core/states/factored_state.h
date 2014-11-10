@@ -50,13 +50,13 @@ public:
 	 * actual factored state tuple (vector).
 	 * @param	factoredState		The list of states which define this factored state.
 	 */
-	FactoredState(const std::vector<const State *> &factoredState);
+	FactoredState(const std::vector<State *> &factoredState);
 
 	/**
 	 * The copy constructor of the FactoredState object.
 	 * @param	other		The factored state to copy.
 	 */
-	FactoredState(const FactoredState &other);
+	FactoredState(FactoredState &other);
 
 	/**
 	 * The default deconstructor of the FactoredState object.
@@ -67,20 +67,20 @@ public:
 	 * Set the factored state given a list of states.
 	 * @param	factoredState		The list of states which define this factored state.
 	 */
-	virtual void set(const std::vector<const State *> &factoredState);
+	virtual void set(const std::vector<State *> &factoredState);
 
 	/**
 	 * Get the factored state.
 	 * @return	The list of states.
 	 */
-	virtual const std::vector<const State *> &get() const;
+	virtual std::vector<State *> &get();
 
 	/**
 	 * Get a particular state at a index.
 	 * @param	index		The index to retrieve the state.
 	 * @return	The state at the index provided.
 	 */
-	virtual const State *get(int index) const;
+	virtual State *get(unsigned int index);
 
 	/**
 	 * Get the number of states within the joint state.
@@ -94,7 +94,7 @@ public:
 	 * @throw	StateException	The other state is not a FactoredState.
 	 * @return	The new version of this state.
 	 */
-	virtual State &operator=(const State &other);
+	virtual State &operator=(State &other);
 
 	/**
 	 * Returns a string representation of this state.
@@ -114,7 +114,7 @@ protected:
 	 * remain general, this is a vector, but should remain a fixed size. This class does *not*
 	 * manage the memory of these state objects.
 	 */
-	std::vector<const State *> states;
+	std::vector<State *> states;
 
 };
 

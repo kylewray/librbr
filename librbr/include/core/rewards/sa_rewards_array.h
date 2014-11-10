@@ -56,7 +56,7 @@ public:
 	 * @param	action		The action taken in the current state.
 	 * @param	reward		The reward from the provided state-action-state triple.
 	 */
-	virtual void set(const State *state, const Action *action, double reward);
+	virtual void set(State *state, Action *action, double reward);
 
 	/**
 	 * Set a state transition from a particular state-action-state triple to a probability.
@@ -65,7 +65,7 @@ public:
 	 * @param	nextState	The next state with which we assign the reward.
 	 * @param	reward		The reward from the provided state-action-state triple.
 	 */
-	virtual void set(const State *state, const Action *action, const State *nextState, double reward);
+	virtual void set(State *state, Action *action, State *nextState, double reward);
 
 	/**
 	 * Set a state transition from a particular state-action-state-observation quadruple to a probability.
@@ -75,8 +75,8 @@ public:
 	 * @param	observation		The observation made at the next state.
 	 * @param	reward			The reward from the provided state-action-state-observation quadruple.
 	 */
-	virtual void set(const State *state, const Action *action, const State *nextState,
-			const Observation *observation, double reward);
+	virtual void set(State *state, Action *action, State *nextState,
+			Observation *observation, double reward);
 
 	/**
 	 * The probability of a transition following the state-action pair provided.
@@ -84,7 +84,7 @@ public:
 	 * @param	action		The action taken at the current state.
 	 * @return	The reward from taking the given action in the given state.
 	 */
-	virtual double get(const State *state, const Action *action) const;
+	virtual double get(State *state, Action *action);
 
 	/**
 	 * The probability of a transition following the state-action-state triple provided.
@@ -93,7 +93,7 @@ public:
 	 * @param	nextState	The next state with which we assign the reward.
 	 * @return	The reward from taking the given action in the given state.
 	 */
-	virtual double get(const State *state, const Action *action, const State *nextState) const;
+	virtual double get(State *state, Action *action, State *nextState);
 
 	/**
 	 * The probability of a transition following the state-action-state-observation quadruple provided.
@@ -103,8 +103,8 @@ public:
 	 * @param	observation		The observation made at the next state.
 	 * @return	The reward from taking the given action in the given state.
 	 */
-	virtual double get(const State *state, const Action *action, const State *nextState,
-			const Observation *observation) const;
+	virtual double get(State *state, Action *action, State *nextState,
+			Observation *observation);
 
 	/**
 	 * Set the entire 2-dimensional array with the one provided. This only performs a copy.
@@ -117,7 +117,7 @@ public:
 	 * Get the memory location of the 2-dimensional array.
 	 * @return	A pointer to the raw rewards data.
 	 */
-	virtual const float *get_rewards() const;
+	virtual float *get_rewards();
 
 	/**
 	 * Get the number of states used for the rewards array.

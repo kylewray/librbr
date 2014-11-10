@@ -63,7 +63,7 @@ POMDPPBVI::~POMDPPBVI()
 	reset();
 }
 
-void POMDPPBVI::add_initial_belief_state(const BeliefState *b)
+void POMDPPBVI::add_initial_belief_state(BeliefState *b)
 {
 	if (b == nullptr) {
 		return;
@@ -71,7 +71,7 @@ void POMDPPBVI::add_initial_belief_state(const BeliefState *b)
 	initialB.push_back(b);
 }
 
-void POMDPPBVI::set_initial_belief_states(const std::vector<const BeliefState *> &initialBeliefStates)
+void POMDPPBVI::set_initial_belief_states(const std::vector<BeliefState *> &initialBeliefStates)
 {
 	initialB = initialBeliefStates;
 }
@@ -97,7 +97,7 @@ void POMDPPBVI::set_num_expansion_iterations(unsigned int iterations)
 	}
 }
 
-const std::vector<const BeliefState *> &POMDPPBVI::get_initial_belief_states() const
+std::vector<BeliefState *> &POMDPPBVI::get_initial_belief_states()
 {
 	return initialB;
 }
@@ -117,12 +117,12 @@ unsigned int POMDPPBVI::get_num_expansion_iterations() const
 	return expansions;
 }
 
-const std::vector<const BeliefState *> &POMDPPBVI::get_belief_states() const
+std::vector<BeliefState *> &POMDPPBVI::get_belief_states()
 {
 	return B;
 }
 
-void POMDPPBVI::compute_num_update_iterations(const POMDP *pomdp, double epsilon)
+void POMDPPBVI::compute_num_update_iterations(POMDP *pomdp, double epsilon)
 {
 	// Handle the trivial case.
 	if (pomdp == nullptr) {
@@ -130,12 +130,12 @@ void POMDPPBVI::compute_num_update_iterations(const POMDP *pomdp, double epsilon
 	}
 
 	// Attempt to convert the rewards object into SASORewards.
-	const SASORewards *R = dynamic_cast<const SASORewards *>(pomdp->get_rewards());
+	SASORewards *R = dynamic_cast<SASORewards *>(pomdp->get_rewards());
 	if (R == nullptr) {
 		throw RewardException();
 	}
 
-	const Horizon *h = pomdp->get_horizon();
+	Horizon *h = pomdp->get_horizon();
 
 	// Make sure we do not take the log of 0.
 	double Rmin = R->get_min();
@@ -147,7 +147,7 @@ void POMDPPBVI::compute_num_update_iterations(const POMDP *pomdp, double epsilon
 	updates = (int)((log(epsilon) - log(Rmax - Rmin)) / log(h->get_discount_factor()));
 }
 
-PolicyAlphaVectors *POMDPPBVI::solve(const POMDP *pomdp)
+PolicyAlphaVectors *POMDPPBVI::solve(POMDP *pomdp)
 {
 	// Handle the trivial case.
 	if (pomdp == nullptr) {
@@ -155,45 +155,45 @@ PolicyAlphaVectors *POMDPPBVI::solve(const POMDP *pomdp)
 	}
 
 	// Attempt to convert the states object into FiniteStates.
-	const StatesMap *S = dynamic_cast<const StatesMap *>(pomdp->get_states());
+	StatesMap *S = dynamic_cast<StatesMap *>(pomdp->get_states());
 	if (S == nullptr) {
 		throw StateException();
 	}
 
 	// Attempt to convert the actions object into FiniteActions.
-	const ActionsMap *A = dynamic_cast<const ActionsMap *>(pomdp->get_actions());
+	ActionsMap *A = dynamic_cast<ActionsMap *>(pomdp->get_actions());
 	if (A == nullptr) {
 		throw ActionException();
 	}
 
 	// Attempt to convert the observations object into FiniteObservations.
-	const ObservationsMap *Z = dynamic_cast<const ObservationsMap *>(pomdp->get_observations());
+	ObservationsMap *Z = dynamic_cast<ObservationsMap *>(pomdp->get_observations());
 	if (Z == nullptr) {
 		throw ObservationException();
 	}
 
 	// Attempt to convert the state transitions object into FiniteStateTransitions.
-	const StateTransitionsMap *T =
-			dynamic_cast<const StateTransitionsMap *>(pomdp->get_state_transitions());
+	StateTransitionsMap *T =
+			dynamic_cast<StateTransitionsMap *>(pomdp->get_state_transitions());
 	if (T == nullptr) {
 		throw StateTransitionException();
 	}
 
 	// Attempt to convert the observation transitions object into FiniteObservationTransitions.
-	const ObservationTransitionsMap *O =
-			dynamic_cast<const ObservationTransitionsMap *>(pomdp->get_observation_transitions());
+	ObservationTransitionsMap *O =
+			dynamic_cast<ObservationTransitionsMap *>(pomdp->get_observation_transitions());
 	if (O == nullptr) {
 		throw ObservationTransitionException();
 	}
 
 	// Attempt to convert the rewards object into SASORewards.
-	const SASORewards *R = dynamic_cast<const SASORewards *>(pomdp->get_rewards());
+	SASORewards *R = dynamic_cast<SASORewards *>(pomdp->get_rewards());
 	if (R == nullptr) {
 		throw RewardException();
 	}
 
 	// Obtain the horizon and return the correct value iteration.
-	const Horizon *h = pomdp->get_horizon();
+	Horizon *h = pomdp->get_horizon();
 	if (h->is_finite()) {
 		return solve_finite_horizon(S, A, Z, T, O, R, h);
 	} else {
@@ -202,14 +202,14 @@ PolicyAlphaVectors *POMDPPBVI::solve(const POMDP *pomdp)
 }
 
 void POMDPPBVI::reset() {
-	for (const BeliefState *b : initialB) {
+	for (BeliefState *b : initialB) {
 		if (b != nullptr) {
 			delete b;
 		}
 	}
 	initialB.clear();
 
-	for (const BeliefState *b : B) {
+	for (BeliefState *b : B) {
 		if (b != nullptr) {
 			delete b;
 		}
@@ -217,17 +217,17 @@ void POMDPPBVI::reset() {
 	B.clear();
 }
 
-PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
-		const StateTransitionsMap *T, const ObservationTransitionsMap *O, const SASORewards *R,
-		const Horizon *h)
+PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+		StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+		Horizon *h)
 {
 	// Create the policy of alpha vectors variable. Set the horizon, to make the object's policy differ over time.
 	PolicyAlphaVectors *policy = new PolicyAlphaVectors(h->get_horizon());
 
 	// Before anything, cache Gamma_{a, *} for all actions. This is used in every cross-sum computation.
-	std::map<const Action *, std::vector<PolicyAlphaVector *> > gammaAStar;
+	std::map<Action *, std::vector<PolicyAlphaVector *> > gammaAStar;
 	for (auto a : *A) {
-		const Action *action = resolve(a);
+		Action *action = resolve(a);
 		gammaAStar[action].push_back(create_gamma_a_star(S, A, Z, T, O, R, action));
 	}
 
@@ -242,7 +242,7 @@ PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(const StatesMap *S, const Ac
 	bool current = false;
 
 	// Initialize the first set Gamma to be a set of zero alpha vectors.
-	for (int i = 0; i < B.size(); i++) {
+	for (unsigned int i = 0; i < B.size(); i++) {
 		PolicyAlphaVector *zeroAlphaVector = new PolicyAlphaVector();
 		for (auto s : *S) {
 			zeroAlphaVector->set(resolve(s), 0.0);
@@ -251,17 +251,17 @@ PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(const StatesMap *S, const Ac
 	}
 
 	// Perform a predefined number of expansions. Each update adds more belief points to the set B.
-	for (int e = 0; e < expansions; e++) {
+	for (unsigned int e = 0; e < expansions; e++) {
 		// Continue to iterate until the horizon has been reached.
-		for (int t = 0; t < h->get_horizon(); t++){
+		for (unsigned int t = 0; t < h->get_horizon(); t++){
 			// For each of the belief points, we must compute the optimal alpha vector.
-			for (const BeliefState *belief : B) {
+			for (BeliefState *belief : B) {
 				PolicyAlphaVector *maxAlphaB = nullptr;
 				double maxAlphaDotBeta = 0.0;
 
 				// Compute the optimal alpha vector for this belief state.
 				for (auto a : *A) {
-					const Action *action = resolve(a);
+					Action *action = resolve(a);
 
 					PolicyAlphaVector *alphaBA = bellman_update_belief_state(S, A, Z, T, O, R, h,
 							gammaAStar[action], gamma[!current], action, belief);
@@ -327,7 +327,7 @@ PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(const StatesMap *S, const Ac
 
 	// Free the memory of Gamma_{a, *}.
 	for (auto a : *A) {
-		const Action *action = resolve(a);
+		Action *action = resolve(a);
 		for (PolicyAlphaVector *alphaVector : gammaAStar[action]) {
 			delete alphaVector;
 		}
@@ -338,23 +338,23 @@ PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(const StatesMap *S, const Ac
 	return policy;
 }
 
-PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
-		const StateTransitionsMap *T, const ObservationTransitionsMap *O, const SASORewards *R,
-		const Horizon *h)
+PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+		StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+		Horizon *h)
 {
 	// Create the policy of alpha vectors variable. Set the horizon, to make the object's policy differ over time.
 	PolicyAlphaVectors *policy = new PolicyAlphaVectors(h->get_horizon());
 
 	// Before anything, cache Gamma_{a, *} for all actions. This is used in every cross-sum computation.
-	std::map<const Action *, std::vector<PolicyAlphaVector *> > gammaAStar;
+	std::map<Action *, std::vector<PolicyAlphaVector *> > gammaAStar;
 	for (auto a : *A) {
-		const Action *action = resolve(a);
+		Action *action = resolve(a);
 		gammaAStar[action].push_back(create_gamma_a_star(S, A, Z, T, O, R, action));
 	}
 
 	// Initialize the set of belief points to be the initial set. This must be a copy, since memory is managed
 	// for both objects independently.
-	for (const BeliefState *b : initialB) {
+	for (BeliefState *b : initialB) {
 		B.push_back(new BeliefState(*b));
 	}
 
@@ -363,7 +363,7 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(const StatesMap *S, const 
 	bool current = false;
 
 	// Initialize the first set Gamma to be a set of zero alpha vectors.
-	for (int i = 0; i < B.size(); i++) {
+	for (unsigned int i = 0; i < B.size(); i++) {
 		PolicyAlphaVector *zeroAlphaVector = new PolicyAlphaVector();
 		for (auto s : *S) {
 			zeroAlphaVector->set(resolve(s), 0.0);
@@ -372,17 +372,17 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(const StatesMap *S, const 
 	}
 
 	// Perform a predefined number of expansions. Each update adds more belief points to the set B.
-	for (int e = 0; e < expansions; e++) {
+	for (unsigned int e = 0; e < expansions; e++) {
 		// Perform a predefined number of updates. Each update improves the value function estimate.
-		for (int u = 0; u < updates; u++){
+		for (unsigned int u = 0; u < updates; u++){
 			// For each of the belief points, we must compute the optimal alpha vector.
-			for (const BeliefState *belief : B) {
+			for (BeliefState *belief : B) {
 				PolicyAlphaVector *maxAlphaB = nullptr;
 				double maxAlphaDotBeta = 0.0;
 
 				// Compute the optimal alpha vector for this belief state.
 				for (auto a : *A) {
-					const Action *action = resolve(a);
+					Action *action = resolve(a);
 
 					PolicyAlphaVector *alphaBA = bellman_update_belief_state(S, A, Z, T, O, R, h,
 							gammaAStar[action], gamma[!current], action, belief);
@@ -446,7 +446,7 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(const StatesMap *S, const 
 
 	// Free the memory of Gamma_{a, *}.
 	for (auto a : *A) {
-		const Action *action = resolve(a);
+		Action *action = resolve(a);
 		for (PolicyAlphaVector *alphaVector : gammaAStar[action]) {
 			delete alphaVector;
 		}
@@ -457,15 +457,15 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(const StatesMap *S, const 
 	return policy;
 }
 
-void POMDPPBVI::expand_random_belief_selection(const StatesMap *S)
+void POMDPPBVI::expand_random_belief_selection(StatesMap *S)
 {
-	std::vector<const BeliefState *> Bnew;
+	std::vector<BeliefState *> Bnew;
 
-	for (int b = 0; b < B.size(); b++) {
+	for (unsigned int b = 0; b < B.size(); b++) {
 		std::vector<double> bTmp;
 		bTmp.resize(S->get_num_states());
 
-		for (int i = 0; i < S->get_num_states(); i++) {
+		for (unsigned int i = 0; i < S->get_num_states(); i++) {
 			bTmp[i] = (double)rand() / (double)RAND_MAX;
 		}
 
@@ -473,7 +473,7 @@ void POMDPPBVI::expand_random_belief_selection(const StatesMap *S)
 
 		BeliefState *bNew = new BeliefState();
 
-		int i = 0;
+		unsigned int i = 0;
 		double sum = 0.0;
 		for (auto s : *S) {
 			if (i + 1 < S->get_num_states()) {
@@ -492,14 +492,14 @@ void POMDPPBVI::expand_random_belief_selection(const StatesMap *S)
 	B.insert(B.end(), Bnew.begin(), Bnew.end());
 }
 
-void POMDPPBVI::expand_stochastic_simulation_random_actions(const StatesMap *S, const ActionsMap *A,
-		const ObservationsMap *Z, const StateTransitionsMap *T, const ObservationTransitionsMap *O)
+void POMDPPBVI::expand_stochastic_simulation_random_actions(StatesMap *S, ActionsMap *A,
+		ObservationsMap *Z, StateTransitionsMap *T, ObservationTransitionsMap *O)
 {
-	std::vector<const BeliefState *> Bnew;
+	std::vector<BeliefState *> Bnew;
 
-	for (const BeliefState *b : B) {
+	for (BeliefState *b : B) {
 		// Randomly select the state following Multinomial(b).
-		const State *state = nullptr;
+		State *state = nullptr;
 
 		double rnd = (double)rand() / (double)RAND_MAX;
 		double sum = 0.0f;
@@ -513,7 +513,7 @@ void POMDPPBVI::expand_stochastic_simulation_random_actions(const StatesMap *S, 
 		}
 
 		// Randomly select the action following Uniform(A).
-		const Action *action = nullptr;
+		Action *action = nullptr;
 
 		rnd = (double)((int)rand() % A->get_num_actions());
 		sum = 0.0;
@@ -527,7 +527,7 @@ void POMDPPBVI::expand_stochastic_simulation_random_actions(const StatesMap *S, 
 		}
 
 		// Randomly select the state following Multinomial(T(s, a, *)).
-		const State *nextState = nullptr;
+		State *nextState = nullptr;
 
 		rnd = (double)rand() / (double)RAND_MAX;
 		sum = 0.0f;
@@ -541,13 +541,13 @@ void POMDPPBVI::expand_stochastic_simulation_random_actions(const StatesMap *S, 
 		}
 
 		// Randomly select the state following Multinomial(O(a, s', *)).
-		const Observation *observation = nullptr;
+		Observation *observation = nullptr;
 
 		rnd = (double)rand() / (double)RAND_MAX;
 		sum = 0.0f;
 
 		for (auto obs : *Z) {
-			const Observation *z = resolve(obs);
+			Observation *z = resolve(obs);
 
 			sum += O->get(action, nextState, z);
 			if (sum >= rnd) {
@@ -563,15 +563,15 @@ void POMDPPBVI::expand_stochastic_simulation_random_actions(const StatesMap *S, 
 	B.insert(B.end(), Bnew.begin(), Bnew.end());
 }
 
-void POMDPPBVI::expand_stochastic_simulation_greedy_action(const StatesMap *S, const ActionsMap *A,
-		const ObservationsMap *Z, const StateTransitionsMap *T, const ObservationTransitionsMap *O,
-		const std::vector<PolicyAlphaVector *> &gamma)
+void POMDPPBVI::expand_stochastic_simulation_greedy_action(StatesMap *S, ActionsMap *A,
+		ObservationsMap *Z, StateTransitionsMap *T, ObservationTransitionsMap *O,
+		std::vector<PolicyAlphaVector *> &gamma)
 {
-	std::vector<const BeliefState *> Bnew;
+	std::vector<BeliefState *> Bnew;
 
-	for (const BeliefState *b : B) {
+	for (BeliefState *b : B) {
 		// Randomly select the state following Multinomial(b).
-		const State *state = nullptr;
+		State *state = nullptr;
 
 		double rnd = (double)rand() / (double)RAND_MAX;
 		double sum = 0.0f;
@@ -586,7 +586,7 @@ void POMDPPBVI::expand_stochastic_simulation_greedy_action(const StatesMap *S, c
 
 		// Randomly select the action following Uniform(A) with probability epsilon. Or, with probability
 		// 1 - epsilon, select the 'optimal' action.
-		const Action *action = nullptr;
+		Action *action = nullptr;
 
 		// Assume epsilon is 0.1.
 		if ((int)rand() % 10 == 0) {
@@ -604,7 +604,7 @@ void POMDPPBVI::expand_stochastic_simulation_greedy_action(const StatesMap *S, c
 		} else {
 			// Optimize the action.
 			double maxVal = std::numeric_limits<double>::lowest();
-			for (const PolicyAlphaVector *alpha : gamma) {
+			for (PolicyAlphaVector *alpha : gamma) {
 				double val = alpha->compute_value(b);
 				if (val > maxVal) {
 					maxVal = val;
@@ -614,7 +614,7 @@ void POMDPPBVI::expand_stochastic_simulation_greedy_action(const StatesMap *S, c
 		}
 
 		// Randomly select the state following Multinomial(T(s, a, *)).
-		const State *nextState = nullptr;
+		State *nextState = nullptr;
 
 		rnd = (double)rand() / (double)RAND_MAX;
 		sum = 0.0f;
@@ -628,13 +628,13 @@ void POMDPPBVI::expand_stochastic_simulation_greedy_action(const StatesMap *S, c
 		}
 
 		// Randomly select the state following Multinomial(O(a, s', *)).
-		const Observation *observation = nullptr;
+		Observation *observation = nullptr;
 
 		rnd = (double)rand() / (double)RAND_MAX;
 		sum = 0.0f;
 
 		for (auto obs : *Z) {
-			const Observation *z = resolve(obs);
+			Observation *z = resolve(obs);
 
 			sum += O->get(action, nextState, z);
 			if (sum >= rnd) {
@@ -650,21 +650,21 @@ void POMDPPBVI::expand_stochastic_simulation_greedy_action(const StatesMap *S, c
 	B.insert(B.end(), Bnew.begin(), Bnew.end());
 }
 
-void POMDPPBVI::expand_stochastic_simulation_exploratory_action(const StatesMap *S, const ActionsMap *A,
-		const ObservationsMap *Z, const StateTransitionsMap *T, const ObservationTransitionsMap *O)
+void POMDPPBVI::expand_stochastic_simulation_exploratory_action(StatesMap *S, ActionsMap *A,
+		ObservationsMap *Z, StateTransitionsMap *T, ObservationTransitionsMap *O)
 {
-	std::vector<const BeliefState *> Bnew;
+	std::vector<BeliefState *> Bnew;
 
-	for (const BeliefState *b : B) {
+	for (BeliefState *b : B) {
 		BeliefState *bNew = nullptr;
 		double bVal = std::numeric_limits<double>::lowest();
 
 		// For each action, we will randomly generate a belief.
 		for (auto a : *A) {
-			const Action *action = resolve(a);
+			Action *action = resolve(a);
 
 			// Randomly select the state following Multinomial(b).
-			const State *state = nullptr;
+			State *state = nullptr;
 
 			double rnd = (double)rand() / (double)RAND_MAX;
 			double sum = 0.0f;
@@ -678,7 +678,7 @@ void POMDPPBVI::expand_stochastic_simulation_exploratory_action(const StatesMap 
 			}
 
 			// Randomly select the state following Multinomial(T(s, a, *)).
-			const State *nextState = nullptr;
+			State *nextState = nullptr;
 
 			rnd = (double)rand() / (double)RAND_MAX;
 			sum = 0.0f;
@@ -692,13 +692,13 @@ void POMDPPBVI::expand_stochastic_simulation_exploratory_action(const StatesMap 
 			}
 
 			// Randomly select the state following Multinomial(O(a, s', *)).
-			const Observation *observation = nullptr;
+			Observation *observation = nullptr;
 
 			rnd = (double)rand() / (double)RAND_MAX;
 			sum = 0.0f;
 
 			for (auto obs : *Z) {
-				const Observation *z = resolve(obs);
+				Observation *z = resolve(obs);
 
 				sum += O->get(action, nextState, z);
 				if (sum >= rnd) {
@@ -713,7 +713,7 @@ void POMDPPBVI::expand_stochastic_simulation_exploratory_action(const StatesMap 
 			// Compute the min over the belief points, finding the 1-norm between the ba and all
 			// other belief points possible.
 			double baMin = std::numeric_limits<double>::lowest() * -1.0;
-			for (const BeliefState *bp : B) {
+			for (BeliefState *bp : B) {
 				sum = 0.0;
 				for (auto s : *S) {
 					sum += std::fabs(ba->get(resolve(s)) - bp->get(resolve(s)));
@@ -722,7 +722,7 @@ void POMDPPBVI::expand_stochastic_simulation_exploratory_action(const StatesMap 
 					baMin = sum;
 				}
 			}
-			for (const BeliefState *bp : Bnew) {
+			for (BeliefState *bp : Bnew) {
 				sum = 0.0;
 				for (auto s : *S) {
 					sum += std::fabs(ba->get(resolve(s)) - bp->get(resolve(s)));

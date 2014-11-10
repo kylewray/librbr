@@ -54,9 +54,9 @@
  * @param	action		The action taken at this time step.
  * @return	The alpha vector which is the single element in Gamma_{a,*}.
  */
-PolicyAlphaVector *create_gamma_a_star(const StatesMap *S, const ActionsMap *A,
-		const ObservationsMap *Z, const StateTransitionsMap *T, const ObservationTransitionsMap *O,
-		const SASORewards *R, const Action *action);
+PolicyAlphaVector *create_gamma_a_star(StatesMap *S, ActionsMap *A,
+		ObservationsMap *Z, StateTransitionsMap *T, ObservationTransitionsMap *O,
+		SASORewards *R, Action *action);
 
 /**
  * Perform the belief state update equation on the current belief. This creates a new belief state in memory.
@@ -68,9 +68,9 @@ PolicyAlphaVector *create_gamma_a_star(const StatesMap *S, const ActionsMap *A,
  * @param	observation		The observation observed after taking the action in the current belief state.
  * @return	The resultant new belief state.
  */
-BeliefState *belief_state_update(const StatesMap *S, const StateTransitionsMap *T,
-		const ObservationTransitionsMap *O, const BeliefState *belief, const Action *action,
-		const Observation *observation);
+BeliefState *belief_state_update(StatesMap *S, StateTransitionsMap *T,
+		ObservationTransitionsMap *O, BeliefState *belief, Action *action,
+		Observation *observation);
 
 /**
  * Compute the Bellman update/backup using the cross sum operation, fully expanding all possible alpha vectors. Since the value
@@ -88,10 +88,10 @@ BeliefState *belief_state_update(const StatesMap *S, const StateTransitionsMap *
  * @param	action	 	The action taken.
  * @return	The Gamma_{a} which contains the new set of optimal alpha-vectors, given a particular action.
  */
-std::vector<PolicyAlphaVector *> bellman_update_cross_sum(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
-		const StateTransitionsMap *T, const ObservationTransitionsMap *O, const SASORewards *R,
-		const Horizon *h, const std::vector<PolicyAlphaVector *> &gammaAStar, const std::vector<PolicyAlphaVector *> &gamma,
-		const Action *action);
+std::vector<PolicyAlphaVector *> bellman_update_cross_sum(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+		StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+		Horizon *h, std::vector<PolicyAlphaVector *> &gammaAStar, std::vector<PolicyAlphaVector *> &gamma,
+		Action *action);
 
 /**
  * Compute the Bellman update/backup for one specific belief state, returning the new optimal alpha-vector for this belief state. In
@@ -109,10 +109,10 @@ std::vector<PolicyAlphaVector *> bellman_update_cross_sum(const StatesMap *S, co
  * @param	b			The belief state for which to compute the updated alpha vector.
  * @return	The optimal alpha-vector at this belief state, given a particular action.
  */
-PolicyAlphaVector *bellman_update_belief_state(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
-		const StateTransitionsMap *T, const ObservationTransitionsMap *O, const SASORewards *R,
-		const Horizon *h, const std::vector<PolicyAlphaVector *> &gammaAStar, const std::vector<PolicyAlphaVector *> &gamma,
-		const Action *action, const BeliefState *b);
+PolicyAlphaVector *bellman_update_belief_state(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+		StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+		Horizon *h, std::vector<PolicyAlphaVector *> &gammaAStar, std::vector<PolicyAlphaVector *> &gamma,
+		Action *action, BeliefState *b);
 
 
 #endif // POMDP_UTILITIES_H

@@ -134,7 +134,7 @@ MDP *RawFile::load_raw_mdp(std::string filename)
 
 	// Attempt to read in the state transition blocks.
 	float *T = new float[n * m * n];
-	for (int s = 0; s < n; s++) {
+	for (unsigned int s = 0; s < n; s++) {
 		try {
 			load_data(file, m, n, T, s * m * n);
 		} catch (CoreException &err) {
@@ -148,7 +148,7 @@ MDP *RawFile::load_raw_mdp(std::string filename)
 	// reward factors equal to the factor value loaded.
 	float **R = new float*[k];
 
-	for (int i = 0; i < k; i++) {
+	for (unsigned int i = 0; i < k; i++) {
 		switch (r) {
 		case RawFileRewardsType::RawFileSRewards:
 			// ToDo: Implement this after creating SRewards.
@@ -172,7 +172,7 @@ MDP *RawFile::load_raw_mdp(std::string filename)
 			R[i] = new float[n * m * n];
 
 			try {
-				for (int s = 0; s < n; s++) {
+				for (unsigned int s = 0; s < n; s++) {
 					load_data(file, m, n, R[i], s * m * n);
 				}
 			} catch (CoreException &err) {
@@ -194,22 +194,17 @@ MDP *RawFile::load_raw_mdp(std::string filename)
 	IndexedState::reset_indexer();
 
 	StatesMap *states = new StatesMap();
-	Initial *initial = nullptr;
 
-	for (int i = 0; i < n; i++) {
+	for (unsigned int i = 0; i < n; i++) {
 		IndexedState *s = new IndexedState();
 		states->add(s);
-
-		if (s->get_index() == s0) {
-			initial = new Initial(s);
-		}
 	}
 
 	// Create the actions.
 	IndexedAction::reset_indexer();
 
 	ActionsMap *actions = new ActionsMap();
-	for (int i = 0; i < m; i++) {
+	for (unsigned int i = 0; i < m; i++) {
 		actions->add(new IndexedAction());
 	}
 
@@ -284,10 +279,10 @@ MDP *RawFile::load_raw_mdp(std::string filename)
 	horizon->set_horizon(h);
 
 	// Finally, after all that, return the MDP.
-	return new MDP(states, actions, stateTransitions, rewards, initial, horizon);
+	return new MDP(states, actions, stateTransitions, rewards, horizon);
 }
 
-void RawFile::save_raw_mdp(const MDP *mdp, std::string filename)
+void RawFile::save_raw_mdp(MDP *mdp, std::string filename)
 {
 	// Load the file and throw an error if this cannot be done.
 	std::ofstream file(filename);
@@ -304,54 +299,53 @@ void RawFile::save_raw_mdp(const MDP *mdp, std::string filename)
 
 	// First, obtain all the objects for easy reference. Also, check to make sure this
 	// is a valid MDP.
-	const StatesMap *S = dynamic_cast<const StatesMap *>(mdp->get_states());
-	const ActionsMap *A = dynamic_cast<const ActionsMap *>(mdp->get_actions());
-	const StateTransitions *T = mdp->get_state_transitions();
-	const Rewards *R = nullptr;
-	const Initial *s0 = mdp->get_initial_state();
-	const Horizon *h = mdp->get_horizon();
+	StatesMap *S = dynamic_cast<StatesMap *>(mdp->get_states());
+	ActionsMap *A = dynamic_cast<ActionsMap *>(mdp->get_actions());
+	StateTransitions *T = mdp->get_state_transitions();
+	Rewards *R = nullptr;
+	Horizon *h = mdp->get_horizon();
 
 	unsigned int k = 0;
 	unsigned int r = 0;
 
-	R = dynamic_cast<const FactoredRewards *>(mdp->get_rewards());
+	R = dynamic_cast<FactoredRewards *>(mdp->get_rewards());
 	if (R == nullptr) {
 		k = 1;
 
 //		if (R == nullptr) {
-//			R = dynamic_cast<const SARewards *>(mdp->get_rewards());
+//			R = dynamic_cast<SARewards *>(mdp->get_rewards());
 //			r = 1;
 //		}
 		if (R == nullptr) {
-			R = dynamic_cast<const SASRewards *>(mdp->get_rewards());
+			R = dynamic_cast<SASRewards *>(mdp->get_rewards());
 			r = 2;
 		}
 	} else {
-		const FactoredRewards *RF = dynamic_cast<const FactoredRewards *>(R);
+		FactoredRewards *RF = dynamic_cast<FactoredRewards *>(R);
 		if (RF == nullptr) {
 			throw CoreException();
 		}
 		k = RF->get_num_rewards();
 
 //		// Note: We attempt to cast the first one, and assume that the rest are of the same class.
-//		const Rewards *R0 = nullptr;
+//		Rewards *R0 = nullptr;
 //		try {
-//			R0 = ((const FactoredRewards *)R)->get(0);
-//		} catch (RewardException &err) {
+//			R0 = R->get(0);
+//		} catch (const RewardException &err) {
 //			log_message("RawFile::save_raw_mdp",
 //					"Found null reward, and thus failed to save the file '" + filename + "'.");
 //			throw CoreException();
 //		}
 
-//		if (dynamic_cast<const SARewards *>(R0) == nullptr) {
+//		if (dynamic_cast<SARewards *>(R0) == nullptr) {
 //			r = 1;
-//		} else if (dynamic_cast<const SASRewards *>(R0) == nullptr) {
+//		} else if (dynamic_cast<SASRewards *>(R0) == nullptr) {
 			r = 2;
 //		}
 	}
 
 	if (S == nullptr || S->get_num_states() == 0 || A == nullptr || A->get_num_actions() == 0 ||
-			T == nullptr || R == nullptr || s0 == nullptr || h == nullptr) {
+			T == nullptr || R == nullptr || h == nullptr) {
 		log_message("RawFile::save_raw_mdp",
 				"Failed to parse the MDP provided and save the file '" + filename + "'.");
 		throw CoreException();
@@ -359,29 +353,18 @@ void RawFile::save_raw_mdp(const MDP *mdp, std::string filename)
 
 	// Create the header which contains state, action, and horizon information.
 	file << S->get_num_states() << " " << A->get_num_actions() << " " << k << " " << r << " ";
-
-	int si = 0;
-	for (auto state : *S) {
-		const State *s = resolve(state);
-		if (s0->get_initial_state()->hash_value() == s->hash_value()) {
-			file << si << " ";
-			break;
-		}
-		si++;
-	}
-
 	file << h->get_horizon() << " " << h->get_discount_factor() << std::endl;
 
 	// Write all of the state transition information.
 	for (auto state : *S) {
-		const State *s = resolve(state);
+		State *s = resolve(state);
 
 		for (auto action : *A) {
-			const Action *a = resolve(action);
-			int i = 0;
+			Action *a = resolve(action);
+			unsigned int i = 0;
 
 			for (auto nextState : *S) {
-				const State *sp = resolve(nextState);
+				State *sp = resolve(nextState);
 
 				file << T->get(s, a, sp);
 
@@ -399,15 +382,15 @@ void RawFile::save_raw_mdp(const MDP *mdp, std::string filename)
 		// In order to reuse code, do this small trick. If this is only a single reward, then
 		// we will just type cast the normal reward R; however, if this is a factored reward, then
 		// get the particular factor we are iterating over.
-		const Rewards *Ri = nullptr;
-		const FactoredRewards *RF = nullptr;
-		const SARewardsArray *RiSA = nullptr;
-		const SASRewardsArray *RiSAS = nullptr;
+		Rewards *Ri = nullptr;
+		FactoredRewards *RF = nullptr;
+		SARewardsArray *RiSA = nullptr;
+		SASRewardsArray *RiSAS = nullptr;
 
 		if (k == 1) {
 			Ri = R;
 		} else {
-			RF = dynamic_cast<const FactoredRewards *>(R);
+			RF = dynamic_cast<FactoredRewards *>(R);
 			if (RF == nullptr) {
 				throw CoreException();
 			}
@@ -420,20 +403,20 @@ void RawFile::save_raw_mdp(const MDP *mdp, std::string filename)
 			throw CoreException();
 			break;
 		case RawFileRewardsType::RawFileSARewards:
-			RF = dynamic_cast<const FactoredRewards *>(R);
+			RF = dynamic_cast<FactoredRewards *>(R);
 			if (RF == nullptr) {
 				throw CoreException();
 			}
 			Ri = RF->get(i);
 
 			for (auto state : *S) {
-				const State *s = resolve(state);
+				State *s = resolve(state);
 				int i = 0;
 
 				for (auto action : *A) {
-					const Action *a = resolve(action);
+					Action *a = resolve(action);
 
-					RiSA = dynamic_cast<const SARewardsArray *>(Ri);
+					RiSA = dynamic_cast<SARewardsArray *>(Ri);
 					if (RiSA == nullptr) {
 						throw CoreException();
 					}
@@ -449,23 +432,23 @@ void RawFile::save_raw_mdp(const MDP *mdp, std::string filename)
 			}
 			break;
 		case RawFileRewardsType::RawFileSASRewards:
-			RF = dynamic_cast<const FactoredRewards *>(R);
+			RF = dynamic_cast<FactoredRewards *>(R);
 			if (RF == nullptr) {
 				throw CoreException();
 			}
 			Ri = RF->get(i);
 
 			for (auto state : *S) {
-				const State *s = resolve(state);
+				State *s = resolve(state);
 
 				for (auto action : *A) {
-					const Action *a = resolve(action);
-					int i = 0;
+					Action *a = resolve(action);
+					unsigned int i = 0;
 
 					for (auto nextState : *S) {
-						const State *sp = resolve(nextState);
+						State *sp = resolve(nextState);
 
-						RiSAS = dynamic_cast<const SASRewardsArray *>(Ri);
+						RiSAS = dynamic_cast<SASRewardsArray *>(Ri);
 						if (RiSAS == nullptr) {
 							throw CoreException();
 						}
@@ -491,7 +474,7 @@ void RawFile::save_raw_mdp(const MDP *mdp, std::string filename)
 void RawFile::load_data(std::ifstream &file, unsigned int rows, unsigned int cols, float *array, unsigned int offset)
 {
 	// For each of the rows, attempt to read and parse the line.
-	for (int r = 0; r < rows; r++) {
+	for (unsigned int r = 0; r < rows; r++) {
 		if (file.eof()) {
 			throw CoreException();
 		}
@@ -506,7 +489,7 @@ void RawFile::load_data(std::ifstream &file, unsigned int rows, unsigned int col
 			throw CoreException();
 		}
 
-		for (int c = 0; c < cols; c++) {
+		for (unsigned int c = 0; c < cols; c++) {
 			try {
 				array[offset + (r * cols + c)] = std::stof(items[c]);
 			} catch (std::exception &err) {

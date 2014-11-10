@@ -65,7 +65,7 @@ public:
 	 * @param	observation		The next observation to which we assign a probability.
 	 * @param	probability		The probability of the observation given we took the action and landed in the state given.
 	 */
-	virtual void set(const Action *previousAction, const State *state, const Observation *observation, double probability);
+	virtual void set(Action *previousAction, State *state, Observation *observation, double probability);
 
 	/**
 	 * The probability of a transition following the observation-action-state triple provided.
@@ -74,7 +74,7 @@ public:
 	 * @param	observation			The next observation to which we assign a probability.
 	 * @return	The probability of the observation given we took the action and landed in the state given.
 	 */
-	virtual double get(const Action *previousAction, const State *state, const Observation *observation) const;
+	virtual double get(Action *previousAction, State *state, Observation *observation);
 
 	/**
 	 * Return a list of the observations available given a previous state and the action taken there.
@@ -83,8 +83,8 @@ public:
 	 * @param	state				The current state.
 	 * @param	result				The list to overwrite and set to be the list of successor states.
 	 */
-	virtual void available(const Observations *Z, const Action *previousAction, const State *state,
-			std::vector<const Observation *> &result) const;
+	virtual void available(Observations *Z, Action *previousAction, State *state,
+			std::vector<Observation *> &result);
 
 	/**
 	 * Reset the observation transitions, clearing the internal mapping.
@@ -101,14 +101,14 @@ private:
 	 * @throw	ObservationTransitionException 	The observation transition was not defined.
 	 * @return	The probability of the observation given we took the action and landed in the state given.
 	 */
-	virtual double get_value(const Action *previousAction, const State *state, const Observation *observation) const;
+	virtual double get_value(Action *previousAction, State *state, Observation *observation);
 
 	/**
 	 * The list of all state-action-state transitions.
 	 */
-	std::unordered_map<const Action *,
-		std::unordered_map<const State *,
-		std::unordered_map<const Observation *, double> > > observationTransitions;
+	std::unordered_map<Action *,
+		std::unordered_map<State *,
+		std::unordered_map<Observation *, double> > > observationTransitions;
 
 	/**
 	 * A special action (implicitly constant) referring to an action wildcard.

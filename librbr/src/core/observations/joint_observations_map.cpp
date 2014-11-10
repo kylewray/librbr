@@ -28,7 +28,7 @@
 
 #include <algorithm>
 
-JointObservationsMap::JointObservationsMap(int numFactors)
+JointObservationsMap::JointObservationsMap(unsigned int numFactors)
 {
 	if (numFactors < 1) {
 		numFactors = 1;
@@ -41,7 +41,7 @@ JointObservationsMap::~JointObservationsMap()
 	reset();
 }
 
-void JointObservationsMap::add(int factorIndex, const Observation *newObservation)
+void JointObservationsMap::add(unsigned int factorIndex, Observation *newObservation)
 {
 	if (factorIndex < 0 || factorIndex >= factoredObservations.size()) {
 		throw ObservationException();
@@ -50,7 +50,7 @@ void JointObservationsMap::add(int factorIndex, const Observation *newObservatio
 	factoredObservations[factorIndex].push_back(newObservation);
 }
 
-void JointObservationsMap::remove(int factorIndex, const Observation *removeObservation)
+void JointObservationsMap::remove(unsigned int factorIndex, Observation *removeObservation)
 {
 	if (factorIndex < 0 || factorIndex >= factoredObservations.size()) {
 		throw ObservationException();
@@ -66,14 +66,14 @@ void JointObservationsMap::remove(int factorIndex, const Observation *removeObse
 	delete removeObservation;
 }
 
-void JointObservationsMap::set(int factorIndex, const std::vector<const Observation *> &newObservations)
+void JointObservationsMap::set(unsigned int factorIndex, const std::vector<Observation *> &newObservations)
 {
 	if (factorIndex < 0 || factorIndex >= factoredObservations.size() || newObservations.size() == 0) {
 		throw ObservationException();
 	}
 
 	// Delete the current factor's observations list.
-	for (const Observation *observation : factoredObservations[factorIndex]) {
+	for (Observation *observation : factoredObservations[factorIndex]) {
 		delete observation;
 	}
 	factoredObservations[factorIndex].clear();
@@ -81,7 +81,7 @@ void JointObservationsMap::set(int factorIndex, const std::vector<const Observat
 	factoredObservations[factorIndex] = newObservations;
 }
 
-const Observation *JointObservationsMap::get(int factorIndex, int observationIndex) const
+Observation *JointObservationsMap::get(unsigned int factorIndex, unsigned int observationIndex)
 {
 	if (factorIndex < 0 || factorIndex >= factoredObservations.size() ||
 			observationIndex < 0 || observationIndex >= factoredObservations[factorIndex].size()) {
@@ -94,7 +94,7 @@ const Observation *JointObservationsMap::get(int factorIndex, int observationInd
 void JointObservationsMap::update()
 {
 	// Throw an error if one factor is not defined.
-	for (std::vector<const Observation *> &factor : factoredObservations) {
+	for (std::vector<Observation *> &factor : factoredObservations) {
 		if (factor.size() == 0) {
 			throw ObservationException();
 		}
@@ -102,7 +102,7 @@ void JointObservationsMap::update()
 
 	observations.clear();
 
-	std::vector<const Observation *> create;
+	std::vector<Observation *> create;
 	update_step(create, 0);
 }
 
@@ -113,8 +113,8 @@ unsigned int JointObservationsMap::get_num_factors()
 
 void JointObservationsMap::reset()
 {
-	for (std::vector<const Observation *> &factor : factoredObservations) {
-		for (const Observation *observation : factor) {
+	for (std::vector<Observation *> &factor : factoredObservations) {
+		for (Observation *observation : factor) {
 			delete observation;
 		}
 		factor.clear();
@@ -123,17 +123,17 @@ void JointObservationsMap::reset()
 	observations.clear();
 }
 
-void JointObservationsMap::update_step(std::vector<const Observation *> currentJointObservation, int currentFactorIndex)
+void JointObservationsMap::update_step(std::vector<Observation *> currentJointObservation, unsigned int currentFactorIndex)
 {
 	// At the final factor index, we need to create a bunch of joint observations.
-	for (const Observation *observation : factoredObservations[currentFactorIndex]) {
+	for (Observation *observation : factoredObservations[currentFactorIndex]) {
 		// Begin by pushing a current factor's observation on the vector (tuple).
 		currentJointObservation.push_back(observation);
 
 		// If this is the final index, then create a joint observation object and append it to the list of observations.
 		// Otherwise, recurse to the next index, using the new currentJointObservation object.
 		if (currentFactorIndex == factoredObservations.size() - 1) {
-			const JointObservation *newObservation = new JointObservation(currentJointObservation);
+			JointObservation *newObservation = new JointObservation(currentJointObservation);
 			observations[newObservation->hash_value()] = newObservation;
 		} else {
 			update_step(currentJointObservation, currentFactorIndex + 1);

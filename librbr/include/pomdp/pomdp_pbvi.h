@@ -90,14 +90,14 @@ public:
 	 * Note: This relinquishes control of the belief state's memory management to this class.
 	 * @param	b		The initial set of belief states before calling 'solve'.
 	 */
-	void add_initial_belief_state(const BeliefState *b);
+	void add_initial_belief_state(BeliefState *b);
 
 	/**
 	 * Set the initial set of belief states which are used to seed the belief states before computing
 	 * the optimal policy. Note: This relinquishes control of the belief states' memory management to this class.
 	 * @param	initialBeliefStates		The initial set of belief states before calling 'solve'.
 	 */
-	void set_initial_belief_states(const std::vector<const BeliefState *> &initialBeliefStates);
+	void set_initial_belief_states(const std::vector<BeliefState *> &initialBeliefStates);
 
 	/**
 	 * Set the expansion rule to add belief points.
@@ -122,14 +122,14 @@ public:
 	 * the optimal policy.
 	 * @return	The initial set of belief states before calling 'solve'.
 	 */
-	const std::vector<const BeliefState *> &get_initial_belief_states() const;
+	std::vector<BeliefState *> &get_initial_belief_states();
 
 	/**
 	 * Get the set of belief states which were used to compute the optimal policy. This vector is only
 	 * populated after calling 'solve'.
 	 * @return	The final set of belief states after calling 'solve'.
 	 */
-	const std::vector<const BeliefState *> &get_belief_states() const;
+	std::vector<BeliefState *> &get_belief_states();
 
 	/**
 	 * Set the expansion rule to add belief points.
@@ -156,7 +156,7 @@ public:
 	 * @param	epsilon				The desired tolerance between value functions to check for convergence.
 	 * @throw	RewardException		The POMDP did not have a SASORewards rewards object.
 	 */
-	void compute_num_update_iterations(const POMDP *pomdp, double epsilon);
+	void compute_num_update_iterations(POMDP *pomdp, double epsilon);
 
 	/**
 	 * Solve the POMDP provided using point-based value iteration.
@@ -171,7 +171,7 @@ public:
 	 * @throw	PolicyException						An error occurred computing the policy.
 	 * @return	Return the optimal policy as a finite state controller (infinite horizon) or tree (finite horizon).
 	 */
-	PolicyAlphaVectors *solve(const POMDP *pomdp);
+	PolicyAlphaVectors *solve(POMDP *pomdp);
 
 	/**
 	 * Reset this POMDP PBVI solver. This method frees all the belief state memory.
@@ -191,9 +191,9 @@ private:
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy as a collection of alpha vectors.
 	 */
-	PolicyAlphaVectors *solve_finite_horizon(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
-			const StateTransitionsMap *T, const ObservationTransitionsMap *O, const SASORewards *R,
-			const Horizon *h);
+	PolicyAlphaVectors *solve_finite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+			StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+			Horizon *h);
 
 	/**
 	 * Solve an infinite horizon POMDP using point-based value iteration.
@@ -207,9 +207,9 @@ private:
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy as a collection of alpha vectors.
 	 */
-	PolicyAlphaVectors *solve_infinite_horizon(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
-			const StateTransitionsMap *T, const ObservationTransitionsMap *O, const SASORewards *R,
-			const Horizon *h);
+	PolicyAlphaVectors *solve_infinite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+			StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+			Horizon *h);
 
 	/**
 	 * Expand the set of beliefs following Random Belief Selection. This works by randomly selecting a set of new
@@ -217,7 +217,7 @@ private:
 	 * quantity each time.
 	 * @param	S	The finite states.
 	 */
-	void expand_random_belief_selection(const StatesMap *S);
+	void expand_random_belief_selection(StatesMap *S);
 
 	/**
 	 * Expand the set of beliefs following Stochastic Simulation with Random Actions. "Stochastic Simulation" means it
@@ -231,8 +231,8 @@ private:
 	 * @param	T	The finite state transition function.
 	 * @param	O	The finite observation transition function.
 	 */
-	void expand_stochastic_simulation_random_actions(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
-			const StateTransitionsMap *T, const ObservationTransitionsMap *O);
+	void expand_stochastic_simulation_random_actions(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+			StateTransitionsMap *T, ObservationTransitionsMap *O);
 
 	/**
 	 * Expand the set of beliefs following Stochastic Simulation with Greedy Action. "Stochastic Simulation" means it
@@ -247,8 +247,8 @@ private:
 	 * @param	O 		The finite observation transition function.
 	 * @param	gamma	The current set of alpha vectors.
 	 */
-	void expand_stochastic_simulation_greedy_action(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
-			const StateTransitionsMap *T, const ObservationTransitionsMap *O, const std::vector<PolicyAlphaVector *> &gamma);
+	void expand_stochastic_simulation_greedy_action(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+			StateTransitionsMap *T, ObservationTransitionsMap *O, std::vector<PolicyAlphaVector *> &gamma);
 
 	/**
 	 * Expand the set of beliefs following Stochastic Simulation with Exploratory Action. "Stochastic Simulation" means it
@@ -261,8 +261,8 @@ private:
 	 * @param	T	The finite state transition function.
 	 * @param	O	The finite observation transition function.
 	 */
-	void expand_stochastic_simulation_exploratory_action(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
-			const StateTransitionsMap *T, const ObservationTransitionsMap *O);
+	void expand_stochastic_simulation_exploratory_action(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+			StateTransitionsMap *T, ObservationTransitionsMap *O);
 
 	/**
 	 * Expand the set of beliefs following Greedy Error Reduction. TODO: Implement.
@@ -287,12 +287,12 @@ private:
 	/**
 	 * The initial set of belief points.
 	 */
-	std::vector<const BeliefState *> initialB;
+	std::vector<BeliefState *> initialB;
 
 	/**
 	 * The final set of belief points after the solver's iterations.
 	 */
-	std::vector<const BeliefState *> B;
+	std::vector<BeliefState *> B;
 
 };
 

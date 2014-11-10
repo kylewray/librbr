@@ -52,10 +52,10 @@ SARewardsArray::~SARewardsArray()
 	delete [] rewards;
 }
 
-void SARewardsArray::set(const State *state, const Action *action, double reward)
+void SARewardsArray::set(State *state, Action *action, double reward)
 {
-	const IndexedState *s = dynamic_cast<const IndexedState *>(state);
-	const IndexedAction *a = dynamic_cast<const IndexedAction *>(action);
+	IndexedState *s = dynamic_cast<IndexedState *>(state);
+	IndexedAction *a = dynamic_cast<IndexedAction *>(action);
 
 	if (s == nullptr || a == nullptr) {
 		throw RewardException();
@@ -75,21 +75,21 @@ void SARewardsArray::set(const State *state, const Action *action, double reward
 	}
 }
 
-void SARewardsArray::set(const State *state, const Action *action, const State *nextState, double reward)
+void SARewardsArray::set(State *state, Action *action, State *nextState, double reward)
 {
 	set(state, action, reward);
 }
 
-void SARewardsArray::set(const State *state, const Action *action, const State *nextState,
-		const Observation *observation, double reward)
+void SARewardsArray::set(State *state, Action *action, State *nextState,
+		Observation *observation, double reward)
 {
 	set(state, action, reward);
 }
 
-double SARewardsArray::get(const State *state, const Action *action) const
+double SARewardsArray::get(State *state, Action *action)
 {
-	const IndexedState *s = dynamic_cast<const IndexedState *>(state);
-	const IndexedAction *a = dynamic_cast<const IndexedAction *>(action);
+	IndexedState *s = dynamic_cast<IndexedState *>(state);
+	IndexedAction *a = dynamic_cast<IndexedAction *>(action);
 
 	if (s == nullptr || a == nullptr) {
 		throw RewardException();
@@ -102,21 +102,21 @@ double SARewardsArray::get(const State *state, const Action *action) const
 	return rewards[s->get_index() * actions + a->get_index()];
 }
 
-double SARewardsArray::get(const State *state, const Action *action, const State *nextState) const
+double SARewardsArray::get(State *state, Action *action, State *nextState)
 {
 	return get(state, action);
 }
 
-double SARewardsArray::get(const State *state, const Action *action, const State *nextState,
-		const Observation *observation) const
+double SARewardsArray::get(State *state, Action *action, State *nextState,
+		Observation *observation)
 {
 	return get(state, action);
 }
 
 void SARewardsArray::reset()
 {
-	for (int s = 0; s < states; s++) {
-		for (int a = 0; a < actions; a++) {
+	for (unsigned int s = 0; s < states; s++) {
+		for (unsigned int a = 0; a < actions; a++) {
 			rewards[s * actions + a] = 0.0f;
 		}
 	}
@@ -127,8 +127,8 @@ void SARewardsArray::reset()
 
 void SARewardsArray::set_rewards(const float *R)
 {
-	for (int s = 0; s < states; s++) {
-		for (int a = 0; a < actions; a++) {
+	for (unsigned int s = 0; s < states; s++) {
+		for (unsigned int a = 0; a < actions; a++) {
 			rewards[s * actions + a] = R[s * actions + a];
 
 			if (Rmin > R[s * actions + a]) {
@@ -141,9 +141,9 @@ void SARewardsArray::set_rewards(const float *R)
 	}
 }
 
-const float *SARewardsArray::get_rewards() const
+float *SARewardsArray::get_rewards()
 {
-	return (const float *)rewards;
+	return rewards;
 }
 
 unsigned int SARewardsArray::get_num_states() const

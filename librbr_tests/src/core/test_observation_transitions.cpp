@@ -192,7 +192,7 @@ int test_observation_transitions()
 	finiteObservationTransitions->set(a2, s2, o1, 1.0);
 	finiteObservationTransitions->set(a2, s2, o2, 1.0);
 
-	std::vector<const Observation *> tmp;
+	std::vector<Observation *> tmp;
 	finiteObservationTransitions->available(Z, a1, s1, tmp);
 
 	if (tmp.size() == 0) {

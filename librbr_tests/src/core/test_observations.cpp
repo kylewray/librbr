@@ -55,7 +55,7 @@ int test_observations()
 
 	try {
 		for (auto o : *finiteObservations) {
-			const Observation *observation = resolve(o);
+			Observation *observation = resolve(o);
 			if (observation == o1) {
 				o1Found = true;
 			} else if (observation == o2) {
@@ -93,7 +93,7 @@ int test_observations()
 	o3Found = false;
 
 	for (auto o : *finiteObservations) {
-		const Observation *observation = resolve(o);
+		Observation *observation = resolve(o);
 		if (observation == o1) {
 			o1Found = true;
 		} else if (observation == o2) {
@@ -145,7 +145,7 @@ int test_observations()
 	o3Found = false;
 
 	for (auto o : *finiteObservations) {
-		const Observation *observation = resolve(o);
+		Observation *observation = resolve(o);
 		if (observation == o1) {
 			o1Found = true;
 		} else if (observation == o2) {
@@ -182,7 +182,7 @@ int test_observations()
 	NamedObservation *o1New = new NamedObservation("o1");
 	NamedObservation *o2New = new NamedObservation("o2");
 
-	std::vector<const Observation *> testObservationsList;
+	std::vector<Observation *> testObservationsList;
 	testObservationsList.push_back(o1New);
 	testObservationsList.push_back(o2New);
 	finiteObservations->set(testObservationsList);
@@ -196,7 +196,7 @@ int test_observations()
 	o3Found = false;
 
 	for (auto o : *finiteObservations) {
-		const Observation *observation = resolve(o);
+		Observation *observation = resolve(o);
 		if (observation == o1) {
 			o1Found = true;
 		} else if (observation == o2) {
@@ -214,7 +214,7 @@ int test_observations()
 		std::cout << " Failure." << std::endl;
 	}
 
-	const Observation *testFindObservation = nullptr;
+	Observation *testFindObservation = nullptr;
 
 	std::cout << "Observations: Test 'FiniteObservations::find'... ";
 	try {
@@ -266,8 +266,8 @@ int test_observations()
 
 	try {
 		for (auto o : *finiteJointObservations) {
-			const Observation *observation = resolve(o);
-			const JointObservation *jo = static_cast<const JointObservation *>(observation);
+			Observation *observation = resolve(o);
+			JointObservation *jo = static_cast<JointObservation *>(observation);
 			if (jo == nullptr) {
 				throw ObservationException();
 			}

@@ -44,7 +44,7 @@ StateTransitionsMap::~StateTransitionsMap()
 	delete actionWildcard;
 }
 
-void StateTransitionsMap::set(const State *state, const Action *action, const State *nextState, double probability)
+void StateTransitionsMap::set(State *state, Action *action, State *nextState, double probability)
 {
 	if (state == nullptr) {
 		state = stateWildcard;
@@ -59,24 +59,24 @@ void StateTransitionsMap::set(const State *state, const Action *action, const St
 	stateTransitions[state][action][nextState] = std::max(0.0, std::min(1.0, probability));
 }
 
-double StateTransitionsMap::get(const State *state, const Action *action, const State *nextState) const
+double StateTransitionsMap::get(State *state, Action *action, State *nextState)
 {
 	// Iterate over all possible configurations of wildcards in the get statement.
 	// For each, use the get_value() function to check if the value exists. If it
 	// does, perhaps using a wildcard, then return that, otherwise continue.
 	// Return 0 by default.
 	for (int i = 0; i < 8; i++) {
-		const State *alpha = stateWildcard;
+		State *alpha = stateWildcard;
 		if (i & (1 << 0)) {
 			alpha = state;
 		}
 
-		const Action *beta = actionWildcard;
+		Action *beta = actionWildcard;
 		if (i & (1 << 1)) {
 			beta = action;
 		}
 
-		const State *gamma = stateWildcard;
+		State *gamma = stateWildcard;
 		if (i & (1 << 2)) {
 			gamma = nextState;
 		}
@@ -89,18 +89,18 @@ double StateTransitionsMap::get(const State *state, const Action *action, const 
 	return 0.0;
 }
 
-void StateTransitionsMap::successors(const States *S, const State *state,
-		const Action *action, std::vector<const State *> &result) const
+void StateTransitionsMap::successors(States *S, State *state,
+		Action *action, std::vector<State *> &result)
 {
 	// ToDo: Create a StatesArray object, and replace this cast with that instead.
-	const StatesMap *SMap = dynamic_cast<const StatesMap *>(S);
+	StatesMap *SMap = dynamic_cast<StatesMap *>(S);
 	if (SMap == nullptr) {
 		throw StateTransitionException();
 	}
 
 	result.clear();
 	for (auto sp : *SMap) {
-		const State *nextState = resolve(sp);
+		State *nextState = resolve(sp);
 		if (get(state, action, nextState) > 0.0) {
 			result.push_back(nextState);
 		}
@@ -112,22 +112,22 @@ void StateTransitionsMap::reset()
 	stateTransitions.clear();
 }
 
-double StateTransitionsMap::get_value(const State *state, const Action *action, const State *nextState) const
+double StateTransitionsMap::get_value(State *state, Action *action, State *nextState)
 {
-	std::unordered_map<const State *,
-		std::unordered_map<const Action *,
-		std::unordered_map<const State *, double> > >::const_iterator alpha = stateTransitions.find(state);
+	std::unordered_map<State *,
+		std::unordered_map<Action *,
+		std::unordered_map<State *, double> > >::const_iterator alpha = stateTransitions.find(state);
 	if (alpha == stateTransitions.end()) {
 		throw StateTransitionException();
 	}
 
-	std::unordered_map<const Action *,
-		std::unordered_map<const State *, double> >::const_iterator beta = alpha->second.find(action);
+	std::unordered_map<Action *,
+		std::unordered_map<State *, double> >::const_iterator beta = alpha->second.find(action);
 	if (beta == alpha->second.end()) {
 		throw StateTransitionException();
 	}
 
-	std::unordered_map<const State *, double>::const_iterator gamma = beta->second.find(nextState);
+	std::unordered_map<State *, double>::const_iterator gamma = beta->second.find(nextState);
 	if (gamma == beta->second.end()) {
 		throw StateTransitionException();
 	}

@@ -30,17 +30,15 @@ MDP::MDP()
 	actions = nullptr;
 	stateTransitions = nullptr;
 	rewards = nullptr;
-	initialState = nullptr;
 	horizon = nullptr;
 }
 
-MDP::MDP(States *S, Actions *A, StateTransitions *T, Rewards *R, Initial *s, Horizon *h)
+MDP::MDP(States *S, Actions *A, StateTransitions *T, Rewards *R, Horizon *h)
 {
 	states = S;
 	actions = A;
 	stateTransitions = T;
 	rewards = R;
-	initialState = s;
 	horizon = h;
 }
 
@@ -58,40 +56,32 @@ MDP::~MDP()
 	if (rewards != nullptr) {
 		delete rewards;
 	}
-	if (initialState != nullptr) {
-		delete initialState;
-	}
 	if (horizon != nullptr) {
 		delete horizon;
 	}
 }
 
-const States *MDP::get_states() const
+States *MDP::get_states()
 {
 	return states;
 }
 
-const Actions *MDP::get_actions() const
+Actions *MDP::get_actions()
 {
 	return actions;
 }
 
-const StateTransitions *MDP::get_state_transitions() const
+StateTransitions *MDP::get_state_transitions()
 {
 	return stateTransitions;
 }
 
-const Rewards *MDP::get_rewards() const
+Rewards *MDP::get_rewards()
 {
 	return rewards;
 }
 
-const Initial *MDP::get_initial_state() const
-{
-	return initialState;
-}
-
-const Horizon *MDP::get_horizon() const
+Horizon *MDP::get_horizon()
 {
 	return horizon;
 }

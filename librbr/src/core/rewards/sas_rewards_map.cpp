@@ -47,7 +47,7 @@ SASRewardsMap::~SASRewardsMap()
 	delete actionWildcard;
 }
 
-void SASRewardsMap::set(const State *state, const Action *action, const State *nextState, double reward)
+void SASRewardsMap::set(State *state, Action *action, State *nextState, double reward)
 {
 	if (state == nullptr) {
 		state = stateWildcard;
@@ -69,30 +69,30 @@ void SASRewardsMap::set(const State *state, const Action *action, const State *n
 	}
 }
 
-void SASRewardsMap::set(const State *state, const Action *action, const State *nextState,
-		const Observation *observation, double reward)
+void SASRewardsMap::set(State *state, Action *action, State *nextState,
+		Observation *observation, double reward)
 {
 	set(state, action, nextState, reward);
 }
 
-double SASRewardsMap::get(const State *state, const Action *action, const State *nextState) const
+double SASRewardsMap::get(State *state, Action *action, State *nextState)
 {
 	// Iterate over all possible configurations of wildcards in the get statement.
 	// For each, use the get_value() function to check if the value exists. If it
 	// does, perhaps using a wildcard, then return that, otherwise continue.
 	// Return 0 by default.
 	for (int i = 0; i < 8; i++) {
-		const State *alpha = stateWildcard;
+		State *alpha = stateWildcard;
 		if (!(bool)(i & (1 << 0))) {
 			alpha = state;
 		}
 
-		const Action *beta = actionWildcard;
+		Action *beta = actionWildcard;
 		if (!(bool)(i & (1 << 1))) {
 			beta = action;
 		}
 
-		const State *gamma = stateWildcard;
+		State *gamma = stateWildcard;
 		if (!(bool)(i & (1 << 2))) {
 			gamma = nextState;
 		}
@@ -105,8 +105,8 @@ double SASRewardsMap::get(const State *state, const Action *action, const State 
 	return 0.0;
 }
 
-double SASRewardsMap::get(const State *state, const Action *action, const State *nextState,
-		const Observation *observation) const
+double SASRewardsMap::get(State *state, Action *action, State *nextState,
+		Observation *observation)
 {
 	return get(state, action, nextState);
 }
@@ -118,22 +118,22 @@ void SASRewardsMap::reset()
 	Rmax = std::numeric_limits<double>::lowest();
 }
 
-double SASRewardsMap::get_value(const State *state, const Action *action, const State *nextState) const
+double SASRewardsMap::get_value(State *state, Action *action, State *nextState)
 {
-	std::unordered_map<const State *,
-		std::unordered_map<const Action *,
-		std::unordered_map<const State *, double> > >::const_iterator alpha = rewards.find(state);
+	std::unordered_map<State *,
+		std::unordered_map<Action *,
+		std::unordered_map<State *, double> > >::const_iterator alpha = rewards.find(state);
 	if (alpha == rewards.end()) {
 		throw RewardException();
 	}
 
-	std::unordered_map<const Action *,
-		std::unordered_map<const State *, double> >::const_iterator beta = alpha->second.find(action);
+	std::unordered_map<Action *,
+		std::unordered_map<State *, double> >::const_iterator beta = alpha->second.find(action);
 	if (beta == alpha->second.end()) {
 		throw RewardException();
 	}
 
-	std::unordered_map<const State *, double>::const_iterator gamma = beta->second.find(nextState);
+	std::unordered_map<State *, double>::const_iterator gamma = beta->second.find(nextState);
 	if (gamma == beta->second.end()) {
 		throw RewardException();
 	}

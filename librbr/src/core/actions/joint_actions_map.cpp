@@ -28,7 +28,7 @@
 
 #include <algorithm>
 
-JointActionsMap::JointActionsMap(int numFactors)
+JointActionsMap::JointActionsMap(unsigned int numFactors)
 {
 	if (numFactors < 1) {
 		numFactors = 1;
@@ -41,7 +41,7 @@ JointActionsMap::~JointActionsMap()
 	reset();
 }
 
-void JointActionsMap::add(int factorIndex, const Action *newAction)
+void JointActionsMap::add(unsigned int factorIndex, Action *newAction)
 {
 	if (factorIndex < 0 || factorIndex >= factoredActions.size()) {
 		throw ActionException();
@@ -50,7 +50,7 @@ void JointActionsMap::add(int factorIndex, const Action *newAction)
 	factoredActions[factorIndex].push_back(newAction);
 }
 
-void JointActionsMap::remove(int factorIndex, const Action *removeAction)
+void JointActionsMap::remove(unsigned int factorIndex, Action *removeAction)
 {
 	if (factorIndex < 0 || factorIndex >= factoredActions.size()) {
 		throw ActionException();
@@ -65,14 +65,14 @@ void JointActionsMap::remove(int factorIndex, const Action *removeAction)
 	delete removeAction;
 }
 
-void JointActionsMap::set(int factorIndex, const std::vector<const Action *> &newActions)
+void JointActionsMap::set(unsigned int factorIndex, const std::vector<Action *> &newActions)
 {
 	if (factorIndex < 0 || factorIndex >= factoredActions.size() || newActions.size() == 0) {
 		throw ActionException();
 	}
 
 	// Delete the current factor's actions list.
-	for (const Action *action : factoredActions[factorIndex]) {
+	for (Action *action : factoredActions[factorIndex]) {
 		delete action;
 	}
 	factoredActions[factorIndex].clear();
@@ -80,7 +80,7 @@ void JointActionsMap::set(int factorIndex, const std::vector<const Action *> &ne
 	factoredActions[factorIndex] = newActions;
 }
 
-const Action *JointActionsMap::get(int factorIndex, int actionIndex) const
+Action *JointActionsMap::get(unsigned int factorIndex, unsigned int actionIndex)
 {
 	if (factorIndex < 0 || factorIndex >= factoredActions.size() ||
 			actionIndex < 0 || actionIndex >= factoredActions[factorIndex].size()) {
@@ -93,7 +93,7 @@ const Action *JointActionsMap::get(int factorIndex, int actionIndex) const
 void JointActionsMap::update()
 {
 	// Throw an error if one factor is not defined.
-	for (std::vector<const Action *> &factor : factoredActions) {
+	for (std::vector<Action *> &factor : factoredActions) {
 		if (factor.size() == 0) {
 			throw ActionException();
 		}
@@ -101,7 +101,7 @@ void JointActionsMap::update()
 
 	actions.clear();
 
-	std::vector<const Action *> create;
+	std::vector<Action *> create;
 	update_step(create, 0);
 }
 
@@ -112,8 +112,8 @@ unsigned int JointActionsMap::get_num_factors()
 
 void JointActionsMap::reset()
 {
-	for (std::vector<const Action *> &factor : factoredActions) {
-		for (const Action *action : factor) {
+	for (std::vector<Action *> &factor : factoredActions) {
+		for (Action *action : factor) {
 			delete action;
 		}
 		factor.clear();
@@ -122,17 +122,17 @@ void JointActionsMap::reset()
 	actions.clear();
 }
 
-void JointActionsMap::update_step(std::vector<const Action *> currentJointAction, int currentFactorIndex)
+void JointActionsMap::update_step(std::vector<Action *> currentJointAction, unsigned int currentFactorIndex)
 {
 	// At the final factor index, we need to create a bunch of joint actions.
-	for (const Action *action : factoredActions[currentFactorIndex]) {
+	for (Action *action : factoredActions[currentFactorIndex]) {
 		// Begin by pushing a current factor's action on the vector (tuple).
 		currentJointAction.push_back(action);
 
 		// If this is the final index, then create a joint action object and append it to the list of actions.
 		// Otherwise, recurse to the next index, using the new currentJointAction object.
 		if (currentFactorIndex == factoredActions.size() - 1) {
-			const JointAction *newAction = new JointAction(currentJointAction);
+			JointAction *newAction = new JointAction(currentJointAction);
 			actions[newAction->hash_value()] = newAction;
 		} else {
 			update_step(currentJointAction, currentFactorIndex + 1);

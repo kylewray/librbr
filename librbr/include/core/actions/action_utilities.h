@@ -36,7 +36,7 @@
  * @throw	ActionException		The name was invalid, or an action was not a NamedAction.
  * @return	The action with the corresponding name provided.
  */
-const Action *find_action(const ActionsMap *A, std::string actionName);
+Action *find_action(ActionsMap *A, std::string actionName);
 
 
 #endif // ACTION_UTILITIES_H

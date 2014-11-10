@@ -66,7 +66,7 @@ unsigned int POMDPValueIteration::get_num_iterations()
 	return iterations;
 }
 
-void POMDPValueIteration::compute_num_iterations(const POMDP *pomdp, double epsilon)
+void POMDPValueIteration::compute_num_iterations(POMDP *pomdp, double epsilon)
 {
 	// Handle the trivial case.
 	if (pomdp == nullptr) {
@@ -74,12 +74,12 @@ void POMDPValueIteration::compute_num_iterations(const POMDP *pomdp, double epsi
 	}
 
 	// Attempt to convert the rewards object into SASORewards.
-	const SASORewards *R = dynamic_cast<const SASORewards *>(pomdp->get_rewards());
+	SASORewards *R = dynamic_cast<SASORewards *>(pomdp->get_rewards());
 	if (R == nullptr) {
 		throw RewardException();
 	}
 
-	const Horizon *h = pomdp->get_horizon();
+	Horizon *h = pomdp->get_horizon();
 
 	// Make sure we do not take the log of 0.
 	double Rmin = R->get_min();
@@ -91,7 +91,7 @@ void POMDPValueIteration::compute_num_iterations(const POMDP *pomdp, double epsi
 	iterations = (int)((log(epsilon) - log(Rmax - Rmin)) / log(h->get_discount_factor()));
 }
 
-PolicyAlphaVectors *POMDPValueIteration::solve(const POMDP *pomdp)
+PolicyAlphaVectors *POMDPValueIteration::solve(POMDP *pomdp)
 {
 	// Handle the trivial case.
 	if (pomdp == nullptr) {
@@ -99,45 +99,45 @@ PolicyAlphaVectors *POMDPValueIteration::solve(const POMDP *pomdp)
 	}
 
 	// Attempt to convert the states object into FiniteStates.
-	const StatesMap *S = dynamic_cast<const StatesMap *>(pomdp->get_states());
+	StatesMap *S = dynamic_cast<StatesMap *>(pomdp->get_states());
 	if (S == nullptr) {
 		throw StateException();
 	}
 
 	// Attempt to convert the actions object into FiniteActions.
-	const ActionsMap *A = dynamic_cast<const ActionsMap *>(pomdp->get_actions());
+	ActionsMap *A = dynamic_cast<ActionsMap *>(pomdp->get_actions());
 	if (A == nullptr) {
 		throw ActionException();
 	}
 
 	// Attempt to convert the observations object into FiniteObservations.
-	const ObservationsMap *Z = dynamic_cast<const ObservationsMap *>(pomdp->get_observations());
+	ObservationsMap *Z = dynamic_cast<ObservationsMap *>(pomdp->get_observations());
 	if (Z == nullptr) {
 		throw ObservationException();
 	}
 
 	// Attempt to convert the state transitions object into FiniteStateTransitions.
-	const StateTransitionsMap *T =
-			dynamic_cast<const StateTransitionsMap *>(pomdp->get_state_transitions());
+	StateTransitionsMap *T =
+			dynamic_cast<StateTransitionsMap *>(pomdp->get_state_transitions());
 	if (T == nullptr) {
 		throw StateTransitionException();
 	}
 
 	// Attempt to convert the observation transitions object into FiniteObservationTransitions.
-	const ObservationTransitionsMap *O =
-			dynamic_cast<const ObservationTransitionsMap *>(pomdp->get_observation_transitions());
+	ObservationTransitionsMap *O =
+			dynamic_cast<ObservationTransitionsMap *>(pomdp->get_observation_transitions());
 	if (O == nullptr) {
 		throw ObservationTransitionException();
 	}
 
 	// Attempt to convert the rewards object into SASORewards.
-	const SASORewards *R = dynamic_cast<const SASORewards *>(pomdp->get_rewards());
+	SASORewards *R = dynamic_cast<SASORewards *>(pomdp->get_rewards());
 	if (R == nullptr) {
 		throw RewardException();
 	}
 
 	// Obtain the horizon and return the correct value iteration.
-	const Horizon *h = pomdp->get_horizon();
+	Horizon *h = pomdp->get_horizon();
 	if (h->is_finite()) {
 		return solve_finite_horizon(S, A, Z, T, O, R, h);
 	} else {
@@ -145,17 +145,17 @@ PolicyAlphaVectors *POMDPValueIteration::solve(const POMDP *pomdp)
 	}
 }
 
-PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
-		const StateTransitionsMap *T, const ObservationTransitionsMap *O, const SASORewards *R,
-		const Horizon *h)
+PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+		StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+		Horizon *h)
 {
 	// Create the policy of alpha vectors variable. Set the horizon, to make the object's policy differ over time.
 	PolicyAlphaVectors *policy = new PolicyAlphaVectors(h->get_horizon());
 
 	// Before anything, cache Gamma_{a, *} for all actions. This is used in every cross-sum computation.
-	std::map<const Action *, std::vector<PolicyAlphaVector *> > gammaAStar;
+	std::map<Action *, std::vector<PolicyAlphaVector *> > gammaAStar;
 	for (auto a : *A) {
-		const Action *action = resolve(a);
+		Action *action = resolve(a);
 		gammaAStar[action].push_back(create_gamma_a_star(S, A, Z, T, O, R, action));
 	}
 
@@ -164,10 +164,10 @@ PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const StatesMap *S
 	bool current = false;
 
 	// Continue to iterate until the horizon has been reached.
-	for (int t = 0; t < h->get_horizon(); t++) {
+	for (unsigned int t = 0; t < h->get_horizon(); t++) {
 		// Compute the new set of alpha vectors, gamma.
 		for (auto a : *A) {
-			const Action *action = resolve(a);
+			Action *action = resolve(a);
 			std::vector<PolicyAlphaVector *> alphaVector = bellman_update_cross_sum(S, A, Z, T, O, R, h,
 					gammaAStar[action], gamma[!current], action);
 			gamma[current].insert(gamma[current].end(), alphaVector.begin(), alphaVector.end());
@@ -188,7 +188,7 @@ PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const StatesMap *S
 
 	// Free the memory of Gamma_{a, *}.
 	for (auto a : *A) {
-		const Action *action = resolve(a);
+		Action *action = resolve(a);
 		for (PolicyAlphaVector *alphaVector : gammaAStar[action]) {
 			delete alphaVector;
 		}
@@ -199,17 +199,17 @@ PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(const StatesMap *S
 	return policy;
 }
 
-PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
-		const StateTransitionsMap *T, const ObservationTransitionsMap *O, const SASORewards *R,
-		const Horizon *h)
+PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+		StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+		Horizon *h)
 {
 	// Create the policy of alpha vectors variable. Set the horizon, to make the object's policy differ over time.
 	PolicyAlphaVectors *policy = new PolicyAlphaVectors(h->get_horizon());
 
 	// Before anything, cache Gamma_{a, *} for all actions. This is used in every cross-sum computation.
-	std::map<const Action *, std::vector<PolicyAlphaVector *> > gammaAStar;
+	std::map<Action *, std::vector<PolicyAlphaVector *> > gammaAStar;
 	for (auto a : *A) {
-		const Action *action = resolve(a);
+		Action *action = resolve(a);
 		gammaAStar[action].push_back(create_gamma_a_star(S, A, Z, T, O, R, action));
 	}
 
@@ -218,10 +218,10 @@ PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(const StatesMap 
 	bool current = false;
 
 	// Continue to iterate until the number of iterations has been reached.
-	for (int t = 0; t < iterations; t++) {
+	for (unsigned int t = 0; t < iterations; t++) {
 		// Compute the new set of alpha vectors, gamma.
 		for (auto a : *A) {
-			const Action *action = resolve(a);
+			Action *action = resolve(a);
 			std::vector<PolicyAlphaVector *> alphaVector = bellman_update_cross_sum(S, A, Z, T, O, R, h,
 					gammaAStar[action], gamma[!current], action);
 			gamma[current].insert(gamma[current].end(), alphaVector.begin(), alphaVector.end());
@@ -242,7 +242,7 @@ PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(const StatesMap 
 
 	// Free the memory of Gamma_{a, *}.
 	for (auto a : *A) {
-		const Action *action = resolve(a);
+		Action *action = resolve(a);
 		for (PolicyAlphaVector *alphaVector : gammaAStar[action]) {
 			delete alphaVector;
 		}

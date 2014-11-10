@@ -46,7 +46,7 @@ MDPValueIteration::MDPValueIteration(double tolerance)
 MDPValueIteration::~MDPValueIteration()
 { }
 
-PolicyMap *MDPValueIteration::solve(const MDP *mdp)
+PolicyMap *MDPValueIteration::solve(MDP *mdp)
 {
 	// Handle the trivial case.
 	if (mdp == nullptr) {
@@ -54,32 +54,32 @@ PolicyMap *MDPValueIteration::solve(const MDP *mdp)
 	}
 
 	// Attempt to convert the states object into StatesMap.
-	const StatesMap *S = dynamic_cast<const StatesMap *>(mdp->get_states());
+	StatesMap *S = dynamic_cast<StatesMap *>(mdp->get_states());
 	if (S == nullptr) {
 		throw StateException();
 	}
 
 	// Attempt to convert the actions object into ActionsMap.
-	const ActionsMap *A = dynamic_cast<const ActionsMap *>(mdp->get_actions());
+	ActionsMap *A = dynamic_cast<ActionsMap *>(mdp->get_actions());
 	if (A == nullptr) {
 		throw ActionException();
 	}
 
 	// Attempt to convert the state transitions object into StateTransitions.
-	const StateTransitions *T =
-			dynamic_cast<const StateTransitions *>(mdp->get_state_transitions());
+	StateTransitions *T =
+			dynamic_cast<StateTransitions *>(mdp->get_state_transitions());
 	if (T == nullptr) {
 		throw StateTransitionException();
 	}
 
 	// Attempt to convert the rewards object into SASRewards.
-	const SASRewards *R = dynamic_cast<const SASRewards *>(mdp->get_rewards());
+	SASRewards *R = dynamic_cast<SASRewards *>(mdp->get_rewards());
 	if (R == nullptr) {
 		throw RewardException();
 	}
 
 	// Obtain the horizon and return the correct value iteration.
-	const Horizon *h = mdp->get_horizon();
+	Horizon *h = mdp->get_horizon();
 	if (h->is_finite()) {
 		return solve_finite_horizon(S, A, T, R, h);
 	} else {
@@ -87,13 +87,13 @@ PolicyMap *MDPValueIteration::solve(const MDP *mdp)
 	}
 }
 
-const std::unordered_map<const State *, double> &MDPValueIteration::get_V() const
+const std::unordered_map<State *, double> &MDPValueIteration::get_V() const
 {
 	return V;
 }
 
-PolicyMap *MDPValueIteration::solve_finite_horizon(const StatesMap *S, const ActionsMap *A, const StateTransitions *T,
-		const SASRewards *R, const Horizon *h)
+PolicyMap *MDPValueIteration::solve_finite_horizon(StatesMap *S, ActionsMap *A, StateTransitions *T,
+		SASRewards *R, Horizon *h)
 {
 	// Create the policy based on the horizon.
 	PolicyMap *policy = new PolicyMap(h);
@@ -104,8 +104,8 @@ PolicyMap *MDPValueIteration::solve_finite_horizon(const StatesMap *S, const Act
 	for (int t = h->get_horizon() - 1; t >= 0; t--){
 		// For all the states, compute V(s).
 		for (auto state : *S) {
-			const State *s = resolve(state);
-			const Action *aBest = nullptr;
+			State *s = resolve(state);
+			Action *aBest = nullptr;
 
 			bellman_update(S, A, T, R, h, s, V, aBest);
 
@@ -117,8 +117,8 @@ PolicyMap *MDPValueIteration::solve_finite_horizon(const StatesMap *S, const Act
 	return policy;
 }
 
-PolicyMap *MDPValueIteration::solve_infinite_horizon(const StatesMap *S, const ActionsMap *A, const StateTransitions *T,
-		const SASRewards *R, const Horizon *h)
+PolicyMap *MDPValueIteration::solve_infinite_horizon(StatesMap *S, ActionsMap *A, StateTransitions *T,
+		SASRewards *R, Horizon *h)
 {
 	// Create the policy based on the horizon.
 	PolicyMap *policy = new PolicyMap(h);
@@ -134,8 +134,8 @@ PolicyMap *MDPValueIteration::solve_infinite_horizon(const StatesMap *S, const A
 
 		// For all the states, compute V(s).
 		for (auto state : *S) {
-			const State *s = resolve(state);
-			const Action *aBest = nullptr;
+			State *s = resolve(state);
+			Action *aBest = nullptr;
 			double Vs = V[s];
 
 			// Perform the Bellman update, which modifies V and aBest such that V(s) = max Q(s, a)

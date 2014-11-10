@@ -36,7 +36,7 @@
  * @throw	ObservationException	The name was invalid.
  * @return	The observation with the corresponding name provided.
  */
-const Observation *find_observation(const ObservationsMap *Z, std::string observationName);
+Observation *find_observation(ObservationsMap *Z, std::string observationName);
 
 
 #endif // ACTION_UTILITIES_H

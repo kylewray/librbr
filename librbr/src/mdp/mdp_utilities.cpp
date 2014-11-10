@@ -27,23 +27,23 @@
 #include <limits>
 #include <math.h>
 
-void bellman_update(const StatesMap *S, const ActionsMap *A, const StateTransitions *T,
-		const SASRewards *R, const Horizon *h, const State *s,
-		std::unordered_map<const State *, double> &V, const Action *&aBest)
+void bellman_update(StatesMap *S, ActionsMap *A, StateTransitions *T,
+		SASRewards *R, Horizon *h, State *s,
+		std::unordered_map<State *, double> &V, Action *&aBest)
 {
 	double maxQsa = std::numeric_limits<double>::lowest();
 
 	// For all the actions, compute max Q(s, a), and argmax Q(s, a), both over the set of available actions.
 	for (auto action : A->available(s)) {
-		const Action *a = resolve(action);
+		Action *a = resolve(action);
 
 		// Compute the Q(s, a) estimate.
 		double Qsa = 0.0;
 
-		std::vector<const State *> successors;
+		std::vector<State *> successors;
 		T->successors(S, s, a, successors);
 
-		for (const State *sPrime : successors) {
+		for (State *sPrime : successors) {
 			Qsa += T->get(s, a, sPrime) * (R->get(s, a, sPrime) + h->get_discount_factor() * V[sPrime]);
 		}
 
@@ -57,11 +57,11 @@ void bellman_update(const StatesMap *S, const ActionsMap *A, const StateTransiti
 	V[s] = maxQsa;
 }
 
-void compute_V_pi(const StatesMap *S, const ActionsMap *A, const StateTransitions *T, const SASRewards *R, const Horizon *h,
-		double epsilon, const PolicyMap *pi, std::unordered_map<const State *, double> &V)
+void compute_V_pi(StatesMap *S, ActionsMap *A, StateTransitions *T, SASRewards *R, Horizon *h,
+		double epsilon, PolicyMap *pi, std::unordered_map<State *, double> &V)
 {
 	for (auto state : *S) {
-		const State *s = resolve(state);
+		State *s = resolve(state);
 		V[s] = 0.0;
 	}
 
@@ -73,14 +73,14 @@ void compute_V_pi(const StatesMap *S, const ActionsMap *A, const StateTransition
 
 		// For all the states, compute V(s).
 		for (auto state : *S) {
-			const State *s = resolve(state);
+			State *s = resolve(state);
 
-			std::vector<const State *> successors;
+			std::vector<State *> successors;
 			T->successors(S, s, pi->get(s), successors);
 
 			double QsPIs = 0.0;
 
-			for (const State *sPrime : successors) {
+			for (State *sPrime : successors) {
 				QsPIs += T->get(s, pi->get(s), sPrime) * (R->get(s, pi->get(s), sPrime) + h->get_discount_factor() * V[sPrime]);
 			}
 
@@ -93,14 +93,14 @@ void compute_V_pi(const StatesMap *S, const ActionsMap *A, const StateTransition
 	}
 }
 
-void compute_V_pi(const StatesMap *S, const ActionsMap *A, const StateTransitions *T, const FactoredRewards *R, const Horizon *h,
-		double epsilon, const PolicyMap *pi, std::vector<std::unordered_map<const State *, double> > &V)
+void compute_V_pi(StatesMap *S, ActionsMap *A, StateTransitions *T, FactoredRewards *R, Horizon *h,
+		double epsilon, PolicyMap *pi, std::vector<std::unordered_map<State *, double> > &V)
 {
 	V.clear();
 	V.resize(R->get_num_rewards());
 
 	for (int i = 0; i < (int)R->get_num_rewards(); i++) {
-		const SASRewards *Ri = dynamic_cast<const SASRewards *>(R->get(i));
+		SASRewards *Ri = dynamic_cast<SASRewards *>(R->get(i));
 		compute_V_pi(S, A, T, Ri, h, epsilon, pi, V[i]);
 	}
 }

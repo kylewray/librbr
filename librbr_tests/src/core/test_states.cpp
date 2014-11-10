@@ -55,7 +55,7 @@ int test_states()
 
 	try {
 		for (auto s : *finiteStates) {
-			const State *state = resolve(s);
+			State *state = resolve(s);
 			if (state == s1) {
 				s1Found = true;
 			} else if (state == s2) {
@@ -93,7 +93,7 @@ int test_states()
 	s3Found = false;
 
 	for (auto s : *finiteStates) {
-		const State *state = resolve(s);
+		State *state = resolve(s);
 		if (state == s1) {
 			s1Found = true;
 		} else if (state == s2) {
@@ -145,7 +145,7 @@ int test_states()
 	s3Found = false;
 
 	for (auto s : *finiteStates) {
-		const State *state = resolve(s);
+		State *state = resolve(s);
 		if (state == s1) {
 			s1Found = true;
 		} else if (state == s2) {
@@ -179,7 +179,7 @@ int test_states()
 	State *s1New = new NamedState("s1");
 	State *s2New = new NamedState("s2");
 
-	std::vector<const State *> testStatesList;
+	std::vector<State *> testStatesList;
 	testStatesList.push_back(s1New);
 	testStatesList.push_back(s2New);
 	finiteStates->set(testStatesList);
@@ -193,7 +193,7 @@ int test_states()
 	s3Found = false;
 
 	for (auto s : *finiteStates) {
-		const State *state = resolve(s);
+		State *state = resolve(s);
 		if (state == s1) {
 			s1Found = true;
 		} else if (state == s2) {
@@ -213,7 +213,7 @@ int test_states()
 
 	std::cout << "States: Test 'FiniteStates::find'... ";
 	try {
-		const NamedState *ns1 = dynamic_cast<const NamedState *>(s1);
+		NamedState *ns1 = dynamic_cast<NamedState *>(s1);
 		find_state(finiteStates, ns1->get_name());
 		std::cout << " Success." << std::endl;
 		numSuccesses++;
@@ -223,7 +223,7 @@ int test_states()
 
 	std::cout << "States: Test 'FiniteStates::find' (Expecting Error)... ";
 	try {
-		const NamedState *ns3 = dynamic_cast<const NamedState *>(s3);
+		NamedState *ns3 = dynamic_cast<NamedState *>(s3);
 		find_state(finiteStates, ns3->get_name());
 		std::cout << " Failure." << std::endl;
 	} catch (const StateException &err) {
@@ -263,8 +263,8 @@ int test_states()
 
 	try {
 		for (auto s : *finiteFactoredStates) {
-			const State *state = resolve(s);
-			const FactoredState *fs = dynamic_cast<const FactoredState *>(state);
+			State *state = resolve(s);
+			FactoredState *fs = dynamic_cast<FactoredState *>(state);
 			if (fs == nullptr) {
 				throw StateException();
 			}

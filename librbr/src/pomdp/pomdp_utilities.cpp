@@ -24,23 +24,23 @@
 
 #include "../../include/pomdp/pomdp_utilities.h"
 
-PolicyAlphaVector *create_gamma_a_star(const StatesMap *S, const ActionsMap *A,
-		const ObservationsMap *Z, const StateTransitionsMap *T, const ObservationTransitionsMap *O,
-		const SASORewards *R, const Action *action)
+PolicyAlphaVector *create_gamma_a_star(StatesMap *S, ActionsMap *A,
+		ObservationsMap *Z, StateTransitionsMap *T, ObservationTransitionsMap *O,
+		SASORewards *R, Action *action)
 {
 	PolicyAlphaVector *alpha = new PolicyAlphaVector(action);
 
 	for (auto s : *S) {
-		const State *state = resolve(s);
+		State *state = resolve(s);
 
 		// Compute the immediate state-action-state-observation reward.
 		double immediateReward = 0.0;
 		for (auto sp : *S) {
-			const State *nextState = resolve(sp);
+			State *nextState = resolve(sp);
 
 			double innerImmediateReward = 0.0;
 			for (auto z : *Z) {
-				const Observation *observation = resolve(z);
+				Observation *observation = resolve(z);
 				innerImmediateReward += O->get(action, nextState, observation) * R->get(state, action, nextState, observation);
 			}
 			immediateReward += T->get(state, action, nextState) * innerImmediateReward;
@@ -51,19 +51,19 @@ PolicyAlphaVector *create_gamma_a_star(const StatesMap *S, const ActionsMap *A,
 	return alpha;
 }
 
-BeliefState *belief_state_update(const StatesMap *S, const StateTransitionsMap *T,
-		const ObservationTransitionsMap *O, const BeliefState *belief, const Action *action,
-		const Observation *observation) {
+BeliefState *belief_state_update(StatesMap *S, StateTransitionsMap *T,
+		ObservationTransitionsMap *O, BeliefState *belief, Action *action,
+		Observation *observation) {
 	BeliefState *nextBelief = new BeliefState();
 
 	// First, compute all of the numerators and the denominator independently.
 	double N = 0.0;
 	for (auto sp : *S) {
-		const State *nextState = resolve(sp);
+		State *nextState = resolve(sp);
 
 		double b = 0.0;
 		for (auto s : *S) {
-			const State *state = resolve(s);
+			State *state = resolve(s);
 			b += T->get(state, action, nextState) * belief->get(state);
 		}
 		b *= O->get(action, nextState, observation);
@@ -74,17 +74,17 @@ BeliefState *belief_state_update(const StatesMap *S, const StateTransitionsMap *
 
 	// Normalize by the denominator.
 	for (auto sp : *S) {
-		const State *nextState = resolve(sp);
+		State *nextState = resolve(sp);
 		nextBelief->set(nextState, nextBelief->get(nextState) / N);
 	}
 
 	return nextBelief;
 }
 
-std::vector<PolicyAlphaVector *> bellman_update_cross_sum(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
-		const StateTransitionsMap *T, const ObservationTransitionsMap *O, const SASORewards *R,
-		const Horizon *h, const std::vector<PolicyAlphaVector *> &gammaAStar, const std::vector<PolicyAlphaVector *> &gamma,
-		const Action *action)
+std::vector<PolicyAlphaVector *> bellman_update_cross_sum(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+		StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+		Horizon *h, std::vector<PolicyAlphaVector *> &gammaAStar, std::vector<PolicyAlphaVector *> &gamma,
+		Action *action)
 {
 	// Perform a deep copy on the gammaAStar variable, since we will need fresh PolicyAlphaVectors in the for loop below.
 	std::vector<PolicyAlphaVector *> gammaA;
@@ -94,7 +94,7 @@ std::vector<PolicyAlphaVector *> bellman_update_cross_sum(const StatesMap *S, co
 
 	// Iteratively compute and apply the cross-sum of the gamma.
 	for (auto z : *Z) {
-		const Observation *observation = resolve(z);
+		Observation *observation = resolve(z);
 
 		// Compute the set Gamma_{a, omega}.
 		std::vector<PolicyAlphaVector *> gammaAOmega;
@@ -106,12 +106,12 @@ std::vector<PolicyAlphaVector *> bellman_update_cross_sum(const StatesMap *S, co
 
 			// For each of the columns in the alpha vector.
 			for (auto s : *S) {
-				const State *state = resolve(s);
+				State *state = resolve(s);
 
 				// Compute the value of an element of the alpha vector.
 				double value = 0.0;
 				for (auto sp : *S) {
-					const State *nextState = resolve(sp);
+					State *nextState = resolve(sp);
 					value += T->get(state, action, nextState) * O->get(action, nextState, observation) * alphaGamma->get(nextState);
 				}
 				value *= h->get_discount_factor();
@@ -150,10 +150,10 @@ std::vector<PolicyAlphaVector *> bellman_update_cross_sum(const StatesMap *S, co
 	return gammaA;
 }
 
-PolicyAlphaVector *bellman_update_belief_state(const StatesMap *S, const ActionsMap *A, const ObservationsMap *Z,
-		const StateTransitionsMap *T, const ObservationTransitionsMap *O, const SASORewards *R,
-		const Horizon *h, const std::vector<PolicyAlphaVector *> &gammaAStar, const std::vector<PolicyAlphaVector *> &gamma,
-		const Action *action, const BeliefState *b)
+PolicyAlphaVector *bellman_update_belief_state(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+		StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+		Horizon *h, std::vector<PolicyAlphaVector *> &gammaAStar, std::vector<PolicyAlphaVector *> &gamma,
+		Action *action, BeliefState *b)
 {
 	// Create the alpha vector and initialize its value equal to that of the element inside gammaAStar.
 	PolicyAlphaVector *alphaBAStar = new PolicyAlphaVector(*gammaAStar[0]);
@@ -162,7 +162,7 @@ PolicyAlphaVector *bellman_update_belief_state(const StatesMap *S, const Actions
 	// Add to its value for each state following a summation, instead of the cross-sum. This operation iterates over the
 	// possible observations and selects the optimal policy for that subtree given the current set of alpha vectors in gamma.
 	for (auto z : *Z) {
-		const Observation *observation = resolve(z);
+		Observation *observation = resolve(z);
 
 		// The argmax of alpha dot beta given the belief point, action, and observation.
 		PolicyAlphaVector *maxAlphaBAOmega = nullptr;
@@ -175,12 +175,12 @@ PolicyAlphaVector *bellman_update_belief_state(const StatesMap *S, const Actions
 
 			// For each of the columns in the alpha vector.
 			for (auto s : *S) {
-				const State *state = resolve(s);
+				State *state = resolve(s);
 
 				// Compute the value of an element of the alpha vector.
 				double value = 0.0;
 				for (auto sp : *S) {
-					const State *nextState = resolve(sp);
+					State *nextState = resolve(sp);
 					value += T->get(state, action, nextState) * O->get(action, nextState, observation) * alphaGamma->get(nextState);
 				}
 				value *= h->get_discount_factor();

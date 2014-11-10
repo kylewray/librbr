@@ -30,7 +30,7 @@
 StatesMap::StatesMap()
 { }
 
-StatesMap::StatesMap(const std::vector<const State *> &states)
+StatesMap::StatesMap(const std::vector<State *> &states)
 {
 	set(states);
 }
@@ -40,15 +40,15 @@ StatesMap::~StatesMap()
 	reset();
 }
 
-void StatesMap::add(const State *newState)
+void StatesMap::add(State *newState)
 {
 	states[newState->hash_value()] = newState;
 }
 
-void StatesMap::remove(const State *removeState)
+void StatesMap::remove(State *removeState)
 {
 	// Ensure that the element exists in the hash before removing it.
-	std::unordered_map<unsigned int, const State *>::const_iterator result = states.find(removeState->hash_value());
+	std::unordered_map<unsigned int, State *>::const_iterator result = states.find(removeState->hash_value());
 	if (result == states.end()) {
 		throw StateException();
 	}
@@ -57,10 +57,10 @@ void StatesMap::remove(const State *removeState)
 	delete removeState;
 }
 
-void StatesMap::set(const std::vector<const State *> &newStates)
+void StatesMap::set(const std::vector<State *> &newStates)
 {
 	reset();
-	for (const State *state : newStates) {
+	for (State *state : newStates) {
 		states[state->hash_value()] = state;
 	}
 }
@@ -75,7 +75,7 @@ bool StatesMap::exists(const State *state) const
 	return true;
 }
 
-const State *StatesMap::get(unsigned int hash) const
+State *StatesMap::get(unsigned int hash)
 {
 	try {
 		return states.at(hash);
@@ -97,22 +97,22 @@ void StatesMap::reset()
 	states.clear();
 }
 
-std::unordered_map<unsigned int, const State *>::const_iterator StatesMap::begin() const
+std::unordered_map<unsigned int, State *>::iterator StatesMap::begin()
 {
 	return states.begin();
 }
 
-std::unordered_map<unsigned int, const State *>::const_iterator StatesMap::end() const
+std::unordered_map<unsigned int, State *>::iterator StatesMap::end()
 {
 	return states.end();
 }
 
-const State *resolve(std::unordered_map<unsigned int, const State *>::value_type &stateIterator)
+State *resolve(std::unordered_map<unsigned int, State *>::value_type &stateIterator)
 {
 	return stateIterator.second;
 }
 
-unsigned int hash_value(std::unordered_map<unsigned int, const State *>::value_type &stateIterator)
+unsigned int hash_value(std::unordered_map<unsigned int, State *>::value_type &stateIterator)
 {
 	return stateIterator.first;
 }

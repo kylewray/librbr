@@ -56,7 +56,7 @@ public:
 	 * specify the number of factors.
 	 * @param	numFactors		The number of state factors, minimum of 1.
 	 */
-	FactoredStatesMap(int numFactors);
+	FactoredStatesMap(unsigned int numFactors);
 
 	/**
 	 * The default deconstructor for the FactoredStatesMap class.
@@ -69,7 +69,7 @@ public:
 	 * @param	newStates			The new states to include in the set of available states.
 	 * @throw	StateException		The vector was empty, or contained null pointers.
 	 */
-	void add_factor(const std::vector<const State *> &newStates);
+	void add_factor(const std::vector<State *> &newStates);
 
 	/**
 	 * Add a state to the set of available states in a factor. This does *not* update the states list; please
@@ -78,7 +78,7 @@ public:
 	 * @param	newState 			The new state to include in the set of available states.
 	 * @throw	StateException		The index was invalid.
 	 */
-	void add(int factorIndex, const State *newState);
+	void add(unsigned int factorIndex, State *newState);
 
 	/**
 	 * Remove a state to the set of available states in a factor. This frees the memory. This does *not*
@@ -87,7 +87,7 @@ public:
 	 * @param	removeState 		The state to remove from the set of available states.
 	 * @throw	StateException		The index was invalid, or the state was not found in the states list.
 	 */
-	void remove(int factorIndex, const State *removeState);
+	void remove(unsigned int factorIndex, State *removeState);
 
 	/**
 	 * Set the internal states list for a factor given another list, performing a deep copy. This resets
@@ -97,7 +97,7 @@ public:
 	 * @param 	newStates 			The vector of new states to use.
 	 * @throw	StateException		The index was invalid, or newStates was empty.
 	 */
-	void set(int factorIndex, const std::vector<const State *> &newStates);
+	void set(unsigned int factorIndex, const std::vector<State *> &newStates);
 
 	/**
 	 * Get the state at the corresponding index, given the particular factor. The factor index
@@ -108,7 +108,7 @@ public:
 	 * @throw	StateException		The index was invalid.
 	 * @return	The state at the corresponding index.
 	 */
-	const State *get(int factorIndex, int stateIndex) const;
+	State *get(unsigned int factorIndex, unsigned int stateIndex);
 
 	/**
 	 * Update the internal states list which holds all permutations of factored states in an efficient structure.
@@ -132,7 +132,7 @@ protected:
 	/**
 	 * The list of all available states for each state factor.
 	 */
-	std::vector<std::vector<const State *> > factoredStates;
+	std::vector<std::vector<State *> > factoredStates;
 
 private:
 	/**
@@ -140,7 +140,7 @@ private:
 	 * @param	currentFactoredState	The current (incomplete) factored state as a vector of states.
 	 * @param	currentFactorIndex		The current factor index.
 	 */
-	void update_step(std::vector<const State *> currentFactoredState, int currentFactorIndex);
+	void update_step(std::vector<State *> currentFactoredState, unsigned int currentFactorIndex);
 
 };
 

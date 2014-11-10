@@ -54,18 +54,18 @@ struct PolicyTreeNode {
 	 * A constructor for the PolicyTreeNode class which allows the specification of the action.
 	 * @param	a	The corresponding action at this node.
 	 */
-	PolicyTreeNode(const Action *a);
+	PolicyTreeNode(Action *a);
 
 	/**
 	 * The current node's action.
 	 */
-	const Action *action;
+	Action *action;
 
 	/**
 	 * A pointer to each of the children following a given observation.
 	 * If next is empty, then we are at a leaf.
 	 */
-	std::map<const Observation *, PolicyTreeNode *> next;
+	std::map<Observation *, PolicyTreeNode *> next;
 
 };
 
@@ -91,14 +91,14 @@ public:
 	 * @param	observations	The finite set of observations.
 	 * @param	horizon 		The horizon of the problem.
 	 */
-	PolicyTree(const ObservationsMap *observations, unsigned int horizon);
+	PolicyTree(ObservationsMap *observations, unsigned int horizon);
 
 	/**
 	 * A constructor for a MapPolicy object which specifies the horizon.
 	 * @param	observations	The finite set of observations.
 	 * @param	horizon 		The horizon object from the MDP-like object.
 	 */
-	PolicyTree(const ObservationsMap *observations, const Horizon *horizon);
+	PolicyTree(ObservationsMap *observations, Horizon *horizon);
 
 	/**
 	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
@@ -111,7 +111,7 @@ public:
 	 * @param	action				The action to take after this history of observations.
 	 * @throw	PolicyException		The policy was not defined for this history.
 	 */
-	void set(const std::vector<const Observation *> &history, const Action *action);
+	void set(const std::vector<Observation *> &history, Action *action);
 
 	/**
 	 * Get the action given a history of observations.
@@ -119,7 +119,7 @@ public:
 	 * @throw	PolicyException		The policy was not defined for this history.
 	 * @return	The action to take given the history of observations provided.
 	 */
-	const Action *get(const std::vector<const Observation *> &history) const;
+	Action *get(const std::vector<Observation *> &history);
 
 	/**
 	 * A function which must load a policy file.
@@ -129,21 +129,21 @@ public:
 	 * @param	horizon			The horizons object to ensure valid policy creation.
 	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	virtual bool load(std::string filename, const ActionsMap *actions, const ObservationsMap *observations, const Horizon *horizon);
+	virtual bool load(std::string filename, ActionsMap *actions, ObservationsMap *observations, Horizon *horizon);
 
 	/**
 	 * A function which must save a policy file.
 	 * @param	filename	The name and path of the file to save.
 	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	virtual bool save(std::string filename) const;
+	virtual bool save(std::string filename);
 
 	/**
 	 * A function which follows the defined policy, having the current state stored internally,
 	 * and returns the action to select next.
 	 * @throw	PolicyException		The horizon has already been reached; no more planning has been done.
 	 */
-	virtual const Action *next(const Observation *observation);
+	virtual Action *next(Observation *observation);
 
 	/**
 	 * Reset the policy, clearing the entire tree.
@@ -157,7 +157,7 @@ private:
 	 * @param	horizon			The remaining horizon value; once zero, recursion terminates.
 	 * @return	The root of this node's subtree.
 	 */
-	PolicyTreeNode *generate_tree(const ObservationsMap *observations, unsigned int horizon);
+	PolicyTreeNode *generate_tree(ObservationsMap *observations, unsigned int horizon);
 
 	/**
 	 * Traverse the tree following the history provided.
@@ -165,7 +165,7 @@ private:
 	 * @throw	PolicyException		The policy was not defined for this history.
 	 * @return	The final node after following the history.
 	 */
-	PolicyTreeNode *traverse(const std::vector<const Observation *> &history) const;
+	PolicyTreeNode *traverse(const std::vector<Observation *> &history);
 
 	/**
 	 * Save the policy tree recursively.
@@ -173,7 +173,7 @@ private:
 	 * @param	node 		The current node.
 	 * @param	history		The history of observations so far.
 	 */
-	void save_tree(std::ofstream &file, PolicyTreeNode *node, std::vector<const Observation *> history) const;
+	void save_tree(std::ofstream &file, PolicyTreeNode *node, std::vector<Observation *> history);
 
 	/**
 	 * Defines the policy itself; it's the internal mapping from states to actions. There is

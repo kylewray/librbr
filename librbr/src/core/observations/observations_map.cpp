@@ -30,7 +30,7 @@
 ObservationsMap::ObservationsMap()
 { }
 
-ObservationsMap::ObservationsMap(const std::vector<const Observation *> &observations)
+ObservationsMap::ObservationsMap(const std::vector<Observation *> &observations)
 {
 	set(observations);
 }
@@ -40,15 +40,15 @@ ObservationsMap::~ObservationsMap()
 	reset();
 }
 
-void ObservationsMap::add(const Observation *newObservation)
+void ObservationsMap::add(Observation *newObservation)
 {
 	observations[newObservation->hash_value()] = newObservation;
 }
 
-void ObservationsMap::remove(const Observation *removeObservation)
+void ObservationsMap::remove(Observation *removeObservation)
 {
 	// Ensure that the element exists in the hash before removing it.
-	std::unordered_map<unsigned int, const Observation *>::const_iterator result = observations.find(removeObservation->hash_value());
+	std::unordered_map<unsigned int, Observation *>::const_iterator result = observations.find(removeObservation->hash_value());
 	if (result == observations.end()) {
 		throw ObservationException();
 	}
@@ -57,15 +57,15 @@ void ObservationsMap::remove(const Observation *removeObservation)
 	delete removeObservation;
 }
 
-void ObservationsMap::set(const std::vector<const Observation *> &newObservations)
+void ObservationsMap::set(const std::vector<Observation *> &newObservations)
 {
 	reset();
-	for (const Observation *observation : newObservations) {
+	for (Observation *observation : newObservations) {
 		observations[observation->hash_value()] = observation;
 	}
 }
 
-bool ObservationsMap::exists(const Observation *observation) const
+bool ObservationsMap::exists(Observation *observation)
 {
 	try {
 		observations.at(observation->hash_value());
@@ -75,7 +75,7 @@ bool ObservationsMap::exists(const Observation *observation) const
 	return true;
 }
 
-const Observation *ObservationsMap::get(unsigned int hash) const
+Observation *ObservationsMap::get(unsigned int hash)
 {
 	try {
 		return observations.at(hash);
@@ -97,22 +97,22 @@ void ObservationsMap::reset()
 	observations.clear();
 }
 
-std::unordered_map<unsigned int, const Observation *>::const_iterator ObservationsMap::begin() const
+std::unordered_map<unsigned int, Observation *>::iterator ObservationsMap::begin()
 {
 	return observations.begin();
 }
 
-std::unordered_map<unsigned int, const Observation *>::const_iterator ObservationsMap::end() const
+std::unordered_map<unsigned int, Observation *>::iterator ObservationsMap::end()
 {
 	return observations.end();
 }
 
-const Observation *resolve(std::unordered_map<unsigned int, const Observation *>::value_type &observationIterator)
+Observation *resolve(std::unordered_map<unsigned int, Observation *>::value_type &observationIterator)
 {
 	return observationIterator.second;
 }
 
-unsigned int hash_value(std::unordered_map<unsigned int, const Observation *>::value_type &observationIterator)
+unsigned int hash_value(std::unordered_map<unsigned int, Observation *>::value_type &observationIterator)
 {
 	return observationIterator.first;
 }

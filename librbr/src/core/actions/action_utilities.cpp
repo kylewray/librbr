@@ -28,24 +28,24 @@
 #include "../../../include/core/actions/named_action.h"
 #include "../../../include/core/actions/joint_action.h"
 
-const Action *find_action(const ActionsMap *A, std::string actionName)
+Action *find_action(ActionsMap *A, std::string actionName)
 {
 	for (auto act : *A) {
-		const Action *action = resolve(act);
+		Action *action = resolve(act);
 
 		// Try to cast the action as a NamedAction. If it fails, it may still be a joint action.
-	    const NamedAction *a = dynamic_cast<const NamedAction *>(action);
+	    NamedAction *a = dynamic_cast<NamedAction *>(action);
 	    if (a == nullptr) {
 	    	// Try to cast it as a JointAction.
-	    	const JointAction *ja = dynamic_cast<const JointAction *>(action);
+	    	JointAction *ja = dynamic_cast<JointAction *>(action);
 		    if (ja == nullptr) {
 		    	throw ActionException();
 		    }
 
 		    // Construct the joint action name from the component names, separated by spaces.
 		    std::string jaName = "";
-	    	for (int i = 0; i < ja->get_num_actions(); i++) {
-	    		a = dynamic_cast<const NamedAction *>(ja->get(i));
+	    	for (unsigned int i = 0; i < ja->get_num_actions(); i++) {
+	    		a = dynamic_cast<NamedAction *>(ja->get(i));
 	    		if (a == nullptr) {
 	    			throw ActionException();
 	    		}

@@ -25,18 +25,18 @@
 #include "../../../include/core/actions/joint_action.h"
 #include "../../../include/core/actions/action_exception.h"
 
-JointAction::JointAction(int numJointActions)
+JointAction::JointAction(unsigned int numJointActions)
 {
 	actions.reserve(numJointActions);
 }
 
-JointAction::JointAction(const std::vector<const Action *> &jointAction)
+JointAction::JointAction(const std::vector<Action *> &jointAction)
 {
 	actions.reserve(jointAction.size());
 	actions = jointAction;
 }
 
-JointAction::JointAction(const JointAction &other)
+JointAction::JointAction(JointAction &other)
 {
 	*this = other;
 }
@@ -44,17 +44,17 @@ JointAction::JointAction(const JointAction &other)
 JointAction::~JointAction()
 { }
 
-void JointAction::set(const std::vector<const Action *> &jointAction)
+void JointAction::set(const std::vector<Action *> &jointAction)
 {
 	actions = jointAction;
 }
 
-const std::vector<const Action *> &JointAction::get() const
+std::vector<Action *> &JointAction::get()
 {
 	return actions;
 }
 
-const Action *JointAction::get(int index) const
+Action *JointAction::get(unsigned int index)
 {
 	if (index < 0 || index >= actions.size()) {
 		throw ActionException();
@@ -62,14 +62,14 @@ const Action *JointAction::get(int index) const
 	return actions[index];
 }
 
-int JointAction::get_num_actions() const
+unsigned int JointAction::get_num_actions() const
 {
 	return actions.size();
 }
 
-Action &JointAction::operator=(const Action &other)
+Action &JointAction::operator=(Action &other)
 {
-    const JointAction *a = dynamic_cast<const JointAction*>(&other);
+    JointAction *a = dynamic_cast<JointAction*>(&other);
     if (a == nullptr) {
     	throw ActionException();
     }
@@ -80,7 +80,7 @@ Action &JointAction::operator=(const Action &other)
 std::string JointAction::to_string() const
 {
 	std::string jointAction = "";
-	for (int i = 0; i < actions.size(); i++) {
+	for (unsigned int i = 0; i < actions.size(); i++) {
 		jointAction += actions[i]->to_string();
 		if (i != actions.size() - 1) {
 			jointAction += " ";
@@ -92,7 +92,7 @@ std::string JointAction::to_string() const
 unsigned int JointAction::hash_value() const
 {
 	unsigned int hash = 7;
-	for (const Action *action : actions) {
+	for (Action *action : actions) {
 		hash = 31 * hash + action->hash_value();
 	}
 	return hash;

@@ -43,7 +43,7 @@
  * @throw	CoreException	The MDP provided was invalid.
  * @return	The new array-based MDP, for its state transitions and rewards.
  */
-MDP *convert_map_to_array(const MDP *mdp);
+MDP *convert_map_to_array(MDP *mdp);
 
 /**
  * Convert the components of a map-based MDP to an array-based MDP.
@@ -56,9 +56,9 @@ MDP *convert_map_to_array(const MDP *mdp);
  * @throw	CoreException		The MDP provided was invalid.
  * @return	The new array-based MDP, for its state transitions and rewards.
  */
-MDP *convert_map_to_array(const StatesMap *states, const ActionsMap *actions,
-		const StateTransitions *stateTransitions, const SASRewards *rewards,
-		const Initial *initial, const Horizon *horizon);
+MDP *convert_map_to_array(StatesMap *states, ActionsMap *actions,
+		StateTransitions *stateTransitions, SASRewards *rewards,
+		Horizon *horizon);
 
 /**
  * Convert a map-based POMDP to an array-based POMDP.
@@ -68,7 +68,7 @@ MDP *convert_map_to_array(const StatesMap *states, const ActionsMap *actions,
  * @return	The new array-based POMDP, for its rewards and its state and
  * 			observation transitions.
  */
-POMDP *convert_map_to_array(const POMDP *pomdp);
+POMDP *convert_map_to_array(POMDP *pomdp);
 
 
 #endif // CONVERSION_H

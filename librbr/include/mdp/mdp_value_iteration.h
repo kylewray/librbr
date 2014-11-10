@@ -75,13 +75,13 @@ public:
 	 * @throw	PolicyException				An error occurred computing the policy.
 	 * @return	Return the optimal policy.
 	 */
-	PolicyMap *solve(const MDP *mdp);
+	PolicyMap *solve(MDP *mdp);
 
 	/**
 	 * Get the values of the states' mapping.
 	 * @return	The mapping from states to values.
 	 */
-	const std::unordered_map<const State *, double> &get_V() const;
+	const std::unordered_map<State *, double> &get_V() const;
 
 private:
 	/**
@@ -94,8 +94,8 @@ private:
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy.
 	 */
-	PolicyMap *solve_finite_horizon(const StatesMap *S, const ActionsMap *A, const StateTransitions *T,
-			const SASRewards *R, const Horizon *h);
+	PolicyMap *solve_finite_horizon(StatesMap *S, ActionsMap *A, StateTransitions *T,
+			SASRewards *R, Horizon *h);
 
 	/**
 	 * Solve an infinite horizon MDP using value iteration.
@@ -107,13 +107,13 @@ private:
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy.
 	 */
-	PolicyMap *solve_infinite_horizon(const StatesMap *S, const ActionsMap *A, const StateTransitions *T,
-			const SASRewards *R, const Horizon *h);
+	PolicyMap *solve_infinite_horizon(StatesMap *S, ActionsMap *A, StateTransitions *T,
+			SASRewards *R, Horizon *h);
 
 	/**
 	 * The value of a states and state's actions.
 	 */
-	std::unordered_map<const State *, double> V;
+	std::unordered_map<State *, double> V;
 
 	/**
 	 * The tolerance convergence criterion.

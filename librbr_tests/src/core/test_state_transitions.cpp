@@ -188,7 +188,7 @@ int test_state_transitions()
 	S->add(s1);
 	S->add(s2);
 
-	std::vector<const State *> tmp;
+	std::vector<State *> tmp;
 	finiteStateTransitions->successors(S, s1, a1, tmp);
 
 	if (tmp.size() == 0) {

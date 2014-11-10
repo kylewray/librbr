@@ -66,21 +66,21 @@ public:
 	 * A constructor for a PolicyAlphaVectors object which specifies the horizon.
 	 * @param	horizon		The horizon object from the MDP-like object.
 	 */
-	PolicyAlphaVectors(const Horizon *horizon);
+	PolicyAlphaVectors(Horizon *horizon);
 
 	/**
 	 * A constructor for a PolicyAlphaVectors object which specifies the alpha vectors.
 	 * It defaults to a horizon of 1 in this case.
 	 * @param	alphas		The set of alpha vectors.
 	 */
-	PolicyAlphaVectors(const std::vector<PolicyAlphaVector *> &alphas);
+	PolicyAlphaVectors(std::vector<PolicyAlphaVector *> &alphas);
 
 	/**
 	 * A constructor for a PolicyAlphaVectors object which specifies the alpha vectors.
 	 * It defaults to a horizon of 1 in this case.
 	 * @param	alphas		The set of alpha vectors at each horizon.
 	 */
-	PolicyAlphaVectors(const std::vector<std::vector<PolicyAlphaVector *> > &alphas);
+	PolicyAlphaVectors(std::vector<std::vector<PolicyAlphaVector *> > &alphas);
 
 	/**
 	 * A virtual deconstructor to prevent errors upon the deletion of a child object.
@@ -92,7 +92,7 @@ public:
 	 * previous alpha vectors.
 	 * @param	alphas		The set of alpha vectors.
 	 */
-	void set(const std::vector<PolicyAlphaVector *> &alphas);
+	void set(std::vector<PolicyAlphaVector *> &alphas);
 
 	/**
 	 * Set the alpha vectors, allowing the explicit specification of the horizon. This frees
@@ -101,7 +101,7 @@ public:
 	 * @param	alphas 				The set of alpha vectors.
 	 * @throw	PolicyException		The horizon was invalid.
 	 */
-	void set(unsigned int horizon, const std::vector<PolicyAlphaVector *> &alphas);
+	void set(unsigned int horizon, std::vector<PolicyAlphaVector *> &alphas);
 
 	/**
 	 * Get the action for a given belief state. For finite horizon, it assumes 0 by default.
@@ -109,7 +109,7 @@ public:
 	 * @throw	PolicyException		The policy was not defined for this state.
 	 * @return	The action to take at the given belief state.
 	 */
-	const Action *get(const BeliefState *belief) const;
+	Action *get(BeliefState *belief);
 
 	/**
 	 * Get the action for a given belief state, allowing the explicit specification of the horizon.
@@ -118,7 +118,7 @@ public:
 	 * @throw	PolicyException		The policy was not defined for this belief state, or horizon was invalid.
 	 * @return	The action to take at the given belief state.
 	 */
-	const Action *get(unsigned int horizon, const BeliefState *belief) const;
+	Action *get(unsigned int horizon, BeliefState *belief);
 
 	/**
 	 * A function which must load a policy file.
@@ -129,8 +129,8 @@ public:
 	 * @param	horizon			The horizons object to ensure valid policy creation.
 	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	virtual bool load(std::string filename, const StatesMap *states, const ActionsMap *actions,
-			const ObservationsMap *observations, const Horizon *horizon);
+	virtual bool load(std::string filename, StatesMap *states, ActionsMap *actions,
+			ObservationsMap *observations, Horizon *horizon);
 
 	/**
 	 * A function which must save a policy file.
@@ -138,7 +138,7 @@ public:
 	 * @param	states		The states object which contains the actual state objects to be mapped.
 	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	bool save(std::string filename, const StatesMap *states) const;
+	bool save(std::string filename, StatesMap *states);
 
 	/**
 	 * Reset the alpha vectors, freeing the memory.
@@ -152,7 +152,7 @@ public:
 	 * @param	alphas 				The set of alpha vectors for which dominated ones will be pruned in place.
 	 * @throws	PolicyException		The states were invalid, there were zero alpha vectors, or the first alpha vector is null.
 	 */
-	static void prune_dominated(const StatesMap *S, std::vector<PolicyAlphaVector *> &alphas);
+	static void prune_dominated(StatesMap *S, std::vector<PolicyAlphaVector *> &alphas);
 
 private:
 	/**

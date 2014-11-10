@@ -47,7 +47,7 @@ SARewardsMap::~SARewardsMap()
 	delete actionWildcard;
 }
 
-void SARewardsMap::set(const State *state, const Action *action, double reward)
+void SARewardsMap::set(State *state, Action *action, double reward)
 {
 	if (state == nullptr) {
 		state = stateWildcard;
@@ -66,30 +66,30 @@ void SARewardsMap::set(const State *state, const Action *action, double reward)
 	}
 }
 
-void SARewardsMap::set(const State *state, const Action *action, const State *nextState, double reward)
+void SARewardsMap::set(State *state, Action *action, State *nextState, double reward)
 {
 	set(state, action, reward);
 }
 
-void SARewardsMap::set(const State *state, const Action *action, const State *nextState,
-		const Observation *observation, double reward)
+void SARewardsMap::set(State *state, Action *action, State *nextState,
+		Observation *observation, double reward)
 {
 	set(state, action, reward);
 }
 
-double SARewardsMap::get(const State *state, const Action *action) const
+double SARewardsMap::get(State *state, Action *action)
 {
 	// Iterate over all possible configurations of wildcards in the get statement.
 	// For each, use the get_value() function to check if the value exists. If it
 	// does, perhaps using a wildcard, then return that, otherwise continue.
 	// Return 0 by default.
 	for (int i = 0; i < 4; i++) {
-		const State *alpha = stateWildcard;
+		State *alpha = stateWildcard;
 		if (!(bool)(i & (1 << 0))) {
 			alpha = state;
 		}
 
-		const Action *beta = actionWildcard;
+		Action *beta = actionWildcard;
 		if (!(bool)(i & (1 << 1))) {
 			beta = action;
 		}
@@ -102,13 +102,13 @@ double SARewardsMap::get(const State *state, const Action *action) const
 	return 0.0;
 }
 
-double SARewardsMap::get(const State *state, const Action *action, const State *nextState) const
+double SARewardsMap::get(State *state, Action *action, State *nextState)
 {
 	return get(state, action);
 }
 
-double SARewardsMap::get(const State *state, const Action *action, const State *nextState,
-		const Observation *observation) const
+double SARewardsMap::get(State *state, Action *action, State *nextState,
+		Observation *observation)
 {
 	return get(state, action);
 }
@@ -120,16 +120,16 @@ void SARewardsMap::reset()
 	Rmax = std::numeric_limits<double>::lowest();
 }
 
-double SARewardsMap::get_value(const State *state, const Action *action) const
+double SARewardsMap::get_value(State *state, Action *action)
 {
-	std::unordered_map<const State *,
-		std::unordered_map<const Action *, double> >::const_iterator alpha =
+	std::unordered_map<State *,
+		std::unordered_map<Action *, double> >::const_iterator alpha =
 			rewards.find(state);
 	if (alpha == rewards.end()) {
 		throw RewardException();
 	}
 
-	std::unordered_map<const Action *, double>::const_iterator beta = alpha->second.find(action);
+	std::unordered_map<Action *, double>::const_iterator beta = alpha->second.find(action);
 	if (beta == alpha->second.end()) {
 		throw RewardException();
 	}

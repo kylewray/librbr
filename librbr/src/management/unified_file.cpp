@@ -56,8 +56,8 @@ UnifiedFile::UnifiedFile()
 	stateTransitions = nullptr;
 	observationTransitions = nullptr;
 	rewards = nullptr;
-	initialState = nullptr;
 	horizon = nullptr;
+	initialState = nullptr;
 
 	rewardValue = true;
 	rows = 1;
@@ -93,8 +93,8 @@ bool UnifiedFile::load(std::string path)
 	// 4 = T vector, 5 = T matrix
 	// 6 = O vector, 7 = O matrix
 	// 8 = R vector, 9 = R matrix
-	int loading = 0;
-	int loadingCounter = 0;
+	unsigned int loading = 0;
+	unsigned int loadingCounter = 0;
 
 	// If the file failed to open, then do not do anything.
 	if (!file.is_open()) {
@@ -332,11 +332,6 @@ void UnifiedFile::reset()
 	}
 	rewards = nullptr;
 
-	if (initialState != nullptr) {
-		delete initialState;
-	}
-	initialState = nullptr;
-
 	if (horizon != nullptr) {
 		delete horizon;
 	}
@@ -377,7 +372,7 @@ bool UnifiedFile::load_horizon(std::vector<std::string> items)
 	}
 
 	// Attempt to convert the string to a double. If successful, then set the horizon.
-	int h = 0.0;
+	int h = 0;
 	try {
 		h = std::stoi(items[1]);
 	} catch (const std::invalid_argument &err) {
@@ -471,7 +466,7 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 			initialState->set_initial_belief(resolve(state), probability);
 		}
 	} else if (list.size() == 1) {
-		const State *state = nullptr;
+		State *state = nullptr;
 
 		try {
 			state = find_state(states, list[0]);
@@ -548,7 +543,7 @@ bool UnifiedFile::load_initial_state_inclusive(std::vector<std::string> items)
 	double probability = 1.0 / (double)list.size();
 
 	for (std::string idString : list) {
-		const State *state = nullptr;
+		State *state = nullptr;
 
 		try {
 			state = find_state(states, idString);
@@ -597,10 +592,10 @@ bool UnifiedFile::load_initial_state_exclusive(std::vector<std::string> items)
 
 	double probability = 1.0 / (double)(states->get_num_states() - list.size());
 
-	std::vector<const State *> subset;
+	std::vector<State *> subset;
 
 	for (std::string idString : list) {
-		const State *state = nullptr;
+		State *state = nullptr;
 
 		try {
 			state = find_state(states, idString);
@@ -617,7 +612,7 @@ bool UnifiedFile::load_initial_state_exclusive(std::vector<std::string> items)
 
 	// The remaining states must be defined with a uniform belief.
 	for (auto s : *states) {
-		const State *state = resolve(s);
+		State *state = resolve(s);
 		if (std::find(subset.begin(), subset.end(), state) == subset.end()) {
 			initialState->set_initial_belief(state, probability);
 		}
@@ -744,14 +739,14 @@ int UnifiedFile::load_states(std::vector<std::string> items)
 		char stateName[16];
 		for (int i = 0; i < n; i++) {
 			sprintf(stateName, "%i", i);
-			const State *newState = new NamedState(stateName);
+			State *newState = new NamedState(stateName);
 			states->add(newState);
 			orderedStates.push_back(newState);
 		}
 	} else {
 		// This must be a full list of unique state names.
 		for (std::string stateName : list) {
-			const State *newState = new NamedState(stateName);
+			State *newState = new NamedState(stateName);
 			states->add(newState);
 			orderedStates.push_back(newState);
 		}
@@ -760,7 +755,7 @@ int UnifiedFile::load_states(std::vector<std::string> items)
 	return 0;
 }
 
-bool UnifiedFile::load_factored_states(int factorIndex, std::string line)
+bool UnifiedFile::load_factored_states(unsigned int factorIndex, std::string line)
 {
 	// Handle an invalid factor index and undefined states variable.
 	if (factorIndex < 0) { // || factorIndex >= ((FiniteFactoredStates *)states)->get_num_factors()) {
@@ -778,7 +773,7 @@ bool UnifiedFile::load_factored_states(int factorIndex, std::string line)
 	std::vector<std::string> list = split_string_by_space(line);
 
 	// If this is one item, then it must be a number, since there must be at least two states.
-	std::vector<const State *> newStates;
+	std::vector<State *> newStates;
 
 	if (list.size() == 1) {
 		// Attempt to convert this to an integer.
@@ -820,7 +815,7 @@ bool UnifiedFile::load_factored_states(int factorIndex, std::string line)
 		throw CoreException();
 	}
 
-	if (factorIndex >= (int)S->get_num_factors()) {
+	if (factorIndex >= S->get_num_factors()) {
 		S->add_factor(newStates);
 	} else {
 		S->set(factorIndex, newStates);
@@ -897,7 +892,7 @@ int UnifiedFile::load_actions(std::vector<std::string> items)
 	return 0;
 }
 
-int UnifiedFile::load_agent_actions(int agentIndex, std::string line)
+int UnifiedFile::load_agent_actions(unsigned int agentIndex, std::string line)
 {
 	// Handle an invalid agent index and undefined agents variable.
 	if (agents == nullptr || agentIndex < 0 || agentIndex >= agents->get_num_agents()) {
@@ -915,7 +910,7 @@ int UnifiedFile::load_agent_actions(int agentIndex, std::string line)
 	std::vector<std::string> list = split_string_by_space(line);
 
 	// If this is one item, then it must be a number, since there must be at least two actions.
-	std::vector<const Action *> newActions;
+	std::vector<Action *> newActions;
 
 	if (list.size() == 1) {
 		// Attempt to convert this to an integer.
@@ -1012,14 +1007,14 @@ int UnifiedFile::load_observations(std::vector<std::string> items)
 		char observationName[16];
 		for (int i = 0; i < n; i++) {
 			sprintf(observationName, "%i", i);
-			const Observation *newObservation = new NamedObservation(observationName);
+			Observation *newObservation = new NamedObservation(observationName);
 			observations->add(newObservation);
 			orderedObservations.push_back(newObservation);
 		}
 	} else {
 		// This must be a full list of unique observation names.
 		for (std::string observationName : list) {
-			const Observation *newObservation = new NamedObservation(observationName);
+			Observation *newObservation = new NamedObservation(observationName);
 			observations->add(newObservation);
 			orderedObservations.push_back(newObservation);
 		}
@@ -1028,7 +1023,7 @@ int UnifiedFile::load_observations(std::vector<std::string> items)
 	return 0;
 }
 
-int UnifiedFile::load_agent_observations(int agentIndex, std::string line)
+int UnifiedFile::load_agent_observations(unsigned int agentIndex, std::string line)
 {
 	// Handle an invalid agent index and undefined agents variable.
 	if (agents == nullptr || agentIndex < 0 || agentIndex >= agents->get_num_agents()) {
@@ -1046,7 +1041,7 @@ int UnifiedFile::load_agent_observations(int agentIndex, std::string line)
 	std::vector<std::string> list = split_string_by_space(line);
 
 	// If this is one item, then it must be a number, since there must be at least two observations.
-	std::vector<const Observation *> newObservations;
+	std::vector<Observation *> newObservations;
 
 	if (list.size() == 1) {
 		// Attempt to convert this to an integer.
@@ -1115,7 +1110,7 @@ int UnifiedFile::load_state_transition(std::vector<std::string> items)
 	}
 
 	std::string actionName = split_string_by_space(items[1])[0];
-	const Action *action = nullptr;
+	Action *action = nullptr;
 
 	if (actionName.compare("*") != 0) {
 		try {
@@ -1135,7 +1130,7 @@ int UnifiedFile::load_state_transition(std::vector<std::string> items)
 	}
 
 	std::string startStateName = split_string_by_space(items[2])[0];
-	const State *startState = nullptr;
+	State *startState = nullptr;
 
 	if (startStateName.compare("*") != 0) {
 		try {
@@ -1156,7 +1151,7 @@ int UnifiedFile::load_state_transition(std::vector<std::string> items)
 	}
 
 	std::string endStateName = split_string_by_space(items[3])[0];
-	const State *endState = nullptr;
+	State *endState = nullptr;
 
 	if (endStateName.compare("*") != 0) {
 		try {
@@ -1201,13 +1196,13 @@ bool UnifiedFile::load_state_transition_vector(std::string line)
 	// Handle the special case of "uniform".
 	if (list[0].compare("uniform") == 0) {
 		double probability = 1.0 / (double)states->get_num_states();
-		for (int i = 0; i < states->get_num_states(); i++) {
+		for (unsigned int i = 0; i < states->get_num_states(); i++) {
 			stateTransitions->set(loadingState, loadingAction, orderedStates[i], probability);
 		}
 		return false;
 	}
 
-	if ((int)list.size() != states->get_num_states()) {
+	if (list.size() != states->get_num_states()) {
 		sprintf(error, "Invalid number of probabilities given: %i != %i on line %i in file '%s'.",
 				(int)list.size(), states->get_num_states(), rows, filename.c_str());
 		log_message("UnifiedFile::load_state_transition_vector", error);
@@ -1215,7 +1210,7 @@ bool UnifiedFile::load_state_transition_vector(std::string line)
 	}
 
 	// Attempt to convert each string to a probability and set the corresponding transition probability.
-	int counter = 0;
+	unsigned int counter = 0;
 
 	for (std::string probabilityString : list) {
 		double probability = 0.0;
@@ -1244,7 +1239,7 @@ bool UnifiedFile::load_state_transition_vector(std::string line)
 	return false;
 }
 
-bool UnifiedFile::load_state_transition_matrix(int stateIndex, std::string line)
+bool UnifiedFile::load_state_transition_matrix(unsigned int stateIndex, std::string line)
 {
 	// Split the line into a list of (hopefully) probabilities equal to the number of states.
 	std::vector<std::string> list = split_string_by_space(line);
@@ -1259,20 +1254,20 @@ bool UnifiedFile::load_state_transition_matrix(int stateIndex, std::string line)
 	// Handle the special cases of "uniform" and "identity".
 	if (list[0].compare("uniform") == 0) {
 		double probability = 1.0 / (double)states->get_num_states();
-		for (int i = 0; i < states->get_num_states(); i++) {
-			for (int j = 0; j < states->get_num_states(); j++) {
+		for (unsigned int i = 0; i < states->get_num_states(); i++) {
+			for (unsigned int j = 0; j < states->get_num_states(); j++) {
 				stateTransitions->set(orderedStates[i], loadingAction, orderedStates[j], probability);
 			}
 		}
 		return false;
 	} else if (list[0].compare("identity") == 0) {
-		for (int i = 0; i < states->get_num_states(); i++) {
+		for (unsigned int i = 0; i < states->get_num_states(); i++) {
 			stateTransitions->set(orderedStates[i], loadingAction, orderedStates[i], 1.0);
 		}
 		return false;
 	}
 
-	if ((int)list.size() != states->get_num_states()) {
+	if (list.size() != states->get_num_states()) {
 		sprintf(error, "Invalid number of probabilities given: '%i != %i' on line %i in file '%s'.",
 				(int)list.size(), states->get_num_states(), rows, filename.c_str());
 		log_message("UnifiedFile::load_state_transition_matrix", error);
@@ -1280,7 +1275,7 @@ bool UnifiedFile::load_state_transition_matrix(int stateIndex, std::string line)
 	}
 
 	// Attempt to convert each string to a probability and set the corresponding transition probability.
-	int counter = 0;
+	unsigned int counter = 0;
 
 	for (std::string probabilityString : list) {
 		double probability = 0.0;
@@ -1324,7 +1319,7 @@ int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 	}
 
 	std::string actionName = split_string_by_space(items[1])[0];
-	const Action *action = nullptr;
+	Action *action = nullptr;
 
 	if (actionName.compare("*") != 0) {
 		try {
@@ -1344,7 +1339,7 @@ int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 	}
 
 	std::string endStateName = split_string_by_space(items[2])[0];
-	const State *endState = nullptr;
+	State *endState = nullptr;
 
 	if (endStateName.compare("*") != 0) {
 		try {
@@ -1365,7 +1360,7 @@ int UnifiedFile::load_observation_transition(std::vector<std::string> items)
 	}
 
 	std::string observationName = split_string_by_space(items[3])[0];
-	const Observation *observation = nullptr;
+	Observation *observation = nullptr;
 
 	if (observationName.compare("*") != 0) {
 		try {
@@ -1410,13 +1405,13 @@ bool UnifiedFile::load_observation_transition_vector(std::string line)
 	// Handle the special case of "uniform".
 	if (list[0].compare("uniform") == 0) {
 		double probability = 1.0 / (double)observations->get_num_observations();
-		for (int i = 0; i < observations->get_num_observations(); i++) {
+		for (unsigned int i = 0; i < observations->get_num_observations(); i++) {
 			observationTransitions->set(loadingAction, loadingState, orderedObservations[i], probability);
 		}
 		return false;
 	}
 
-	if ((int)list.size() != observations->get_num_observations()) {
+	if (list.size() != observations->get_num_observations()) {
 		sprintf(error, "Invalid number of probabilities given: %i != %i on line %i in file '%s'.",
 				(int)list.size(), observations->get_num_observations(), rows, filename.c_str());
 		log_message("UnifiedFile::load_observation_transition_vector", error);
@@ -1424,7 +1419,7 @@ bool UnifiedFile::load_observation_transition_vector(std::string line)
 	}
 
 	// Attempt to convert each string to a probability and set the corresponding transition probability.
-	int counter = 0;
+	unsigned int counter = 0;
 
 	for (std::string probabilityString : list) {
 		double probability = 0.0;
@@ -1453,7 +1448,7 @@ bool UnifiedFile::load_observation_transition_vector(std::string line)
 	return false;
 }
 
-bool UnifiedFile::load_observation_transition_matrix(int stateIndex, std::string line)
+bool UnifiedFile::load_observation_transition_matrix(unsigned int stateIndex, std::string line)
 {
 	// Split the line into a list of (hopefully) probabilities equal to the number of observations.
 	std::vector<std::string> list = split_string_by_space(line);
@@ -1469,15 +1464,15 @@ bool UnifiedFile::load_observation_transition_matrix(int stateIndex, std::string
 	// number of observations and states may not be equal.
 	if (list[0].compare("uniform") == 0) {
 		double probability = 1.0 / (double)observations->get_num_observations();
-		for (int i = 0; i < states->get_num_states(); i++) {
-			for (int j = 0; j < observations->get_num_observations(); j++) {
+		for (unsigned int i = 0; i < states->get_num_states(); i++) {
+			for (unsigned int j = 0; j < observations->get_num_observations(); j++) {
 				observationTransitions->set(loadingAction, orderedStates[i], orderedObservations[j], probability);
 			}
 		}
 		return false;
 	}
 
-	if ((int)list.size() != observations->get_num_observations()) {
+	if (list.size() != observations->get_num_observations()) {
 		sprintf(error, "Invalid number of probabilities given: '%i != %i' on line %i in file '%s'.",
 				(int)list.size(), observations->get_num_observations(), rows, filename.c_str());
 		log_message("UnifiedFile::load_observation_transition_matrix", error);
@@ -1485,7 +1480,7 @@ bool UnifiedFile::load_observation_transition_matrix(int stateIndex, std::string
 	}
 
 	// Attempt to convert each string to a probability and set the corresponding transition probability.
-	int counter = 0;
+	unsigned int counter = 0;
 
 	for (std::string probabilityString : list) {
 		double probability = 0.0;
@@ -1529,7 +1524,7 @@ int UnifiedFile::load_reward(std::vector<std::string> items)
 	}
 
 	std::string actionName = split_string_by_space(items[1])[0];
-	const Action *action = nullptr;
+	Action *action = nullptr;
 
 	if (actionName.compare("*") != 0) {
 		try {
@@ -1549,7 +1544,7 @@ int UnifiedFile::load_reward(std::vector<std::string> items)
 	}
 
 	std::string startStateName = split_string_by_space(items[2])[0];
-	const State *startState = nullptr;
+	State *startState = nullptr;
 
 	if (startStateName.compare("*") != 0) {
 		try {
@@ -1570,7 +1565,7 @@ int UnifiedFile::load_reward(std::vector<std::string> items)
 	}
 
 	std::string endStateName = split_string_by_space(items[3])[0];
-	const State *endState = nullptr;
+	State *endState = nullptr;
 
 	if (endStateName.compare("*") != 0) {
 		try {
@@ -1610,7 +1605,7 @@ bool UnifiedFile::load_reward_vector(std::string line)
 	// Split the line into a list of (hopefully) rewards equal to the number of states.
 	std::vector<std::string> list = split_string_by_space(line);
 
-	if ((int)list.size() != states->get_num_states()) {
+	if (list.size() != states->get_num_states()) {
 		sprintf(error, "Invalid number of rewards given: %i != %i on line %i in file '%s'.",
 				(int)list.size(), states->get_num_states(), rows, filename.c_str());
 		log_message("UnifiedFile::load_reward_vector", error);
@@ -1618,7 +1613,7 @@ bool UnifiedFile::load_reward_vector(std::string line)
 	}
 
 	// Attempt to convert each string to a reward and set the corresponding value accordingly.
-	int counter = 0;
+	unsigned int counter = 0;
 
 	for (std::string rewardString : list) {
 		double reward = 0.0;
@@ -1644,7 +1639,7 @@ bool UnifiedFile::load_reward_vector(std::string line)
 	return false;
 }
 
-bool UnifiedFile::load_reward_matrix(int stateIndex, std::string line)
+bool UnifiedFile::load_reward_matrix(unsigned int stateIndex, std::string line)
 {
 	// Split the line into a list of (hopefully) rewards equal to the number of states.
 	std::vector<std::string> list = split_string_by_space(line);
@@ -1656,7 +1651,7 @@ bool UnifiedFile::load_reward_matrix(int stateIndex, std::string line)
 		return true;
 	}
 
-	if ((int)list.size() != states->get_num_states()) {
+	if (list.size() != states->get_num_states()) {
 		sprintf(error, "Invalid number of rewards given: '%i != %i' on line %i in file '%s'.",
 				(int)list.size(), states->get_num_states(), rows, filename.c_str());
 		log_message("UnifiedFile::load_reward_matrix", error);
@@ -1664,7 +1659,7 @@ bool UnifiedFile::load_reward_matrix(int stateIndex, std::string line)
 	}
 
 	// Attempt to convert each string to a reward and set the corresponding value accordingly.
-	int counter = 0;
+	unsigned int counter = 0;
 
 	for (std::string rewardString : list) {
 		double reward = 0.0;
@@ -1699,18 +1694,18 @@ void UnifiedFile::release()
 	stateTransitions = nullptr;
 	observationTransitions = nullptr;
 	rewards = nullptr;
-	initialState = nullptr;
 	horizon = nullptr;
+	initialState = nullptr;
 }
 
 MDP *UnifiedFile::get_mdp()
 {
 	if (states == nullptr || actions == nullptr || stateTransitions == nullptr || rewards == nullptr ||
-			initialState == nullptr || horizon == nullptr) {
+			horizon == nullptr) { // initialState == nullptr // TODO: Uncomment for SSP loading.
 		throw CoreException();
 	}
 
-	MDP *mdp = new MDP(states, actions, stateTransitions, rewards, initialState, horizon);
+	MDP *mdp = new MDP(states, actions, stateTransitions, rewards, horizon); // initialState, // TODO: Uncomment for SSP loading.
 	release();
 	return mdp;
 }
@@ -1718,13 +1713,13 @@ MDP *UnifiedFile::get_mdp()
 POMDP *UnifiedFile::get_pomdp()
 {
 	if (states == nullptr || actions == nullptr || observations == nullptr || stateTransitions == nullptr ||
-			observationTransitions == nullptr || rewards == nullptr || initialState == nullptr ||
+			observationTransitions == nullptr || rewards == nullptr || // initialState == nullptr || // TODO: Uncomment for SSP loading.
 			horizon == nullptr) {
 		throw CoreException();
 	}
 
 	POMDP *pomdp = new POMDP(states, actions, observations, stateTransitions, observationTransitions,
-			rewards, initialState, horizon);
+			rewards, horizon); // , initialState // TODO: Uncomment for SSP loading.
 	release();
 	return pomdp;
 }
@@ -1733,12 +1728,12 @@ DecPOMDP *UnifiedFile::get_dec_pomdp()
 {
 	if (agents == nullptr || states == nullptr || actions == nullptr || observations == nullptr ||
 			stateTransitions == nullptr || observationTransitions == nullptr || rewards == nullptr ||
-			initialState == nullptr || horizon == nullptr) {
+			horizon == nullptr) { // initialState == nullptr // TODO: Uncomment for SSP loading.
 		throw CoreException();
 	}
 
 	DecPOMDP *decpomdp = new DecPOMDP(agents, states, actions, observations, stateTransitions, observationTransitions,
-			rewards, initialState, horizon);
+			rewards, horizon); // , initialState // TODO: Uncomment for SSP loading.
 	release();
 	return decpomdp;
 }

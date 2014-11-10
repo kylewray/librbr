@@ -55,11 +55,10 @@ public:
 	 * @param	T		The state transitions, which uses the states and actions parameters.
 	 * @param	O		The observation transitions, which uses the states, actions, and observations parameters.
 	 * @param	R		The rewards, which uses the states and actions parameters.
-	 * @param	s		The initial state, which uses the states parameter.
 	 * @param	h		The horizon.
 	 */
 	POMDP(States *S, Actions *A, Observations *Z, StateTransitions *T, ObservationTransitions *O,
-			Rewards *R, Initial *s, Horizon *h);
+			Rewards *R, Horizon *h);
 
 	/**
 	 * A deconstructor for the POMDP class.
@@ -70,13 +69,13 @@ public:
 	 * Get the observations object.
 	 * @return	The observations object.
 	 */
-	const Observations *get_observations() const;
+	Observations *get_observations();
 
 	/**
 	 * Get the observation transitions object.
 	 * @return	The observation transitions object.
 	 */
-	const ObservationTransitions *get_observation_transitions() const;
+	ObservationTransitions *get_observation_transitions();
 
 protected:
 	/**

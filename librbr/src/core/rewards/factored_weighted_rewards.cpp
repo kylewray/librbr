@@ -49,7 +49,7 @@ FactoredWeightedRewards::~FactoredWeightedRewards()
 
 void FactoredWeightedRewards::add_factor(Rewards *newRewardsFactor)
 {
-	const SASORewards *R = dynamic_cast<const SASORewards *>(newRewardsFactor);
+	SASORewards *R = dynamic_cast<SASORewards *>(newRewardsFactor);
 	if (R == nullptr) {
 		throw RewardException();
 	}
@@ -59,7 +59,7 @@ void FactoredWeightedRewards::add_factor(Rewards *newRewardsFactor)
 
 void FactoredWeightedRewards::set(unsigned int factorIndex, Rewards *newRewardsFactor)
 {
-	const SASORewards *R = dynamic_cast<const SASORewards *>(newRewardsFactor);
+	SASORewards *R = dynamic_cast<SASORewards *>(newRewardsFactor);
 	if (R == nullptr) {
 		throw RewardException();
 	}
@@ -67,7 +67,7 @@ void FactoredWeightedRewards::set(unsigned int factorIndex, Rewards *newRewardsF
 	FactoredRewards::set(factorIndex, newRewardsFactor);
 }
 
-void FactoredWeightedRewards::set(const State *state, const Action *action, double reward)
+void FactoredWeightedRewards::set(State *state, Action *action, double reward)
 {
 	for (Rewards *R : rewards) {
 		SARewards *Ri = dynamic_cast<SARewards *>(R);
@@ -75,7 +75,7 @@ void FactoredWeightedRewards::set(const State *state, const Action *action, doub
 	}
 }
 
-void FactoredWeightedRewards::set(const State *state, const Action *action, const State *nextState, double reward)
+void FactoredWeightedRewards::set(State *state, Action *action, State *nextState, double reward)
 {
 	for (Rewards *R : rewards) {
 		SASRewards *Ri = dynamic_cast<SASRewards *>(R);
@@ -83,8 +83,8 @@ void FactoredWeightedRewards::set(const State *state, const Action *action, cons
 	}
 }
 
-void FactoredWeightedRewards::set(const State *state, const Action *action, const State *nextState,
-		const Observation *observation, double reward)
+void FactoredWeightedRewards::set(State *state, Action *action, State *nextState,
+		Observation *observation, double reward)
 {
 	for (Rewards *R : rewards) {
 		SASORewards *Ri = dynamic_cast<SASORewards *>(R);
@@ -92,7 +92,7 @@ void FactoredWeightedRewards::set(const State *state, const Action *action, cons
 	}
 }
 
-double FactoredWeightedRewards::get(const State *state, const Action *action) const
+double FactoredWeightedRewards::get(State *state, Action *action)
 {
 	double weightedAverage = 0.0;
 
@@ -108,7 +108,7 @@ double FactoredWeightedRewards::get(const State *state, const Action *action) co
 	return weightedAverage;
 }
 
-double FactoredWeightedRewards::get(const State *state, const Action *action, const State *nextState) const
+double FactoredWeightedRewards::get(State *state, Action *action, State *nextState)
 {
 	double weightedAverage = 0.0;
 
@@ -124,8 +124,8 @@ double FactoredWeightedRewards::get(const State *state, const Action *action, co
 	return weightedAverage;
 }
 
-double FactoredWeightedRewards::get(const State *state, const Action *action, const State *nextState,
-		const Observation *observation) const
+double FactoredWeightedRewards::get(State *state, Action *action, State *nextState,
+		Observation *observation)
 {
 	double weightedAverage = 0.0;
 

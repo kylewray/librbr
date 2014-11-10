@@ -69,7 +69,7 @@ public:
 	 * 										moving to the nextState.
 	 * @throw	StateTransitionException	Either one of the states or the action was invalid.
 	 */
-	virtual void set(const State *state, const Action *action, const State *nextState, double probability);
+	virtual void set(State *state, Action *action, State *nextState, double probability);
 
 	/**
 	 * The probability of a transition following the state-action-state triple provided.
@@ -79,7 +79,7 @@ public:
 	 * @throw	StateTransitionException	Either one of the states or the action was invalid.
 	 * @return	The probability of going from the state, taking the action, then moving to the nextState.
 	 */
-	virtual double get(const State *state, const Action *action, const State *nextState) const;
+	virtual double get(State *state, Action *action, State *nextState);
 
 	/**
 	 * Return a list of the states available given a previous state and the action taken there.
@@ -89,8 +89,8 @@ public:
 	 * @param	successors					The list to overwrite and set to be the list of successor states.
 	 * @throw	StateTransitionException	Either the states array, state, or action was invalid.
 	 */
-	virtual void successors(const States *S, const State *state, const Action *action,
-			std::vector<const State *> &result) const;
+	virtual void successors(States *S, State *state, Action *action,
+			std::vector<State *> &result);
 
 	/**
 	 * Set the entire 3-dimensional array with the one provided. This only performs a copy.
@@ -103,7 +103,7 @@ public:
 	 * Get the memory location of the 3-dimensional array.
 	 * @return	A pointer to the raw state transitions data.
 	 */
-	virtual const float *get_state_transitions() const;
+	virtual float *get_state_transitions();
 
 	/**
 	 * Get the number of states used for the state transitions array.

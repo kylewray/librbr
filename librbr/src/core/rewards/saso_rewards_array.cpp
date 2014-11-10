@@ -58,13 +58,13 @@ SASORewardsArray::~SASORewardsArray()
 	delete [] rewards;
 }
 
-void SASORewardsArray::set(const State *state, const Action *action, const State *nextState,
-		const Observation *observation, double reward)
+void SASORewardsArray::set(State *state, Action *action, State *nextState,
+		Observation *observation, double reward)
 {
-	const IndexedState *s = dynamic_cast<const IndexedState *>(state);
-	const IndexedAction *a = dynamic_cast<const IndexedAction *>(action);
-	const IndexedState *sp = dynamic_cast<const IndexedState *>(nextState);
-	const IndexedObservation *z = dynamic_cast<const IndexedObservation *>(observation);
+	IndexedState *s = dynamic_cast<IndexedState *>(state);
+	IndexedAction *a = dynamic_cast<IndexedAction *>(action);
+	IndexedState *sp = dynamic_cast<IndexedState *>(nextState);
+	IndexedObservation *z = dynamic_cast<IndexedObservation *>(observation);
 
 	if (s == nullptr || a == nullptr || sp == nullptr || z == nullptr) {
 		throw RewardException();
@@ -88,13 +88,13 @@ void SASORewardsArray::set(const State *state, const Action *action, const State
 	}
 }
 
-double SASORewardsArray::get(const State *state, const Action *action, const State *nextState,
-		const Observation *observation) const
+double SASORewardsArray::get(State *state, Action *action, State *nextState,
+		Observation *observation)
 {
-	const IndexedState *s = dynamic_cast<const IndexedState *>(state);
-	const IndexedAction *a = dynamic_cast<const IndexedAction *>(action);
-	const IndexedState *sp = dynamic_cast<const IndexedState *>(nextState);
-	const IndexedObservation *z = dynamic_cast<const IndexedObservation *>(observation);
+	IndexedState *s = dynamic_cast<IndexedState *>(state);
+	IndexedAction *a = dynamic_cast<IndexedAction *>(action);
+	IndexedState *sp = dynamic_cast<IndexedState *>(nextState);
+	IndexedObservation *z = dynamic_cast<IndexedObservation *>(observation);
 
 	if (s == nullptr || a == nullptr || sp == nullptr || z == nullptr) {
 		throw RewardException();
@@ -113,10 +113,10 @@ double SASORewardsArray::get(const State *state, const Action *action, const Sta
 
 void SASORewardsArray::reset()
 {
-	for (int s = 0; s < states; s++) {
-		for (int a = 0; a < actions; a++) {
-			for (int sp = 0; sp < states; sp++) {
-				for (int z = 0; z < observations; z++) {
+	for (unsigned int s = 0; s < states; s++) {
+		for (unsigned int a = 0; a < actions; a++) {
+			for (unsigned int sp = 0; sp < states; sp++) {
+				for (unsigned int z = 0; z < observations; z++) {
 					rewards[s * actions * states * observations +
 					        a * states * observations +
 					        sp * observations +
@@ -132,10 +132,10 @@ void SASORewardsArray::reset()
 
 void SASORewardsArray::set_rewards(const float *R)
 {
-	for (int s = 0; s < states; s++) {
-		for (int a = 0; a < actions; a++) {
-			for (int sp = 0; sp < states; sp++) {
-				for (int z = 0; z < observations; z++) {
+	for (unsigned int s = 0; s < states; s++) {
+		for (unsigned int a = 0; a < actions; a++) {
+			for (unsigned int sp = 0; sp < states; sp++) {
+				for (unsigned int z = 0; z < observations; z++) {
 					rewards[s * actions * states * observations + a * states * observations + sp * observations + z] =
 							R[s * actions * states * observations + a * states * observations + sp * observations + z];
 
@@ -151,9 +151,9 @@ void SASORewardsArray::set_rewards(const float *R)
 	}
 }
 
-const float *SASORewardsArray::get_rewards() const
+float *SASORewardsArray::get_rewards()
 {
-	return (const float *)rewards;
+	return rewards;
 }
 
 unsigned int SASORewardsArray::get_num_states() const

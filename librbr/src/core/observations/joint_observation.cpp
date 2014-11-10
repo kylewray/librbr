@@ -30,13 +30,13 @@ JointObservation::JointObservation(int numJointObservations)
 	observations.reserve(numJointObservations);
 }
 
-JointObservation::JointObservation(const std::vector<const Observation *> &jointObservation)
+JointObservation::JointObservation(const std::vector<Observation *> &jointObservation)
 {
 	observations.reserve(jointObservation.size());
 	observations = jointObservation;
 }
 
-JointObservation::JointObservation(const JointObservation &other)
+JointObservation::JointObservation(JointObservation &other)
 {
 	*this = other;
 }
@@ -44,17 +44,17 @@ JointObservation::JointObservation(const JointObservation &other)
 JointObservation::~JointObservation()
 { }
 
-void JointObservation::set(const std::vector<const Observation *> &jointObservation)
+void JointObservation::set(const std::vector<Observation *> &jointObservation)
 {
 	observations = jointObservation;
 }
 
-const std::vector<const Observation *> &JointObservation::get() const
+std::vector<Observation *> &JointObservation::get()
 {
 	return observations;
 }
 
-const Observation *JointObservation::get(int index) const
+Observation *JointObservation::get(unsigned int index)
 {
 	if (index < 0 || index >= observations.size()) {
 		throw ObservationException();
@@ -67,9 +67,9 @@ int JointObservation::get_num_observations() const
 	return observations.size();
 }
 
-Observation &JointObservation::operator=(const Observation &other)
+Observation &JointObservation::operator=(Observation &other)
 {
-    const JointObservation *o = static_cast<const JointObservation*>(&other);
+    JointObservation *o = static_cast<JointObservation*>(&other);
 	observations = o->get();
 	return *this;
 }
@@ -77,7 +77,7 @@ Observation &JointObservation::operator=(const Observation &other)
 std::string JointObservation::to_string() const
 {
 	std::string jointObservation = "";
-	for (int i = 0; i < observations.size(); i++) {
+	for (unsigned int i = 0; i < observations.size(); i++) {
 		jointObservation += observations[i]->to_string();
 		if (i != observations.size() - 1) {
 			jointObservation += " ";

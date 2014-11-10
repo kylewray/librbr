@@ -31,7 +31,7 @@ POMDP::POMDP() : MDP()
 }
 
 POMDP::POMDP(States *S, Actions *A, Observations *Z, StateTransitions *T, ObservationTransitions *O,
-		Rewards *R, Initial *s, Horizon *h) : MDP(S, A, T, R, s, h)
+		Rewards *R, Horizon *h) : MDP(S, A, T, R, h)
 {
 	observations = Z;
 	observationTransitions = O;
@@ -47,12 +47,12 @@ POMDP::~POMDP()
 	}
 }
 
-const Observations *POMDP::get_observations() const
+Observations *POMDP::get_observations()
 {
 	return observations;
 }
 
-const ObservationTransitions *POMDP::get_observation_transitions() const
+ObservationTransitions *POMDP::get_observation_transitions()
 {
 	return observationTransitions;
 }

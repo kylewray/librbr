@@ -28,16 +28,16 @@
 #include "../../../include/core/states/named_state.h"
 #include "../../../include/core/states/factored_state.h"
 
-const State *find_state(const StatesMap *S, std::string stateName)
+State *find_state(StatesMap *S, std::string stateName)
 {
 	for (auto stateIterator : *S) {
-		const State *state = resolve(stateIterator);
+		State *state = resolve(stateIterator);
 
 		// Try to cast the state as a NamedState. If it fails, it may still be a factored state.
-	    const NamedState *s = dynamic_cast<const NamedState *>(state);
+	    NamedState *s = dynamic_cast<NamedState *>(state);
 	    if (s == nullptr) {
 	    	// Try to cast it as a FactoredState.
-	    	const FactoredState *fs = dynamic_cast<const FactoredState *>(state);
+	    	FactoredState *fs = dynamic_cast<FactoredState *>(state);
 		    if (fs == nullptr) {
 		    	throw StateException();
 		    }
@@ -45,7 +45,7 @@ const State *find_state(const StatesMap *S, std::string stateName)
 		    // Construct the factored state name from the component names, separated by spaces.
 		    std::string fsName = "";
 	    	for (int i = 0; i < fs->get_num_states(); i++) {
-	    		s = dynamic_cast<const NamedState *>(fs->get(i));
+	    		s = dynamic_cast<NamedState *>(fs->get(i));
 	    		if (s == nullptr) {
 	    			throw StateException();
 	    		}

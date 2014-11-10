@@ -60,7 +60,7 @@ public:
 	 * @param	observation		The next observation to which we assign a probability.
 	 * @param	probability		The probability of the observation given we took the action and landed in the state given.
 	 */
-	virtual void set(const Action *previousAction, const State *state, const Observation *observation, double probability) = 0;
+	virtual void set(Action *previousAction, State *state, Observation *observation, double probability) = 0;
 
 	/**
 	 * The probability of a transition following the observation-action-state triple provided.
@@ -69,7 +69,7 @@ public:
 	 * @param	observation			The next observation to which we assign a probability.
 	 * @return	The probability of the observation given we took the action and landed in the state given.
 	 */
-	virtual double get(const Action *previousAction, const State *state, const Observation *observation) const = 0;
+	virtual double get(Action *previousAction, State *state, Observation *observation) = 0;
 
 	/**
 	 * Return a list of the observations available given a previous state and the action taken there.
@@ -78,8 +78,8 @@ public:
 	 * @param	state				The current state.
 	 * @param	result				The list to overwrite and set to be the list of successor states.
 	 */
-	virtual void available(const Observations *Z, const Action *previousAction, const State *state,
-			std::vector<const Observation *> &result) const = 0;
+	virtual void available(Observations *Z, Action *previousAction, State *state,
+			std::vector<Observation *> &result) = 0;
 
 };
 

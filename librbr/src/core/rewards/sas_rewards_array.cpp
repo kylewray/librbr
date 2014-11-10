@@ -52,11 +52,11 @@ SASRewardsArray::~SASRewardsArray()
 	delete [] rewards;
 }
 
-void SASRewardsArray::set(const State *state, const Action *action, const State *nextState, double reward)
+void SASRewardsArray::set(State *state, Action *action, State *nextState, double reward)
 {
-	const IndexedState *s = dynamic_cast<const IndexedState *>(state);
-	const IndexedAction *a = dynamic_cast<const IndexedAction *>(action);
-	const IndexedState *sp = dynamic_cast<const IndexedState *>(nextState);
+	IndexedState *s = dynamic_cast<IndexedState *>(state);
+	IndexedAction *a = dynamic_cast<IndexedAction *>(action);
+	IndexedState *sp = dynamic_cast<IndexedState *>(nextState);
 
 	if (s == nullptr || a == nullptr || sp == nullptr) {
 		throw RewardException();
@@ -79,17 +79,17 @@ void SASRewardsArray::set(const State *state, const Action *action, const State 
 	}
 }
 
-void SASRewardsArray::set(const State *state, const Action *action, const State *nextState,
-		const Observation *observation, double reward)
+void SASRewardsArray::set(State *state, Action *action, State *nextState,
+		Observation *observation, double reward)
 {
 	set(state, action, nextState, reward);
 }
 
-double SASRewardsArray::get(const State *state, const Action *action, const State *nextState) const
+double SASRewardsArray::get(State *state, Action *action, State *nextState)
 {
-	const IndexedState *s = dynamic_cast<const IndexedState *>(state);
-	const IndexedAction *a = dynamic_cast<const IndexedAction *>(action);
-	const IndexedState *sp = dynamic_cast<const IndexedState *>(nextState);
+	IndexedState *s = dynamic_cast<IndexedState *>(state);
+	IndexedAction *a = dynamic_cast<IndexedAction *>(action);
+	IndexedState *sp = dynamic_cast<IndexedState *>(nextState);
 
 	if (s == nullptr || a == nullptr || sp == nullptr) {
 		throw RewardException();
@@ -105,17 +105,17 @@ double SASRewardsArray::get(const State *state, const Action *action, const Stat
 	               sp->get_index()];
 }
 
-double SASRewardsArray::get(const State *state, const Action *action, const State *nextState,
-		const Observation *observation) const
+double SASRewardsArray::get(State *state, Action *action, State *nextState,
+		Observation *observation)
 {
 	return get(state, action, nextState);
 }
 
 void SASRewardsArray::reset()
 {
-	for (int s = 0; s < states; s++) {
-		for (int a = 0; a < actions; a++) {
-			for (int sp = 0; sp < states; sp++) {
+	for (unsigned int s = 0; s < states; s++) {
+		for (unsigned int a = 0; a < actions; a++) {
+			for (unsigned int sp = 0; sp < states; sp++) {
 				rewards[s * actions * states + a * states + sp] = 0.0f;
 			}
 		}
@@ -127,9 +127,9 @@ void SASRewardsArray::reset()
 
 void SASRewardsArray::set_rewards(const float *R)
 {
-	for (int s = 0; s < states; s++) {
-		for (int a = 0; a < actions; a++) {
-			for (int sp = 0; sp < states; sp++) {
+	for (unsigned int s = 0; s < states; s++) {
+		for (unsigned int a = 0; a < actions; a++) {
+			for (unsigned int sp = 0; sp < states; sp++) {
 				rewards[s * actions * states + a * states + sp] =
 						R[s * actions * states + a * states + sp];
 
@@ -144,9 +144,9 @@ void SASRewardsArray::set_rewards(const float *R)
 	}
 }
 
-const float *SASRewardsArray::get_rewards() const
+float *SASRewardsArray::get_rewards()
 {
-	return (const float *)rewards;
+	return rewards;
 }
 
 unsigned int SASRewardsArray::get_num_states() const

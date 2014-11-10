@@ -65,7 +65,7 @@ public:
 	 * @param	probability		The probability of going from the state, taking the action, then
 	 * 							moving to the nextState.
 	 */
-	virtual void set(const State *state, const Action *action, const State *nextState, double probability);
+	virtual void set(State *state, Action *action, State *nextState, double probability);
 
 	/**
 	 * The probability of a transition following the state-action-state triple provided.
@@ -74,7 +74,7 @@ public:
 	 * @param	nextState	The next state with which we assign the probability.
 	 * @return	The probability of going from the state, taking the action, then moving to the nextState.
 	 */
-	virtual double get(const State *state, const Action *action, const State *nextState) const;
+	virtual double get(State *state, Action *action, State *nextState);
 
 	/**
 	 * Return a list of the states available given a previous state and the action taken there.
@@ -83,7 +83,7 @@ public:
 	 * @param	action			The action taken at the previous state.
 	 * @param	successors		The list to overwrite and set to be the list of successor states.
 	 */
-	virtual void successors(const States *S, const State *state, const Action *action, std::vector<const State *> &result) const;
+	virtual void successors(States *S, State *state, Action *action, std::vector<State *> &result);
 
 	/**
 	 * Reset the state transitions, clearing the internal mapping.
@@ -100,14 +100,14 @@ private:
 	 * @throw	StateTransitionException	The state transition was not defined.
 	 * @return	The probability of going from the state, taking the action, then moving to the nextState.
 	 */
-	virtual double get_value(const State *state, const Action *action, const State *nextState) const;
+	virtual double get_value(State *state, Action *action, State *nextState);
 
 	/**
 	 * The list of all state-action-state transitions.
 	 */
-	std::unordered_map<const State *,
-		std::unordered_map<const Action *,
-		std::unordered_map<const State *, double> > > stateTransitions;
+	std::unordered_map<State *,
+		std::unordered_map<Action *,
+		std::unordered_map<State *, double> > > stateTransitions;
 
 	/**
 	 * A special state (implicitly constant) referring to a state wildcard.

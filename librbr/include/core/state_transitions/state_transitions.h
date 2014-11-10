@@ -61,7 +61,7 @@ public:
 	 * 										moving to the nextState.
 	 * @throw	StateTransitionException	An error occurred. Please see child class definitions for specifics.
 	 */
-	virtual void set(const State *state, const Action *action, const State *nextState, double probability) = 0;
+	virtual void set(State *state, Action *action, State *nextState, double probability) = 0;
 
 	/**
 	 * The probability of a transition following the state-action-state triple provided.
@@ -71,7 +71,7 @@ public:
 	 * @throw	StateTransitionException	An error occurred. Please see child class definitions for specifics.
 	 * @return	The probability of going from the state, taking the action, then moving to the nextState.
 	 */
-	virtual double get(const State *state, const Action *action, const State *nextState) const = 0;
+	virtual double get(State *state, Action *action, State *nextState) = 0;
 
 	/**
 	 * Return a list of the states available given a previous state and the action taken there.
@@ -81,8 +81,8 @@ public:
 	 * @param	successors					The list to overwrite and set to be the list of successor states.
 	 * @throw	StateTransitionException	An error occurred. Please see child class definitions for specifics.
 	 */
-	virtual void successors(const States *S, const State *state, const Action *action,
-			std::vector<const State *> &result) const = 0;
+	virtual void successors(States *S, State *state, Action *action,
+			std::vector<State *> &result) = 0;
 
 };
 

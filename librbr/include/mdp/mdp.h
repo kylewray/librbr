@@ -49,10 +49,9 @@ public:
 	 * @param	A		The actions.
 	 * @param	T		The state transitions, which uses the states and actions parameters.
 	 * @param	R		The rewards, which uses the states and actions parameters.
-	 * @param	s		The initial state, which uses the states parameter.
 	 * @param	h		The horizon.
 	 */
-	MDP(States *S, Actions *A, StateTransitions *T, Rewards *R, Initial *s, Horizon *h);
+	MDP(States *S, Actions *A, StateTransitions *T, Rewards *R, Horizon *h);
 
 	/**
 	 * A deconstructor for the MDP class.
@@ -63,37 +62,31 @@ public:
 	 * Get the states object.
 	 * @return	The states object.
 	 */
-	const States *get_states() const;
+	States *get_states();
 
 	/**
 	 * Get the actions object.
 	 * @return	The actions object.
 	 */
-	const Actions *get_actions() const;
+	Actions *get_actions();
 
 	/**
 	 * Get the state transitions object.
 	 * @return	The state transitions object.
 	 */
-	const StateTransitions *get_state_transitions() const;
+	StateTransitions *get_state_transitions();
 
 	/**
 	 * Get the rewards object.
 	 * @return	The rewards object.
 	 */
-	const Rewards *get_rewards() const;
-
-	/**
-	 * Get the initial state object.
-	 * @return	The initial state object.
-	 */
-	const Initial *get_initial_state() const;
+	Rewards *get_rewards();
 
 	/**
 	 * Get the horizon object.
 	 * @return	The horizon object.
 	 */
-	const Horizon *get_horizon() const;
+	Horizon *get_horizon();
 
 protected:
 	/**
@@ -115,11 +108,6 @@ protected:
 	 * The reward function in the MDP; e.g., a two-dimensional array mapping to a double.
 	 */
 	Rewards *rewards;
-
-	/**
-	 * The initial state or initial belief state; e.g., factored initial state.
-	 */
-	Initial *initialState;
 
 	/**
 	 * The horizon, either a finite time or a discount factor.

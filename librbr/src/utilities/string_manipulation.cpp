@@ -29,15 +29,15 @@
 void trim_whitespace(std::string &item)
 {
 	// Trim from the left side.
-	int left = 0;
-	for (left = 0; left < item.length(); left++) {
+	unsigned int left = 0;
+	for (left = 0; left < (unsigned int)item.length(); left++) {
 		if (item[left] != ' ') {
 			break;
 		}
 	}
 
 	// Trim from the right side.
-	int right = item.length();
+	unsigned int right = item.length();
 	for (right = item.length(); right > 0; right--) {
 		if (item[right - 1] != ' ') {
 			break;

@@ -30,13 +30,13 @@ FactoredState::FactoredState(int numFactoredStates)
 	states.reserve(numFactoredStates);
 }
 
-FactoredState::FactoredState(const std::vector<const State *> &factoredState)
+FactoredState::FactoredState(const std::vector<State *> &factoredState)
 {
 	states.reserve(factoredState.size());
 	states = factoredState;
 }
 
-FactoredState::FactoredState(const FactoredState &other)
+FactoredState::FactoredState(FactoredState &other)
 {
 	*this = other;
 }
@@ -44,17 +44,17 @@ FactoredState::FactoredState(const FactoredState &other)
 FactoredState::~FactoredState()
 { }
 
-void FactoredState::set(const std::vector<const State *> &factoredState)
+void FactoredState::set(const std::vector<State *> &factoredState)
 {
 	states = factoredState;
 }
 
-const std::vector<const State *> &FactoredState::get() const
+std::vector<State *> &FactoredState::get()
 {
 	return states;
 }
 
-const State *FactoredState::get(int index) const
+State *FactoredState::get(unsigned int index)
 {
 	if (index < 0 || index >= states.size()) {
 		throw StateException();
@@ -67,9 +67,9 @@ int FactoredState::get_num_states() const
 	return states.size();
 }
 
-State &FactoredState::operator=(const State &other)
+State &FactoredState::operator=(State &other)
 {
-    const FactoredState *s = dynamic_cast<const FactoredState *> (&other);
+    FactoredState *s = dynamic_cast<FactoredState *> (&other);
     if (s == nullptr) {
     	throw StateException();
     }
@@ -80,7 +80,7 @@ State &FactoredState::operator=(const State &other)
 std::string FactoredState::to_string() const
 {
 	std::string jointState = "";
-	for (int i = 0; i < states.size(); i++) {
+	for (unsigned int i = 0; i < states.size(); i++) {
 		jointState += states[i]->to_string();
 		if (i != states.size() - 1) {
 			jointState += " ";
@@ -92,7 +92,7 @@ std::string FactoredState::to_string() const
 unsigned int FactoredState::hash_value() const
 {
 	unsigned int hash = 7;
-	for (const State *state : states) {
+	for (State *state : states) {
 		hash = 31 * hash + state->hash_value();
 	}
 	return hash;

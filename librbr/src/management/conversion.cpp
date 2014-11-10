@@ -52,7 +52,7 @@
 
 //#include <iostream>   // ToDo: REMOVE ME!
 
-MDP *convert_map_to_array(const MDP *mdp)
+MDP *convert_map_to_array(MDP *mdp)
 {
 	if (mdp == nullptr) {
 		throw CoreException();
@@ -60,53 +60,46 @@ MDP *convert_map_to_array(const MDP *mdp)
 
 	// Check the validity of the MDP's components by attempting to cast the
 	// states, actions, state transitions, rewards, and initial state.
-	const StatesMap *states = dynamic_cast<const StatesMap *>(mdp->get_states());
-	const ActionsMap *actions = dynamic_cast<const ActionsMap *>(mdp->get_actions());
+	StatesMap *states = dynamic_cast<StatesMap *>(mdp->get_states());
+	ActionsMap *actions = dynamic_cast<ActionsMap *>(mdp->get_actions());
 
-	const StateTransitionsMap *stateTransitions =
-			dynamic_cast<const StateTransitionsMap *>(mdp->get_state_transitions());
-	const SASRewardsMap *rewards = dynamic_cast<const SASRewardsMap *>(mdp->get_rewards());
+	StateTransitionsMap *stateTransitions =
+			dynamic_cast<StateTransitionsMap *>(mdp->get_state_transitions());
+	SASRewardsMap *rewards = dynamic_cast<SASRewardsMap *>(mdp->get_rewards());
 
-	const Initial *initial = dynamic_cast<const Initial *>(mdp->get_initial_state());
-	const Horizon *horizon = dynamic_cast<const Horizon *>(mdp->get_horizon());
+	Horizon *horizon = dynamic_cast<Horizon *>(mdp->get_horizon());
 
 	if (states == nullptr || actions == nullptr || stateTransitions == nullptr ||
-			rewards == nullptr || initial == nullptr) {
+			rewards == nullptr) {
 		throw CoreException();
 	}
 
-	return convert_map_to_array(states, actions, stateTransitions, rewards, initial, horizon);
+	return convert_map_to_array(states, actions, stateTransitions, rewards, horizon);
 }
 
-MDP *convert_map_to_array(const StatesMap *states, const ActionsMap *actions,
-		const StateTransitions *stateTransitions, const SASRewards *rewards,
-		const Initial *initial, const Horizon *horizon)
+MDP *convert_map_to_array(StatesMap *states, ActionsMap *actions,
+		StateTransitions *stateTransitions, SASRewards *rewards,
+		Horizon *horizon)
 {
 	// Next, create the states object. As part of this, we must create a mapping from the
 	// indexed states to the original states. Also create the initial state in the process.
 	StatesMap *S = new StatesMap();
-	std::unordered_map<unsigned int, const State *> convertStates;
-
-	Initial *s0 = nullptr;
+	std::unordered_map<unsigned int, State *> convertStates;
 
 	IndexedState::reset_indexer();
 	for (auto state : *states) {
-		const State *indexedState = new IndexedState();
+		State *indexedState = new IndexedState();
 		S->add(indexedState);
 		convertStates[indexedState->hash_value()] = resolve(state);
-
-		if (initial->get_initial_state() == resolve(state)) {
-			s0 = new Initial(indexedState);
-		}
 	}
 
 	// Create the actions object in a similar manner, with its own mapping.
 	ActionsMap *A = new ActionsMap();
-	std::unordered_map<unsigned int, const Action *> convertActions;
+	std::unordered_map<unsigned int, Action *> convertActions;
 
 	IndexedAction::reset_indexer();
 	for (auto action : *actions) {
-		const Action *indexedAction = new IndexedAction();
+		Action *indexedAction = new IndexedAction();
 		A->add(indexedAction);
 		convertActions[indexedAction->hash_value()] = resolve(action);
 	}
@@ -116,16 +109,16 @@ MDP *convert_map_to_array(const StatesMap *states, const ActionsMap *actions,
 	SASRewardsArray *R = new SASRewardsArray(S->get_num_states(), A->get_num_actions());
 
 	for (auto state : *S) {
-		const State *s = resolve(state);
-		const State *sOriginal = convertStates[s->hash_value()];
+		State *s = resolve(state);
+		State *sOriginal = convertStates[s->hash_value()];
 
 		for (auto action : *A) {
-			const Action *a = resolve(action);
-			const Action *aOriginal = convertActions[a->hash_value()];
+			Action *a = resolve(action);
+			Action *aOriginal = convertActions[a->hash_value()];
 
 			for (auto nextState : *S) {
-				const State *sp = resolve(nextState);
-				const State *spOriginal = convertStates[sp->hash_value()];
+				State *sp = resolve(nextState);
+				State *spOriginal = convertStates[sp->hash_value()];
 
 //				std::cout << "(" << sOriginal->to_string() << ", " << aOriginal->to_string() << ", " << spOriginal->to_string() << ")\n";
 //				std::cout.flush();
@@ -144,7 +137,7 @@ MDP *convert_map_to_array(const StatesMap *states, const ActionsMap *actions,
 		h = new Horizon(horizon->get_discount_factor());
 	}
 
-	return new MDP(S, A, T, R, s0, h);
+	return new MDP(S, A, T, R, h);
 }
 
 POMDP *convert_map_to_array(const POMDP *pomdp)

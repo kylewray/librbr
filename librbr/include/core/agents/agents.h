@@ -52,21 +52,21 @@ public:
 	 * Add an agent to the set of available agents.
 	 * @param	newAgent	The new agent to include in the set of available agents.
 	 */
-	void add(const Agent *newAgent);
+	void add(Agent *newAgent);
 
 	/**
 	 * Remove an agent to the set of available agents. This frees the memory.
 	 * @param	removeAgent 		The agent to remove from the set of available agents.
 	 * @throw	AgentException		The agent was not found in the agents list.
 	 */
-	void remove(const Agent *removeAgent);
+	void remove(Agent *removeAgent);
 
 	/**
 	 * Set the internal actions list given another list, performing a deep copy. This resets
 	 * the current list of states and frees the memory.
 	 * @param	newActions		The vector of new actions to use.
 	 */
-	void set(const std::vector<const Agent *> &newAgents);
+	void set(const std::vector<Agent *> &newAgents);
 
 	/**
 	 * Get an agent at a particular index. The index is determined by the order in which
@@ -75,7 +75,7 @@ public:
 	 * @throw	AgentException The index was invalid.
 	 * @return	The agent at the corresponding index.
 	 */
-	const Agent *get(int agentIndex) const;
+	Agent *get(unsigned int agentIndex);
 
 	/**
 	 * Return the number of agents.
@@ -89,7 +89,7 @@ public:
 	 * @throw	AgentException		The name was invalid.
 	 * @return	The agent with the corresponding name provided.
 	 */
-	virtual const Agent *find(std::string agentName) const;
+	virtual Agent *find(std::string agentName);
 
 	/**
 	 * Reset the agents, clearing the internal list and freeing the memory.
@@ -100,19 +100,19 @@ public:
 	 * To facilitate easy iteration, return a constant beginning of the agents vector.
 	 * @return	The iterator which points to a constant beginning of the agents vector.
 	 */
-	std::vector<const Agent *>::const_iterator begin() const;
+	std::vector<Agent *>::iterator begin();
 
 	/**
 	 * To facilitate easy iteration, return a constant end of the agents vector.
 	 * @return	The iterator which points to a constant end of the agents vector.
 	 */
-	std::vector<const Agent *>::const_iterator end() const;
+	std::vector<Agent *>::iterator end();
 
 protected:
 	/**
 	 * The list of all agents.
 	 */
-	std::vector<const Agent *> agents;
+	std::vector<Agent *> agents;
 
 };
 

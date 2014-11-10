@@ -51,7 +51,7 @@ PolicyMap::PolicyMap(unsigned int horizon)
 	}
 }
 
-PolicyMap::PolicyMap(const Horizon *horizon)
+PolicyMap::PolicyMap(Horizon *horizon)
 {
 	if (horizon->get_horizon() > 0) {
 		policy.resize(horizon->get_horizon());
@@ -63,12 +63,12 @@ PolicyMap::PolicyMap(const Horizon *horizon)
 PolicyMap::~PolicyMap()
 { }
 
-void PolicyMap::set(const State *state, const Action *action)
+void PolicyMap::set(State *state, Action *action)
 {
 	set(0, state, action);
 }
 
-void PolicyMap::set(unsigned int horizon, const State *state, const Action *action)
+void PolicyMap::set(unsigned int horizon, State *state, Action *action)
 {
 	if (horizon >= policy.size()) {
 		throw PolicyException();
@@ -77,18 +77,18 @@ void PolicyMap::set(unsigned int horizon, const State *state, const Action *acti
 	policy[horizon][state] = action;
 }
 
-const Action *PolicyMap::get(const State *state) const
+Action *PolicyMap::get(State *state)
 {
 	return get(0, state);
 }
 
-const Action *PolicyMap::get(unsigned int horizon, const State *state) const
+Action *PolicyMap::get(unsigned int horizon, State *state)
 {
 	if (horizon >= policy.size()) {
 		throw PolicyException();
 	}
 
-	std::map<const State *, const Action *>::const_iterator result = policy[horizon].find(state);
+	std::map<State *, Action *>::const_iterator result = policy[horizon].find(state);
 	if (result == policy[horizon].end()) {
 		throw PolicyException();
 	}
@@ -96,7 +96,7 @@ const Action *PolicyMap::get(unsigned int horizon, const State *state) const
 	return result->second;
 }
 
-bool PolicyMap::load(std::string filename, const StatesMap *states, const ActionsMap *actions, const Horizon *horizon)
+bool PolicyMap::load(std::string filename, StatesMap *states, ActionsMap *actions, Horizon *horizon)
 {
 	reset();
 
@@ -113,10 +113,10 @@ bool PolicyMap::load(std::string filename, const StatesMap *states, const Action
 	int rows = 1;
 	std::string line;
 
-	int h = 1;
+	unsigned int h = 1;
 
-	const State *state = nullptr;
-	const Action *action = nullptr;
+	State *state = nullptr;
+	Action *action = nullptr;
 
 	// Before starting, reserve the space for the horizon given.
 	policy.resize(horizon->get_horizon());
@@ -193,7 +193,7 @@ bool PolicyMap::load(std::string filename, const StatesMap *states, const Action
 	return false;
 }
 
-bool PolicyMap::save(std::string filename) const
+bool PolicyMap::save(std::string filename)
 {
 	std::ofstream file(filename);
 	if (!file.is_open()) {
@@ -205,10 +205,10 @@ bool PolicyMap::save(std::string filename) const
 	if (policy.size() > 1) {
 		int h = 1;
 
-		for (std::map<const State *, const Action *> p : policy) {
+		for (std::map<State *, Action *> p : policy) {
 			file << "horizon: " << h << std::endl;
 
-			for (std::map<const State *, const Action *>::value_type iter : p) {
+			for (std::map<State *, Action *>::value_type iter : p) {
 				file << iter.first->to_string() << ": " << iter.second->to_string() << std::endl;
 			}
 
@@ -216,7 +216,7 @@ bool PolicyMap::save(std::string filename) const
 			h++;
 		}
 	} else if (policy.size() == 1) {
-		for (std::map<const State *, const Action *>::value_type iter : policy[0]) {
+		for (std::map<State *, Action *>::value_type iter : policy[0]) {
 			file << iter.first->to_string() << ": " << iter.second->to_string() << std::endl;
 		}
 	} else {

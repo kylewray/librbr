@@ -72,7 +72,7 @@ public:
 	 * 											in the state given.
 	 * @throw	ObservationTransitionException	Either the state, action, or observation was invalid.
 	 */
-	virtual void set(const Action *previousAction, const State *state, const Observation *observation, double probability);
+	virtual void set(Action *previousAction, State *state, Observation *observation, double probability);
 
 	/**
 	 * The probability of a transition following the observation-action-state triple provided.
@@ -82,7 +82,7 @@ public:
 	 * @throw	ObservationTransitionException	Either the state, action, or observation was invalid.
 	 * @return	The probability of the observation given we took the action and landed in the state given.
 	 */
-	virtual double get(const Action *previousAction, const State *state, const Observation *observation) const;
+	virtual double get(Action *previousAction, State *state, Observation *observation);
 
 	/**
 	 * Return a list of the observations available given a previous state and the action taken there.
@@ -92,8 +92,8 @@ public:
 	 * @param	result							The list to overwrite and set to be the list of successor states.
 	 * @throw	ObservationTransitionException	Either the state, action, or observation was invalid.
 	 */
-	virtual void available(const Observations *Z, const Action *previousAction, const State *state,
-			std::vector<const Observation *> &result) const;
+	virtual void available(Observations *Z, Action *previousAction, State *state,
+			std::vector<Observation *> &result);
 
 	/**
 	 * Set the entire 3-dimensional array with the one provided. This only performs a copy.
@@ -106,7 +106,7 @@ public:
 	 * Get the memory location of the 3-dimensional array.
 	 * @return	A pointer to the raw observation transitions data.
 	 */
-	virtual const float *get_observation_transitions() const;
+	virtual float *get_observation_transitions();
 
 	/**
 	 * Get the number of states used for the observation transitions array.
