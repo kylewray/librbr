@@ -156,7 +156,7 @@ PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(StatesMap *S, Acti
 	std::map<Action *, std::vector<PolicyAlphaVector *> > gammaAStar;
 	for (auto a : *A) {
 		Action *action = resolve(a);
-		gammaAStar[action].push_back(create_gamma_a_star(S, A, Z, T, O, R, action));
+		gammaAStar[action].push_back(create_gamma_a_star(S, Z, T, O, R, action));
 	}
 
 	// Create the set of alpha vectors, which we call Gamma. As well as the previous Gamma set.
@@ -168,7 +168,7 @@ PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(StatesMap *S, Acti
 		// Compute the new set of alpha vectors, gamma.
 		for (auto a : *A) {
 			Action *action = resolve(a);
-			std::vector<PolicyAlphaVector *> alphaVector = bellman_update_cross_sum(S, A, Z, T, O, R, h,
+			std::vector<PolicyAlphaVector *> alphaVector = bellman_update_cross_sum(S, Z, T, O, R, h,
 					gammaAStar[action], gamma[!current], action);
 			gamma[current].insert(gamma[current].end(), alphaVector.begin(), alphaVector.end());
 		}
@@ -210,7 +210,7 @@ PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(StatesMap *S, Ac
 	std::map<Action *, std::vector<PolicyAlphaVector *> > gammaAStar;
 	for (auto a : *A) {
 		Action *action = resolve(a);
-		gammaAStar[action].push_back(create_gamma_a_star(S, A, Z, T, O, R, action));
+		gammaAStar[action].push_back(create_gamma_a_star(S, Z, T, O, R, action));
 	}
 
 	// Create the set of alpha vectors, which we call Gamma. As well as the previous Gamma set.
@@ -222,7 +222,7 @@ PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(StatesMap *S, Ac
 		// Compute the new set of alpha vectors, gamma.
 		for (auto a : *A) {
 			Action *action = resolve(a);
-			std::vector<PolicyAlphaVector *> alphaVector = bellman_update_cross_sum(S, A, Z, T, O, R, h,
+			std::vector<PolicyAlphaVector *> alphaVector = bellman_update_cross_sum(S, Z, T, O, R, h,
 					gammaAStar[action], gamma[!current], action);
 			gamma[current].insert(gamma[current].end(), alphaVector.begin(), alphaVector.end());
 		}

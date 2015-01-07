@@ -25,7 +25,7 @@
 #include "../../include/pomdp/pomdp_utilities.h"
 
 PolicyAlphaVector *create_gamma_a_star(StatesMap *S, ActionsMap *A,
-		ObservationsMap *Z, StateTransitionsMap *T, ObservationTransitionsMap *O,
+		ObservationsMap *Z, StateTransitions *T, ObservationTransitions *O,
 		SASORewards *R, Action *action)
 {
 	PolicyAlphaVector *alpha = new PolicyAlphaVector(action);
@@ -51,8 +51,8 @@ PolicyAlphaVector *create_gamma_a_star(StatesMap *S, ActionsMap *A,
 	return alpha;
 }
 
-BeliefState *belief_state_update(StatesMap *S, StateTransitionsMap *T,
-		ObservationTransitionsMap *O, BeliefState *belief, Action *action,
+BeliefState *belief_state_update(StatesMap *S, StateTransitions *T,
+		ObservationTransitions *O, BeliefState *belief, Action *action,
 		Observation *observation) {
 	BeliefState *nextBelief = new BeliefState();
 
@@ -81,8 +81,8 @@ BeliefState *belief_state_update(StatesMap *S, StateTransitionsMap *T,
 	return nextBelief;
 }
 
-std::vector<PolicyAlphaVector *> bellman_update_cross_sum(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-		StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+std::vector<PolicyAlphaVector *> bellman_update_cross_sum(StatesMap *S, ObservationsMap *Z,
+		StateTransitions *T, ObservationTransitions *O, SASORewards *R,
 		Horizon *h, std::vector<PolicyAlphaVector *> &gammaAStar, std::vector<PolicyAlphaVector *> &gamma,
 		Action *action)
 {
@@ -150,8 +150,8 @@ std::vector<PolicyAlphaVector *> bellman_update_cross_sum(StatesMap *S, ActionsM
 	return gammaA;
 }
 
-PolicyAlphaVector *bellman_update_belief_state(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-		StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+PolicyAlphaVector *bellman_update_belief_state(StatesMap *S, ObservationsMap *Z,
+		StateTransitions *T, ObservationTransitions *O, SASORewards *R,
 		Horizon *h, std::vector<PolicyAlphaVector *> &gammaAStar, std::vector<PolicyAlphaVector *> &gamma,
 		Action *action, BeliefState *b)
 {

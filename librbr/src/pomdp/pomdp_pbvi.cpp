@@ -172,16 +172,14 @@ PolicyAlphaVectors *POMDPPBVI::solve(POMDP *pomdp)
 		throw ObservationException();
 	}
 
-	// Attempt to convert the state transitions object into FiniteStateTransitions.
-	StateTransitionsMap *T =
-			dynamic_cast<StateTransitionsMap *>(pomdp->get_state_transitions());
+	// Attempt to get the state transitions.
+	StateTransitions *T = pomdp->get_state_transitions();
 	if (T == nullptr) {
 		throw StateTransitionException();
 	}
 
-	// Attempt to convert the observation transitions object into FiniteObservationTransitions.
-	ObservationTransitionsMap *O =
-			dynamic_cast<ObservationTransitionsMap *>(pomdp->get_observation_transitions());
+	// Attempt to get the observations transitions.
+	ObservationTransitions *O = pomdp->get_observation_transitions();
 	if (O == nullptr) {
 		throw ObservationTransitionException();
 	}
@@ -218,8 +216,7 @@ void POMDPPBVI::reset() {
 }
 
 PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-		StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
-		Horizon *h)
+		StateTransitions *T, ObservationTransitions *O, SASORewards *R, Horizon *h)
 {
 	// Create the policy of alpha vectors variable. Set the horizon, to make the object's policy differ over time.
 	PolicyAlphaVectors *policy = new PolicyAlphaVectors(h->get_horizon());
@@ -228,7 +225,7 @@ PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(StatesMap *S, ActionsMap *A,
 	std::map<Action *, std::vector<PolicyAlphaVector *> > gammaAStar;
 	for (auto a : *A) {
 		Action *action = resolve(a);
-		gammaAStar[action].push_back(create_gamma_a_star(S, A, Z, T, O, R, action));
+		gammaAStar[action].push_back(create_gamma_a_star(S, Z, T, O, R, action));
 	}
 
 	// Initialize the set of belief points to be the initial set. This must be a copy, since memory is managed
@@ -263,7 +260,7 @@ PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(StatesMap *S, ActionsMap *A,
 				for (auto a : *A) {
 					Action *action = resolve(a);
 
-					PolicyAlphaVector *alphaBA = bellman_update_belief_state(S, A, Z, T, O, R, h,
+					PolicyAlphaVector *alphaBA = bellman_update_belief_state(S, Z, T, O, R, h,
 							gammaAStar[action], gamma[!current], action, belief);
 
 					double alphaDotBeta = alphaBA->compute_value(belief);
@@ -339,8 +336,7 @@ PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(StatesMap *S, ActionsMap *A,
 }
 
 PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-		StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
-		Horizon *h)
+		StateTransitions *T, ObservationTransitions *O, SASORewards *R, Horizon *h)
 {
 	// Create the policy of alpha vectors variable. Set the horizon, to make the object's policy differ over time.
 	PolicyAlphaVectors *policy = new PolicyAlphaVectors(h->get_horizon());
@@ -349,7 +345,7 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(StatesMap *S, ActionsMap *
 	std::map<Action *, std::vector<PolicyAlphaVector *> > gammaAStar;
 	for (auto a : *A) {
 		Action *action = resolve(a);
-		gammaAStar[action].push_back(create_gamma_a_star(S, A, Z, T, O, R, action));
+		gammaAStar[action].push_back(create_gamma_a_star(S, Z, T, O, R, action));
 	}
 
 	// Initialize the set of belief points to be the initial set. This must be a copy, since memory is managed
@@ -384,7 +380,7 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(StatesMap *S, ActionsMap *
 				for (auto a : *A) {
 					Action *action = resolve(a);
 
-					PolicyAlphaVector *alphaBA = bellman_update_belief_state(S, A, Z, T, O, R, h,
+					PolicyAlphaVector *alphaBA = bellman_update_belief_state(S, Z, T, O, R, h,
 							gammaAStar[action], gamma[!current], action, belief);
 
 					double alphaDotBeta = alphaBA->compute_value(belief);
@@ -493,7 +489,7 @@ void POMDPPBVI::expand_random_belief_selection(StatesMap *S)
 }
 
 void POMDPPBVI::expand_stochastic_simulation_random_actions(StatesMap *S, ActionsMap *A,
-		ObservationsMap *Z, StateTransitionsMap *T, ObservationTransitionsMap *O)
+		ObservationsMap *Z, StateTransitions *T, ObservationTransitions *O)
 {
 	std::vector<BeliefState *> Bnew;
 
@@ -564,7 +560,7 @@ void POMDPPBVI::expand_stochastic_simulation_random_actions(StatesMap *S, Action
 }
 
 void POMDPPBVI::expand_stochastic_simulation_greedy_action(StatesMap *S, ActionsMap *A,
-		ObservationsMap *Z, StateTransitionsMap *T, ObservationTransitionsMap *O,
+		ObservationsMap *Z, StateTransitions *T, ObservationTransitions *O,
 		std::vector<PolicyAlphaVector *> &gamma)
 {
 	std::vector<BeliefState *> Bnew;
@@ -651,7 +647,7 @@ void POMDPPBVI::expand_stochastic_simulation_greedy_action(StatesMap *S, Actions
 }
 
 void POMDPPBVI::expand_stochastic_simulation_exploratory_action(StatesMap *S, ActionsMap *A,
-		ObservationsMap *Z, StateTransitionsMap *T, ObservationTransitionsMap *O)
+		ObservationsMap *Z, StateTransitions *T, ObservationTransitions *O)
 {
 	std::vector<BeliefState *> Bnew;
 

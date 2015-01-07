@@ -46,7 +46,6 @@
 /**
  * Create the commonly used Gamma_{a,*}.
  * @param	S			The set of finite states.
- * @param	A			The set of finite actions.
  * @param	Z			The set of finite observations.
  * @param	T			The finite state transition function.
  * @param	O			The finite observation transition function.
@@ -54,8 +53,8 @@
  * @param	action		The action taken at this time step.
  * @return	The alpha vector which is the single element in Gamma_{a,*}.
  */
-PolicyAlphaVector *create_gamma_a_star(StatesMap *S, ActionsMap *A,
-		ObservationsMap *Z, StateTransitionsMap *T, ObservationTransitionsMap *O,
+PolicyAlphaVector *create_gamma_a_star(StatesMap *S,
+		ObservationsMap *Z, StateTransitions *T, ObservationTransitions *O,
 		SASORewards *R, Action *action);
 
 /**
@@ -68,8 +67,8 @@ PolicyAlphaVector *create_gamma_a_star(StatesMap *S, ActionsMap *A,
  * @param	observation		The observation observed after taking the action in the current belief state.
  * @return	The resultant new belief state.
  */
-BeliefState *belief_state_update(StatesMap *S, StateTransitionsMap *T,
-		ObservationTransitionsMap *O, BeliefState *belief, Action *action,
+BeliefState *belief_state_update(StatesMap *S, StateTransitions *T,
+		ObservationTransitions *O, BeliefState *belief, Action *action,
 		Observation *observation);
 
 /**
@@ -77,7 +76,6 @@ BeliefState *belief_state_update(StatesMap *S, StateTransitionsMap *T,
  * function V' = HV, is over the belief state space, and we can represent the value function approximately as a PWLC set of alpha
  * vectors, it returns this set of alpha vectors.
  * @param	S 		 	The finite states.
- * @param	A 		 	The finite actions.
  * @param	Z			The finite observations.
  * @param	T 		 	The finite state transition function.
  * @param	O			The finite observation transition function.
@@ -88,8 +86,8 @@ BeliefState *belief_state_update(StatesMap *S, StateTransitionsMap *T,
  * @param	action	 	The action taken.
  * @return	The Gamma_{a} which contains the new set of optimal alpha-vectors, given a particular action.
  */
-std::vector<PolicyAlphaVector *> bellman_update_cross_sum(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-		StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+std::vector<PolicyAlphaVector *> bellman_update_cross_sum(StatesMap *S, ObservationsMap *Z,
+		StateTransitions *T, ObservationTransitions *O, SASORewards *R,
 		Horizon *h, std::vector<PolicyAlphaVector *> &gammaAStar, std::vector<PolicyAlphaVector *> &gamma,
 		Action *action);
 
@@ -97,7 +95,6 @@ std::vector<PolicyAlphaVector *> bellman_update_cross_sum(StatesMap *S, ActionsM
  * Compute the Bellman update/backup for one specific belief state, returning the new optimal alpha-vector for this belief state. In
  * this case, we assume an action has been taken to construct the new alpha vector.
  * @param	S 		 	The finite states.
- * @param	A 		 	The finite actions.
  * @param	Z			The finite observations.
  * @param	T 		 	The finite state transition function.
  * @param	O			The finite observation transition function.
@@ -109,8 +106,8 @@ std::vector<PolicyAlphaVector *> bellman_update_cross_sum(StatesMap *S, ActionsM
  * @param	b			The belief state for which to compute the updated alpha vector.
  * @return	The optimal alpha-vector at this belief state, given a particular action.
  */
-PolicyAlphaVector *bellman_update_belief_state(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-		StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+PolicyAlphaVector *bellman_update_belief_state(StatesMap *S, ObservationsMap *Z,
+		StateTransitions *T, ObservationTransitions *O, SASORewards *R,
 		Horizon *h, std::vector<PolicyAlphaVector *> &gammaAStar, std::vector<PolicyAlphaVector *> &gamma,
 		Action *action, BeliefState *b);
 

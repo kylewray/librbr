@@ -178,7 +178,7 @@ public:
 	 */
 	void reset();
 
-private:
+protected:
 	/**
 	 * Solve a finite horizon POMDP using point-based value iteration.
 	 * @param	S					The finite states.
@@ -192,7 +192,7 @@ private:
 	 * @return	Return the optimal policy as a collection of alpha vectors.
 	 */
 	PolicyAlphaVectors *solve_finite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-			StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+			StateTransitions *T, ObservationTransitions *O, SASORewards *R,
 			Horizon *h);
 
 	/**
@@ -208,7 +208,7 @@ private:
 	 * @return	Return the optimal policy as a collection of alpha vectors.
 	 */
 	PolicyAlphaVectors *solve_infinite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-			StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+			StateTransitions *T, ObservationTransitions *O, SASORewards *R,
 			Horizon *h);
 
 	/**
@@ -232,7 +232,7 @@ private:
 	 * @param	O	The finite observation transition function.
 	 */
 	void expand_stochastic_simulation_random_actions(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-			StateTransitionsMap *T, ObservationTransitionsMap *O);
+			StateTransitions *T, ObservationTransitions *O);
 
 	/**
 	 * Expand the set of beliefs following Stochastic Simulation with Greedy Action. "Stochastic Simulation" means it
@@ -248,7 +248,7 @@ private:
 	 * @param	gamma	The current set of alpha vectors.
 	 */
 	void expand_stochastic_simulation_greedy_action(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-			StateTransitionsMap *T, ObservationTransitionsMap *O, std::vector<PolicyAlphaVector *> &gamma);
+			StateTransitions *T, ObservationTransitions *O, std::vector<PolicyAlphaVector *> &gamma);
 
 	/**
 	 * Expand the set of beliefs following Stochastic Simulation with Exploratory Action. "Stochastic Simulation" means it
@@ -262,7 +262,7 @@ private:
 	 * @param	O	The finite observation transition function.
 	 */
 	void expand_stochastic_simulation_exploratory_action(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-			StateTransitionsMap *T, ObservationTransitionsMap *O);
+			StateTransitions *T, ObservationTransitions *O);
 
 	/**
 	 * Expand the set of beliefs following Greedy Error Reduction. TODO: Implement.
