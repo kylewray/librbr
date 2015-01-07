@@ -139,6 +139,25 @@ Action *PolicyAlphaVectors::get(unsigned int horizon, BeliefState *belief)
 	return action;
 }
 
+double PolicyAlphaVectors::compute_value(BeliefState *belief)
+{
+	return compute_value(0, belief);
+}
+
+double PolicyAlphaVectors::compute_value(unsigned int horizon, BeliefState *belief)
+{
+	double value = std::numeric_limits<double>::lowest();
+
+	for (PolicyAlphaVector *alpha : alphaVectors[horizon]) {
+		double v = alpha->compute_value(belief);
+		if (v > value) {
+			value = v;
+		}
+	}
+
+	return value;
+}
+
 bool PolicyAlphaVectors::load(std::string filename, StatesMap *states, ActionsMap *actions,
 		ObservationsMap *observations, Horizon *horizon)
 {

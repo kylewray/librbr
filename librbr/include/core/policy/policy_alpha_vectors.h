@@ -121,6 +121,23 @@ public:
 	Action *get(unsigned int horizon, BeliefState *belief);
 
 	/**
+	 * Compute the value of the belief state by computing: max_{alpha} dot(beta, alpha).
+	 * For finite horizon, it assumes 0 by default.
+	 * @param	belief		The belief state 'beta' vector.
+	 * @return	The value of the belief state provided.
+	 */
+	double compute_value(BeliefState *belief);
+
+	/**
+	 * Compute the value of the belief state by computing: max_{alpha} dot(beta, alpha), allowing the
+	 * explicit specification of the horizon.
+	 * @param	horizon		The horizon to set.
+	 * @param	belief		The belief state 'beta' vector.
+	 * @return	The value of the belief state provided.
+	 */
+	double compute_value(unsigned int horizon, BeliefState *belief);
+
+	/**
 	 * A function which must load a policy file.
 	 * @param	filename		The name and path of the file to load.
 	 * @param	states			The states object which contains the actual state objects to be mapped.
