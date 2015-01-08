@@ -36,6 +36,9 @@
 #include "../core/observations/observations_map.h"
 #include "../core/state_transitions/state_transitions_map.h"
 #include "../core/observation_transitions/observation_transitions_map.h"
+//#include "../core/rewards/s_rewards.h"
+#include "../core/rewards/sa_rewards.h"
+#include "../core/rewards/sas_rewards.h"
 #include "../core/rewards/saso_rewards.h"
 #include "../core/horizon.h"
 
@@ -86,7 +89,7 @@ public:
 	 * the desired tolerance, requiring knowledge of the reward function.
 	 * @param	pomdp 				The partially observable Markov decision process to use.
 	 * @param	epsilon				The desired tolerance between value functions to check for convergence.
-	 * @throw	RewardException		The POMDP did not have a SASORewards rewards object.
+	 * @throw	RewardException		The POMDP did not have a SARewards rewards object.
 	 */
 	void compute_num_iterations(POMDP *pomdp, double epsilon);
 
@@ -99,7 +102,7 @@ public:
 	 * @throw	ObservationException			The POMDP did not have a FiniteObservations observations object.
 	 * @throw	StateTransitionsException		The POMDP did not have a FiniteStateTransitions state transitions object.
 	 * @throw	ObservationTransitionsException	The POMDP did not have a FiniteObservationTransitions observation transitions object.
-	 * @throw	RewardException					The POMDP did not have a SASORewards rewards object.
+	 * @throw	RewardException					The POMDP did not have a SARewards rewards object.
 	 * @throw	PolicyException					An error occurred computing the policy.
 	 * @return	Return the optimal policy as a finite state controller (infinite horizon) or tree (finite horizon).
 	 */
@@ -113,13 +116,13 @@ private:
 	 * @param	Z					The finite observations.
 	 * @param	T					The finite state transition function.
 	 * @param	O					The finite observation transition function.
-	 * @param	R					The state-action-state-observation rewards.
+	 * @param	R					The state-action-state-observation rewards (or other children types).
 	 * @param	h					The horizon.
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy as a collection of alpha vectors.
 	 */
 	PolicyAlphaVectors *solve_finite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-			StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+			StateTransitionsMap *T, ObservationTransitionsMap *O, Rewards *R,
 			Horizon *h);
 
 	/**
@@ -129,13 +132,13 @@ private:
 	 * @param	Z					The finite observations.
 	 * @param	T					The finite state transition function.
 	 * @param	O					The finite observation transition function.
-	 * @param	R					The state-action-state-observation rewards.
+	 * @param	R					The state-action-state-observation rewards (or other children types).
 	 * @param	h					The horizon.
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy as a collection of alpha vectors.
 	 */
 	PolicyAlphaVectors *solve_infinite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-			StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+			StateTransitionsMap *T, ObservationTransitionsMap *O, Rewards *R,
 			Horizon *h);
 
 	/**

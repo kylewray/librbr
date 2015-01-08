@@ -24,31 +24,77 @@
 
 #include "../../include/pomdp/pomdp_utilities.h"
 
-PolicyAlphaVector *create_gamma_a_star(StatesMap *S, ActionsMap *A,
+//#include "../core/rewards/s_rewards.h"
+#include "../../include/core/rewards/sa_rewards.h"
+#include "../../include/core/rewards/sas_rewards.h"
+#include "../../include/core/rewards/saso_rewards.h"
+#include "../../include/core/rewards/reward_exception.h"
+
+PolicyAlphaVector *create_gamma_a_star(StatesMap *S,
 		ObservationsMap *Z, StateTransitions *T, ObservationTransitions *O,
-		SASORewards *R, Action *action)
+		Rewards *R, Action *action)
 {
 	PolicyAlphaVector *alpha = new PolicyAlphaVector(action);
 
-	for (auto s : *S) {
-		State *state = resolve(s);
+	// Attempt to use a SARewards.
+//	SARewards *SAR = dynamic_cast<SARewards *>(R);
+//	if (SAR != nullptr) {
+//		// This structure may or may not be correct.
+//		for (auto s : *S) {
+//			State *state = resolve(s);
+//
+//			alpha->set(state, SAR->get(state, action));
+//		}
+//
+//		return alpha;
+//	}
+//
+//	// Attempt to use a SASRewards.
+//	SASRewards *SASR = dynamic_cast<SASRewards *>(R);
+//	if (SASR != nullptr) {
+//		// This structure may or may not be correct.
+//		for (auto s : *S) {
+//			State *state = resolve(s);
+//
+//			// Compute the immediate state-action-state-observation reward.
+//			double immediateReward = 0.0;
+//			for (auto sp : *S) {
+//				State *nextState = resolve(sp);
+//
+//				immediateReward += T->get(state, action, nextState) * SASR->get(state, action, nextState);
+//			}
+//			alpha->set(state, immediateReward);
+//		}
+//
+//		return alpha;
+//	}
 
-		// Compute the immediate state-action-state-observation reward.
-		double immediateReward = 0.0;
-		for (auto sp : *S) {
-			State *nextState = resolve(sp);
+	// Attempt to use a SASORewards.
+	SASORewards *SASOR = dynamic_cast<SASORewards *>(R);
+	if (SASOR != nullptr) {
+		// This structure may or may not be correct.
+		for (auto s : *S) {
+			State *state = resolve(s);
 
-			double innerImmediateReward = 0.0;
-			for (auto z : *Z) {
-				Observation *observation = resolve(z);
-				innerImmediateReward += O->get(action, nextState, observation) * R->get(state, action, nextState, observation);
+			// Compute the immediate state-action-state-observation reward.
+			double immediateReward = 0.0;
+			for (auto sp : *S) {
+				State *nextState = resolve(sp);
+
+				double innerImmediateReward = 0.0;
+				for (auto z : *Z) {
+					Observation *observation = resolve(z);
+					innerImmediateReward += O->get(action, nextState, observation) * SASOR->get(state, action, nextState, observation);
+				}
+				immediateReward += T->get(state, action, nextState) * innerImmediateReward;
 			}
-			immediateReward += T->get(state, action, nextState) * innerImmediateReward;
+			alpha->set(state, immediateReward);
 		}
-		alpha->set(state, immediateReward);
+
+		return alpha;
 	}
 
-	return alpha;
+	throw RewardException();
 }
 
 BeliefState *belief_state_update(StatesMap *S, StateTransitions *T,
@@ -82,7 +128,7 @@ BeliefState *belief_state_update(StatesMap *S, StateTransitions *T,
 }
 
 std::vector<PolicyAlphaVector *> bellman_update_cross_sum(StatesMap *S, ObservationsMap *Z,
-		StateTransitions *T, ObservationTransitions *O, SASORewards *R,
+		StateTransitions *T, ObservationTransitions *O,
 		Horizon *h, std::vector<PolicyAlphaVector *> &gammaAStar, std::vector<PolicyAlphaVector *> &gamma,
 		Action *action)
 {
@@ -151,7 +197,7 @@ std::vector<PolicyAlphaVector *> bellman_update_cross_sum(StatesMap *S, Observat
 }
 
 PolicyAlphaVector *bellman_update_belief_state(StatesMap *S, ObservationsMap *Z,
-		StateTransitions *T, ObservationTransitions *O, SASORewards *R,
+		StateTransitions *T, ObservationTransitions *O,
 		Horizon *h, std::vector<PolicyAlphaVector *> &gammaAStar, std::vector<PolicyAlphaVector *> &gamma,
 		Action *action, BeliefState *b)
 {

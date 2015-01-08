@@ -129,7 +129,7 @@ void POMDPPBVI::compute_num_update_iterations(POMDP *pomdp, double epsilon)
 		throw CoreException();
 	}
 
-	// Attempt to convert the rewards object into SASORewards.
+	// Attempt to convert the rewards object into SARewards.
 	SASORewards *R = dynamic_cast<SASORewards *>(pomdp->get_rewards());
 	if (R == nullptr) {
 		throw RewardException();
@@ -184,7 +184,7 @@ PolicyAlphaVectors *POMDPPBVI::solve(POMDP *pomdp)
 		throw ObservationTransitionException();
 	}
 
-	// Attempt to convert the rewards object into SASORewards.
+	// Attempt to convert the rewards object into SASORewards. Other children types are thus valid, too.
 	SASORewards *R = dynamic_cast<SASORewards *>(pomdp->get_rewards());
 	if (R == nullptr) {
 		throw RewardException();
@@ -216,7 +216,7 @@ void POMDPPBVI::reset() {
 }
 
 PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-		StateTransitions *T, ObservationTransitions *O, SASORewards *R, Horizon *h)
+		StateTransitions *T, ObservationTransitions *O, Rewards *R, Horizon *h)
 {
 	// Create the policy of alpha vectors variable. Set the horizon, to make the object's policy differ over time.
 	PolicyAlphaVectors *policy = new PolicyAlphaVectors(h->get_horizon());
@@ -260,7 +260,7 @@ PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(StatesMap *S, ActionsMap *A,
 				for (auto a : *A) {
 					Action *action = resolve(a);
 
-					PolicyAlphaVector *alphaBA = bellman_update_belief_state(S, Z, T, O, R, h,
+					PolicyAlphaVector *alphaBA = bellman_update_belief_state(S, Z, T, O, h,
 							gammaAStar[action], gamma[!current], action, belief);
 
 					double alphaDotBeta = alphaBA->compute_value(belief);
@@ -335,8 +335,10 @@ PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(StatesMap *S, ActionsMap *A,
 	return policy;
 }
 
+#include <iostream>
+
 PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-		StateTransitions *T, ObservationTransitions *O, SASORewards *R, Horizon *h)
+		StateTransitions *T, ObservationTransitions *O, Rewards *R, Horizon *h)
 {
 	// Create the policy of alpha vectors variable. Set the horizon, to make the object's policy differ over time.
 	PolicyAlphaVectors *policy = new PolicyAlphaVectors(h->get_horizon());
@@ -358,14 +360,25 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(StatesMap *S, ActionsMap *
 	std::vector<PolicyAlphaVector *> gamma[2];
 	bool current = false;
 
-	// Initialize the first set Gamma to be a set of zero alpha vectors.
+	// For setting the minimum alpha vector values.
+	SASORewards *SASOR = dynamic_cast<SASORewards *>(R);
+	// Note: This should never happen.
+//	if (SASOR == nullptr) {
+//		throw RewardException();
+//	}
+
+	// Initialize the first set Gamma to be a set of Rmin / (1 - gamma) alpha vectors.
+	// This guarantees that alpha vector values always increase or remain the same (Lovejoy 1991).
 	for (unsigned int i = 0; i < B.size(); i++) {
 		PolicyAlphaVector *zeroAlphaVector = new PolicyAlphaVector();
 		for (auto s : *S) {
-			zeroAlphaVector->set(resolve(s), 0.0);
+			zeroAlphaVector->set(resolve(s), SASOR->get_min() / (1.0 - h->get_discount_factor()));
 		}
 		gamma[!current].push_back(zeroAlphaVector);
 	}
+
+	std::cout << "\nNum Expansions: " << expansions << std::endl;
+	std::cout << "\nNum Updates: " << updates << std::endl;
 
 	// Perform a predefined number of expansions. Each update adds more belief points to the set B.
 	for (unsigned int e = 0; e < expansions; e++) {
@@ -380,7 +393,7 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(StatesMap *S, ActionsMap *
 				for (auto a : *A) {
 					Action *action = resolve(a);
 
-					PolicyAlphaVector *alphaBA = bellman_update_belief_state(S, Z, T, O, R, h,
+					PolicyAlphaVector *alphaBA = bellman_update_belief_state(S, Z, T, O, h,
 							gammaAStar[action], gamma[!current], action, belief);
 
 					double alphaDotBeta = alphaBA->compute_value(belief);

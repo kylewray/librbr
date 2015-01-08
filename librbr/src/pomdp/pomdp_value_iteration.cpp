@@ -73,8 +73,8 @@ void POMDPValueIteration::compute_num_iterations(POMDP *pomdp, double epsilon)
 		throw CoreException();
 	}
 
-	// Attempt to convert the rewards object into SASORewards.
-	SASORewards *R = dynamic_cast<SASORewards *>(pomdp->get_rewards());
+	// Attempt to convert the rewards object into SARewards.
+	SARewards *R = dynamic_cast<SARewards *>(pomdp->get_rewards());
 	if (R == nullptr) {
 		throw RewardException();
 	}
@@ -130,7 +130,7 @@ PolicyAlphaVectors *POMDPValueIteration::solve(POMDP *pomdp)
 		throw ObservationTransitionException();
 	}
 
-	// Attempt to convert the rewards object into SASORewards.
+	// Attempt to convert the rewards object into SASORewards object. Later, we will handle all other cases.
 	SASORewards *R = dynamic_cast<SASORewards *>(pomdp->get_rewards());
 	if (R == nullptr) {
 		throw RewardException();
@@ -146,7 +146,7 @@ PolicyAlphaVectors *POMDPValueIteration::solve(POMDP *pomdp)
 }
 
 PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-		StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+		StateTransitionsMap *T, ObservationTransitionsMap *O, Rewards *R,
 		Horizon *h)
 {
 	// Create the policy of alpha vectors variable. Set the horizon, to make the object's policy differ over time.
@@ -168,7 +168,7 @@ PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(StatesMap *S, Acti
 		// Compute the new set of alpha vectors, gamma.
 		for (auto a : *A) {
 			Action *action = resolve(a);
-			std::vector<PolicyAlphaVector *> alphaVector = bellman_update_cross_sum(S, Z, T, O, R, h,
+			std::vector<PolicyAlphaVector *> alphaVector = bellman_update_cross_sum(S, Z, T, O, h,
 					gammaAStar[action], gamma[!current], action);
 			gamma[current].insert(gamma[current].end(), alphaVector.begin(), alphaVector.end());
 		}
@@ -200,7 +200,7 @@ PolicyAlphaVectors *POMDPValueIteration::solve_finite_horizon(StatesMap *S, Acti
 }
 
 PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-		StateTransitionsMap *T, ObservationTransitionsMap *O, SASORewards *R,
+		StateTransitionsMap *T, ObservationTransitionsMap *O, Rewards *R,
 		Horizon *h)
 {
 	// Create the policy of alpha vectors variable. Set the horizon, to make the object's policy differ over time.
@@ -222,7 +222,7 @@ PolicyAlphaVectors *POMDPValueIteration::solve_infinite_horizon(StatesMap *S, Ac
 		// Compute the new set of alpha vectors, gamma.
 		for (auto a : *A) {
 			Action *action = resolve(a);
-			std::vector<PolicyAlphaVector *> alphaVector = bellman_update_cross_sum(S, Z, T, O, R, h,
+			std::vector<PolicyAlphaVector *> alphaVector = bellman_update_cross_sum(S, Z, T, O, h,
 					gammaAStar[action], gamma[!current], action);
 			gamma[current].insert(gamma[current].end(), alphaVector.begin(), alphaVector.end());
 		}

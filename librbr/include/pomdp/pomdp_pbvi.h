@@ -154,7 +154,7 @@ public:
 	 * the desired tolerance, requiring knowledge of the reward function.
 	 * @param	pomdp 				The partially observable Markov decision process to use.
 	 * @param	epsilon				The desired tolerance between value functions to check for convergence.
-	 * @throw	RewardException		The POMDP did not have a SASORewards rewards object.
+	 * @throw	RewardException		The POMDP did not have a SARewards rewards object.
 	 */
 	void compute_num_update_iterations(POMDP *pomdp, double epsilon);
 
@@ -192,7 +192,7 @@ protected:
 	 * @return	Return the optimal policy as a collection of alpha vectors.
 	 */
 	PolicyAlphaVectors *solve_finite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-			StateTransitions *T, ObservationTransitions *O, SASORewards *R,
+			StateTransitions *T, ObservationTransitions *O, Rewards *R,
 			Horizon *h);
 
 	/**
@@ -202,13 +202,13 @@ protected:
 	 * @param	Z					The finite observations.
 	 * @param	T					The finite state transition function.
 	 * @param	O					The finite observation transition function.
-	 * @param	R					The state-action-state-observation rewards.
+	 * @param	R					The state-action rewards.
 	 * @param	h					The horizon.
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy as a collection of alpha vectors.
 	 */
 	PolicyAlphaVectors *solve_infinite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
-			StateTransitions *T, ObservationTransitions *O, SASORewards *R,
+			StateTransitions *T, ObservationTransitions *O, Rewards *R,
 			Horizon *h);
 
 	/**

@@ -38,24 +38,25 @@
 #include "../core/observations/observations_map.h"
 #include "../core/state_transitions/state_transitions_map.h"
 #include "../core/observation_transitions/observation_transitions_map.h"
-#include "../core/rewards/saso_rewards.h"
+#include "../core/rewards/rewards.h"
 #include "../core/horizon.h"
 
 #include "../core/policy/policy_alpha_vector.h"
 
 /**
  * Create the commonly used Gamma_{a,*}.
- * @param	S			The set of finite states.
- * @param	Z			The set of finite observations.
- * @param	T			The finite state transition function.
- * @param	O			The finite observation transition function.
- * @param	R			The state-action-state rewards function.
- * @param	action		The action taken at this time step.
+ * @param	S					The set of finite states.
+ * @param	Z					The set of finite observations.
+ * @param	T					The finite state transition function.
+ * @param	O					The finite observation transition function.
+ * @param	R					The state-action rewards function.
+ * @param	action				The action taken at this time step.
  * @return	The alpha vector which is the single element in Gamma_{a,*}.
+ * @throw	RewardException		The rewards argument was invalid.
  */
 PolicyAlphaVector *create_gamma_a_star(StatesMap *S,
 		ObservationsMap *Z, StateTransitions *T, ObservationTransitions *O,
-		SASORewards *R, Action *action);
+		Rewards *R, Action *action);
 
 /**
  * Perform the belief state update equation on the current belief. This creates a new belief state in memory.
@@ -79,7 +80,6 @@ BeliefState *belief_state_update(StatesMap *S, StateTransitions *T,
  * @param	Z			The finite observations.
  * @param	T 		 	The finite state transition function.
  * @param	O			The finite observation transition function.
- * @param	R 		 	The state-action-state rewards.
  * @param	h 			The horizon.
  * @param	gammaAStar	The initial gamma which is always used in the cross sum: Gamma_{a,*}.
  * @param	gamma		The current Bellman backup, represented as the set Gamma storing alpha-vectors.
@@ -87,7 +87,7 @@ BeliefState *belief_state_update(StatesMap *S, StateTransitions *T,
  * @return	The Gamma_{a} which contains the new set of optimal alpha-vectors, given a particular action.
  */
 std::vector<PolicyAlphaVector *> bellman_update_cross_sum(StatesMap *S, ObservationsMap *Z,
-		StateTransitions *T, ObservationTransitions *O, SASORewards *R,
+		StateTransitions *T, ObservationTransitions *O,
 		Horizon *h, std::vector<PolicyAlphaVector *> &gammaAStar, std::vector<PolicyAlphaVector *> &gamma,
 		Action *action);
 
@@ -98,7 +98,6 @@ std::vector<PolicyAlphaVector *> bellman_update_cross_sum(StatesMap *S, Observat
  * @param	Z			The finite observations.
  * @param	T 		 	The finite state transition function.
  * @param	O			The finite observation transition function.
- * @param	R 		 	The state-action-state rewards.
  * @param	h 		 	The horizon.
  * @param	gammaAStar	The initial gamma which is always used in the cross sum: Gamma_{a,*}.
  * @param	gamma		The current Bellman backup, represented as the set Gamma storing alpha-vectors.
@@ -107,7 +106,7 @@ std::vector<PolicyAlphaVector *> bellman_update_cross_sum(StatesMap *S, Observat
  * @return	The optimal alpha-vector at this belief state, given a particular action.
  */
 PolicyAlphaVector *bellman_update_belief_state(StatesMap *S, ObservationsMap *Z,
-		StateTransitions *T, ObservationTransitions *O, SASORewards *R,
+		StateTransitions *T, ObservationTransitions *O,
 		Horizon *h, std::vector<PolicyAlphaVector *> &gammaAStar, std::vector<PolicyAlphaVector *> &gamma,
 		Action *action, BeliefState *b);
 

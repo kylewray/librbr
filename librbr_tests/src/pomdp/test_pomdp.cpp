@@ -109,7 +109,7 @@ int test_pomdp()
 
 		BeliefState *b = new BeliefState();
 		b->set(orderedStates[0], 1.0);
-		b->set(orderedStates[0], 0.0);
+		b->set(orderedStates[1], 0.0);
 		pbvi.add_initial_belief_state(b);
 
 		b = new BeliefState();
@@ -174,6 +174,8 @@ int test_pomdp()
 
 	std::cout << "POMDP: Solving 'tiger_infinite.pomdp' with POMDPValueIteration...";
 
+	// Anything above like 5 or 6 iterations produces too many belief points to terminate quickly.
+	// Therefore, the resultant values (e.g., -98.2942 and 11.7058) are actually ***underestimates***!
 	vi.set_num_iterations(5);
 
 	try {
@@ -210,7 +212,7 @@ int test_pomdp()
 
 	std::cout << "POMDP: Solving 'tiger_infinite.pomdp' with POMDPPBVI...";
 
-	int numExpansions = 2;
+	int numExpansions = 4;
 	pbvi.set_expansion_rule(POMDPPBVIExpansionRule::STOCHASTIC_SIMULATION_EXPLORATORY_ACTION);
 	pbvi.set_num_expansion_iterations(numExpansions);
 	pbvi.compute_num_update_iterations(pomdp, 0.01);
@@ -226,7 +228,7 @@ int test_pomdp()
 
 		BeliefState *b = new BeliefState();
 		b->set(orderedStates[0], 1.0);
-		b->set(orderedStates[0], 0.0);
+		b->set(orderedStates[1], 0.0);
 		pbvi.add_initial_belief_state(b);
 
 		b = new BeliefState();
