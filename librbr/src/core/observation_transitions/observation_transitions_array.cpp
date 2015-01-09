@@ -31,6 +31,8 @@
 #include "../../../include/core/actions/indexed_action.h"
 #include "../../../include/core/observations/indexed_observation.h"
 
+#include <algorithm>
+
 ObservationTransitionsArray::ObservationTransitionsArray(unsigned int numStates,
 		unsigned int numActions, unsigned int numObservations)
 {

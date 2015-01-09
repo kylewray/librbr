@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\core\actions\action.h" />
+    <ClInclude Include="include\core\actions\actions.h" />
+    <ClInclude Include="include\core\actions\actions_map.h" />
+    <ClInclude Include="include\core\actions\action_exception.h" />
+    <ClInclude Include="include\core\actions\action_utilities.h" />
+    <ClInclude Include="include\core\actions\indexed_action.h" />
+    <ClInclude Include="include\core\actions\joint_action.h" />
+    <ClInclude Include="include\core\actions\joint_actions_map.h" />
+    <ClInclude Include="include\core\actions\named_action.h" />
+    <ClInclude Include="include\core\agents\agent.h" />
+    <ClInclude Include="include\core\agents\agents.h" />
+    <ClInclude Include="include\core\agents\agent_exception.h" />
+    <ClInclude Include="include\core\core_exception.h" />
+    <ClInclude Include="include\core\horizon.h" />
+    <ClInclude Include="include\core\initial.h" />
+    <ClInclude Include="include\core\observations\indexed_observation.h" />
+    <ClInclude Include="include\core\observations\joint_observation.h" />
+    <ClInclude Include="include\core\observations\joint_observations_map.h" />
+    <ClInclude Include="include\core\observations\named_observation.h" />
+    <ClInclude Include="include\core\observations\observation.h" />
+    <ClInclude Include="include\core\observations\observations.h" />
+    <ClInclude Include="include\core\observations\observations_map.h" />
+    <ClInclude Include="include\core\observations\observation_exception.h" />
+    <ClInclude Include="include\core\observations\observation_utilities.h" />
+    <ClInclude Include="include\core\observation_transitions\observation_transitions.h" />
+    <ClInclude Include="include\core\observation_transitions\observation_transitions_array.h" />
+    <ClInclude Include="include\core\observation_transitions\observation_transitions_map.h" />
+    <ClInclude Include="include\core\observation_transitions\observation_transition_exception.h" />
+    <ClInclude Include="include\core\policy\policy.h" />
+    <ClInclude Include="include\core\policy\policy_alpha_vector.h" />
+    <ClInclude Include="include\core\policy\policy_alpha_vectors.h" />
+    <ClInclude Include="include\core\policy\policy_exception.h" />
+    <ClInclude Include="include\core\policy\policy_map.h" />
+    <ClInclude Include="include\core\policy\policy_tree.h" />
+    <ClInclude Include="include\core\rewards\factored_rewards.h" />
+    <ClInclude Include="include\core\rewards\factored_weighted_rewards.h" />
+    <ClInclude Include="include\core\rewards\rewards.h" />
+    <ClInclude Include="include\core\rewards\reward_exception.h" />
+    <ClInclude Include="include\core\rewards\saso_rewards.h" />
+    <ClInclude Include="include\core\rewards\saso_rewards_array.h" />
+    <ClInclude Include="include\core\rewards\saso_rewards_map.h" />
+    <ClInclude Include="include\core\rewards\sas_rewards.h" />
+    <ClInclude Include="include\core\rewards\sas_rewards_array.h" />
+    <ClInclude Include="include\core\rewards\sas_rewards_map.h" />
+    <ClInclude Include="include\core\rewards\sa_rewards.h" />
+    <ClInclude Include="include\core\rewards\sa_rewards_array.h" />
+    <ClInclude Include="include\core\rewards\sa_rewards_map.h" />
+    <ClInclude Include="include\core\states\belief_state.h" />
+    <ClInclude Include="include\core\states\factored_state.h" />
+    <ClInclude Include="include\core\states\factored_states_map.h" />
+    <ClInclude Include="include\core\states\indexed_state.h" />
+    <ClInclude Include="include\core\states\named_state.h" />
+    <ClInclude Include="include\core\states\state.h" />
+    <ClInclude Include="include\core\states\states.h" />
+    <ClInclude Include="include\core\states\states_map.h" />
+    <ClInclude Include="include\core\states\state_exception.h" />
+    <ClInclude Include="include\core\states\state_utilities.h" />
+    <ClInclude Include="include\core\state_transitions\state_transitions.h" />
+    <ClInclude Include="include\core\state_transitions\state_transitions_array.h" />
+    <ClInclude Include="include\core\state_transitions\state_transitions_map.h" />
+    <ClInclude Include="include\core\state_transitions\state_transition_exception.h" />
+    <ClInclude Include="include\dec_pomdp\dec_pomdp.h" />
+    <ClInclude Include="include\management\conversion.h" />
+    <ClInclude Include="include\management\raw_file.h" />
+    <ClInclude Include="include\management\unified_file.h" />
+    <ClInclude Include="include\mdp\mdp.h" />
+    <ClInclude Include="include\mdp\mdp_policy_iteration.h" />
+    <ClInclude Include="include\mdp\mdp_utilities.h" />
+    <ClInclude Include="include\mdp\mdp_value_iteration.h" />
+    <ClInclude Include="include\pomdp\pomdp.h" />
+    <ClInclude Include="include\pomdp\pomdp_pbvi.h" />
+    <ClInclude Include="include\pomdp\pomdp_utilities.h" />
+    <ClInclude Include="include\pomdp\pomdp_value_iteration.h" />
+    <ClInclude Include="include\ssp\ssp.h" />
+    <ClInclude Include="include\ssp\ssp_uct.h" />
+    <ClInclude Include="include\utilities\a_star.h" />
+    <ClInclude Include="include\utilities\log.h" />
+    <ClInclude Include="include\utilities\string_manipulation.h" />
+    <ClInclude Include="include\utilities\utility_exception.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\core\actions\action.cpp" />
+    <ClCompile Include="src\core\actions\actions.cpp" />
+    <ClCompile Include="src\core\actions\actions_map.cpp" />
+    <ClCompile Include="src\core\actions\action_exception.cpp" />
+    <ClCompile Include="src\core\actions\action_utilities.cpp" />
+    <ClCompile Include="src\core\actions\indexed_action.cpp" />
+    <ClCompile Include="src\core\actions\joint_action.cpp" />
+    <ClCompile Include="src\core\actions\joint_actions_map.cpp" />
+    <ClCompile Include="src\core\actions\named_action.cpp" />
+    <ClCompile Include="src\core\agents\agent.cpp" />
+    <ClCompile Include="src\core\agents\agents.cpp" />
+    <ClCompile Include="src\core\agents\agent_exception.cpp" />
+    <ClCompile Include="src\core\core_exception.cpp" />
+    <ClCompile Include="src\core\horizon.cpp" />
+    <ClCompile Include="src\core\initial.cpp" />
+    <ClCompile Include="src\core\observations\indexed_observation.cpp" />
+    <ClCompile Include="src\core\observations\joint_observation.cpp" />
+    <ClCompile Include="src\core\observations\joint_observations_map.cpp" />
+    <ClCompile Include="src\core\observations\named_observation.cpp" />
+    <ClCompile Include="src\core\observations\observation.cpp" />
+    <ClCompile Include="src\core\observations\observations.cpp" />
+    <ClCompile Include="src\core\observations\observations_map.cpp" />
+    <ClCompile Include="src\core\observations\observation_exception.cpp" />
+    <ClCompile Include="src\core\observations\observation_utilities.cpp" />
+    <ClCompile Include="src\core\observation_transitions\observation_transitions.cpp" />
+    <ClCompile Include="src\core\observation_transitions\observation_transitions_array.cpp" />
+    <ClCompile Include="src\core\observation_transitions\observation_transitions_map.cpp" />
+    <ClCompile Include="src\core\observation_transitions\observation_transition_exception.cpp" />
+    <ClCompile Include="src\core\policy\policy.cpp" />
+    <ClCompile Include="src\core\policy\policy_alpha_vector.cpp" />
+    <ClCompile Include="src\core\policy\policy_alpha_vectors.cpp" />
+    <ClCompile Include="src\core\policy\policy_exception.cpp" />
+    <ClCompile Include="src\core\policy\policy_map.cpp" />
+    <ClCompile Include="src\core\policy\policy_tree.cpp" />
+    <ClCompile Include="src\core\rewards\factored_rewards.cpp" />
+    <ClCompile Include="src\core\rewards\factored_weighted_rewards.cpp" />
+    <ClCompile Include="src\core\rewards\rewards.cpp" />
+    <ClCompile Include="src\core\rewards\reward_exception.cpp" />
+    <ClCompile Include="src\core\rewards\saso_rewards.cpp" />
+    <ClCompile Include="src\core\rewards\saso_rewards_array.cpp" />
+    <ClCompile Include="src\core\rewards\saso_rewards_map.cpp" />
+    <ClCompile Include="src\core\rewards\sas_rewards.cpp" />
+    <ClCompile Include="src\core\rewards\sas_rewards_array.cpp" />
+    <ClCompile Include="src\core\rewards\sas_rewards_map.cpp" />
+    <ClCompile Include="src\core\rewards\sa_rewards.cpp" />
+    <ClCompile Include="src\core\rewards\sa_rewards_array.cpp" />
+    <ClCompile Include="src\core\rewards\sa_rewards_map.cpp" />
+    <ClCompile Include="src\core\states\belief_state.cpp" />
+    <ClCompile Include="src\core\states\factored_state.cpp" />
+    <ClCompile Include="src\core\states\factored_states_map.cpp" />
+    <ClCompile Include="src\core\states\indexed_state.cpp" />
+    <ClCompile Include="src\core\states\named_state.cpp" />
+    <ClCompile Include="src\core\states\state.cpp" />
+    <ClCompile Include="src\core\states\states.cpp" />
+    <ClCompile Include="src\core\states\states_map.cpp" />
+    <ClCompile Include="src\core\states\state_exception.cpp" />
+    <ClCompile Include="src\core\states\state_utilities.cpp" />
+    <ClCompile Include="src\core\state_transitions\state_transitions.cpp" />
+    <ClCompile Include="src\core\state_transitions\state_transitions_array.cpp" />
+    <ClCompile Include="src\core\state_transitions\state_transitions_map.cpp" />
+    <ClCompile Include="src\core\state_transitions\state_transition_exception.cpp" />
+    <ClCompile Include="src\dec_pomdp\dec_pomdp.cpp" />
+    <ClCompile Include="src\management\conversion.cpp" />
+    <ClCompile Include="src\management\raw_file.cpp" />
+    <ClCompile Include="src\management\unified_file.cpp" />
+    <ClCompile Include="src\mdp\mdp.cpp" />
+    <ClCompile Include="src\mdp\mdp_policy_iteration.cpp" />
+    <ClCompile Include="src\mdp\mdp_utilities.cpp" />
+    <ClCompile Include="src\mdp\mdp_value_iteration.cpp" />
+    <ClCompile Include="src\pomdp\pomdp.cpp" />
+    <ClCompile Include="src\pomdp\pomdp_pbvi.cpp" />
+    <ClCompile Include="src\pomdp\pomdp_utilities.cpp" />
+    <ClCompile Include="src\pomdp\pomdp_value_iteration.cpp" />
+    <ClCompile Include="src\ssp\ssp.cpp" />
+    <ClCompile Include="src\ssp\ssp_uct.cpp" />
+    <ClCompile Include="src\utilities\log.cpp" />
+    <ClCompile Include="src\utilities\string_manipulation.cpp" />
+    <ClCompile Include="src\utilities\utility_exception.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{FC9FA2B3-A679-4A05-912E-79A2DA2E1C19}</ProjectGuid>
+    <RootNamespace>librbr</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)..\external;$(SolutionDir)..\external\osi098\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);;$(SolutionDir)..\external\osi098\lib</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)..\external;$(SolutionDir)..\external\osi098\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);;$(SolutionDir)..\external\osi098\lib</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

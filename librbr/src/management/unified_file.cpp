@@ -755,7 +755,7 @@ int UnifiedFile::load_states(std::vector<std::string> items)
 	return 0;
 }
 
-bool UnifiedFile::load_factored_states(unsigned int factorIndex, std::string line)
+int UnifiedFile::load_factored_states(unsigned int factorIndex, std::string line)
 {
 	// Handle an invalid factor index and undefined states variable.
 	if (factorIndex < 0) { // || factorIndex >= ((FiniteFactoredStates *)states)->get_num_factors()) {
@@ -1083,7 +1083,7 @@ int UnifiedFile::load_agent_observations(unsigned int agentIndex, std::string li
 	((JointObservationsMap *)observations)->set(agentIndex, newObservations);
 	try {
 		((JointObservationsMap *)observations)->update();
-	} catch (const ObservationException &error) { }
+	} catch (const ObservationException &err) { }
 
 	// After the update, the internal observations have been reset, so we need to remake
 	// the ordered list of observations.

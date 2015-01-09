@@ -65,7 +65,7 @@ void SARewardsArray::set(State *state, Action *action, double reward)
 		throw RewardException();
 	}
 
-	rewards[s->get_index() * actions + a->get_index()] = reward;
+	rewards[s->get_index() * actions + a->get_index()] = (float)reward;
 
 	if (Rmin > reward) {
 		Rmin = reward;
@@ -121,7 +121,7 @@ void SARewardsArray::reset()
 		}
 	}
 
-	Rmin = std::numeric_limits<double>::lowest() * -1.0;
+	Rmin = std::numeric_limits<double>::lowest() * -1.0f;
 	Rmax = std::numeric_limits<double>::lowest();
 }
 

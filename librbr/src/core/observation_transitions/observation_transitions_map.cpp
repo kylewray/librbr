@@ -31,6 +31,8 @@
 #include "../../../include/core/actions/named_action.h"
 #include "../../../include/core/observations/named_observation.h"
 
+#include <algorithm>
+
 ObservationTransitionsMap::ObservationTransitionsMap()
 {
 	stateWildcard = new NamedState("*");

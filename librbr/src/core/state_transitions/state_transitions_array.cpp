@@ -30,6 +30,8 @@
 #include "../../../include/core/states/indexed_state.h"
 #include "../../../include/core/actions/indexed_action.h"
 
+#include <algorithm>
+
 StateTransitionsArray::StateTransitionsArray(unsigned int numStates, unsigned int numActions)
 {
 	states = numStates;

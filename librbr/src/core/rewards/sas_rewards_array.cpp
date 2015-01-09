@@ -69,7 +69,7 @@ void SASRewardsArray::set(State *state, Action *action, State *nextState, double
 
 	rewards[s->get_index() * actions * states +
 	        a->get_index() * states +
-	        sp->get_index()] = reward;
+			sp->get_index()] = (float)reward;
 
 	if (Rmin > reward) {
 		Rmin = reward;
@@ -121,7 +121,7 @@ void SASRewardsArray::reset()
 		}
 	}
 
-	Rmin = std::numeric_limits<double>::lowest() * -1.0;
+	Rmin = std::numeric_limits<double>::lowest() * -1.0f;
 	Rmax = std::numeric_limits<double>::lowest();
 }
 

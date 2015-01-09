@@ -30,6 +30,8 @@
 #include "../../../include/core/states/named_state.h"
 #include "../../../include/core/actions/named_action.h"
 
+#include <algorithm>
+
 StateTransitionsMap::StateTransitionsMap()
 {
 	stateWildcard = new NamedState("*");

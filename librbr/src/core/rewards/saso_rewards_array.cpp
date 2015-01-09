@@ -78,7 +78,7 @@ void SASORewardsArray::set(State *state, Action *action, State *nextState,
 	rewards[s->get_index() * actions * states * observations +
 	        a->get_index() * states * observations +
 	        sp->get_index() * observations +
-	        z->get_index()] = reward;
+			z->get_index()] = (float)reward;
 
 	if (Rmin > reward) {
 		Rmin = reward;

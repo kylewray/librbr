@@ -168,12 +168,12 @@ private:
 	/**
 	 * The minimum R-value.
 	 */
-	float Rmin;
+	double Rmin;
 
 	/**
 	 * The maximum R-value.
 	 */
-	float Rmax;
+	double Rmax;
 
 };
 

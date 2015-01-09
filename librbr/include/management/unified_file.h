@@ -180,7 +180,7 @@ private:
 	 * @param	line			The line string from the file.
 	 * @return	Return @code{true} if an error occurred, and @code{false} otherwise.
 	 */
-	bool load_factored_states(unsigned int factorIndex, std::string line);
+	int load_factored_states(unsigned int factorIndex, std::string line);
 
 	/**
 	 * Load the actions from the file's data.
