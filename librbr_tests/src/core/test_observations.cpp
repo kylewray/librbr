@@ -366,7 +366,8 @@ int test_observations()
 	std::cout << "Observations: Test 'FiniteJointObservations::remove' (Expecting Error)... ";
 	NamedObservation *a7 = new NamedObservation("a7");
 	NamedObservation *a8 = new NamedObservation("a8");
-	JointObservation *doesNotExist2 = new JointObservation({a7, a8});
+	std::vector<Observation *> finiteJointObservationsRemove = { a7, a8 };
+	JointObservation *doesNotExist2 = new JointObservation(finiteJointObservationsRemove);
 	try {
 		finiteJointObservations->remove(0, doesNotExist2);
 		finiteJointObservations->update();

@@ -57,8 +57,11 @@ int test_policy()
 	Action *a1 = new NamedAction("a1");
 	Action *a2 = new NamedAction("a2");
 
-	StatesMap *states = new StatesMap({s1, s2});
-	ActionsMap *actions = new ActionsMap({a1, a2});
+	std::vector<State *> vectorOfStates = { s1, s2 };
+	std::vector<Action *> vectorOfActions = { a1, a2 };
+
+	StatesMap *states = new StatesMap(vectorOfStates);
+	ActionsMap *actions = new ActionsMap(vectorOfActions);
 	Horizon *horizon = new Horizon((unsigned int)4);
 
 	PolicyMap *policyMap = new PolicyMap();
@@ -150,7 +153,8 @@ int test_policy()
 	NamedObservation *o1 = new NamedObservation("o1");
 	NamedObservation *o2 = new NamedObservation("o2");
 
-	ObservationsMap *observations = new ObservationsMap({o1, o2});
+	std::vector<Observation *> policyTreeLoadObservations = { o1, o2 };
+	ObservationsMap *observations = new ObservationsMap(policyTreeLoadObservations);
 
 	PolicyTree *policyTree = new PolicyTree(observations, horizon);
 

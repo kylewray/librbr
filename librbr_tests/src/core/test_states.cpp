@@ -363,7 +363,8 @@ int test_states()
 	std::cout << "States: Test 'FiniteFactoredStates::remove' (Expecting Error)... ";
 	State *a7 = new NamedState("a7");
 	State *a8 = new NamedState("a8");
-	FactoredState *doesNotExist2 = new FactoredState({a7, a8});
+	std::vector<State *> finiteFactoredStatesRemove = { a7, a8 };
+	FactoredState *doesNotExist2 = new FactoredState(finiteFactoredStatesRemove);
 	try {
 		finiteFactoredStates->remove(0, doesNotExist2);
 		finiteFactoredStates->update();

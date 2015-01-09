@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 {
 	std::cout << "Performing Tests..." << std::endl;
 
-	int numTests = 12;
+	const int numTests = 12;
 
 	int numSuccesses[numTests];
 	for (int i = 0; i < numTests; i++) {

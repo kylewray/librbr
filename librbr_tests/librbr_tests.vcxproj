@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C2F754B1-6E40-4E65-A1D2-308BCB276152}</ProjectGuid>
+    <RootNamespace>librbr_tests</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)..\librbr\include\;$(SolutionDir)..\external\;$(SolutionDir)..\external\coin_or\include\</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)..\external\coin_or\lib\;$(SolutionDir)Debug\</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)..\librbr\include;$(SolutionDir)..\external;$(SolutionDir)..\external\coin_or\include</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)..\external\coin_or\lib\;$(SolutionDir)Release\</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(SolutionDir)Debug\librbr.lib;$(SolutionDir)..\external\coin_or\lib\libDecomp.lib;$(SolutionDir)..\external\coin_or\lib\libcoinmumps.lib;$(SolutionDir)..\external\coin_or\lib\libDylp.lib;$(SolutionDir)..\external\coin_or\lib\libCoinMP.lib;$(SolutionDir)..\external\coin_or\lib\libFlopCpp.lib;$(SolutionDir)..\external\coin_or\lib\libcoinmetis.lib;$(SolutionDir)..\external\coin_or\lib\libipopt.lib;$(SolutionDir)..\external\coin_or\lib\libcoinlapack.lib;$(SolutionDir)..\external\coin_or\lib\libipoptamplinterface.lib;$(SolutionDir)..\external\coin_or\lib\libcoinglpk.lib;$(SolutionDir)..\external\coin_or\lib\libOS.lib;$(SolutionDir)..\external\coin_or\lib\libcoinblas.lib;$(SolutionDir)..\external\coin_or\lib\libOsi.lib;$(SolutionDir)..\external\coin_or\lib\libcoinasl.lib;$(SolutionDir)..\external\coin_or\lib\libOsiCbc.lib;$(SolutionDir)..\external\coin_or\lib\libClp.lib;$(SolutionDir)..\external\coin_or\lib\libOsiClp.lib;$(SolutionDir)..\external\coin_or\lib\libCgl.lib;$(SolutionDir)..\external\coin_or\lib\libOsiCommonTests.lib;$(SolutionDir)..\external\coin_or\lib\libCbcSolver.lib;$(SolutionDir)..\external\coin_or\lib\libOsiDylp.lib;$(SolutionDir)..\external\coin_or\lib\libCbc.lib;$(SolutionDir)..\external\coin_or\lib\libOsiGlpk.lib;$(SolutionDir)..\external\coin_or\lib\libbonminampl.lib;$(SolutionDir)..\external\coin_or\lib\libOsiSym.lib;$(SolutionDir)..\external\coin_or\lib\libbonmin.lib;$(SolutionDir)..\external\coin_or\lib\libOsiVol.lib;$(SolutionDir)..\external\coin_or\lib\libBonCouenne.lib;$(SolutionDir)..\external\coin_or\lib\libCouenne.lib;$(SolutionDir)..\external\coin_or\lib\libCouenneReadnl.lib;$(SolutionDir)..\external\coin_or\lib\libCoinUtils.lib;$(SolutionDir)..\external\coin_or\lib\libSmi.lib;$(SolutionDir)..\external\coin_or\lib\libBlis.lib;$(SolutionDir)..\external\coin_or\lib\libSym.lib;$(SolutionDir)..\external\coin_or\lib\libBcps.lib;$(SolutionDir)..\external\coin_or\lib\libSymAppl.lib;$(SolutionDir)..\external\coin_or\lib\libBcp.lib;$(SolutionDir)..\external\coin_or\lib\libVol.lib;$(SolutionDir)..\external\coin_or\lib\libAlps.lib;$(SolutionDir)..\external\coin_or\lib\intel\ifconsol.lib;$(SolutionDir)..\external\coin_or\lib\intel\libifcoremd.lib;$(SolutionDir)..\external\coin_or\lib\intel\libifportmd.lib;$(SolutionDir)..\external\coin_or\lib\intel\libirc.lib;$(SolutionDir)..\external\coin_or\lib\intel\libmmd.lib;$(SolutionDir)..\external\coin_or\lib\intel\svml_disp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\external\coin_or\lib\;$(SolutionDir)Debug\</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>$(SolutionDir)Release\librbr.lib;$(SolutionDir)..\external\coin_or\lib\libDecomp.lib;$(SolutionDir)..\external\coin_or\lib\libcoinmumps.lib;$(SolutionDir)..\external\coin_or\lib\libDylp.lib;$(SolutionDir)..\external\coin_or\lib\libCoinMP.lib;$(SolutionDir)..\external\coin_or\lib\libFlopCpp.lib;$(SolutionDir)..\external\coin_or\lib\libcoinmetis.lib;$(SolutionDir)..\external\coin_or\lib\libipopt.lib;$(SolutionDir)..\external\coin_or\lib\libcoinlapack.lib;$(SolutionDir)..\external\coin_or\lib\libipoptamplinterface.lib;$(SolutionDir)..\external\coin_or\lib\libcoinglpk.lib;$(SolutionDir)..\external\coin_or\lib\libOS.lib;$(SolutionDir)..\external\coin_or\lib\libcoinblas.lib;$(SolutionDir)..\external\coin_or\lib\libOsi.lib;$(SolutionDir)..\external\coin_or\lib\libcoinasl.lib;$(SolutionDir)..\external\coin_or\lib\libOsiCbc.lib;$(SolutionDir)..\external\coin_or\lib\libClp.lib;$(SolutionDir)..\external\coin_or\lib\libOsiClp.lib;$(SolutionDir)..\external\coin_or\lib\libCgl.lib;$(SolutionDir)..\external\coin_or\lib\libOsiCommonTests.lib;$(SolutionDir)..\external\coin_or\lib\libCbcSolver.lib;$(SolutionDir)..\external\coin_or\lib\libOsiDylp.lib;$(SolutionDir)..\external\coin_or\lib\libCbc.lib;$(SolutionDir)..\external\coin_or\lib\libOsiGlpk.lib;$(SolutionDir)..\external\coin_or\lib\libbonminampl.lib;$(SolutionDir)..\external\coin_or\lib\libOsiSym.lib;$(SolutionDir)..\external\coin_or\lib\libbonmin.lib;$(SolutionDir)..\external\coin_or\lib\libOsiVol.lib;$(SolutionDir)..\external\coin_or\lib\libBonCouenne.lib;$(SolutionDir)..\external\coin_or\lib\libCouenne.lib;$(SolutionDir)..\external\coin_or\lib\libCouenneReadnl.lib;$(SolutionDir)..\external\coin_or\lib\libCoinUtils.lib;$(SolutionDir)..\external\coin_or\lib\libSmi.lib;$(SolutionDir)..\external\coin_or\lib\libBlis.lib;$(SolutionDir)..\external\coin_or\lib\libSym.lib;$(SolutionDir)..\external\coin_or\lib\libBcps.lib;$(SolutionDir)..\external\coin_or\lib\libSymAppl.lib;$(SolutionDir)..\external\coin_or\lib\libBcp.lib;$(SolutionDir)..\external\coin_or\lib\libVol.lib;$(SolutionDir)..\external\coin_or\lib\libAlps.lib;$(SolutionDir)..\external\coin_or\lib\intel\ifconsol.lib;$(SolutionDir)..\external\coin_or\lib\intel\libifcoremd.lib;$(SolutionDir)..\external\coin_or\lib\intel\libifportmd.lib;$(SolutionDir)..\external\coin_or\lib\intel\libirc.lib;$(SolutionDir)..\external\coin_or\lib\intel\libmmd.lib;$(SolutionDir)..\external\coin_or\lib\intel\svml_disp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\external\coin_or\lib\;$(SolutionDir)Release\</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="include\perform_tests.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\core\test_actions.cpp" />
+    <ClCompile Include="src\core\test_agents.cpp" />
+    <ClCompile Include="src\core\test_observations.cpp" />
+    <ClCompile Include="src\core\test_observation_transitions.cpp" />
+    <ClCompile Include="src\core\test_policy.cpp" />
+    <ClCompile Include="src\core\test_rewards.cpp" />
+    <ClCompile Include="src\core\test_states.cpp" />
+    <ClCompile Include="src\core\test_state_transitions.cpp" />
+    <ClCompile Include="src\management\test_unified_file.cpp" />
+    <ClCompile Include="src\mdp\test_mdp.cpp" />
+    <ClCompile Include="src\perform_tests.cpp" />
+    <ClCompile Include="src\pomdp\test_pomdp.cpp" />
+    <ClCompile Include="src\utilities\test_utilities.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\librbr\librbr.vcxproj">
+      <Project>{fc9fa2b3-a679-4a05-912e-79a2da2e1c19}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

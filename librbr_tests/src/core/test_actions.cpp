@@ -366,7 +366,8 @@ int test_actions()
 	std::cout << "Actions: Test 'FiniteJointActions::remove' (Expecting Error)... ";
 	Action *a7 = new NamedAction("a7");
 	Action *a8 = new NamedAction("a8");
-	JointAction *doesNotExist2 = new JointAction({a7, a8});
+	std::vector<Action *> finiteJointActionsRemove = { a7, a8 };
+	JointAction *doesNotExist2 = new JointAction(finiteJointActionsRemove);
 	try {
 		finiteJointActions->remove(0, doesNotExist2);
 		finiteJointActions->update();
