@@ -121,6 +121,29 @@ public:
 	Action *get(unsigned int horizon, BeliefState *belief);
 
 	/**
+	 * Get the set of actions at a given belief state, up to the specified "deviation" away from optimal.
+	 * For finite horizon, it assumes 0 by default.
+	 * @param	belief				The belief state to retrieve a mapping.
+	 * @param	deviation			The deviation from the optimal value.
+	 * @param	A					The return set of actions up to the deviation. This will be modified.
+	 * @throw	PolicyException		The policy was not defined for this state.
+	 * @return	The action to take at the given belief state.
+	 */
+	void get(BeliefState *belief, double deviation, std::vector<Action *> &A);
+
+	/**
+	 * Get the set of actions at a given belief state, up to the specified "deviation" away from optimal,
+	 * allowing the explicit specification of the horizon.
+	 * @param	horizon				The horizon to set.
+	 * @param	belief				The belief state to retrieve a mapping.
+	 * @param	deviation			The deviation from the optimal value.
+	 * @param	A					The return set of actions up to the deviation. This will be modified.
+	 * @throw	PolicyException		The policy was not defined for this belief state, or horizon was invalid.
+	 * @return	The action to take at the given belief state.
+	 */
+	void get(unsigned int horizon, BeliefState *belief, double deviation, std::vector<Action *> &A);
+
+	/**
 	 * Compute the value of the belief state by computing: max_{alpha} dot(beta, alpha).
 	 * For finite horizon, it assumes 0 by default.
 	 * @param	belief		The belief state 'beta' vector.

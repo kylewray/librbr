@@ -287,13 +287,13 @@ PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(StatesMap *S, ActionsMap *A,
 			// Prepare the next time step's gamma by clearing it. Remember again, we don't free the memory
 			// because policy manages the previous time step's gamma (above). If this is the first horizon,
 			// however, we actually do need to clear the set of zero alpha vectors.
-			current = !current;
 			if (h == 0) {
-				for (PolicyAlphaVector *zeroAlphaVector : gamma[current]) {
+				for (PolicyAlphaVector *zeroAlphaVector : gamma[!current]) {
 					delete zeroAlphaVector;
 				}
 			}
-			gamma[current].clear();
+			gamma[!current].clear();
+			current = !current;
 		}
 
 		// Perform an expansion based on the rule the user wishes to use.
@@ -335,8 +335,6 @@ PolicyAlphaVectors *POMDPPBVI::solve_finite_horizon(StatesMap *S, ActionsMap *A,
 	return policy;
 }
 
-#include <iostream>
-
 PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
 		StateTransitions *T, ObservationTransitions *O, Rewards *R, Horizon *h)
 {
@@ -377,9 +375,6 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(StatesMap *S, ActionsMap *
 		gamma[!current].push_back(zeroAlphaVector);
 	}
 
-	std::cout << "\nNum Expansions: " << expansions << std::endl;
-	std::cout << "\nNum Updates: " << updates << std::endl;
-
 	// Perform a predefined number of expansions. Each update adds more belief points to the set B.
 	for (unsigned int e = 0; e < expansions; e++) {
 		// Perform a predefined number of updates. Each update improves the value function estimate.
@@ -416,11 +411,11 @@ PolicyAlphaVectors *POMDPPBVI::solve_infinite_horizon(StatesMap *S, ActionsMap *
 			// Prepare the next time step's gamma by clearing it. Remember again, we don't free the memory
 			// because policy manages the previous time step's gamma (above). If this is the first horizon,
 			// however, we actually do need to clear the set of zero alpha vectors.
-			current = !current;
-			for (PolicyAlphaVector *zeroAlphaVector : gamma[current]) {
+			for (PolicyAlphaVector *zeroAlphaVector : gamma[!current]) {
 				delete zeroAlphaVector;
 			}
-			gamma[current].clear();
+			gamma[!current].clear();
+			current = !current;
 		}
 
 		// Perform an expansion based on the rule the user wishes to use.

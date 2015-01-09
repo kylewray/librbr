@@ -85,7 +85,7 @@ double ObservationTransitionsArray::get(Action *previousAction, State *state,
 {
 	IndexedAction *a = dynamic_cast<IndexedAction *>(previousAction);
 	IndexedState *s = dynamic_cast<IndexedState *>(state);
-	IndexedState *z = dynamic_cast<IndexedState *>(observation);
+	IndexedObservation *z = dynamic_cast<IndexedObservation *>(observation);
 
 	if (a == nullptr || s == nullptr || z == nullptr) {
 		throw ObservationTransitionException();

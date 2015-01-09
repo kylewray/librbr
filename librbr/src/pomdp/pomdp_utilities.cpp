@@ -37,37 +37,37 @@ PolicyAlphaVector *create_gamma_a_star(StatesMap *S,
 	PolicyAlphaVector *alpha = new PolicyAlphaVector(action);
 
 	// Attempt to use a SARewards.
-//	SARewards *SAR = dynamic_cast<SARewards *>(R);
-//	if (SAR != nullptr) {
-//		// This structure may or may not be correct.
-//		for (auto s : *S) {
-//			State *state = resolve(s);
-//
-//			alpha->set(state, SAR->get(state, action));
-//		}
-//
-//		return alpha;
-//	}
-//
-//	// Attempt to use a SASRewards.
-//	SASRewards *SASR = dynamic_cast<SASRewards *>(R);
-//	if (SASR != nullptr) {
-//		// This structure may or may not be correct.
-//		for (auto s : *S) {
-//			State *state = resolve(s);
-//
-//			// Compute the immediate state-action-state-observation reward.
-//			double immediateReward = 0.0;
-//			for (auto sp : *S) {
-//				State *nextState = resolve(sp);
-//
-//				immediateReward += T->get(state, action, nextState) * SASR->get(state, action, nextState);
-//			}
-//			alpha->set(state, immediateReward);
-//		}
-//
-//		return alpha;
-//	}
+	SARewards *SAR = dynamic_cast<SARewards *>(R);
+	if (SAR != nullptr) {
+		// This structure may or may not be correct.
+		for (auto s : *S) {
+			State *state = resolve(s);
+
+			alpha->set(state, SAR->get(state, action));
+		}
+
+		return alpha;
+	}
+
+	// Attempt to use a SASRewards.
+	SASRewards *SASR = dynamic_cast<SASRewards *>(R);
+	if (SASR != nullptr) {
+		// This structure may or may not be correct.
+		for (auto s : *S) {
+			State *state = resolve(s);
+
+			// Compute the immediate state-action-state-observation reward.
+			double immediateReward = 0.0;
+			for (auto sp : *S) {
+				State *nextState = resolve(sp);
+
+				immediateReward += T->get(state, action, nextState) * SASR->get(state, action, nextState);
+			}
+			alpha->set(state, immediateReward);
+		}
+
+		return alpha;
+	}
 
 	// Attempt to use a SASORewards.
 	SASORewards *SASOR = dynamic_cast<SASORewards *>(R);
@@ -225,8 +225,11 @@ PolicyAlphaVector *bellman_update_belief_state(StatesMap *S, ObservationsMap *Z,
 
 				// Compute the value of an element of the alpha vector.
 				double value = 0.0;
-				for (auto sp : *S) {
-					State *nextState = resolve(sp);
+//				for (auto sp : *S) {
+				std::vector<State *> successors;
+				T->successors(S, state, action, successors);
+				for (State *nextState : successors) {
+//					State *nextState = resolve(sp);
 					value += T->get(state, action, nextState) * O->get(action, nextState, observation) * alphaGamma->get(nextState);
 				}
 				value *= h->get_discount_factor();

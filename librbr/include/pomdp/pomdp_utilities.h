@@ -51,8 +51,8 @@
  * @param	O					The finite observation transition function.
  * @param	R					The state-action rewards function.
  * @param	action				The action taken at this time step.
- * @return	The alpha vector which is the single element in Gamma_{a,*}.
  * @throw	RewardException		The rewards argument was invalid.
+ * @return	The alpha vector which is the single element in Gamma_{a,*}.
  */
 PolicyAlphaVector *create_gamma_a_star(StatesMap *S,
 		ObservationsMap *Z, StateTransitions *T, ObservationTransitions *O,

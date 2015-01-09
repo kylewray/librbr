@@ -481,7 +481,7 @@ bool UnifiedFile::load_initial_state(std::vector<std::string> items)
 		initialState->set_initial_belief(state, 1.0);
 	} else {
 		// This must be a full list of probabilities.
-		int stateIndex = 0;
+		unsigned int stateIndex = 0;
 		for (std::string probability : list) {
 			// Stop if too many probabilities are defined and return an error.
 			if (stateIndex >= states->get_num_states()) {

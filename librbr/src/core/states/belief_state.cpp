@@ -62,3 +62,4 @@ void BeliefState::reset()
 {
 	belief.clear();
 }
+

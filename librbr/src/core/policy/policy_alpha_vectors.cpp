@@ -135,8 +135,35 @@ Action *PolicyAlphaVectors::get(unsigned int horizon, BeliefState *belief)
 			action = alpha->get_action();
 		}
 	}
-
 	return action;
+}
+
+void PolicyAlphaVectors::get(BeliefState *belief, double deviation, std::vector<Action *> &A)
+{
+	get(0, belief, deviation, A);
+}
+
+void PolicyAlphaVectors::get(unsigned int horizon, BeliefState *belief, double deviation, std::vector<Action *> &A)
+{
+	// Ensure that there is an alpha vector defined.
+	if (horizon >= alphaVectors.size() || alphaVectors[horizon].size() == 0) {
+		std::cout << "\n" << horizon << "\t" << alphaVectors.size() << "\t" << alphaVectors[horizon].size() << "\n"; std::cout.flush();
+		throw PolicyException();
+	}
+
+	// Important: Clear the set of any actions.
+	A.clear();
+
+	// We will find all alpha vectors (and thus their actions) that are within deviation from this value.
+	// Note: We allow for some slack here with machine precision computing the value at the belief.
+	double maxVb = compute_value(belief) - 1e-12;
+
+	// Find the alpha vector which maximizes "dot(b, alpha)" and return the corresponding action.
+	for (PolicyAlphaVector *alpha : alphaVectors[horizon]) {
+		if (maxVb - alpha->compute_value(belief) < deviation) {
+			A.push_back(alpha->get_action());
+		}
+	}
 }
 
 double PolicyAlphaVectors::compute_value(BeliefState *belief)
