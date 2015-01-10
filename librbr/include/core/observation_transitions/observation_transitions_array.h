@@ -85,15 +85,22 @@ public:
 	virtual double get(Action *previousAction, State *state, Observation *observation);
 
 	/**
-	 * Return a list of the observations available given a previous state and the action taken there.
-	 * @param	Z								A set of observations.
-	 * @param	previousAction					The action taken at the previous state which resulted in the current state.
-	 * @param	state							The current state.
-	 * @param	result							The list to overwrite and set to be the list of successor states.
-	 * @throw	ObservationTransitionException	Either the state, action, or observation was invalid.
+	 * Add an available observation.
+	 * @param	previousAction					The previous action taken at the previous state.
+	 * @param	state							The resultant state.
+	 * @param	availableObservation			The available observation.
+	 * @throw	ObservationTransitionException	The action-state pair could not be found.
 	 */
-	virtual void available(Observations *Z, Action *previousAction, State *state,
-			std::vector<Observation *> &result);
+	void add_available(Action *previousAction, State *state, Observation *availableObservation);
+
+	/**
+	 * Return a list of the observations available given a previous state and the action taken there.
+	 * @param	Z					A set of observations.
+	 * @param	previousAction		The action taken at the previous state which resulted in the current state.
+	 * @param	state				The current state.
+	 * @return	The list of available observations.
+	 */
+	virtual const std::vector<Observation *> &available(Observations *Z, Action *previousAction, State *state);
 
 	/**
 	 * Set the entire 3-dimensional array with the one provided. This only performs a copy.
@@ -152,6 +159,11 @@ private:
 	 * The number of observations in the state transitions third dimension.
 	 */
 	unsigned int observations;
+
+	/**
+	 * A mapping from action-state pairs to a vector of available observations.
+	 */
+	std::vector<Observation *> *availableObservations;
 
 };
 

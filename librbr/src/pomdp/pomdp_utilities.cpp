@@ -30,6 +30,8 @@
 #include "../../include/core/rewards/saso_rewards.h"
 #include "../../include/core/rewards/reward_exception.h"
 
+#include "../../include/core/state_transitions/state_transition_exception.h"
+
 PolicyAlphaVector *create_gamma_a_star(StatesMap *S,
 		ObservationsMap *Z, StateTransitions *T, ObservationTransitions *O,
 		Rewards *R, Action *action)
@@ -225,12 +227,15 @@ PolicyAlphaVector *bellman_update_belief_state(StatesMap *S, ObservationsMap *Z,
 
 				// Compute the value of an element of the alpha vector.
 				double value = 0.0;
-//				for (auto sp : *S) {
-				std::vector<State *> successors;
-				T->successors(S, state, action, successors);
-				for (State *nextState : successors) {
-//					State *nextState = resolve(sp);
-					value += T->get(state, action, nextState) * O->get(action, nextState, observation) * alphaGamma->get(nextState);
+				try {
+					for (State *nextState : T->successors(S, state, action)) {
+						value += T->get(state, action, nextState) * O->get(action, nextState, observation) * alphaGamma->get(nextState);
+					}
+				} catch (StateTransitionException &err) {
+					for (auto sp : *S) {
+						State *nextState = resolve(sp);
+						value += T->get(state, action, nextState) * O->get(action, nextState, observation) * alphaGamma->get(nextState);
+					}
 				}
 				value *= h->get_discount_factor();
 

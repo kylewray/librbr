@@ -77,14 +77,22 @@ public:
 	virtual double get(Action *previousAction, State *state, Observation *observation);
 
 	/**
+	 * Add an available observation.
+	 * @param	previousAction					The previous action taken at the previous state.
+	 * @param	state							The resultant state.
+	 * @param	availableObservation			The available observation.
+	 * @throw	ObservationTransitionException	The action-state pair could not be found.
+	 */
+	void add_available(Action *previousAction, State *state, Observation *availableObservation);
+
+	/**
 	 * Return a list of the observations available given a previous state and the action taken there.
 	 * @param	Z					A set of observations.
 	 * @param	previousAction		The action taken at the previous state which resulted in the current state.
 	 * @param	state				The current state.
-	 * @param	result				The list to overwrite and set to be the list of successor states.
+	 * @return	The list of available observations.
 	 */
-	virtual void available(Observations *Z, Action *previousAction, State *state,
-			std::vector<Observation *> &result);
+	virtual const std::vector<Observation *> &available(Observations *Z, Action *previousAction, State *state);
 
 	/**
 	 * Reset the observation transitions, clearing the internal mapping.
@@ -124,6 +132,11 @@ private:
 	 * A special observation (implicitly constant) referring to an observation wildcard.
 	 */
 	Observation *observationWildcard;
+
+	/**
+	 * A mapping from action-state pairs to a vector of available observations.
+	 */
+	std::unordered_map<Action *, std::unordered_map<State *, std::vector<Observation *> > > availableObservations;
 
 };
 

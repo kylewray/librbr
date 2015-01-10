@@ -76,10 +76,9 @@ public:
 	 * @param	Z					A set of observations.
 	 * @param	previousAction		The action taken at the previous state which resulted in the current state.
 	 * @param	state				The current state.
-	 * @param	result				The list to overwrite and set to be the list of successor states.
+	 * @return	The list of available observations.
 	 */
-	virtual void available(Observations *Z, Action *previousAction, State *state,
-			std::vector<Observation *> &result) = 0;
+	virtual const std::vector<Observation *> &available(Observations *Z, Action *previousAction, State *state) = 0;
 
 };
 

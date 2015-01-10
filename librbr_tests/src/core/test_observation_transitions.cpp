@@ -27,6 +27,7 @@
 #include <iostream>
 
 #include "../../../librbr/include/core/observation_transitions/observation_transitions_map.h"
+#include "../../../librbr/include/core/observation_transitions/observation_transition_exception.h"
 
 #include "../../../librbr/include/core/states/named_state.h"
 #include "../../../librbr/include/core/actions/named_action.h"
@@ -192,16 +193,21 @@ int test_observation_transitions()
 	finiteObservationTransitions->set(a2, s2, o1, 1.0);
 	finiteObservationTransitions->set(a2, s2, o2, 1.0);
 
-	std::vector<Observation *> tmp;
-	finiteObservationTransitions->available(Z, a1, s1, tmp);
+	finiteObservationTransitions->add_available(a1, s2, o1);
+	finiteObservationTransitions->add_available(a2, s1, o2);
+	finiteObservationTransitions->add_available(a2, s2, o1);
+	finiteObservationTransitions->add_available(a2, s2, o2);
 
-	if (tmp.size() == 0) {
-		finiteObservationTransitions->available(Z, a1, s2, tmp);
-		if (tmp.size() == 1 && tmp[0] == o1) {
-			finiteObservationTransitions->available(Z, a2, s1, tmp);
-			if (tmp.size() == 1 && tmp[0] == o2) {
-				finiteObservationTransitions->available(Z, a2, s2, tmp);
-				if (tmp.size() == 2) {
+	try {
+		const std::vector<Observation *> &tmp1 = finiteObservationTransitions->available(Z, a1, s1);
+		std::cout << " Failure." << std::endl;
+	} catch (ObservationTransitionException &err) {
+		const std::vector<Observation *> &tmp2 = finiteObservationTransitions->available(Z, a1, s2);
+		if (tmp2.size() == 1 && tmp2[0] == o1) {
+			const std::vector<Observation *> &tmp3 = finiteObservationTransitions->available(Z, a2, s1);
+			if (tmp3.size() == 1 && tmp3[0] == o2) {
+				const std::vector<Observation *> &tmp4 = finiteObservationTransitions->available(Z, a2, s2);
+				if (tmp4.size() == 2) {
 					std::cout << " Success." << std::endl;
 					numSuccesses++;
 				} else {
@@ -213,8 +219,6 @@ int test_observation_transitions()
 		} else {
 			std::cout << " Failure." << std::endl;
 		}
-	} else {
-		std::cout << " Failure." << std::endl;
 	}
 
 	delete finiteObservationTransitions;

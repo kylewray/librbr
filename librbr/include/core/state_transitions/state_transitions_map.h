@@ -77,13 +77,25 @@ public:
 	virtual double get(State *state, Action *action, State *nextState);
 
 	/**
-	 * Return a list of the states available given a previous state and the action taken there.
-	 * @param	S				The set of states.
-	 * @param	state			The previous state.
-	 * @param	action			The action taken at the previous state.
-	 * @param	successors		The list to overwrite and set to be the list of successor states.
+	 * Add a successor to a particular state.
+	 * @param	state						The previous state.
+	 * @param	action						The action taken at the previous state.
+	 * @param	successorState				The previous state.
+	 * @throw	StateTransitionException	The state-action pair could not be found.
 	 */
-	virtual void successors(States *S, State *state, Action *action, std::vector<State *> &result);
+	virtual void add_successor(State *state, Action *action, State *successorState);
+
+	/**
+	 * Return a list of the states available given a previous state and the action taken there.
+	 * Note: This list may change (continual planning) if nested inside loops incorrectly. To be safe,
+	 * just call it once unless you know what you are doing.
+	 * @param	S							The set of states.
+	 * @param	state						The previous state.
+	 * @param	action						The action taken at the previous state.
+	 * @throw	StateTransitionException	The state-action pair could not be found.
+	 * @return	successors					A reference to the list of successor states.
+	 */
+	virtual const std::vector<State *> &successors(States *S, State *state, Action *action);
 
 	/**
 	 * Reset the state transitions, clearing the internal mapping.
@@ -118,6 +130,11 @@ private:
 	 * A special action (implicitly constant) referring to an action wildcard.
 	 */
 	Action *actionWildcard;
+
+	/**
+	 * A mapping from state-action pairs to a vector of successor states.
+	 */
+	std::unordered_map<State *, std::unordered_map<Action *, std::vector<State *> > > successorStates;
 
 };
 

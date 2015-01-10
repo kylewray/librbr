@@ -45,6 +45,7 @@ StateTransitionsArray::StateTransitionsArray(unsigned int numStates, unsigned in
 	}
 
 	stateTransitions = new float[states * actions * states];
+	successorStates = new std::vector<State *>[states * actions];
 
 	reset();
 }
@@ -52,6 +53,7 @@ StateTransitionsArray::StateTransitionsArray(unsigned int numStates, unsigned in
 StateTransitionsArray::~StateTransitionsArray()
 {
 	delete [] stateTransitions;
+	delete [] successorStates;
 }
 
 void StateTransitionsArray::set(State *state, Action *action, State *nextState, double probability)
@@ -92,22 +94,36 @@ double StateTransitionsArray::get(State *state, Action *action, State *nextState
 	                        sp->get_index()];
 }
 
-void StateTransitionsArray::successors(States *S, State *state,
-		Action *action, std::vector<State *> &result)
+void StateTransitionsArray::add_successor(State *state, Action *action, State *successorState)
 {
-	// ToDo: Create a StatesArray object, and replace this cast with that instead.
-	StatesMap *SMap = dynamic_cast<StatesMap *>(S);
-	if (SMap == nullptr) {
+	IndexedState *s = dynamic_cast<IndexedState *>(state);
+	IndexedAction *a = dynamic_cast<IndexedAction *>(action);
+
+	if (s == nullptr || a == nullptr) {
 		throw StateTransitionException();
 	}
 
-	result.clear();
-	for (auto sp : *SMap) {
-		State *nextState = resolve(sp);
-		if (get(state, action, nextState) > 0.0) {
-			result.push_back(nextState);
-		}
+	if (s->get_index() >= states || a->get_index() >= actions) {
+		throw StateTransitionException();
 	}
+
+	successorStates[s->get_index() * actions + a->get_index()].push_back(successorState);
+}
+
+const std::vector<State *> &StateTransitionsArray::successors(States *S, State *state, Action *action)
+{
+	IndexedState *s = dynamic_cast<IndexedState *>(state);
+	IndexedAction *a = dynamic_cast<IndexedAction *>(action);
+
+	if (s == nullptr || a == nullptr) {
+		throw StateTransitionException();
+	}
+
+	if (s->get_index() >= states || a->get_index() >= actions) {
+		throw StateTransitionException();
+	}
+
+	return successorStates[s->get_index() * actions + a->get_index()];
 }
 
 void StateTransitionsArray::set_state_transitions(const float *T)
@@ -146,6 +162,8 @@ void StateTransitionsArray::reset()
 				                 a * states +
 				                 sp] = 0.0f;
 			}
+
+			successorStates[s * actions + a].clear();
 		}
 	}
 }

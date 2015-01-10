@@ -52,6 +52,7 @@ ObservationTransitionsArray::ObservationTransitionsArray(unsigned int numStates,
 	}
 
 	observationTransitions = new float[actions * states * observations];
+	availableObservations = new std::vector<Observation *>[actions * states];
 
 	reset();
 }
@@ -59,6 +60,7 @@ ObservationTransitionsArray::ObservationTransitionsArray(unsigned int numStates,
 ObservationTransitionsArray::~ObservationTransitionsArray()
 {
 	delete [] observationTransitions;
+	delete [] availableObservations;
 }
 
 void ObservationTransitionsArray::set(Action *previousAction, State *state,
@@ -102,22 +104,36 @@ double ObservationTransitionsArray::get(Action *previousAction, State *state,
 	   	                       z->get_index()];
 }
 
-void ObservationTransitionsArray::available(Observations *Z, Action *previousAction, State *state,
-		std::vector<Observation *> &result)
+void ObservationTransitionsArray::add_available(Action *previousAction, State *state, Observation *availableObservation)
 {
-	// ToDo: Create an ObservationsArray object, and replace this cast with that instead.
-	ObservationsMap *ZMap = static_cast<ObservationsMap *>(Z);
-	if (ZMap == nullptr) {
+	IndexedAction *a = dynamic_cast<IndexedAction *>(previousAction);
+	IndexedState *s = dynamic_cast<IndexedState *>(state);
+
+	if (a == nullptr || s == nullptr) {
 		throw ObservationTransitionException();
 	}
 
-	result.clear();
-	for (auto z : *ZMap) {
-		Observation *observation = resolve(z);
-		if (get(previousAction, state, observation) > 0.0) {
-			result.push_back(observation);
-		}
+	if (a->get_index() >= actions || s->get_index() >= states) {
+		throw ObservationTransitionException();
 	}
+
+	availableObservations[a->get_index() * states + s->get_index()].push_back(availableObservation);
+}
+
+const std::vector<Observation *> &ObservationTransitionsArray::available(Observations *Z, Action *previousAction, State *state)
+{
+	IndexedAction *a = dynamic_cast<IndexedAction *>(previousAction);
+	IndexedState *s = dynamic_cast<IndexedState *>(state);
+
+	if (a == nullptr || s == nullptr) {
+		throw ObservationTransitionException();
+	}
+
+	if (a->get_index() >= actions || s->get_index() >= states) {
+		throw ObservationTransitionException();
+	}
+
+	return availableObservations[a->get_index() * states + s->get_index()];
 }
 
 void ObservationTransitionsArray::set_observation_transitions(const float *O)
@@ -161,6 +177,8 @@ void ObservationTransitionsArray::reset()
 				                       s * observations +
 				                       z] = 0.0f;
 			}
+
+			availableObservations[a * states + s].clear();
 		}
 	}
 }

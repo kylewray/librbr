@@ -24,6 +24,8 @@
 
 #include "../../include/mdp/mdp_utilities.h"
 
+#include "../../include/core/state_transitions/state_transition_exception.h"
+
 #include <limits>
 #include <math.h>
 
@@ -40,11 +42,15 @@ void bellman_update(StatesMap *S, ActionsMap *A, StateTransitions *T,
 		// Compute the Q(s, a) estimate.
 		double Qsa = 0.0;
 
-		std::vector<State *> successors;
-		T->successors(S, s, a, successors);
-
-		for (State *sPrime : successors) {
-			Qsa += T->get(s, a, sPrime) * (R->get(s, a, sPrime) + h->get_discount_factor() * V[sPrime]);
+		try {
+			for (State *sp : T->successors(S, s, a)) {
+				Qsa += T->get(s, a, sp) * (R->get(s, a, sp) + h->get_discount_factor() * V[sp]);
+			}
+		} catch (StateTransitionException &err) {
+			for (auto sPrime : *S) {
+				State *sp = resolve(sPrime);
+				Qsa += T->get(s, a, sp) * (R->get(s, a, sp) + h->get_discount_factor() * V[sp]);
+			}
 		}
 
 		// While we are looping over actions, find the max and argmax.
@@ -75,14 +81,29 @@ void compute_V_pi(StatesMap *S, ActionsMap *A, StateTransitions *T, SASRewards *
 		for (auto state : *S) {
 			State *s = resolve(state);
 
-			std::vector<State *> successors;
-			T->successors(S, s, pi->get(s), successors);
-
 			double QsPIs = 0.0;
 
-			for (State *sPrime : successors) {
-				QsPIs += T->get(s, pi->get(s), sPrime) * (R->get(s, pi->get(s), sPrime) + h->get_discount_factor() * V[sPrime]);
+			try {
+				for (State *sp : T->successors(S, s, pi->get(s))) {
+					QsPIs += T->get(s, pi->get(s), sp) * (R->get(s, pi->get(s), sp) + h->get_discount_factor() * V[sp]);
+				}
+			} catch (StateTransitionException &err) {
+				for (auto sPrime : *S) {
+					State *sp = resolve(sPrime);
+					QsPIs += T->get(s, pi->get(s), sp) * (R->get(s, pi->get(s), sp) + h->get_discount_factor() * V[sp]);
+				}
 			}
+
+//			try {
+//				for (State *nextState : T->successors(S, state, action)) {
+//					value += T->get(state, action, nextState) * O->get(action, nextState, observation) * alphaGamma->get(nextState);
+//				}
+//			} catch (StateTransitionException &err) {
+//				for (auto sp : *S) {
+//					State *nextState = resolve(sp);
+//					value += T->get(state, action, nextState) * O->get(action, nextState, observation) * alphaGamma->get(nextState);
+//				}
+//			}
 
 			if (fabs(V[s] - QsPIs) > delta) {
 				delta = fabs(V[s] - QsPIs);

@@ -75,14 +75,15 @@ public:
 
 	/**
 	 * Return a list of the states available given a previous state and the action taken there.
+	 * Note: This list may change (continual planning) if nested inside loops incorrectly. To be safe,
+	 * just call it once unless you know what you are doing.
 	 * @param	S							The set of states.
 	 * @param	state						The previous state.
 	 * @param	action						The action taken at the previous state.
-	 * @param	successors					The list to overwrite and set to be the list of successor states.
 	 * @throw	StateTransitionException	An error occurred. Please see child class definitions for specifics.
+	 * @return	successors					A reference to the list of successor states.
 	 */
-	virtual void successors(States *S, State *state, Action *action,
-			std::vector<State *> &result) = 0;
+	virtual const std::vector<State *> &successors(States *S, State *state, Action *action) = 0;
 
 };
 

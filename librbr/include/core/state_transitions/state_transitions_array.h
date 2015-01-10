@@ -82,15 +82,25 @@ public:
 	virtual double get(State *state, Action *action, State *nextState);
 
 	/**
+	 * Add a successor to a particular state.
+	 * @param	state						The previous state.
+	 * @param	action						The action taken at the previous state.
+	 * @param	successorState				The previous state.
+	 * @throw	StateTransitionException	The state-action pair was invalid.
+	 */
+	virtual void add_successor(State *state, Action *action, State *successorState);
+
+	/**
 	 * Return a list of the states available given a previous state and the action taken there.
+	 * Note: This list may change (continual planning) if nested inside loops incorrectly. To be safe,
+	 * just call it once unless you know what you are doing.
 	 * @param	S							The set of states.
 	 * @param	state						The previous state.
 	 * @param	action						The action taken at the previous state.
-	 * @param	successors					The list to overwrite and set to be the list of successor states.
-	 * @throw	StateTransitionException	Either the states array, state, or action was invalid.
+	 * @throw	StateTransitionException	An error occurred. Please see child class definitions for specifics.
+	 * @return	successors					A reference to the list of successor states.
 	 */
-	virtual void successors(States *S, State *state, Action *action,
-			std::vector<State *> &result);
+	virtual const std::vector<State *> &successors(States *S, State *state, Action *action);
 
 	/**
 	 * Set the entire 3-dimensional array with the one provided. This only performs a copy.
@@ -138,6 +148,11 @@ private:
 	 * The number of actions in the state transitions second dimension.
 	 */
 	unsigned int actions;
+
+	/**
+	 * A mapping from state-action pairs to a vector of successor states.
+	 */
+	std::vector<State *> *successorStates;
 
 };
 

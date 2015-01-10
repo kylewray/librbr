@@ -91,27 +91,33 @@ double StateTransitionsMap::get(State *state, Action *action, State *nextState)
 	return 0.0;
 }
 
-void StateTransitionsMap::successors(States *S, State *state,
-		Action *action, std::vector<State *> &result)
+void StateTransitionsMap::add_successor(State *state, Action *action, State *successorState)
 {
-	// ToDo: Create a StatesArray object, and replace this cast with that instead.
-	StatesMap *SMap = dynamic_cast<StatesMap *>(S);
-	if (SMap == nullptr) {
+	successorStates[state][action].push_back(successorState);
+}
+
+const std::vector<State *> &StateTransitionsMap::successors(States *S, State *state, Action *action)
+{
+	std::unordered_map<State *,
+		std::unordered_map<Action *,
+		std::vector<State *> > >::const_iterator alpha = successorStates.find(state);
+	if (alpha == successorStates.end()) {
 		throw StateTransitionException();
 	}
 
-	result.clear();
-	for (auto sp : *SMap) {
-		State *nextState = resolve(sp);
-		if (get(state, action, nextState) > 0.0) {
-			result.push_back(nextState);
-		}
+	std::unordered_map<Action *,
+		std::vector<State *> >::const_iterator beta = alpha->second.find(action);
+	if (beta == alpha->second.end()) {
+		throw StateTransitionException();
 	}
+
+	return beta->second;
 }
 
 void StateTransitionsMap::reset()
 {
 	stateTransitions.clear();
+	successorStates.clear();
 }
 
 double StateTransitionsMap::get_value(State *state, Action *action, State *nextState)

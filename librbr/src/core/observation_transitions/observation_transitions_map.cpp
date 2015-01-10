@@ -96,26 +96,33 @@ double ObservationTransitionsMap::get(Action *previousAction, State *state,
 	return 0.0;
 }
 
-void ObservationTransitionsMap::available(Observations *Z, Action *previousAction, State *state,
-		std::vector<Observation *> &result)
+void ObservationTransitionsMap::add_available(Action *previousAction, State *state, Observation *availableObservation)
 {
-	ObservationsMap *ZMap = static_cast<ObservationsMap *>(Z);
-	if (ZMap == nullptr) {
+	availableObservations[previousAction][state].push_back(availableObservation);
+}
+
+const std::vector<Observation *> &ObservationTransitionsMap::available(Observations *Z, Action *previousAction, State *state)
+{
+	std::unordered_map<Action *,
+		std::unordered_map<State *,
+		std::vector<Observation *> > >::const_iterator alpha = availableObservations.find(previousAction);
+	if (alpha == availableObservations.end()) {
 		throw ObservationTransitionException();
 	}
 
-	result.clear();
-	for (auto z : *ZMap) {
-		Observation *observation = resolve(z);
-		if (get(previousAction, state, observation) > 0.0) {
-			result.push_back(observation);
-		}
+	std::unordered_map<State *,
+		std::vector<Observation *> >::const_iterator beta = alpha->second.find(state);
+	if (beta == alpha->second.end()) {
+		throw ObservationTransitionException();
 	}
+
+	return beta->second;
 }
 
 void ObservationTransitionsMap::reset()
 {
 	observationTransitions.clear();
+	availableObservations.clear();
 }
 
 double ObservationTransitionsMap::get_value(Action *previousAction, State *state,

@@ -27,6 +27,7 @@
 #include <iostream>
 
 #include "../../../librbr/include/core/state_transitions/state_transitions_map.h"
+#include "../../../librbr/include/core/state_transitions/state_transition_exception.h"
 
 #include "../../../librbr/include/core/states/named_state.h"
 #include "../../../librbr/include/core/actions/named_action.h"
@@ -173,7 +174,7 @@ int test_state_transitions()
 	delete finiteStateTransitions;
 	finiteStateTransitions = new StateTransitionsMap();
 
-	std::cout << "StateTransitions: Test 'FiniteStateTransitions::successors'... ";
+	std::cout << "StateTransitions: Test 'FiniteStateTransitions::add_successor' and 'FiniteStateTransitions::successors'... ";
 
 	finiteStateTransitions->set(s1, a1, s1, 0.0);
 	finiteStateTransitions->set(s1, a1, s2, 0.0);
@@ -188,16 +189,24 @@ int test_state_transitions()
 	S->add(s1);
 	S->add(s2);
 
-	std::vector<State *> tmp;
-	finiteStateTransitions->successors(S, s1, a1, tmp);
+	finiteStateTransitions->add_successor(s1, a2, s1);
+	finiteStateTransitions->add_successor(s2, a1, s2);
+	finiteStateTransitions->add_successor(s2, a2, s1);
+	finiteStateTransitions->add_successor(s2, a2, s2);
 
-	if (tmp.size() == 0) {
-		finiteStateTransitions->successors(S, s1, a2, tmp);
-		if (tmp.size() == 1 && tmp[0] == s1) {
-			finiteStateTransitions->successors(S, s2, a1, tmp);
-			if (tmp.size() == 1 && tmp[0] == s2) {
-				finiteStateTransitions->successors(S, s2, a2, tmp);
-				if (tmp.size() == 2) {
+	try {
+		const std::vector<State *> &tmp1 = finiteStateTransitions->successors(S, s1, a1);
+		std::cout << " Failure." << std::endl;
+	} catch (StateTransitionException &err) {
+		std::cout << "1"; std::cout.flush();
+		const std::vector<State *> &tmp2 = finiteStateTransitions->successors(S, s1, a2);
+		if (tmp2.size() == 1 && tmp2[0] == s1) {
+			std::cout << "2"; std::cout.flush();
+			const std::vector<State *> &tmp3 = finiteStateTransitions->successors(S, s2, a1);
+			if (tmp3.size() == 1 && tmp3[0] == s2) {
+				std::cout << "3"; std::cout.flush();
+				const std::vector<State *> &tmp4 = finiteStateTransitions->successors(S, s2, a2);
+				if (tmp4.size() == 2) {
 					std::cout << " Success." << std::endl;
 					numSuccesses++;
 				} else {
@@ -209,8 +218,6 @@ int test_state_transitions()
 		} else {
 			std::cout << " Failure." << std::endl;
 		}
-	} else {
-		std::cout << " Failure." << std::endl;
 	}
 
 	delete finiteStateTransitions;
