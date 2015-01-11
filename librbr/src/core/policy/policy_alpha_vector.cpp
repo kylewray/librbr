@@ -78,9 +78,12 @@ double PolicyAlphaVector::compute_value(BeliefState *belief)
 {
 	// Perform the dot product: dot(beta, alpha), but do so with map objects.
 	double value = 0.0;
-	for (std::map<State *, double>::value_type alpha : alphaVector) {
-		value += alpha.second * belief->get(alpha.first);
+	for (State *s : belief->get_states()) {
+		value += alphaVector[s] * belief->get(s);
 	}
+//	for (std::map<State *, double>::value_type alpha : alphaVector) {
+//		value += alpha.second * belief->get(alpha.first);
+//	}
 	return value;
 }
 

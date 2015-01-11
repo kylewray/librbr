@@ -123,6 +123,10 @@ const std::vector<State *> &StateTransitionsArray::successors(States *S, State *
 		throw StateTransitionException();
 	}
 
+	if (successorStates[s->get_index() * actions + a->get_index()].size() == 0) {
+		throw StateTransitionException();
+	}
+
 	return successorStates[s->get_index() * actions + a->get_index()];
 }
 

@@ -133,6 +133,10 @@ const std::vector<Observation *> &ObservationTransitionsArray::available(Observa
 		throw ObservationTransitionException();
 	}
 
+	if (availableObservations[a->get_index() * states + s->get_index()].size() == 0) {
+		throw ObservationTransitionException();
+	}
+
 	return availableObservations[a->get_index() * states + s->get_index()];
 }
 

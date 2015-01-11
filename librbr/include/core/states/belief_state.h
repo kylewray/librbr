@@ -27,6 +27,7 @@
 
 
 #include <map>
+#include <vector>
 
 #include "state.h"
 
@@ -56,14 +57,21 @@ public:
 	 * @param	state			The state to set a belief over.
 	 * @param	probability		The probability of the state.
 	 */
-	void set(const State *state, double probability);
+	void set(State *state, double probability);
 
 	/**
 	 * Get the probability of a state.
 	 * @param	state		The state to get a belief over.
 	 * @return	The belief probability of the state.
 	 */
-	double get(const State *state) const;
+	double get(State *state) const;
+
+	/**
+	 * Get the set of states with non-zero belief probability. Note: This set may change
+	 * if you have nested for loops, so be sure to correctly use this function.
+	 * @return	The set of states with non-zero belief probability.
+	 */
+	const std::vector<State *> &get_states();
 
 	/**
 	 * Overload the equals operator to set this belief state equal to the belief state provided.
@@ -82,7 +90,12 @@ private:
 	 * The belief over the states. If a state is not mapped, then it
 	 * is assumed that the probability for that state is 0.
 	 */
-	std::map<const State *, double> belief;
+	std::map<State *, double> belief;
+
+	/**
+	 * The set of states corresponding to this belief state which are non-zero.
+	 */
+	std::vector<State *> states;
 
 };
 

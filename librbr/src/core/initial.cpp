@@ -29,12 +29,12 @@ Initial::Initial()
 	initialState = nullptr;
 }
 
-Initial::Initial(const State *state)
+Initial::Initial(State *state)
 {
 	initialState = state;
 }
 
-Initial::Initial(const BeliefState &belief)
+Initial::Initial(BeliefState &belief)
 {
 	initialState = nullptr;
 	initialBelief = belief;
@@ -45,30 +45,30 @@ Initial::~Initial()
 	reset();
 }
 
-void Initial::set_initial_state(const State *state)
+void Initial::set_initial_state(State *state)
 {
 	initialState = nullptr;
 	initialBelief.reset();
 }
 
-void Initial::set_initial_belief(const BeliefState &belief)
+void Initial::set_initial_belief(BeliefState &belief)
 {
 	initialState = nullptr;
 	initialBelief = belief;
 }
 
-void Initial::set_initial_belief(const State *state, double probability)
+void Initial::set_initial_belief(State *state, double probability)
 {
 	initialState = nullptr;
 	initialBelief.set(state, probability);
 }
 
-const State *Initial::get_initial_state() const
+State *Initial::get_initial_state()
 {
 	return initialState;
 }
 
-const BeliefState &Initial::get_initial_belief() const
+BeliefState &Initial::get_initial_belief()
 {
 	return initialBelief;
 }

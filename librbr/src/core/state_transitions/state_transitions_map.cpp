@@ -111,6 +111,10 @@ const std::vector<State *> &StateTransitionsMap::successors(States *S, State *st
 		throw StateTransitionException();
 	}
 
+	if (beta->second.size() == 0) {
+		throw StateTransitionException();
+	}
+
 	return beta->second;
 }
 

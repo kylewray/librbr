@@ -221,10 +221,9 @@ PolicyAlphaVector *bellman_update_belief_state(StatesMap *S, ObservationsMap *Z,
 			// Note: It doesn't matter if we set the action here, since cross_sum will create new alpha vectors anyway.
 			PolicyAlphaVector *newAlpha = new PolicyAlphaVector();
 
-			// For each of the columns in the alpha vector.
-			for (auto s : *S) {
-				State *state = resolve(s);
-
+			// For each of the columns in the alpha vector. Note: This is only used in computing the dot
+			// product of "dot(alphaGamma, b)" so we skip over some states for now.
+			for (State *state : b->get_states()) {
 				// Compute the value of an element of the alpha vector.
 				double value = 0.0;
 				try {
@@ -250,6 +249,28 @@ PolicyAlphaVector *bellman_update_belief_state(StatesMap *S, ObservationsMap *Z,
 				if (maxAlphaBAOmega != nullptr) {
 					delete maxAlphaBAOmega;
 				}
+
+				// Now you actually have to compute all the states' values, since we found a new max.
+				for (auto s : *S) {
+					State *state = resolve(s);
+
+					// Compute the value of an element of the alpha vector.
+					double value = 0.0;
+					try {
+						for (State *nextState : T->successors(S, state, action)) {
+							value += T->get(state, action, nextState) * O->get(action, nextState, observation) * alphaGamma->get(nextState);
+						}
+					} catch (StateTransitionException &err) {
+						for (auto sp : *S) {
+							State *nextState = resolve(sp);
+							value += T->get(state, action, nextState) * O->get(action, nextState, observation) * alphaGamma->get(nextState);
+						}
+					}
+					value *= h->get_discount_factor();
+
+					newAlpha->set(state, value);
+				}
+
 				maxAlphaBAOmega = newAlpha;
 				maxAlphaDotBeta = alphaDotBeta;
 			} else {

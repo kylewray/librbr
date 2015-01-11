@@ -116,6 +116,10 @@ const std::vector<Observation *> &ObservationTransitionsMap::available(Observati
 		throw ObservationTransitionException();
 	}
 
+	if (beta->second.size() == 0) {
+		throw ObservationTransitionException();
+	}
+
 	return beta->second;
 }
 

@@ -47,13 +47,13 @@ public:
 	 * The constructor for the Initial class, specifying the true initial state.
 	 * @param	state		The true initial state.
 	 */
-	Initial(const State *state);
+	Initial(State *state);
 
 	/**
 	 * The constructor for the Initial class, specifying the belief over the states.
 	 * @param	belief		The belief over the states.
 	 */
-	Initial(const BeliefState &belief);
+	Initial(BeliefState &belief);
 
 	/**
 	 * The deconstructor for the Initial class.
@@ -64,33 +64,33 @@ public:
 	 * Set the true initial state.
 	 * @param	state		The true initial state.
 	 */
-	void set_initial_state(const State *state);
+	void set_initial_state(State *state);
 
 	/**
 	 * Set the initial belief over states.
 	 * @param	belief		The belief over the states.
 	 */
-	void set_initial_belief(const BeliefState &belief);
+	void set_initial_belief(BeliefState &belief);
 
 	/**
 	 * Set the probability of a particular state, assuming the belief has been created.
 	 * @param	state 			The state to which the probability will be assigned.
 	 * @param	probability		The probability of that the initial state is the state given.
 	 */
-	void set_initial_belief(const State *state, double probability);
+	void set_initial_belief(State *state, double probability);
 
 	/**
 	 * Get the true initial state.
 	 * @return	The true initial state.
 	 */
-	const State *get_initial_state() const;
+	State *get_initial_state();
 
 	/**
 	 * Get the probability of a particular state.
 	 * @param	state		The state to which the probability will be assigned.
 	 * @return	The probability of that the initial state is the state given.
 	 */
-	const BeliefState &get_initial_belief() const;
+	BeliefState &get_initial_belief();
 
 	/**
 	 * Reset the initial state and the initial belief.
@@ -101,7 +101,7 @@ private:
 	/**
 	 * The true initial state.
 	 */
-	const State *initialState;
+	State *initialState;
 
 	/**
 	 * The belief over the states.

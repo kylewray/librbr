@@ -102,7 +102,7 @@ int test_pomdp()
 
 	try {
 		StatesMap *states = dynamic_cast<StatesMap *>(pomdp->get_states());
-		std::vector<const State *> orderedStates;
+		std::vector<State *> orderedStates;
 		for (auto s : *states) {
 			orderedStates.push_back(resolve(s));
 		}
@@ -221,7 +221,7 @@ int test_pomdp()
 
 	try {
 		StatesMap *states = dynamic_cast<StatesMap *>(pomdp->get_states());
-		std::vector<const State *> orderedStates;
+		std::vector<State *> orderedStates;
 		for (auto s : *states) {
 			orderedStates.push_back(resolve(s));
 		}

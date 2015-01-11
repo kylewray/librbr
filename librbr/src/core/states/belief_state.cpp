@@ -37,14 +37,16 @@ BeliefState::~BeliefState()
 	reset();
 }
 
-void BeliefState::set(const State *state, double probability)
+void BeliefState::set(State *state, double probability)
 {
-	belief[state] = probability;
+	belief[state] = std::min(1.0, std::max(0.0, probability));
+
+	states.push_back(state);
 }
 
-double BeliefState::get(const State *state) const
+double BeliefState::get(State *state) const
 {
-	std::map<const State *, double>::const_iterator result = belief.find(state);
+	std::map<State *, double>::const_iterator result = belief.find(state);
 	if (result == belief.end()) {
 		return 0.0;
 	} else {
@@ -52,14 +54,21 @@ double BeliefState::get(const State *state) const
 	}
 }
 
+const std::vector<State *> &BeliefState::get_states()
+{
+	return states;
+}
+
 BeliefState &BeliefState::operator=(const BeliefState &other)
 {
 	belief = other.belief;
+	states = other.states;
 	return *this;
 }
 
 void BeliefState::reset()
 {
 	belief.clear();
+	states.clear();
 }
 
