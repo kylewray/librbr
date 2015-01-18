@@ -24,6 +24,8 @@
 
 #include "../../../include/core/policy/policy_alpha_vector.h"
 
+#include <iostream>
+
 PolicyAlphaVector::PolicyAlphaVector()
 {
 	alphaVectorAction = nullptr;
@@ -131,7 +133,7 @@ PolicyAlphaVector PolicyAlphaVector::operator-(PolicyAlphaVector &other)
 
 PolicyAlphaVector &PolicyAlphaVector::operator-=(PolicyAlphaVector &other)
 {
-	for (std::map<State *, double>::value_type &alpha :alphaVector) {
+	for (std::map<State *, double>::value_type &alpha : alphaVector) {
 		alpha.second -= other.get(alpha.first);
 	}
 
@@ -142,6 +144,22 @@ void PolicyAlphaVector::reset()
 {
 	alphaVector.clear();
 	alphaVectorAction = nullptr;
+}
+
+void PolicyAlphaVector::print()
+{
+	for (std::map<State *, double>::value_type &alpha : alphaVector) {
+		std::cout << alpha.first->to_string() << ":" << alpha.second << " ";
+	}
+	std::cout << std::endl;
+}
+
+void PolicyAlphaVector::print(const std::vector<State *> &states)
+{
+	for (State *s : states) {
+		std::cout << s->to_string() << ":" << alphaVector[s] << " ";
+	}
+	std::cout << std::endl;
 }
 
 std::vector<PolicyAlphaVector *> PolicyAlphaVector::cross_sum(std::vector<PolicyAlphaVector *> &A,

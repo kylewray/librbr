@@ -92,7 +92,7 @@ public:
 	 * previous alpha vectors.
 	 * @param	alphas		The set of alpha vectors.
 	 */
-	void set(std::vector<PolicyAlphaVector *> &alphas);
+	virtual void set(std::vector<PolicyAlphaVector *> &alphas);
 
 	/**
 	 * Set the alpha vectors, allowing the explicit specification of the horizon. This frees
@@ -101,7 +101,7 @@ public:
 	 * @param	alphas 				The set of alpha vectors.
 	 * @throw	PolicyException		The horizon was invalid.
 	 */
-	void set(unsigned int horizon, std::vector<PolicyAlphaVector *> &alphas);
+	virtual void set(unsigned int horizon, std::vector<PolicyAlphaVector *> &alphas);
 
 	/**
 	 * Get the action for a given belief state. For finite horizon, it assumes 0 by default.
@@ -109,7 +109,7 @@ public:
 	 * @throw	PolicyException		The policy was not defined for this state.
 	 * @return	The action to take at the given belief state.
 	 */
-	Action *get(BeliefState *belief);
+	virtual Action *get(BeliefState *belief);
 
 	/**
 	 * Get the action for a given belief state, allowing the explicit specification of the horizon.
@@ -118,7 +118,7 @@ public:
 	 * @throw	PolicyException		The policy was not defined for this belief state, or horizon was invalid.
 	 * @return	The action to take at the given belief state.
 	 */
-	Action *get(unsigned int horizon, BeliefState *belief);
+	virtual Action *get(unsigned int horizon, BeliefState *belief);
 
 	/**
 	 * Get the set of actions at a given belief state, up to the specified "deviation" away from optimal.
@@ -129,7 +129,7 @@ public:
 	 * @throw	PolicyException		The policy was not defined for this state.
 	 * @return	The action to take at the given belief state.
 	 */
-	void get(BeliefState *belief, double deviation, std::vector<Action *> &A);
+	virtual void get(BeliefState *belief, double deviation, std::vector<Action *> &A);
 
 	/**
 	 * Get the set of actions at a given belief state, up to the specified "deviation" away from optimal,
@@ -141,7 +141,7 @@ public:
 	 * @throw	PolicyException		The policy was not defined for this belief state, or horizon was invalid.
 	 * @return	The action to take at the given belief state.
 	 */
-	void get(unsigned int horizon, BeliefState *belief, double deviation, std::vector<Action *> &A);
+	virtual void get(unsigned int horizon, BeliefState *belief, double deviation, std::vector<Action *> &A);
 
 	/**
 	 * Compute the value of the belief state by computing: max_{alpha} dot(beta, alpha).
@@ -149,7 +149,7 @@ public:
 	 * @param	belief		The belief state 'beta' vector.
 	 * @return	The value of the belief state provided.
 	 */
-	double compute_value(BeliefState *belief);
+	virtual double compute_value(BeliefState *belief);
 
 	/**
 	 * Compute the value of the belief state by computing: max_{alpha} dot(beta, alpha), allowing the
@@ -158,7 +158,7 @@ public:
 	 * @param	belief		The belief state 'beta' vector.
 	 * @return	The value of the belief state provided.
 	 */
-	double compute_value(unsigned int horizon, BeliefState *belief);
+	virtual double compute_value(unsigned int horizon, BeliefState *belief);
 
 	/**
 	 * A function which must load a policy file.
@@ -178,12 +178,17 @@ public:
 	 * @param	states		The states object which contains the actual state objects to be mapped.
 	 * @return	Return @code{true} if an error occurred, @code{false} otherwise.
 	 */
-	bool save(std::string filename, StatesMap *states);
+	virtual bool save(std::string filename, StatesMap *states);
 
 	/**
 	 * Reset the alpha vectors, freeing the memory.
 	 */
 	virtual void reset();
+
+	/**
+	 * Print the alpha vectors to the screen.
+	 */
+	virtual void print() const;
 
 	/**
 	 * A static method to prune a set of alpha vectors. This will free the memory of the alpha vectors inside 'alphas',

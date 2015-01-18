@@ -65,78 +65,89 @@ public:
 	 * @param	state	Set the value of this state.
 	 * @param	value	The alpha value of the state.
 	 */
-	void set(State *state, double value);
+	virtual void set(State *state, double value);
 
 	/**
 	 * Get the value of a state. Unset alpha values are assumed to be 0.
 	 * @param	state		Get the value of this state.
 	 * @return	The alpha vector's value of the state.
 	 */
-	double get(State *state);
+	virtual double get(State *state);
 
 	/**
 	 * Set the action to take if this alpha vector is optimal for a belief state.
 	 */
-	void set_action(Action *action);
+	virtual void set_action(Action *action);
 
 	/**
 	 * Get the action to take at this alpha vector.
 	 * @return	The action to take if this alpha vector is optimal for a belief state.
 	 */
-	Action *get_action();
+	virtual Action *get_action();
 
 	/**
 	 * Get the dimension of this alpha vector (which is the number of states).
 	 * @return	The dimension of this alpha vector.
 	 */
-	int get_dimension() const;
+	virtual int get_dimension() const;
 
 	/**
 	 * Compute the value of the belief state by computing: dot(beta, alpha).
 	 * @param	belief		The belief state 'beta' vector.
 	 * @return	The value of the belief state provided.
 	 */
-	double compute_value(BeliefState *belief);
+	virtual double compute_value(BeliefState *belief);
 
 	/**
 	 * Overload the equals operator to set this alpha vector equal to the alpha vector provided.
 	 * @param	other		The alpha vector to copy.
 	 * @return	The new version of this alpha vector.
 	 */
-	PolicyAlphaVector &operator=(PolicyAlphaVector &other);
+	virtual PolicyAlphaVector &operator=(PolicyAlphaVector &other);
 
 	/**
 	 * Overload the plus operator to return the summation of all elements in the vectors.
 	 * @param	other		The alpha vector to add to this one.
 	 * @return	The resultant alpha vector from the sum of this one and the other one provided.
 	 */
-	PolicyAlphaVector operator+(PolicyAlphaVector &other);
+	virtual PolicyAlphaVector operator+(PolicyAlphaVector &other);
 
 	/**
 	 * Overload the plus-equals operator to return the summation of all elements in the vectors.
 	 * @param	other		The alpha vector to add to this one.
 	 * @return	The resultant alpha vector from the sum of this one and the other one provided.
 	 */
-	PolicyAlphaVector &operator+=(PolicyAlphaVector &other);
+	virtual PolicyAlphaVector &operator+=(PolicyAlphaVector &other);
 
 	/**
 	 * Overload the minus operator to return the subtraction of all elements in the vectors.
 	 * @param	other		The alpha vector to subtract to this one.
 	 * @return	The resultant alpha vector from the element-wise subtraction of this one and the other one provided.
 	 */
-	PolicyAlphaVector operator-(PolicyAlphaVector &other);
+	virtual PolicyAlphaVector operator-(PolicyAlphaVector &other);
 
 	/**
 	 * Overload the minus-equals operator to return the subtraction of all elements in the vectors.
 	 * @param	other		The alpha vector to subtract to this one.
 	 * @return	The resultant alpha vector from the element-wise subtraction of this one and the other one provided.
 	 */
-	PolicyAlphaVector &operator-=(PolicyAlphaVector &other);
+	virtual PolicyAlphaVector &operator-=(PolicyAlphaVector &other);
 
 	/**
 	 * Reset the alpha vector.
 	 */
-	void reset();
+	virtual void reset();
+
+	/**
+	 * Print the alpha vector as a row of belief values. This will omit undefined alpha vector values.
+	 */
+	virtual void print();
+
+	/**
+	 * Print the alpha vector as a row of belief values in the order of the states vector provided. This will
+	 * also only print the values of the states specified.
+	 */
+	virtual void print(const std::vector<State *> &states);
 
 	/**
 	 * Compute the cross-sum (Minkowski sum) of two alpha vectors. This creates new PolicyAlphaVector in memory.

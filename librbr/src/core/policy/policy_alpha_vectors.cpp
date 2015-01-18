@@ -371,6 +371,19 @@ void PolicyAlphaVectors::reset()
 	alphaVectors.clear();
 }
 
+void PolicyAlphaVectors::print() const
+{
+	for (unsigned int t = 0; t < alphaVectors.size(); t++) {
+		if (alphaVectors.size() > 1) {
+			std::cout << "Horizon " << t << ":" << std::endl;
+		}
+
+		for (PolicyAlphaVector *alpha : alphaVectors[t]) {
+			alpha->print();
+		}
+	}
+}
+
 void PolicyAlphaVectors::prune_dominated(StatesMap *S, std::vector<PolicyAlphaVector *> &alphas)
 {
 	if (S == nullptr || S->get_num_states() == 0 || alphas.size() == 0 || alphas[0] == nullptr) {
