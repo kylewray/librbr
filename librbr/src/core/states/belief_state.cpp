@@ -24,6 +24,8 @@
 
 #include "../../../include/core/states/belief_state.h"
 
+#include <algorithm>
+
 BeliefState::BeliefState()
 { }
 
