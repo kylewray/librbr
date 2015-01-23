@@ -217,7 +217,7 @@ MDP *RawFile::load_raw_mdp(std::string filename)
 	// Create the rewards, based on the reward type.
 	Rewards *rewards = nullptr;
 
-	for (int i = 0; i < (int)k; i++) {
+	for (unsigned int i = 0; i < k; i++) {
 		Rewards *Ri = nullptr;
 		SARewardsArray *RiSA = nullptr;
 		SASRewardsArray *RiSAS = nullptr;
@@ -228,24 +228,14 @@ MDP *RawFile::load_raw_mdp(std::string filename)
 			throw CoreException();
 			break;
 		case RawFileRewardsType::RawFileSARewards:
-			Ri = new SARewardsArray(n, m);
-
-			RiSA = dynamic_cast<SARewardsArray *>(rewards);
-			if (RiSA == nullptr) {
-				throw CoreException();
-			}
-
+			RiSA = new SARewardsArray(n, m);
 			RiSA->set_rewards(R[i]);
+			Ri = RiSA;
 			break;
 		case RawFileRewardsType::RawFileSASRewards:
-			Ri = new SASRewardsArray(n, m);
-
-			RiSAS = dynamic_cast<SASRewardsArray *>(rewards);
-			if (RiSAS == nullptr) {
-				throw CoreException();
-			}
-
+			RiSAS = new SASRewardsArray(n, m);
 			RiSAS->set_rewards(R[i]);
+			Ri = RiSAS;
 			break;
 		};
 
@@ -259,16 +249,16 @@ MDP *RawFile::load_raw_mdp(std::string filename)
 				rewards = new FactoredRewards();
 			}
 
-			FactoredRewards *RiStar = dynamic_cast<FactoredRewards *>(rewards);
-			if (RiStar == nullptr) {
+			FactoredRewards *RF = dynamic_cast<FactoredRewards *>(rewards);
+			if (RF == nullptr) {
 				throw CoreException();
 			}
 
-			RiStar->add_factor(Ri);
+			RF->add_factor(Ri);
 		}
 	}
 
-	for (int i = 0; i < (int)k; i++) {
+	for (unsigned int i = 0; i < k; i++) {
 		delete [] R[i];
 	}
 	delete [] R;
@@ -312,13 +302,18 @@ void RawFile::save_raw_mdp(MDP *mdp, std::string filename)
 	if (R == nullptr) {
 		k = 1;
 
-//		if (R == nullptr) {
-//			R = dynamic_cast<SARewards *>(mdp->get_rewards());
-//			r = 1;
-//		}
-		if (R == nullptr) {
-			R = dynamic_cast<SASRewards *>(mdp->get_rewards());
-			r = 2;
+//		SRewards *Ri = dynamic_cast<SRewards *>(mdp->get_rewards());
+//		r = RawFileRewardsType::RawFileSRewards;
+//
+//		SARewards *Ri = dynamic_cast<SARewards *>(mdp->get_rewards());
+//		r = RawFileRewardsType::RawFileSARewards;
+
+		SASRewards *Ri = dynamic_cast<SASRewards *>(mdp->get_rewards());
+		r = RawFileRewardsType::RawFileSASRewards;
+
+		// This is not a valid rewards object.
+		if (Ri == nullptr) {
+			throw CoreException();
 		}
 	} else {
 		FactoredRewards *RF = dynamic_cast<FactoredRewards *>(R);
@@ -327,21 +322,33 @@ void RawFile::save_raw_mdp(MDP *mdp, std::string filename)
 		}
 		k = RF->get_num_rewards();
 
-//		// Note: We attempt to cast the first one, and assume that the rest are of the same class.
-//		Rewards *R0 = nullptr;
-//		try {
-//			R0 = R->get(0);
-//		} catch (const RewardException &err) {
-//			log_message("RawFile::save_raw_mdp",
-//					"Found null reward, and thus failed to save the file '" + filename + "'.");
-//			throw CoreException();
-//		}
+		// Note: We attempt to cast the first one, and assume that the rest are of the same class.
+		Rewards *R0 = nullptr;
+		try {
+			R0 = RF->get(0);
+		} catch (const RewardException &err) {
+			log_message("RawFile::save_raw_mdp",
+					"Found null reward, and thus failed to save the file '" + filename + "'.");
+			throw CoreException();
+		}
 
-//		if (dynamic_cast<SARewards *>(R0) == nullptr) {
-//			r = 1;
-//		} else if (dynamic_cast<SASRewards *>(R0) == nullptr) {
-			r = 2;
-//		}
+		// TODO: Include SRewards.
+
+		// Determine the type of rewards object.
+
+//		SRewards *Ri = dynamic_cast<SRewards *>(R0);
+//		r = RawFileRewardsType::RawFileSRewards;
+//
+//		SARewards *Ri = dynamic_cast<SARewards *>(R0);
+//		r = RawFileRewardsType::RawFileSARewards;
+
+		SASRewards *Ri = dynamic_cast<SASRewards *>(R0);
+		r = RawFileRewardsType::RawFileSASRewards;
+
+		// This is not a valid rewards object.
+		if (Ri == nullptr) {
+			throw CoreException();
+		}
 	}
 
 	if (S == nullptr || S->get_num_states() == 0 || A == nullptr || A->get_num_actions() == 0 ||
@@ -378,14 +385,14 @@ void RawFile::save_raw_mdp(MDP *mdp, std::string filename)
 	}
 
 	// Write all of the reward information, based on the reward type.
-	for (int i = 0; i < (int)k; i++) {
+	for (unsigned int i = 0; i < k; i++) {
 		// In order to reuse code, do this small trick. If this is only a single reward, then
 		// we will just type cast the normal reward R; however, if this is a factored reward, then
 		// get the particular factor we are iterating over.
 		Rewards *Ri = nullptr;
 		FactoredRewards *RF = nullptr;
-		SARewardsArray *RiSA = nullptr;
-		SASRewardsArray *RiSAS = nullptr;
+		SARewards *RiSA = nullptr;
+		SASRewards *RiSAS = nullptr;
 
 		if (k == 1) {
 			Ri = R;
@@ -399,31 +406,25 @@ void RawFile::save_raw_mdp(MDP *mdp, std::string filename)
 
 		switch (r) {
 		case RawFileRewardsType::RawFileSRewards:
-			// ToDo: Implement this after creating SRewards.
+			// TODO: Implement this after creating SRewards.
 			throw CoreException();
 			break;
 		case RawFileRewardsType::RawFileSARewards:
-			RF = dynamic_cast<FactoredRewards *>(R);
-			if (RF == nullptr) {
-				throw CoreException();
-			}
-			Ri = RF->get(i);
-
 			for (auto state : *S) {
 				State *s = resolve(state);
-				int i = 0;
+				unsigned int i = 0;
 
 				for (auto action : *A) {
 					Action *a = resolve(action);
 
-					RiSA = dynamic_cast<SARewardsArray *>(Ri);
+					RiSA = dynamic_cast<SARewards *>(Ri);
 					if (RiSA == nullptr) {
 						throw CoreException();
 					}
 
 					file << RiSA->get(s, a);
 
-					if (i < (int)S->get_num_states() - 1) {
+					if (i < S->get_num_states() - 1) {
 						file << " ";
 					}
 					i++;
@@ -432,12 +433,6 @@ void RawFile::save_raw_mdp(MDP *mdp, std::string filename)
 			}
 			break;
 		case RawFileRewardsType::RawFileSASRewards:
-			RF = dynamic_cast<FactoredRewards *>(R);
-			if (RF == nullptr) {
-				throw CoreException();
-			}
-			Ri = RF->get(i);
-
 			for (auto state : *S) {
 				State *s = resolve(state);
 
@@ -448,7 +443,7 @@ void RawFile::save_raw_mdp(MDP *mdp, std::string filename)
 					for (auto nextState : *S) {
 						State *sp = resolve(nextState);
 
-						RiSAS = dynamic_cast<SASRewardsArray *>(Ri);
+						RiSAS = dynamic_cast<SASRewards *>(Ri);
 						if (RiSAS == nullptr) {
 							throw CoreException();
 						}

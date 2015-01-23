@@ -25,11 +25,6 @@
 #include "../../../include/core/state_transitions/state_transitions_array.h"
 #include "../../../include/core/state_transitions/state_transition_exception.h"
 
-#include "../../../include/core/states/states_map.h"
-
-#include "../../../include/core/states/indexed_state.h"
-#include "../../../include/core/actions/indexed_action.h"
-
 #include <algorithm>
 
 StateTransitionsArray::StateTransitionsArray(unsigned int numStates, unsigned int numActions)
@@ -124,7 +119,12 @@ const std::vector<State *> &StateTransitionsArray::successors(States *S, State *
 	}
 
 	if (successorStates[s->get_index() * actions + a->get_index()].size() == 0) {
-		throw StateTransitionException();
+		StatesMap *Smap = dynamic_cast<StatesMap *>(S);
+		if (Smap == nullptr) {
+			throw StateTransitionException();
+		}
+
+		compute_successors(Smap, s, a);
 	}
 
 	return successorStates[s->get_index() * actions + a->get_index()];
@@ -168,6 +168,17 @@ void StateTransitionsArray::reset()
 			}
 
 			successorStates[s * actions + a].clear();
+		}
+	}
+}
+
+void StateTransitionsArray::compute_successors(StatesMap *S, IndexedState *s, IndexedAction *a)
+{
+	successorStates[s->get_index() * actions + a->get_index()].clear();
+
+	for (unsigned int sp = 0; sp < states; sp++) {
+		if (stateTransitions[s->get_index() * actions * states + a->get_index() * states + sp] > 0.0f) {
+			successorStates[s->get_index() * actions + a->get_index()].push_back(S->get(sp));
 		}
 	}
 }

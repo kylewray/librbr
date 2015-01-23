@@ -30,8 +30,10 @@
 
 #include "state_transitions.h"
 
-#include "../states/state.h"
 #include "../states/states.h"
+#include "../states/states_map.h"
+
+#include "../states/state.h"
 
 #include "../actions/action.h"
 
@@ -113,6 +115,16 @@ private:
 	 * @return	The probability of going from the state, taking the action, then moving to the nextState.
 	 */
 	virtual double get_value(State *state, Action *action, State *nextState);
+
+	/**
+	 * Compute the successor states for the state and action pair provided, then store the result
+	 * in successorStates via the 'succ' parameter.
+	 * @param	S							The finite set of states.
+	 * @param	s							The current state.
+	 * @param	a							The current action.
+	 * @param	succ						The reference to the successors vector.
+	 */
+	virtual void compute_successors(StatesMap *S, State *s, Action *a, std::vector<State *> &succ);
 
 	/**
 	 * The list of all state-action-state transitions.

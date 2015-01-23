@@ -25,8 +25,6 @@
 #include "../../../include/core/state_transitions/state_transitions_map.h"
 #include "../../../include/core/state_transitions/state_transition_exception.h"
 
-#include "../../../include/core/states/states_map.h"
-
 #include "../../../include/core/states/named_state.h"
 #include "../../../include/core/actions/named_action.h"
 
@@ -100,19 +98,24 @@ const std::vector<State *> &StateTransitionsMap::successors(States *S, State *st
 {
 	std::unordered_map<State *,
 		std::unordered_map<Action *,
-		std::vector<State *> > >::const_iterator alpha = successorStates.find(state);
+		std::vector<State *> > >::iterator alpha = successorStates.find(state);
 	if (alpha == successorStates.end()) {
 		throw StateTransitionException();
 	}
 
 	std::unordered_map<Action *,
-		std::vector<State *> >::const_iterator beta = alpha->second.find(action);
+		std::vector<State *> >::iterator beta = alpha->second.find(action);
 	if (beta == alpha->second.end()) {
 		throw StateTransitionException();
 	}
 
 	if (beta->second.size() == 0) {
-		throw StateTransitionException();
+		StatesMap *Smap = dynamic_cast<StatesMap *>(S);
+		if (Smap == nullptr) {
+			throw StateTransitionException();
+		}
+
+		compute_successors(Smap, state, action, beta->second);
 	}
 
 	return beta->second;
@@ -145,4 +148,17 @@ double StateTransitionsMap::get_value(State *state, Action *action, State *nextS
 	}
 
 	return gamma->second;
+}
+
+void StateTransitionsMap::compute_successors(StatesMap *S, State *s, Action *a, std::vector<State *> &succ)
+{
+	succ.clear();
+
+	for (auto state : *S) {
+		State *sp = resolve(state);
+
+		if (get(s, a, sp) > 0.0) {
+			succ.push_back(sp);
+		}
+	}
 }

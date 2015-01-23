@@ -90,64 +90,64 @@ public:
 	 * Note: This relinquishes control of the belief state's memory management to this class.
 	 * @param	b		The initial set of belief states before calling 'solve'.
 	 */
-	void add_initial_belief_state(BeliefState *b);
+	virtual void add_initial_belief_state(BeliefState *b);
 
 	/**
 	 * Set the initial set of belief states which are used to seed the belief states before computing
 	 * the optimal policy. Note: This relinquishes control of the belief states' memory management to this class.
 	 * @param	initialBeliefStates		The initial set of belief states before calling 'solve'.
 	 */
-	void set_initial_belief_states(const std::vector<BeliefState *> &initialBeliefStates);
+	virtual void set_initial_belief_states(const std::vector<BeliefState *> &initialBeliefStates);
 
 	/**
 	 * Set the expansion rule to add belief points.
 	 * @param	expansionRule		The expansion rule to use.
 	 */
-	void set_expansion_rule(POMDPPBVIExpansionRule expansionRule);
+	virtual void set_expansion_rule(POMDPPBVIExpansionRule expansionRule);
 
 	/**
 	 * Set the number of update iterations to run for infinite horizon POMDPs.
 	 * @param	iterations		The number of update iterations to run for infinite horizon POMDPs.
 	 */
-	void set_num_update_iterations(unsigned int iterations);
+	virtual void set_num_update_iterations(unsigned int iterations);
 
 	/**
 	 * Set the number of expansion iterations to run for infinite horizon POMDPs.
 	 * @param	iterations		The number of expansion iterations to run for infinite horizon POMDPs.
 	 */
-	void set_num_expansion_iterations(unsigned int iterations);
+	virtual void set_num_expansion_iterations(unsigned int iterations);
 
 	/**
 	 * Get the initial set of belief states which are used to seed the belief states before computing
 	 * the optimal policy.
 	 * @return	The initial set of belief states before calling 'solve'.
 	 */
-	std::vector<BeliefState *> &get_initial_belief_states();
+	virtual std::vector<BeliefState *> &get_initial_belief_states();
 
 	/**
 	 * Get the set of belief states which were used to compute the optimal policy. This vector is only
 	 * populated after calling 'solve'.
 	 * @return	The final set of belief states after calling 'solve'.
 	 */
-	std::vector<BeliefState *> &get_belief_states();
+	virtual std::vector<BeliefState *> &get_belief_states();
 
 	/**
 	 * Set the expansion rule to add belief points.
 	 * @param	expansionRule		The expansion rule to use.
 	 */
-	POMDPPBVIExpansionRule get_expansion_rule() const;
+	virtual POMDPPBVIExpansionRule get_expansion_rule() const;
 
 	/**
 	 * Get the number of update iterations to run for infinite horizon POMDPs.
 	 * @return	The number of update iterations to run for infinite horizon POMDPs.
 	 */
-	unsigned int get_num_update_iterations() const;
+	virtual unsigned int get_num_update_iterations() const;
 
 	/**
 	 * Get the number of expansion iterations to run for infinite horizon POMDPs.
 	 * @return	The number of expansion iterations to run for infinite horizon POMDPs.
 	 */
-	unsigned int get_num_expansion_iterations() const;
+	virtual unsigned int get_num_expansion_iterations() const;
 
 	/**
 	 * Compute the optimal number of update iterations to run for infinite horizon POMDPs, given
@@ -156,7 +156,7 @@ public:
 	 * @param	epsilon				The desired tolerance between value functions to check for convergence.
 	 * @throw	RewardException		The POMDP did not have a SARewards rewards object.
 	 */
-	void compute_num_update_iterations(POMDP *pomdp, double epsilon);
+	virtual void compute_num_update_iterations(POMDP *pomdp, double epsilon);
 
 	/**
 	 * Solve the POMDP provided using point-based value iteration.
@@ -171,12 +171,12 @@ public:
 	 * @throw	PolicyException						An error occurred computing the policy.
 	 * @return	Return the optimal policy as a finite state controller (infinite horizon) or tree (finite horizon).
 	 */
-	PolicyAlphaVectors *solve(POMDP *pomdp);
+	virtual PolicyAlphaVectors *solve(POMDP *pomdp);
 
 	/**
 	 * Reset this POMDP PBVI solver. This method frees all the belief state memory.
 	 */
-	void reset();
+	virtual void reset();
 
 protected:
 	/**
@@ -191,7 +191,7 @@ protected:
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy as a collection of alpha vectors.
 	 */
-	PolicyAlphaVectors *solve_finite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+	virtual PolicyAlphaVectors *solve_finite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
 			StateTransitions *T, ObservationTransitions *O, Rewards *R,
 			Horizon *h);
 
@@ -207,7 +207,7 @@ protected:
 	 * @throw	PolicyException		An error occurred computing the policy.
 	 * @return	Return the optimal policy as a collection of alpha vectors.
 	 */
-	PolicyAlphaVectors *solve_infinite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+	virtual PolicyAlphaVectors *solve_infinite_horizon(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
 			StateTransitions *T, ObservationTransitions *O, Rewards *R,
 			Horizon *h);
 
@@ -217,7 +217,7 @@ protected:
 	 * quantity each time.
 	 * @param	S	The finite states.
 	 */
-	void expand_random_belief_selection(StatesMap *S);
+	virtual void expand_random_belief_selection(StatesMap *S);
 
 	/**
 	 * Expand the set of beliefs following Stochastic Simulation with Random Actions. "Stochastic Simulation" means it
@@ -231,7 +231,7 @@ protected:
 	 * @param	T	The finite state transition function.
 	 * @param	O	The finite observation transition function.
 	 */
-	void expand_stochastic_simulation_random_actions(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+	virtual void expand_stochastic_simulation_random_actions(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
 			StateTransitions *T, ObservationTransitions *O);
 
 	/**
@@ -247,7 +247,7 @@ protected:
 	 * @param	O 		The finite observation transition function.
 	 * @param	gamma	The current set of alpha vectors.
 	 */
-	void expand_stochastic_simulation_greedy_action(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+	virtual void expand_stochastic_simulation_greedy_action(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
 			StateTransitions *T, ObservationTransitions *O, std::vector<PolicyAlphaVector *> &gamma);
 
 	/**
@@ -261,13 +261,13 @@ protected:
 	 * @param	T	The finite state transition function.
 	 * @param	O	The finite observation transition function.
 	 */
-	void expand_stochastic_simulation_exploratory_action(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
+	virtual void expand_stochastic_simulation_exploratory_action(StatesMap *S, ActionsMap *A, ObservationsMap *Z,
 			StateTransitions *T, ObservationTransitions *O);
 
 	/**
 	 * Expand the set of beliefs following Greedy Error Reduction. TODO: Implement.
 	 */
-	void expand_greedy_error_reduction();
+	virtual void expand_greedy_error_reduction();
 
 	/**
 	 * The expansion rule to use which adds belief points.

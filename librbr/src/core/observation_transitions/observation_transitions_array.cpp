@@ -25,12 +25,6 @@
 #include "../../../include/core/observation_transitions/observation_transitions_array.h"
 #include "../../../include/core/observation_transitions/observation_transition_exception.h"
 
-#include "../../../include/core/observations/observations_map.h"
-
-#include "../../../include/core/states/indexed_state.h"
-#include "../../../include/core/actions/indexed_action.h"
-#include "../../../include/core/observations/indexed_observation.h"
-
 #include <algorithm>
 
 ObservationTransitionsArray::ObservationTransitionsArray(unsigned int numStates,
@@ -123,21 +117,26 @@ void ObservationTransitionsArray::add_available(Action *previousAction, State *s
 const std::vector<Observation *> &ObservationTransitionsArray::available(Observations *Z, Action *previousAction, State *state)
 {
 	IndexedAction *a = dynamic_cast<IndexedAction *>(previousAction);
-	IndexedState *s = dynamic_cast<IndexedState *>(state);
+	IndexedState *sp = dynamic_cast<IndexedState *>(state);
 
-	if (a == nullptr || s == nullptr) {
+	if (a == nullptr || sp == nullptr) {
 		throw ObservationTransitionException();
 	}
 
-	if (a->get_index() >= actions || s->get_index() >= states) {
+	if (a->get_index() >= actions || sp->get_index() >= states) {
 		throw ObservationTransitionException();
 	}
 
-	if (availableObservations[a->get_index() * states + s->get_index()].size() == 0) {
-		throw ObservationTransitionException();
+	if (availableObservations[a->get_index() * states + sp->get_index()].size() == 0) {
+		ObservationsMap *Zmap = dynamic_cast<ObservationsMap *>(Z);
+		if (Zmap == nullptr) {
+			throw ObservationTransitionException();
+		}
+
+		compute_available(Zmap, a, sp);
 	}
 
-	return availableObservations[a->get_index() * states + s->get_index()];
+	return availableObservations[a->get_index() * states + sp->get_index()];
 }
 
 void ObservationTransitionsArray::set_observation_transitions(const float *O)
@@ -175,14 +174,25 @@ unsigned int ObservationTransitionsArray::get_num_observations() const
 void ObservationTransitionsArray::reset()
 {
 	for (unsigned int a = 0; a < actions; a++) {
-		for (unsigned int s = 0; s < states; s++) {
+		for (unsigned int sp = 0; sp < states; sp++) {
 			for (unsigned int z = 0; z < observations; z++) {
 				observationTransitions[a * states * observations +
-				                       s * observations +
+				                       sp * observations +
 				                       z] = 0.0f;
 			}
 
-			availableObservations[a * states + s].clear();
+			availableObservations[a * states + sp].clear();
+		}
+	}
+}
+
+void ObservationTransitionsArray::compute_available(ObservationsMap *Z, IndexedAction *a, IndexedState *sp)
+{
+	availableObservations[a->get_index() * states + sp->get_index()].clear();
+
+	for (unsigned int z = 0; z < observations; z++) {
+		if (observationTransitions[a->get_index() * states * observations + sp->get_index() * observations + z] > 0.0f) {
+			availableObservations[a->get_index() * states + sp->get_index()].push_back(Z->get(z));
 		}
 	}
 }

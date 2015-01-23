@@ -25,8 +25,6 @@
 #include "../../../include/core/observation_transitions/observation_transitions_map.h"
 #include "../../../include/core/observation_transitions/observation_transition_exception.h"
 
-#include "../../../include/core/observations/observations_map.h"
-
 #include "../../../include/core/states/named_state.h"
 #include "../../../include/core/actions/named_action.h"
 #include "../../../include/core/observations/named_observation.h"
@@ -105,19 +103,24 @@ const std::vector<Observation *> &ObservationTransitionsMap::available(Observati
 {
 	std::unordered_map<Action *,
 		std::unordered_map<State *,
-		std::vector<Observation *> > >::const_iterator alpha = availableObservations.find(previousAction);
+		std::vector<Observation *> > >::iterator alpha = availableObservations.find(previousAction);
 	if (alpha == availableObservations.end()) {
 		throw ObservationTransitionException();
 	}
 
 	std::unordered_map<State *,
-		std::vector<Observation *> >::const_iterator beta = alpha->second.find(state);
+		std::vector<Observation *> >::iterator beta = alpha->second.find(state);
 	if (beta == alpha->second.end()) {
 		throw ObservationTransitionException();
 	}
 
 	if (beta->second.size() == 0) {
-		throw ObservationTransitionException();
+		ObservationsMap *Zmap = dynamic_cast<ObservationsMap *>(Z);
+		if (Zmap == nullptr) {
+			throw ObservationTransitionException();
+		}
+
+		compute_available(Zmap, previousAction, state, beta->second);
 	}
 
 	return beta->second;
@@ -151,4 +154,17 @@ double ObservationTransitionsMap::get_value(Action *previousAction, State *state
 	}
 
 	return gamma->second;
+}
+
+void ObservationTransitionsMap::compute_available(ObservationsMap *Z, Action *a, State *sp, std::vector<Observation *> &avail)
+{
+	avail.clear();
+
+	for (auto observation : *Z) {
+		Observation *z = resolve(observation);
+
+		if (get(a, sp, z) > 0.0) {
+			avail.push_back(z);
+		}
+	}
 }

@@ -28,12 +28,17 @@
 
 #include "observation_transitions.h"
 
-#include "../observations/observation.h"
 #include "../observations/observations.h"
+#include "../observations/observations_map.h"
+
+#include "../observations/observation.h"
+#include "../observations/indexed_observation.h"
 
 #include "../states/state.h"
+#include "../states/indexed_state.h"
 
 #include "../actions/action.h"
+#include "../actions/indexed_action.h"
 
 /**
  * A class for finite observation transitions in an MDP-like object. Informally, there are two basic ways to
@@ -139,6 +144,15 @@ public:
 	virtual void reset();
 
 private:
+	/**
+	 * Compute the available observations for the action and state pair provided, then store the result
+	 * in availableObservations.
+	 * @param	Z							The finite set of observations.
+	 * @param	a							The current action.
+	 * @param	sp							The next state.
+	 */
+	virtual void compute_available(ObservationsMap *Z, IndexedAction *a, IndexedState *sp);
+
 	/**
 	 * The 3-dimensional array of all action-state-observation transitions. Internally,
 	 * these are floats to improve speed.

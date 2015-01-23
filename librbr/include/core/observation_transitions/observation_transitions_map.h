@@ -30,10 +30,13 @@
 
 #include "observation_transitions.h"
 
-#include "../observations/observation.h"
 #include "../observations/observations.h"
+#include "../observations/observations_map.h"
+
+#include "../observations/observation.h"
 
 #include "../states/state.h"
+
 #include "../actions/action.h"
 
 /**
@@ -110,6 +113,16 @@ private:
 	 * @return	The probability of the observation given we took the action and landed in the state given.
 	 */
 	virtual double get_value(Action *previousAction, State *state, Observation *observation);
+
+	/**
+	 * Compute the available observations for the action and state pair provided, then store the result
+	 * in availableObservations via the 'avail' parameter.
+	 * @param	Z							The finite set of observations.
+	 * @param	a							The current action.
+	 * @param	sp							The next state.
+	 * @param	avail						The reference to the available vector.
+	 */
+	virtual void compute_available(ObservationsMap *Z, Action *a, State *sp, std::vector<Observation *> &avail);
 
 	/**
 	 * The list of all state-action-state transitions.

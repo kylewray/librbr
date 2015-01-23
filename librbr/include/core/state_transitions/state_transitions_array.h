@@ -28,10 +28,14 @@
 
 #include "state_transitions.h"
 
-#include "../states/state.h"
 #include "../states/states.h"
+#include "../states/states_map.h"
+
+#include "../states/state.h"
+#include "../states/indexed_state.h"
 
 #include "../actions/action.h"
+#include "../actions/indexed_action.h"
 
 /**
  * A class for finite state transitions in an MDP-like object. Informally, there are two basic ways to
@@ -133,6 +137,15 @@ public:
 	virtual void reset();
 
 private:
+	/**
+	 * Compute the successor states for the state and action pair provided, then store the result
+	 * in successorStates.
+	 * @param	S							The finite set of states.
+	 * @param	s							The current state.
+	 * @param	a							The current action.
+	 */
+	virtual void compute_successors(StatesMap *S, IndexedState *s, IndexedAction *a);
+
 	/**
 	 * The 3-dimensional array of all state-action-state transitions. Internally,
 	 * these are floats to improve speed.
