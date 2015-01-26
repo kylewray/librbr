@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/lib/:/usr/lib64:/usr/local/lib
+
 rm *.o
 rm -rf librbr/obj
 rm -rf librbr_tests/obj

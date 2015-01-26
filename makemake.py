@@ -20,11 +20,12 @@
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+
 import os
 import os.path
 
 
-def printtarget(f, name, sdir, odir):
+def print_target(f, name, sdir, odir):
     """ Prints a target rule to the specified file.
     
         Parameters:
@@ -35,10 +36,10 @@ def printtarget(f, name, sdir, odir):
     """
 
     f.write(name + ': ' + sdir + '/*.cpp \n')
-    prcompmov(f, sdir, odir)
+    print_commands(f, sdir, odir)
 
 
-def prcompmov(f, sdir, odir):
+def print_commands(f, sdir, odir):
     """ Prints a set of bash comands to create an object directory (if it 
         doesn't exists), compile all source files in a source directory and
         move the object files to the object directory.
@@ -49,17 +50,17 @@ def prcompmov(f, sdir, odir):
             odir -- The directory to where the .o files will be stored.
     """
 
-    f.write('\tmkdir -p ' + odir + ' \n' \
-            + '\t$(CC) $(CFLAGS) -c ' + sdir + '/*.cpp \n' \
-            + '\tmv *.o ' + odir + '\n\n')
+    f.write('\tmkdir -p ' + odir + ' \n' +
+            '\t$(CC) $(CFLAGS) -c ' + sdir + '/*.cpp \n' +
+            '\tmv *.o ' + odir + '\n\n')
 
 
 srcdir = 'librbr/src'
 objdir = 'librbr/obj'
 testdir = 'librbr_tests'
-coresubdir = ['states', 'actions', 'state_transitions', \
-            'observation_transitions', 'observations', 'policy', \
-            'rewards','agents']
+coresubdir = ['states', 'actions', 'observations',
+            'state_transitions', 'observation_transitions',
+            'policy', 'rewards','agents']
 
 f = open('Makefile', 'w')
 
@@ -73,42 +74,52 @@ for d in directories:
 
 
 # Printing flags and directory wildcards.
-f.write('CC = g++\n' \
-        'CFLAGS = -std=c++11 -g\n' \
-        'COINFLAGS = `pkg-config --cflags --libs Coin` '
-        '`pkg-config --cflags --libs clp` '
-        '`pkg-config --cflags --libs osi` '
-        '`pkg-config --libs coinutils` '
-        '`pkg-config --cflags --libs osi-clp`\n')
+f.write('CC = g++\n' +
+        'CFLAGS = -std=c++11 -g\n' +
+        'COINFLAGS = `pkg-config --cflags --libs Coin` ' +
+        '`pkg-config --cflags --libs clp` ' +
+        '`pkg-config --cflags --libs osi` ' +
+        '`pkg-config --libs coinutils` ' +
+        '`pkg-config --cflags --libs osi-clp`\n\n')
 
 # Printing target rule for tests.
-f.write('tests: all.o ' + testdir + '/src/core/*.cpp ' + \
-        testdir + '/src/mdp/*.cpp ' + testdir + '/src/file_loaders/*.cpp ' + \
+f.write('tests: all.o ' +
+        testdir + '/src/core/*.cpp ' +
+        testdir + '/src/mdp/*.cpp ' +
+        #testdir + '/src/ssp/*.cpp ' +
+        testdir + '/src/pomdp/*.cpp ' +
+        #testdir + '/src/dec_pomdp/*.cpp' +
+        testdir + '/src/management/*.cpp ' +
         testdir + '/src/utilities/*.cpp\n')
 f.write('\tmkdir -p ' + testdir + '/obj\n')
-f.write('\t$(CC) $(CFLAGS) -c -I.. ' + testdir + '/src/core/*.cpp ' + \
-        testdir + '/src/mdp/*.cpp ' + testdir + '/src/pomdp/*.cpp ' + \
-        testdir + '/src/file_loaders/*.cpp ' + testdir + '/src/utilities/*.cpp ' + \
+f.write('\t$(CC) $(CFLAGS) -c -I.. ' +
+        testdir + '/src/core/*.cpp ' +
+        testdir + '/src/mdp/*.cpp ' +
+        #testdir + '/src/ssp/*.cpp ' +
+        testdir + '/src/pomdp/*.cpp ' +
+        #testdir + '/src/dec_pomdp/*.cpp' +
+        testdir + '/src/management/*.cpp ' +
+        testdir + '/src/utilities/*.cpp ' +
         testdir + '/src/*.cpp\n')
-f.write('\t$(CC) $(CFLAGS) $(COINFLAGS) -o perform_tests ' + \
+f.write('\t$(CC) $(CFLAGS) $(COINFLAGS) -o perform_tests ' +
         objdir + '/*.o *.o\n')
 f.write('\tmv *.o ' + testdir + '/obj\n\n')
 
 # Printing target rules for all object files.
 for sd in coresubdir:
-    printtarget(f, sd + '.o', srcdir + '/core/' + sd, objdir)
-printtarget(f, 'core.o', srcdir + '/core', objdir)
-printtarget(f, 'util.o', srcdir + '/utilities', objdir)
-printtarget(f, 'fload.o', srcdir + '/file_loaders', objdir)
-printtarget(f, 'mdp.o', srcdir + '/mdp', objdir)
-printtarget(f, 'pomdp.o', srcdir + '/pomdp', objdir)
-printtarget(f, 'dec_mdp.o', srcdir + '/dec_mdp', objdir)
-printtarget(f, 'dec_pomdp.o', srcdir + '/dec_pomdp', objdir)
+    print_target(f, sd + '.o', srcdir + '/core/' + sd, objdir)
+print_target(f, 'core.o', srcdir + '/core', objdir)
+print_target(f, 'utilities.o', srcdir + '/utilities', objdir)
+print_target(f, 'management.o', srcdir + '/management', objdir)
+print_target(f, 'mdp.o', srcdir + '/mdp', objdir)
+print_target(f, 'ssp.o', srcdir + '/ssp', objdir)
+print_target(f, 'pomdp.o', srcdir + '/pomdp', objdir)
+print_target(f, 'dec_pomdp.o', srcdir + '/dec_pomdp', objdir)
 
 f.write('make all.o: ')
 for sd in coresubdir: 
     f.write(sd + '.o ')
-f.write('core.o util.o fload.o mdp.o pomdp.o dec_mdp.o dec_pomdp.o\n')
+f.write('core.o utilities.o management.o mdp.o ssp.o pomdp.o dec_pomdp.o\n\n')
 
 f.close()
 
