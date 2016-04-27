@@ -1,6 +1,8 @@
 librbr
 ======
 
+NOTE: This is for archival purposes only; librbr has been abandoned. Please use "nova" (https://www.github.com/kylewray/nova).
+
 A library for resource bounded reasoning using optimized solvers for  MDPs,
 POMDPs, and Dec-POMDPs. The librbr library supports continual (online) planning
 as well as offline planning, for finite MDP-like objects, in finite or 
